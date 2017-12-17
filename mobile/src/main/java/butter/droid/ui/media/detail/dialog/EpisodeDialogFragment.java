@@ -17,49 +17,59 @@
 
 package butter.droid.ui.media.detail.dialog;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.view.ContextThemeWrapper;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import butter.droid.R;
-import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.media.MediaDisplayManager;
-import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.providers.media.model.MediaMeta;
-import butter.droid.base.providers.media.model.MediaWrapper;
-import butter.droid.base.providers.media.model.StreamInfo;
-import butter.droid.base.providers.meta.MetaProvider;
-import butter.droid.base.torrent.Magnet;
-import butter.droid.base.utils.LocaleUtils;
-import butter.droid.base.utils.PixelUtils;
-import butter.droid.base.utils.StringUtils;
-import butter.droid.base.utils.ThreadUtils;
-import butter.droid.provider.base.model.Episode;
-import butter.droid.provider.base.model.Format;
-import butter.droid.provider.base.model.Torrent;
-import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
-import butter.droid.widget.BottomSheetScrollView;
-import butter.droid.widget.OptionSelector;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import com.squareup.picasso.Picasso;
-import dagger.android.support.DaggerAppCompatDialogFragment;
-import java.util.Locale;
-import javax.inject.Inject;
-import org.parceler.Parcels;
+    import android.app.Activity;
+    import android.app.Dialog;
+    import android.content.DialogInterface;
+    import android.os.Bundle;
+    import android.support.annotation.NonNull;
+    import android.support.annotation.Nullable;
+    import android.text.TextUtils;
+    import android.view.ContextThemeWrapper;
+    import android.view.KeyEvent;
+    import android.view.LayoutInflater;
+    import android.view.View;
+    import android.view.ViewGroup;
+    import android.widget.ImageButton;
+    import android.widget.ImageView;
+    import android.widget.LinearLayout;
+    import android.widget.TextView;
+    import butter.droid.R;
+    import butter.droid.base.content.preferences.PreferencesHandler;
+    import butter.droid.base.manager.internal.media.MediaDisplayManager;
+    import butter.droid.base.manager.internal.provider.ProviderManager;
+    import butter.droid.base.providers.media.model.MediaMeta;
+    import butter.droid.base.providers.media.model.MediaWrapper;
+    import butter.droid.base.providers.media.model.StreamInfo;
+    import butter.droid.base.providers.meta.MetaProvider;
+    import butter.droid.base.torrent.Magnet;
+    import butter.droid.base.utils.LocaleUtils;
+    import butter.droid.base.utils.PixelUtils;
+    import butter.droid.base.utils.StringUtils;
+    import butter.droid.base.utils.ThreadUtils;
+    import butter.droid.provider.base.model.Episode;
+    import butter.droid.provider.base.model.Format;
+    import butter.droid.provider.base.model.Torrent;
+    import butter.droid.ui.media.detail.model.UiSubItem;
+    import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
+    import butter.droid.widget.BottomSheetScrollView;
+    import butter.droid.widget.OptionPreview;
+    import butter.droid.widget.OptionSelector;
+    import butterknife.BindView;
+    import butterknife.ButterKnife;
+    import butterknife.OnClick;
+    import com.squareup.picasso.Picasso;
+    import dagger.android.support.DaggerAppCompatDialogFragment;
+    import io.reactivex.Observable;
+    import io.reactivex.Single;
+    import io.reactivex.SingleObserver;
+    import io.reactivex.android.schedulers.AndroidSchedulers;
+    import io.reactivex.disposables.Disposable;
+    import io.reactivex.schedulers.Schedulers;
+    import java.util.Collections;
+    import java.util.List;
+    import java.util.Locale;
+    import javax.inject.Inject;
+    import org.parceler.Parcels;
 
 public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
 
@@ -92,7 +102,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
     @BindView(R.id.title) TextView title;
     @BindView(R.id.aired) TextView aired;
     @BindView(R.id.synopsis) TextView synopsis;
-    @BindView(R.id.subtitles) OptionSelector subtitles;
+    @BindView(R.id.subtitles) OptionPreview subtitlesPreview;
     @BindView(R.id.quality) OptionSelector quality;
     @BindView(R.id.magnet) @Nullable ImageButton openMagnet;
 
@@ -208,10 +218,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
 
 //        info.setText(String.format(Locale.US, "S%02dE%02d", episode.getSeasion(), episode.getEpisode()));
 
-        subtitles.setFragmentManager(getFragmentManager());
-        quality.setFragmentManager(getFragmentManager());
-        subtitles.setTitle(R.string.subtitles);
-        quality.setTitle(R.string.quality);
+//        subtitlesPreview.setFragmentManager(getFragmentManager());
 
         final Format[] formats = mediaDisplayManager.getSortedTorrentFormats(episode.getTorrents());
         String[] formatDisplay = new String[formats.length];
@@ -221,82 +228,80 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
         quality.setData(formatDisplay);
 
         int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(formats);
-        // TODO: 7/30/17 Handle sorting
-        selectedTorrent = episode.getTorrents()[defaultFormatIndex];
+//        // TODO: 7/30/17 Handle sorting
+//        selectedTorrent = episode.getTorrents()[defaultFormatIndex];
         this.quality.setText(formatDisplay[defaultFormatIndex]);
         this.quality.setDefault(defaultFormatIndex);
-
-        updateMagnet();
-
+//
+//        updateMagnet();
+//
         this.quality.setListener((position, value) -> {
             selectedTorrent = episode.getTorrents()[position];
             updateMagnet();
         });
 
-        subtitles.setText(R.string.loading_subs);
-        subtitles.setClickable(false);
-        // TODO: 6/17/17 subs
-        //        if (providerManager.hasCurrentSubsProvider()) {
-//            providerManager.getCurrentSubsProvider().getList(episode, new SubsProvider.Callback() {
-//                @Override
-//                public void onSuccess(Map<String, String> subtitles) {
-//                    if (!FragmentUtil.isAdded(EpisodeDialogFragment.this)) {
-//                        return;
-//                    }
-//
-//                    episode.subtitles = subtitles;
-//
-//                    String[] languages = subtitles.keySet().toArray(new String[subtitles.size()]);
-//                    Arrays.sort(languages);
-//                    final String[] adapterLanguages = new String[languages.length + 1];
-//                    adapterLanguages[0] = "no-subs";
-//                    System.arraycopy(languages, 0, adapterLanguages, 1, languages.length);
-//
-//                    String[] readableNames = new String[adapterLanguages.length];
-//                    for (int i = 0; i < readableNames.length; i++) {
-//                        String language = adapterLanguages[i];
-//                        if (language.equals("no-subs")) {
-//                            readableNames[i] = getString(R.string.no_subs);
-//                        } else {
-//                            Locale locale = LocaleUtils.toLocale(language);
-//                            readableNames[i] = locale.getDisplayName(locale);
-//                        }
-//                    }
-//
-//                    EpisodeDialogFragment.this.subtitles.setListener(new OptionSelector.SelectorListener() {
-//                        @Override
-//                        public void onSelectionChanged(int position, String value) {
-//                            onSubtitleLanguageSelected(adapterLanguages[position]);
-//                        }
-//                    });
-//                    EpisodeDialogFragment.this.subtitles.setData(readableNames);
-//                    ThreadUtils.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            EpisodeDialogFragment.this.subtitles.setClickable(true);
-//                        }
-//                    });
-//
-//                    String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
-//                    if (subtitles.containsKey(defaultSubtitle)) {
-//                        onSubtitleLanguageSelected(defaultSubtitle);
-//                        EpisodeDialogFragment.this.subtitles.setDefault(Arrays.asList(adapterLanguages).indexOf(defaultSubtitle));
-//                    } else {
-//                        onSubtitleLanguageSelected(SubsProvider.SUBTITLE_LANGUAGE_NONE);
-//                        EpisodeDialogFragment.this.subtitles.setDefault(
-//                                Arrays.asList(adapterLanguages).indexOf(SubsProvider.SUBTITLE_LANGUAGE_NONE));
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Exception ex) {
-//                    subtitles.setData(new String[0]);
-//                    subtitles.setClickable(true);
-//                }
-//            });
-//        } else {
-//            subtitles.setText(R.string.no_subs_available);
-//        }
+        if (providerManager.hasCurrentSubsProvider()) {
+            subtitlesPreview.setText(R.string.loading_subs);
+            subtitlesPreview.setClickable(false);
+
+            providerManager.getCurrentSubsProvider().list(episode)
+                    .flatMap(subs -> {
+                        if (subs.isEmpty()) {
+                            return Single.<List<UiSubItem>>just(Collections.EMPTY_LIST);
+                        } else {
+                            final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
+                            return Observable.fromIterable(subs)
+                                    .map(sub -> new UiSubItem(sub, defaultSubtitle.equals(sub.getLanguage())))
+                                    .startWith(new UiSubItem(null, defaultSubtitle == null))
+                                    .toList();
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<List<UiSubItem>>() {
+                        @Override public void onSubscribe(final Disposable d) {
+                            // TODO dispose
+                        }
+
+                        @Override public void onSuccess(final List<UiSubItem> subs) {
+                            if (subs.isEmpty()) {
+                                subtitlesPreview.setText(R.string.no_subs_available);
+//                                subtitleList = null;
+                            } else {
+                                subtitlesPreview.setEnabled(true);
+//                                subtitleList = subs;
+
+                                UiSubItem selectedItem = null;
+                                for (final UiSubItem sub : subs) {
+                                    if (sub.isSelected()) {
+                                        selectedItem = sub;
+                                        String name = sub.getName();
+                                        if (TextUtils.isEmpty(name)) {
+                                            subtitlesPreview.setText(R.string.no_subs);
+                                        } else {
+                                            subtitlesPreview.setText(name);
+                                        }
+                                        break;
+                                    }
+                                }
+                                if (selectedItem == null) {
+                                    selectedItem = subs.get(0);
+                                }
+
+//                                selectedSub = selectedItem;
+                            }
+                        }
+
+                        @Override public void onError(final Throwable e) {
+//                            subtitleList = null;
+                            subtitlesPreview.setText(R.string.no_subs_available);
+                            subtitlesPreview.setEnabled(false);
+                        }
+                    });
+        } else {
+            subtitlesPreview.setText(R.string.no_subs_available);
+            subtitlesPreview.setClickable(false);
+        }
 
         scrollView.setListener(new BottomSheetScrollView.Listener() {
             @Override
@@ -392,9 +397,9 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
         selectedSubtitleLanguage = language;
         if (!language.equals("no-subs")) {
             final Locale locale = LocaleUtils.toLocale(language);
-            ThreadUtils.runOnUiThread(() -> subtitles.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale))));
+            ThreadUtils.runOnUiThread(() -> subtitlesPreview.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale))));
         } else {
-            ThreadUtils.runOnUiThread(() -> subtitles.setText(R.string.no_subs));
+            ThreadUtils.runOnUiThread(() -> subtitlesPreview.setText(R.string.no_subs));
         }
     }
 
