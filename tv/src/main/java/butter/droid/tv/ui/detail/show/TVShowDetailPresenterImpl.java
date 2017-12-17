@@ -25,10 +25,6 @@ import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Show;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeMap;
 
 public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implements TVShowDetailsPresenter {
 
@@ -54,25 +50,7 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     }
 
     private void addSeasons(Show show) {
-        final TreeMap<Integer, List<Episode>> seasons = new TreeMap<>((me, other) -> me - other);
-
-        for (Episode episode : show.getEpisodes()) {
-            // create list of season if does not exists
-            if (!seasons.containsKey(episode.getSeasion())) {
-                seasons.put(episode.getSeasion(), new ArrayList<>());
-            }
-
-            // add episode to the list
-            final List<Episode> seasonEpisodes = seasons.get(episode.getSeasion());
-            seasonEpisodes.add(episode);
-        }
-
-        for (Integer seasonKey : seasons.descendingKeySet()) {
-            Collections.sort(seasons.get(seasonKey), (me, other) -> other.getEpisode() - me.getEpisode());
-        }
-
-        view.showSeasons(seasons);
-
+        view.showSeasons(show.getSeasons());
     }
 
     @Override public void episodeClicked(final Episode episode) {
