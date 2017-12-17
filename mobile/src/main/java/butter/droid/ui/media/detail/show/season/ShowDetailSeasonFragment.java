@@ -40,7 +40,6 @@ import org.parceler.Parcels;
 
 public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDetailSeasonView, OnClickListener {
 
-//    private static final String ARG_SHOW = "butter.droid.ui.media.detail.show.season.ShowDetailSeasonFragment.show";
     private static final String ARG_SEASON = "butter.droid.ui.media.detail.show.season.ShowDetailSeasonFragment.season";
 
     @Inject ShowDetailSeasonPresenter presenter;
@@ -54,7 +53,6 @@ public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDeta
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
-//        MediaWrapper show = Parcels.unwrap(args.getParcelable(ARG_SHOW));
         Season season = Parcels.unwrap(args.getParcelable(ARG_SEASON));
 
         presenter.onCreate(season);
@@ -104,7 +102,6 @@ public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDeta
 
     public static ShowDetailSeasonFragment newInstance(final Season season) {
         Bundle args = new Bundle(2);
-//        args.putParcelable(ARG_SHOW, Parcels.wrap(show));
         args.putParcelable(ARG_SEASON, Parcels.wrap(season));
 
         ShowDetailSeasonFragment fragment = new ShowDetailSeasonFragment();
