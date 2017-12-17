@@ -1,0 +1,53 @@
+{
+  "seasons": [
+    {
+      "id": 1,
+      "title": "Season 1",
+      "poster": "http://www.gstatic.com/tv/thumb/movieposters/10449498/p10449498_p_v8_aa.jpg",
+      "backdrop": "http://camendesign.com/code/video_for_everybody/poster.jpg",
+      "synopsis": "Season 1",
+      "episodes": [
+        {
+          "id": 1,
+          "title": "Big Buck Bunny Show HD 60fps",
+          "poster": "http://www.gstatic.com/tv/thumb/movieposters/10449498/p10449498_p_v8_aa.jpg",
+          "backdrop": "http://camendesign.com/code/video_for_everybody/poster.jpg",
+          "synopsis": "First episode",
+          "torrent": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4.torrent",
+          "quality": 1080,
+          "episode": 1
+        },
+        {
+          "id": 2,
+          "title": "Big Buck Bunny Show HD 30fps",
+          "poster": "http://www.gstatic.com/tv/thumb/movieposters/10449498/p10449498_p_v8_aa.jpg",
+          "backdrop": "http://camendesign.com/code/video_for_everybody/poster.jpg",
+          "synopsis": "First episode",
+          "torrent": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4.torrent",
+          "quality": 1080,
+          "episode": 2
+        },
+        {
+          "id": 3,
+          "title": "Big Buck Bunny Show 4K 60fps",
+          "poster": "http://www.gstatic.com/tv/thumb/movieposters/10449498/p10449498_p_v8_aa.jpg",
+          "backdrop": "http://camendesign.com/code/video_for_everybody/poster.jpg",
+          "synopsis": "First episode",
+          "torrent": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_2160p_60fps_normal.mp4.torrent",
+          "quality": 2160,
+          "episode": 3
+        },
+        {
+          "id": 4,
+          "title": "Big Buck Bunny Show 4K 30fps",
+          "poster": "http://www.gstatic.com/tv/thumb/movieposters/10449498/p10449498_p_v8_aa.jpg",
+          "backdrop": "http://camendesign.com/code/video_for_everybody/poster.jpg",
+          "synopsis": "First episode",
+          "torrent": "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_2160p_30fps_normal.mp4.torrent",
+          "quality": 2160,
+          "episode": 4
+        }
+      ]
+    }
+  ]
+}

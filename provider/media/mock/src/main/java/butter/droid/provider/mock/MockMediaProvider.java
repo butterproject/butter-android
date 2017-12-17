@@ -41,6 +41,7 @@ import butter.droid.provider.filter.Pager;
 import butter.droid.provider.mock.model.MockEpisode;
 import butter.droid.provider.mock.model.MockMovies;
 import butter.droid.provider.mock.model.MockSeason;
+import butter.droid.provider.mock.model.MockSeasons;
 import butter.droid.provider.mock.model.MockShows;
 import com.google.gson.Gson;
 import io.reactivex.Maybe;
@@ -65,6 +66,7 @@ public class MockMediaProvider extends AbsMediaProvider {
     @NonNull @Override public Single<ItemsWrapper> items(@Nullable final Filter filter, @Nullable Pager pager) {
         return parseMovies()
                 .concatWith(parseShows())
+                .concatWith(parseSeasons())
                 .toList()
                 .map(l -> new ItemsWrapper(l, new Paging("", false)));
     }
@@ -133,6 +135,13 @@ public class MockMediaProvider extends AbsMediaProvider {
                         s.getPoster(), mapSeasons(s.getSeasons())));
     }
 
+    private Observable<Media> parseSeasons() {
+        return Single.fromCallable(() -> parseResponse("season_list.json", MockSeasons.class))
+                .map(MockSeasons::getSeasons)
+                .flattenAsObservable(mockSeasons -> mockSeasons)
+                .map(s -> mapSeason(s));
+    }
+
     private BufferedSource getFile(String fileName) throws IOException {
         String file = String.format("mock/%s", fileName);
         return Okio.buffer(Okio.source(context.getAssets().open(file)));
@@ -141,9 +150,7 @@ public class MockMediaProvider extends AbsMediaProvider {
     private Season[] mapSeasons(MockSeason[] mockSeasons) {
         Season[] seasons = new Season[mockSeasons.length];
         for (int i = 0; i < mockSeasons.length; i++) {
-            MockSeason season = mockSeasons[i];
-            seasons[i] = new Season(String.valueOf(season.getId()), season.getTitle(), season.getYear(), new Genre[0],
-                    null, season.getPoster(), season.getBackdrop(), season.getSynopsis(), mapEpisodes(season.getEpisodes()));
+            seasons[i] = mapSeason(mockSeasons[i]);
         }
         return seasons;
     }
@@ -161,4 +168,10 @@ public class MockMediaProvider extends AbsMediaProvider {
         return episodes;
 
     }
+
+    private Season mapSeason(MockSeason season) {
+        return new Season(String.valueOf(season.getId()), season.getTitle(), season.getYear(), new Genre[0],
+                null, season.getPoster(), season.getBackdrop(), season.getSynopsis(), mapEpisodes(season.getEpisodes()));
+    }
+
 }
