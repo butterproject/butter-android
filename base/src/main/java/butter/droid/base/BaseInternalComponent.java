@@ -48,7 +48,7 @@ public interface BaseInternalComponent {
 
     VodoProvider vodoProvider();
 
-    MockMediaProvider mockMoviesProvider();
+    MockMediaProvider mockMediaProvider();
 
     MockSubsProvider mockSubsProvider();
 

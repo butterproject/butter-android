@@ -53,7 +53,7 @@ public interface ProviderComponent {
 
     VodoProvider vodoProvider();
 
-    MockMediaProvider mockMoviesProvider();
+    MockMediaProvider mockMediaProvider();
 
     MockSubsProvider mockSubsProvider();
 
