@@ -54,7 +54,7 @@ import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
 import butter.droid.ui.media.detail.dialog.MessageDialogFragment;
-import butter.droid.ui.media.detail.movie.MovieDetailFragment;
+import butter.droid.ui.media.detail.streamable.StreamableDetailFragment;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.ui.trailer.TrailerPlayerActivity;
@@ -157,8 +157,8 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         loadBackgroundImage(media);
     }
 
-    @Override public void displayMovie(MediaWrapper movie) {
-        displayFragment(MovieDetailFragment.newInstance(movie));
+    @Override public void displayStreamable(MediaWrapper movie) {
+        displayFragment(StreamableDetailFragment.newInstance(movie));
     }
 
     @Override public void displayShow(MediaWrapper show) {

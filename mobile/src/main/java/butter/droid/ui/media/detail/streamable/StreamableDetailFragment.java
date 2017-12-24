@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail.movie;
+package butter.droid.ui.media.detail.streamable;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -36,12 +36,13 @@ import butter.droid.R;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.torrent.Magnet;
 import butter.droid.base.torrent.TorrentHealth;
+import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.SubsPickerCallback;
 import butter.droid.ui.media.detail.model.UiSubItem;
-import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
+import butter.droid.ui.media.detail.streamable.dialog.SynopsisDialogFragment;
 import butter.droid.widget.OptionPreview;
 import butter.droid.widget.OptionSelector;
 import butterknife.BindView;
@@ -56,11 +57,11 @@ import java.util.Locale;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
-public class MovieDetailFragment extends DaggerFragment implements MovieDetailView, SubsPickerCallback {
+public class StreamableDetailFragment extends DaggerFragment implements StreamableDetailView, SubsPickerCallback {
 
-    private static final String EXTRA_MOVIE = "butter.droid.ui.media.detail.movie.MovieDetailFragment.movie";
+    private static final String EXTRA_MOVIE = "butter.droid.ui.media.detail.movie.StreamableDetailFragment.movie";
 
-    @Inject MovieDetailPresenter presenter;
+    @Inject StreamableDetailPresenter presenter;
 
     private Magnet magnet;
 
@@ -158,7 +159,7 @@ public class MovieDetailFragment extends DaggerFragment implements MovieDetailVi
         this.synopsis.setText(synopsis);
         this.synopsis.post(() -> {
             boolean ellipsized = false;
-            Layout layout = MovieDetailFragment.this.synopsis.getLayout();
+            Layout layout = StreamableDetailFragment.this.synopsis.getLayout();
             int lines = layout.getLineCount();
             if (lines > 0) {
                 int ellipsisCount = layout.getEllipsisCount(lines - 1);
@@ -234,9 +235,9 @@ public class MovieDetailFragment extends DaggerFragment implements MovieDetailVi
     }
 
     @Override public void initLayout(MediaWrapper mediaWrapper) {
-        Movie movie = (Movie) mediaWrapper.getMedia();
+        Media media = mediaWrapper.getMedia();
 
-        title.setText(movie.getTitle());
+        title.setText(media.getTitle());
 
         quality.setFragmentManager(getFragmentManager());
         quality.setTitle(R.string.quality);
@@ -246,10 +247,12 @@ public class MovieDetailFragment extends DaggerFragment implements MovieDetailVi
             fab.setBackgroundTintList(ColorStateList.valueOf(mediaWrapper.getColor()));
         }
 
-        watchTrailer.setVisibility(TextUtils.isEmpty(movie.getTrailer()) ? View.GONE : View.VISIBLE);
+        if (mediaWrapper.isMovie()) {
+            watchTrailer.setVisibility(TextUtils.isEmpty(((Movie) media).getTrailer()) ? View.GONE : View.VISIBLE);
+        }
 
         if (coverImage != null) {
-            Picasso.with(coverImage.getContext()).load(movie.getBackdrop()).into(coverImage);
+            Picasso.with(coverImage.getContext()).load(media.getBackdrop()).into(coverImage);
         }
     }
 
@@ -257,11 +260,11 @@ public class MovieDetailFragment extends DaggerFragment implements MovieDetailVi
         presenter.subtitleSelected(item);
     }
 
-    public static MovieDetailFragment newInstance(MediaWrapper movie) {
+    public static StreamableDetailFragment newInstance(MediaWrapper movie) {
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_MOVIE, Parcels.wrap(movie));
 
-        MovieDetailFragment fragment = new MovieDetailFragment();
+        StreamableDetailFragment fragment = new StreamableDetailFragment();
         fragment.setArguments(args);
         return fragment;
     }

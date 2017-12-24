@@ -25,7 +25,7 @@ import butter.droid.base.torrent.TorrentHealth;
 public interface MediaDetailView {
     void initMediaLayout(MediaWrapper media);
 
-    void displayMovie(MediaWrapper media);
+    void displayStreamable(MediaWrapper media);
 
     void displayShow(MediaWrapper media);
 

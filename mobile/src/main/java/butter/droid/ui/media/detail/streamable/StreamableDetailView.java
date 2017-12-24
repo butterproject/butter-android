@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail.movie;
+package butter.droid.ui.media.detail.streamable;
 
 import android.support.annotation.StringRes;
 import butter.droid.base.providers.media.model.MediaWrapper;
@@ -23,7 +23,7 @@ import butter.droid.provider.base.model.Torrent;
 import butter.droid.ui.media.detail.model.UiSubItem;
 import java.util.List;
 
-public interface MovieDetailView {
+public interface StreamableDetailView {
     void initLayout(MediaWrapper movie);
 
     void renderHealth(Torrent torrent);

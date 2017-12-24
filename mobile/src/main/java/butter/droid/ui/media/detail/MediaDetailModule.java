@@ -22,8 +22,8 @@ import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.ui.ActivityScope;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.media.detail.MediaDetailModule.MediaDetailBindModule;
-import butter.droid.ui.media.detail.movie.MovieDetailFragment;
-import butter.droid.ui.media.detail.movie.MovieDetailModule;
+import butter.droid.ui.media.detail.streamable.StreamableDetailFragment;
+import butter.droid.ui.media.detail.streamable.StreamableDetailModule;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
 import butter.droid.ui.media.detail.show.ShowDetailModule;
 import dagger.Binds;
@@ -44,8 +44,8 @@ public class MediaDetailModule {
         @Binds MediaDetailView bindView(MediaDetailActivity activity);
 
         @FragmentScope
-        @ContributesAndroidInjector(modules = MovieDetailModule.class)
-        MovieDetailFragment contributeMovieDetailFragmentInjector();
+        @ContributesAndroidInjector(modules = StreamableDetailModule.class)
+        StreamableDetailFragment contributeStreamableDetailFragmentInjector();
 
         @FragmentScope
         @ContributesAndroidInjector(modules = ShowDetailModule.class)

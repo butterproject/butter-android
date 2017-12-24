@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail.movie.dialog;
+package butter.droid.ui.media.detail.streamable.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

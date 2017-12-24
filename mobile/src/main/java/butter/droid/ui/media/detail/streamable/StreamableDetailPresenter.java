@@ -15,13 +15,13 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail.movie;
+package butter.droid.ui.media.detail.streamable;
 
 import android.support.annotation.MainThread;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.ui.media.detail.model.UiSubItem;
 
-public interface MovieDetailPresenter {
+public interface StreamableDetailPresenter {
     void onCreate(MediaWrapper movie);
 
     void openTrailer();
