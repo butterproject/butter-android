@@ -50,7 +50,7 @@ import butter.droid.provider.base.model.Torrent;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.SubsPickerCallback;
 import butter.droid.ui.media.detail.model.UiSubItem;
-import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
+import butter.droid.ui.media.detail.streamable.dialog.SynopsisDialogFragment;
 import butter.droid.widget.BottomSheetScrollView;
 import butter.droid.widget.OptionPreview;
 import butter.droid.widget.OptionSelector;
@@ -70,6 +70,10 @@ import java.util.List;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
+/**
+ * @deprecated Use {@link butter.droid.ui.media.detail.streamable.StreamableDetailFragment} instead.
+ */
+@Deprecated
 public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment implements SubsPickerCallback {
 
     private static final String EXTRA_MEDIA_META = "butter.droid.ui.media.detail.dialog.EpisodeDialogFragment.mediaMeta";

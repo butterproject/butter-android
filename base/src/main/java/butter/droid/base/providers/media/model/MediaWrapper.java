@@ -21,10 +21,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;
 import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Show;
+import butter.droid.provider.base.model.Streamable;
 import org.parceler.Parcels;
 
 public class MediaWrapper implements Parcelable {
@@ -81,6 +83,14 @@ public class MediaWrapper implements Parcelable {
 
     public boolean isSeason() {
         return media instanceof Season;
+    }
+
+    public boolean isEpisode() {
+        return media instanceof Episode;
+    }
+
+    public boolean isStreamable() {
+        return media instanceof Streamable;
     }
 
     public boolean hasColor() {

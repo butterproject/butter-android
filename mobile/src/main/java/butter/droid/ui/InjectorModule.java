@@ -36,8 +36,6 @@ import butter.droid.ui.main.MainActivity;
 import butter.droid.ui.main.MainModule;
 import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.ui.media.detail.MediaDetailModule;
-import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
-import butter.droid.ui.media.detail.dialog.EpisodeDialogModule;
 import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.ui.player.VideoPlayerModule;
 import butter.droid.ui.preferences.PreferencesActivity;
@@ -107,10 +105,6 @@ public abstract class InjectorModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = StreamLoadingFragmentModule.class)
     abstract StreamLoadingFragment contributeStreamLoadingFragmentInjector();
-
-    @FragmentScope
-    @ContributesAndroidInjector(modules = EpisodeDialogModule.class)
-    abstract EpisodeDialogFragment contributeEpisodeDialogFragmentInjector();
 
     @FragmentScope
     @ContributesAndroidInjector(modules = BeamDeviceSelectorDialogModule.class)

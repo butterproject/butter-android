@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail.movie;
+package butter.droid.ui.media.detail.streamable;
 
 import android.content.res.Resources;
 
@@ -26,24 +26,24 @@ import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
-import butter.droid.ui.media.detail.movie.MovieDetailModule.MovieDetailBindModule;
+import butter.droid.ui.media.detail.streamable.StreamableDetailModule.MovieDetailBindModule;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = MovieDetailBindModule.class)
-public class MovieDetailModule {
+public class StreamableDetailModule {
 
-    @Provides @FragmentScope MovieDetailPresenter providePresenter(MovieDetailView view,
+    @Provides @FragmentScope StreamableDetailPresenter providePresenter(StreamableDetailView view,
             MediaDetailPresenter parentPresenter, YouTubeManager youTubeManager, PreferencesHandler preferencesHandler,
             ProviderManager providerManager, PlayerManager playerManager, Resources resources, MediaDisplayManager mediaDisplayManager) {
-        return new MovieDetailPresenterImpl(view, parentPresenter, youTubeManager, preferencesHandler, providerManager,
+        return new StreamableDetailPresenterImpl(view, parentPresenter, youTubeManager, preferencesHandler, providerManager,
                 playerManager, resources, mediaDisplayManager);
     }
 
     @Module
     public interface MovieDetailBindModule {
-        @Binds MovieDetailView bindView(MovieDetailFragment fragment);
+        @Binds StreamableDetailView bindView(StreamableDetailFragment fragment);
     }
 
 }

@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail.movie;
+package butter.droid.ui.media.detail.streamable;
 
 import android.content.res.Resources;
 import android.text.TextUtils;
@@ -30,6 +30,7 @@ import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.model.Format;
 import butter.droid.provider.base.model.Movie;
+import butter.droid.provider.base.model.Streamable;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
 import butter.droid.ui.media.detail.model.UiSubItem;
@@ -42,9 +43,9 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.Collections;
 import java.util.List;
 
-public class MovieDetailPresenterImpl implements MovieDetailPresenter {
+public class StreamableDetailPresenterImpl implements StreamableDetailPresenter {
 
-    private final MovieDetailView view;
+    private final StreamableDetailView view;
     private final MediaDetailPresenter parentPresenter;
     private final YouTubeManager youTubeManager;
     private final PreferencesHandler preferencesHandler;
@@ -59,7 +60,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     private List<UiSubItem> subtitleList;
     private UiSubItem selectedSub;
 
-    public MovieDetailPresenterImpl(MovieDetailView view, MediaDetailPresenter parentPresenter,
+    public StreamableDetailPresenterImpl(StreamableDetailView view, MediaDetailPresenter parentPresenter,
             YouTubeManager youTubeManager, PreferencesHandler preferencesHandler, ProviderManager providerManager,
             PlayerManager playerManager, Resources resources,
             final MediaDisplayManager mediaDisplayManager) {
@@ -99,7 +100,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     @Override public void selectQuality(int position) {
-        Torrent torrent = ((Movie) mediaWrapper.getMedia()).getTorrents()[position];
+        Torrent torrent = ((Streamable) mediaWrapper.getMedia()).getTorrents()[position];
         parentPresenter.selectTorrent(torrent);
         view.renderHealth(torrent);
         view.updateMagnet(torrent);
@@ -253,7 +254,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     private void displayQualities() {
-        Torrent[] torrents = ((Movie) mediaWrapper.getMedia()).getTorrents();
+        Torrent[] torrents = ((Streamable) mediaWrapper.getMedia()).getTorrents();
         if (torrents.length > 0) {
             final Format[] formats = mediaDisplayManager.getSortedTorrentFormats(torrents);
 

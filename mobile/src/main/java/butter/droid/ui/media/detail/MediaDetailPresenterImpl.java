@@ -51,13 +51,13 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
 
         view.initMediaLayout(media);
 
-        if (media.isMovie()) {
-            view.displayMovie(media);
+        if (media.isStreamable()) {
+            view.displayStreamable(media);
         } else if (media.isShow()) {
             view.displayShow(media);
         } else if (media.isSeason()) {
             view.displaySeason(media);
-        } else { // TODO: 7/30/17 Support episode
+        } else {
             throw new IllegalStateException("Unknown show type");
         }
     }
@@ -91,7 +91,7 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
     }
 
     @Override public void selectSubtitle(Subtitle subtitle) {
-        subtitle = subtitle;
+        this.subtitle = subtitle;
     }
 
     @Override public void healthClicked() {

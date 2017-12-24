@@ -29,9 +29,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import butter.droid.R;
 import butter.droid.base.providers.media.model.MediaMeta;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Season;
-import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
+import butter.droid.ui.media.detail.MediaDetailActivity;
 import butter.droid.ui.media.detail.show.season.list.EpisodeListAdapter;
 import butter.droid.widget.LinearList;
 import dagger.android.support.DaggerFragment;
@@ -99,8 +100,7 @@ public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDeta
     }
 
     @Override public void showEpisodeDialog(MediaMeta mediaMeta, Episode episode) {
-        EpisodeDialogFragment fragment = EpisodeDialogFragment.newInstance(mediaMeta, episode);
-        fragment.show(getFragmentManager(), "episode_dialog");
+        startActivity(MediaDetailActivity.getIntent(getContext(), new MediaWrapper(episode, mediaMeta)));
     }
 
     public static ShowDetailSeasonFragment newInstance(final MediaMeta mediaMeta, final Season season) {
