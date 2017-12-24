@@ -219,14 +219,18 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
                         }
 
                         @Override public void onSuccess(final Uri uri) {
+                            subtitleDisposable = null;
                             streamInfo.getSubtitle().setFileUri(uri);
+                            startPlayer();
                         }
 
                         @Override public void onError(final Throwable e) {
+                            subtitleDisposable = null;
                             startPlayer();
                         }
 
                         @Override public void onComplete() {
+                            subtitleDisposable = null;
                             startPlayer();
                         }
                     });

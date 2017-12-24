@@ -17,61 +17,60 @@
 
 package butter.droid.ui.media.detail.dialog;
 
-    import android.app.Activity;
-    import android.app.Dialog;
-    import android.content.DialogInterface;
-    import android.os.Bundle;
-    import android.support.annotation.NonNull;
-    import android.support.annotation.Nullable;
-    import android.text.TextUtils;
-    import android.view.ContextThemeWrapper;
-    import android.view.KeyEvent;
-    import android.view.LayoutInflater;
-    import android.view.View;
-    import android.view.ViewGroup;
-    import android.widget.ImageButton;
-    import android.widget.ImageView;
-    import android.widget.LinearLayout;
-    import android.widget.TextView;
-    import butter.droid.R;
-    import butter.droid.base.content.preferences.PreferencesHandler;
-    import butter.droid.base.manager.internal.media.MediaDisplayManager;
-    import butter.droid.base.manager.internal.provider.ProviderManager;
-    import butter.droid.base.providers.media.model.MediaMeta;
-    import butter.droid.base.providers.media.model.MediaWrapper;
-    import butter.droid.base.providers.media.model.StreamInfo;
-    import butter.droid.base.providers.meta.MetaProvider;
-    import butter.droid.base.torrent.Magnet;
-    import butter.droid.base.utils.LocaleUtils;
-    import butter.droid.base.utils.PixelUtils;
-    import butter.droid.base.utils.StringUtils;
-    import butter.droid.base.utils.ThreadUtils;
-    import butter.droid.provider.base.model.Episode;
-    import butter.droid.provider.base.model.Format;
-    import butter.droid.provider.base.model.Torrent;
-    import butter.droid.ui.media.detail.model.UiSubItem;
-    import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
-    import butter.droid.widget.BottomSheetScrollView;
-    import butter.droid.widget.OptionPreview;
-    import butter.droid.widget.OptionSelector;
-    import butterknife.BindView;
-    import butterknife.ButterKnife;
-    import butterknife.OnClick;
-    import com.squareup.picasso.Picasso;
-    import dagger.android.support.DaggerAppCompatDialogFragment;
-    import io.reactivex.Observable;
-    import io.reactivex.Single;
-    import io.reactivex.SingleObserver;
-    import io.reactivex.android.schedulers.AndroidSchedulers;
-    import io.reactivex.disposables.Disposable;
-    import io.reactivex.schedulers.Schedulers;
-    import java.util.Collections;
-    import java.util.List;
-    import java.util.Locale;
-    import javax.inject.Inject;
-    import org.parceler.Parcels;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import butter.droid.R;
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.internal.media.MediaDisplayManager;
+import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.providers.media.model.MediaMeta;
+import butter.droid.base.providers.media.model.MediaWrapper;
+import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.providers.meta.MetaProvider;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
+import butter.droid.base.torrent.Magnet;
+import butter.droid.base.utils.PixelUtils;
+import butter.droid.provider.base.model.Episode;
+import butter.droid.provider.base.model.Format;
+import butter.droid.provider.base.model.Torrent;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.SubsPickerCallback;
+import butter.droid.ui.media.detail.model.UiSubItem;
+import butter.droid.ui.media.detail.movie.dialog.SynopsisDialogFragment;
+import butter.droid.widget.BottomSheetScrollView;
+import butter.droid.widget.OptionPreview;
+import butter.droid.widget.OptionSelector;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.squareup.picasso.Picasso;
+import dagger.android.support.DaggerAppCompatDialogFragment;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import java.util.Collections;
+import java.util.List;
+import javax.inject.Inject;
+import org.parceler.Parcels;
 
-public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
+public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment implements SubsPickerCallback {
 
     private static final String EXTRA_MEDIA_META = "butter.droid.ui.media.detail.dialog.EpisodeDialogFragment.mediaMeta";
     private static final String EXTRA_EPISODE = "butter.droid.ui.media.detail.dialog.EpisodeDialogFragment.episode";
@@ -88,11 +87,14 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
     private MetaProvider metaProvider;
     private boolean touching;
     private boolean opened;
-    private String selectedSubtitleLanguage;
     private Torrent selectedTorrent;
+
     private MediaMeta mediaMeta;
     private Episode episode;
     private Magnet magnet;
+
+    List<UiSubItem> subtitleList;
+    private UiSubItem selectedSub;
 
     @BindView(R.id.scrollview) BottomSheetScrollView scrollView;
     @BindView(R.id.placeholder) View placeholder;
@@ -105,6 +107,8 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
     @BindView(R.id.subtitles) OptionPreview subtitlesPreview;
     @BindView(R.id.quality) OptionSelector quality;
     @BindView(R.id.magnet) @Nullable ImageButton openMagnet;
+
+    private android.support.v4.app.DialogFragment subsDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -219,6 +223,9 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
 //        info.setText(String.format(Locale.US, "S%02dE%02d", episode.getSeasion(), episode.getEpisode()));
 
 //        subtitlesPreview.setFragmentManager(getFragmentManager());
+        subtitlesPreview.setOnClickListener(v -> showSubsPickerDialog());
+
+        quality.setFragmentManager(getFragmentManager());
 
         final Format[] formats = mediaDisplayManager.getSortedTorrentFormats(episode.getTorrents());
         String[] formatDisplay = new String[formats.length];
@@ -229,7 +236,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
 
         int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(formats);
 //        // TODO: 7/30/17 Handle sorting
-//        selectedTorrent = episode.getTorrents()[defaultFormatIndex];
+        selectedTorrent = episode.getTorrents()[defaultFormatIndex];
         this.quality.setText(formatDisplay[defaultFormatIndex]);
         this.quality.setDefault(defaultFormatIndex);
 //
@@ -251,7 +258,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
                         } else {
                             final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
                             return Observable.fromIterable(subs)
-                                    .map(sub -> new UiSubItem(sub, defaultSubtitle.equals(sub.getLanguage())))
+                                    .map(sub -> new UiSubItem(sub, sub.equals(defaultSubtitle)))
                                     .startWith(new UiSubItem(null, defaultSubtitle == null))
                                     .toList();
                         }
@@ -266,10 +273,10 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
                         @Override public void onSuccess(final List<UiSubItem> subs) {
                             if (subs.isEmpty()) {
                                 subtitlesPreview.setText(R.string.no_subs_available);
-//                                subtitleList = null;
+                                subtitleList = null;
                             } else {
-                                subtitlesPreview.setEnabled(true);
-//                                subtitleList = subs;
+                                subtitlesPreview.setClickable(true);
+                                subtitleList = subs;
 
                                 UiSubItem selectedItem = null;
                                 for (final UiSubItem sub : subs) {
@@ -288,14 +295,14 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
                                     selectedItem = subs.get(0);
                                 }
 
-//                                selectedSub = selectedItem;
+                                selectedSub = selectedItem;
                             }
                         }
 
                         @Override public void onError(final Throwable e) {
 //                            subtitleList = null;
                             subtitlesPreview.setText(R.string.no_subs_available);
-                            subtitlesPreview.setEnabled(false);
+                            subtitlesPreview.setClickable(false);
                         }
                     });
         } else {
@@ -344,41 +351,30 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
         }
     }
 
-    private void updateMagnet() {
-        if (openMagnet == null) {
-            return;
-        }
-        if (magnet == null) {
-            magnet = new Magnet(activity, selectedTorrent.getUrl());
-        } else {
-            magnet.setUrl(selectedTorrent.getUrl());
-        }
-
-        if (!magnet.canOpen()) {
-            openMagnet.setVisibility(View.GONE);
-        } else {
-            openMagnet.setVisibility(View.VISIBLE);
-        }
-    }
-
     @OnClick(R.id.synopsis)
     public void readMoreClick() {
         if (getFragmentManager().findFragmentByTag("overlay_fragment") != null) {
             return;
         }
-        SynopsisDialogFragment synopsisDialogFragment = new SynopsisDialogFragment();
-        Bundle args = new Bundle();
-//        args.putString("text", ((Episode) episodeWrapper.getMedia()).getOverview());
-        synopsisDialogFragment.setArguments(args);
-        synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
+
+        SynopsisDialogFragment dialog = SynopsisDialogFragment.newInstance(episode.getSynopsis());
+        dialog.show(getFragmentManager(), "overlay_fragment");
     }
 
     @OnClick(R.id.play_button)
     public void playClick() {
         smoothDismiss();
-        // TODO Subs & parent
-//        StreamInfo streamInfo = new StreamInfo(selectedTorrent, episodeWrapper, showWrapper, null);
-        StreamInfo streamInfo = new StreamInfo(selectedTorrent, new MediaWrapper(episode, mediaMeta), null, null);
+        // TODO parent
+        UiSubItem selectedSub = this.selectedSub;
+        final SubtitleWrapper subtitleWrapper;
+        if (selectedSub != null) {
+            subtitleWrapper = new SubtitleWrapper(selectedSub.getSubtitle());
+        } else {
+            subtitleWrapper = null;
+        }
+
+        // TODO use pare presenter
+        StreamInfo streamInfo = new StreamInfo(selectedTorrent, new MediaWrapper(episode, mediaMeta), null, subtitleWrapper);
         ((FragmentListener) getActivity()).playStream(streamInfo);
     }
 
@@ -393,13 +389,49 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
         smoothDismiss();
     }
 
-    private void onSubtitleLanguageSelected(String language) {
-        selectedSubtitleLanguage = language;
-        if (!language.equals("no-subs")) {
-            final Locale locale = LocaleUtils.toLocale(language);
-            ThreadUtils.runOnUiThread(() -> subtitlesPreview.setText(StringUtils.uppercaseFirst(locale.getDisplayName(locale))));
+    @Override public void onSubsItemSelected(final int position, final UiSubItem item) {
+        UiSubItem selectedSub = this.selectedSub;
+        if (selectedSub != null) {
+            selectedSub.setSelected(false);
+        }
+
+        this.selectedSub = item;
+        item.setSelected(true);
+
+        String language = item.getLanguage();
+        // TODO
+//        parentPresenter.selectSubtitle(item.getSubtitle());
+
+        if (language == null) {
+            subtitlesPreview.setText(R.string.no_subs);
         } else {
-            ThreadUtils.runOnUiThread(() -> subtitlesPreview.setText(R.string.no_subs));
+            subtitlesPreview.setText(item.getName());
+        }
+
+        subsDialog.dismiss();
+        subsDialog = null;
+    }
+
+    private void showSubsPickerDialog() {
+        SubsPickerDialog dialog = SubsPickerDialog.newInstance(subtitleList);
+        dialog.show(getChildFragmentManager(), "dialog");
+        subsDialog = dialog;
+    }
+
+    private void updateMagnet() {
+        if (openMagnet == null) {
+            return;
+        }
+        if (magnet == null) {
+            magnet = new Magnet(activity, selectedTorrent.getUrl());
+        } else {
+            magnet.setUrl(selectedTorrent.getUrl());
+        }
+
+        if (!magnet.canOpen()) {
+            openMagnet.setVisibility(View.GONE);
+        } else {
+            openMagnet.setVisibility(View.VISIBLE);
         }
     }
 

@@ -75,7 +75,7 @@ public abstract class AbsSubsProvider implements SubsProvider {
     private String genrateFileName(@NonNull final Media media, @NonNull final Subtitle subtitle) throws NoSuchAlgorithmException {
         // TODO better naming policy needed
         MessageDigest md = MessageDigest.getInstance("MD5");
-        return Base64.encodeToString(md.digest((media.getId() + subtitle.getLanguage() + subtitle.getName()).getBytes()), Base64.DEFAULT);
+        return Base64.encodeToString(md.digest((media.getId() + subtitle.getLanguage() + subtitle.getName()).getBytes()), Base64.NO_WRAP | Base64.URL_SAFE);
     }
 
 }
