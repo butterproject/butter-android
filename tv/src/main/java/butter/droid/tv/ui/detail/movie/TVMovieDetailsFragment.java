@@ -25,7 +25,7 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.provider.base.model.Torrent;
-import butter.droid.tv.presenters.MovieDetailsDescriptionPresenter;
+import butter.droid.tv.presenters.MediaDetailsDescriptionPresenter;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
@@ -53,7 +53,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
     }
 
     @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
-        return new MovieDetailsDescriptionPresenter();
+        return new MediaDetailsDescriptionPresenter();
     }
 
     @Override public void startTrailer(final MediaWrapper movie, final String trailer) {

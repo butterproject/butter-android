@@ -34,6 +34,7 @@ import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
 import butter.droid.base.providers.media.model.MediaWrapper;
+import butter.droid.tv.presenters.MediaDetailsDescriptionPresenter;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Picasso.LoadedFrom;
@@ -105,7 +106,9 @@ public abstract class TVBaseDetailsFragment extends DetailsSupportFragment imple
                 .add(action);
     }
 
-    protected abstract AbstractDetailsDescriptionPresenter getDetailPresenter();
+    protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
+        return new MediaDetailsDescriptionPresenter();
+    }
 
     protected ArrayObjectAdapter getObjectArrayAdapter() {
         return adapter;

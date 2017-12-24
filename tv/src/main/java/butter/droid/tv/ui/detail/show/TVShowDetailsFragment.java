@@ -20,7 +20,6 @@ package butter.droid.tv.ui.detail.show;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
@@ -34,7 +33,6 @@ import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.tv.R;
-import butter.droid.tv.presenters.ShowDetailsDescriptionPresenter;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
 import butter.droid.tv.ui.detail.show.presenter.EpisodeCardPresenter;
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
@@ -42,7 +40,6 @@ import dagger.android.support.AndroidSupportInjection;
 import java.util.ArrayList;
 import javax.inject.Inject;
 import org.parceler.Parcels;
-
 
 public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVShowDetailsView, EpisodeCardPresenter.Listener {
 
@@ -61,10 +58,6 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment implements TVSh
         final MediaWrapper item = Parcels.unwrap(arguments.getParcelable(EXTRA_ITEM));
 
         presenter.onCreate(item);
-    }
-
-    @Override protected AbstractDetailsDescriptionPresenter getDetailPresenter() {
-        return new ShowDetailsDescriptionPresenter();
     }
 
     @Override protected void populatePresenterSelector(ClassPresenterSelector selector) {
