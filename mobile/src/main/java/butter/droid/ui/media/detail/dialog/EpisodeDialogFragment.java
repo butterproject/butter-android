@@ -239,9 +239,9 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment impleme
         selectedTorrent = episode.getTorrents()[defaultFormatIndex];
         this.quality.setText(formatDisplay[defaultFormatIndex]);
         this.quality.setDefault(defaultFormatIndex);
-//
-//        updateMagnet();
-//
+
+        updateMagnet();
+
         this.quality.setListener((position, value) -> {
             selectedTorrent = episode.getTorrents()[position];
             updateMagnet();
