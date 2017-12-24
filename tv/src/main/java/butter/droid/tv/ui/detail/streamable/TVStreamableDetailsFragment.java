@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.tv.presenters.MediaDetailsDescriptionPresenter;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsFragment;
@@ -62,14 +63,15 @@ public class TVStreamableDetailsFragment extends TVBaseDetailsFragment implement
 
     @Override public void startMovie(final MediaWrapper item, final Torrent torrent, final String quality) {
         String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
-        // TODO Subs
 
-//        SubtitleWrapper subtitle = null;
-//        if (subtitleLanguage != null) {
-//            subtitle = new SubtitleWrapper(subtitleLanguage);
-//        }
-//
-        StreamInfo info = new StreamInfo(torrent, item, null, null);
+        final SubtitleWrapper subtitle;
+        if (subtitleLanguage != null) {
+            subtitle = new SubtitleWrapper();
+        }  else {
+            subtitle = null;
+        }
+
+        StreamInfo info = new StreamInfo(torrent, item, null, subtitle);
 
         TVStreamLoadingActivity.startActivity(getActivity(), info);
     }

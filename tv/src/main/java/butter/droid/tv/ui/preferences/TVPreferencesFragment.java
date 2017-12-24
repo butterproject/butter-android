@@ -70,12 +70,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        butterUpdateManager.setListener(new ButterUpdateManager.Listener() {
-            @Override
-            public void updateAvailable(String filePath) {
-                startActivity(TVUpdateActivity.newIntent(getActivity()));
-            }
-        });
+        butterUpdateManager.setListener(filePath -> startActivity(TVUpdateActivity.newIntent(getActivity())));
     }
 
     @NonNull
@@ -122,12 +117,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
         };
         TVPreferencesListFragment fragment = TVPreferencesListFragment.newInstance(title, colors,
                 Arrays.asList(colorCodes).indexOf(value),
-                new TVPreferencesListFragment.SelectionListener() {
-                    @Override
-                    public void onSelect(int position) {
-                        presenter.onColorSelected(key, colorCodes[position]);
-                    }
-                });
+                position -> presenter.onColorSelected(key, colorCodes[position]));
         GuidedStepFragment.add(getFragmentManager(), fragment);
     }
 
@@ -139,12 +129,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
         }
 
         TVPreferencesListFragment fragment = TVPreferencesListFragment.newInstance(title, array, (value - min),
-                new TVPreferencesListFragment.SelectionListener() {
-                    @Override
-                    public void onSelect(int position) {
-                        presenter.onNumberSelected(key, position + min);
-                    }
-                });
+                position -> presenter.onNumberSelected(key, position + min));
         GuidedStepFragment.add(getFragmentManager(), fragment);
     }
 
@@ -160,12 +145,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
         }
 
         TVPreferencesListFragment fragment = TVPreferencesListFragment.newInstance(title, array, (value - min),
-                new TVPreferencesListFragment.SelectionListener() {
-                    @Override
-                    public void onSelect(int position) {
-                        presenter.onNumberSelected(key, position + min);
-                    }
-                });
+                position -> presenter.onNumberSelected(key, position + min));
         GuidedStepFragment.add(getFragmentManager(), fragment);
     }
 
@@ -178,12 +158,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
         }
 
         TVPreferencesListFragment fragment = TVPreferencesListFragment.newInstance(title, array, (value - min),
-                new TVPreferencesListFragment.SelectionListener() {
-                    @Override
-                    public void onSelect(int position) {
-                        presenter.onNumberSelected(key, position + min);
-                    }
-                });
+                position -> presenter.onNumberSelected(key, position + min));
         GuidedStepFragment.add(getFragmentManager(), fragment);
     }
 

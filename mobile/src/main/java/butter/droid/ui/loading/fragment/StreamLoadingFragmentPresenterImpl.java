@@ -20,7 +20,6 @@ package butter.droid.ui.loading.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
@@ -38,9 +37,8 @@ public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmen
 
     private Torrent currentTorrent;
 
-    public StreamLoadingFragmentPresenterImpl(StreamLoadingFragmentView view, ProviderManager providerManager,
-            PreferencesHandler preferencesHandler, PlayerManager playerManager, Context context,
-            BeamManager beamManager) {
+    public StreamLoadingFragmentPresenterImpl(StreamLoadingFragmentView view, ProviderManager providerManager, PlayerManager playerManager,
+            Context context, BeamManager beamManager) {
         super(view, providerManager, preferencesHandler, playerManager, context);
         this.view = view;
         this.context = context;

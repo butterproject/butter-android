@@ -193,18 +193,18 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
             view.setSubtitleText(R.string.loading_subs);
             view.setSubtitleEnabled(false);
 
-            providerManager.getCurrentSubsProvider().list(mediaWrapper.getMedia())
-                    .flatMap(subs -> {
-                        if (subs.isEmpty()) {
-                            return Single.<List<UiSubItem>>just(Collections.EMPTY_LIST);
-                        } else {
-                            final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
-                            return Observable.fromIterable(subs)
-                                    .map(sub -> new UiSubItem(sub, defaultSubtitle.equals(sub.getLanguage())))
-                                    .startWith(new UiSubItem(null, defaultSubtitle == null))
-                                    .toList();
-                        }
-                    })
+                providerManager.getCurrentSubsProvider().list(mediaWrapper.getMedia())
+                        .flatMap(subs -> {
+                            if (subs.isEmpty()) {
+                                return Single.<List<UiSubItem>>just(Collections.EMPTY_LIST);
+                            } else {
+                                final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
+                                return Observable.fromIterable(subs)
+                                        .map(sub -> new UiSubItem(sub, defaultSubtitle.equals(sub.getLanguage())))
+                                        .startWith(new UiSubItem(null, defaultSubtitle == null))
+                                        .toList();
+                            }
+                        })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SingleObserver<List<UiSubItem>>() {

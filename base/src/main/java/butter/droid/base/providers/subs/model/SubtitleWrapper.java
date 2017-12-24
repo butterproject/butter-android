@@ -26,8 +26,13 @@ import butter.droid.provider.subs.model.Subtitle;
 
 public class SubtitleWrapper implements Parcelable {
 
-    @NonNull private final Subtitle subtitle;
+    // If null default subtitle language should be loaded
+    @Nullable private final Subtitle subtitle;
     @Nullable private Uri fileUri;
+
+    public SubtitleWrapper() {
+        subtitle = null;
+    }
 
     public SubtitleWrapper(@NonNull final Subtitle subtitle) {
         this.subtitle = subtitle;
@@ -49,7 +54,7 @@ public class SubtitleWrapper implements Parcelable {
         return 0;
     }
 
-    @NonNull public Subtitle getSubtitle() {
+    @Nullable public Subtitle getSubtitle() {
         return subtitle;
     }
 

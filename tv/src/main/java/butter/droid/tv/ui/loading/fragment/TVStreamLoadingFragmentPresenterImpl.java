@@ -18,7 +18,6 @@
 package butter.droid.tv.ui.loading.fragment;
 
 import android.content.Context;
-import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.model.StreamInfo;
@@ -29,9 +28,7 @@ public class TVStreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragm
 
     private final TVStreamLoadingFragmentView view;
 
-    public TVStreamLoadingFragmentPresenterImpl(TVStreamLoadingFragmentView view,
-            ProviderManager providerManager,
-            PreferencesHandler preferencesHandler,
+    public TVStreamLoadingFragmentPresenterImpl(TVStreamLoadingFragmentView view, ProviderManager providerManager,
             PlayerManager playerManager, Context context) {
         super(view, providerManager, preferencesHandler, playerManager, context);
         this.view = view;

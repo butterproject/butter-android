@@ -27,7 +27,7 @@ public class TVPreferencesActivity extends TVBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState, 0);
         GuidedStepFragment.addAsRoot(this, new TVPreferencesFragment(), android.R.id.content);
     }
 

@@ -32,9 +32,11 @@ import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.SubsProvider;
+import butter.droid.provider.subs.model.Subtitle;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import io.reactivex.Maybe;
 import io.reactivex.MaybeObserver;
 import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.Disposable;
@@ -56,7 +58,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     protected Boolean playerStarted = false;
 
     public BaseStreamLoadingFragmentPresenterImpl(BaseStreamLoadingFragmentView view, ProviderManager providerManager,
-            PreferencesHandler preferencesHandler, PlayerManager playerManager, Context context) {
+            final PreferencesHandler preferencesHandler, PlayerManager playerManager, Context context) {
         this.view = view;
         this.providerManager = providerManager;
         this.preferencesHandler = preferencesHandler;
@@ -212,28 +214,47 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
 
         SubtitleWrapper subtitle = streamInfo.getSubtitle();
         if (subtitle != null) {
-            subsProvider.downloadSubs(media, subtitle.getSubtitle())
-                    .subscribe(new MaybeObserver<Uri>() {
-                        @Override public void onSubscribe(final Disposable d) {
-                            subtitleDisposable = d;
-                        }
 
-                        @Override public void onSuccess(final Uri uri) {
-                            subtitleDisposable = null;
-                            streamInfo.getSubtitle().setFileUri(uri);
-                            startPlayer();
-                        }
+            Subtitle s = subtitle.getSubtitle();
 
-                        @Override public void onError(final Throwable e) {
-                            subtitleDisposable = null;
-                            startPlayer();
-                        }
+            final Maybe<Uri> maybe;
+            if (s != null) {
+                maybe = subsProvider.downloadSubs(media, s);
+            } else {
+                String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 
-                        @Override public void onComplete() {
-                            subtitleDisposable = null;
-                            startPlayer();
-                        }
-                    });
+                if (subtitleLanguage != null) {
+                    maybe = subsProvider.list(media)
+                            .flattenAsObservable(it -> it)
+                            .filter(sub -> subtitleLanguage.equals(sub.getLanguage()))
+                            .firstElement()
+                            .flatMap(sub -> subsProvider.downloadSubs(media, sub));
+                } else {
+                    return;
+                }
+            }
+
+            maybe.subscribe(new MaybeObserver<Uri>() {
+                @Override public void onSubscribe(final Disposable d) {
+                    subtitleDisposable = d;
+                }
+
+                @Override public void onSuccess(final Uri uri) {
+                    subtitleDisposable = null;
+                    streamInfo.getSubtitle().setFileUri(uri);
+                    startPlayer();
+                }
+
+                @Override public void onError(final Throwable e) {
+                    subtitleDisposable = null;
+                    startPlayer();
+                }
+
+                @Override public void onComplete() {
+                    subtitleDisposable = null;
+                    startPlayer();
+                }
+            });
         }
     }
 
