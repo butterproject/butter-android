@@ -17,6 +17,7 @@
 
 package butter.droid.tv.ui.media;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -45,6 +46,7 @@ import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import com.squareup.picasso.Picasso;
+import dagger.android.AndroidInjection;
 import java.util.List;
 import javax.inject.Inject;
 import org.parceler.Parcels;
@@ -67,6 +69,11 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
 
     private GridPagingAdapter adapter;
     private GridPagingManager pagingManager;
+
+    @Override public void onAttach(final Context context) {
+        AndroidInjection.inject(this);
+        super.onAttach(context);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,9 +141,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
 
         MediaWrapper media = item.getMediaWrapper();
-        if (media.isMovie() || media.isShow()) { // TODO: 7/30/17 Handle episodes and seasons
-            startActivity(TVMediaDetailActivity.getIntent(getActivity(), media), options);
-        }
+        startActivity(TVMediaDetailActivity.getIntent(getActivity(), media), options);
     }
 
     private void setupUi() {
@@ -159,6 +164,10 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         setOnItemViewSelectedListener(this);
     }
 
+    @Override public void loadPage(@Nullable final String endCursor) {
+        presenter.loadNextPage(endCursor);
+    }
+
     public static TVMediaGridFragment newInstance(final int provider, @StringRes int title, Filter filter) {
         final Bundle args = new Bundle();
         args.putInt(ARG_TITLE, title);
@@ -170,7 +179,4 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         return fragment;
     }
 
-    @Override public void loadPage(@Nullable final String endCursor) {
-        presenter.loadNextPage(endCursor);
-    }
 }

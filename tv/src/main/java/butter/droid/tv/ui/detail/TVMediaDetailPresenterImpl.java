@@ -32,13 +32,13 @@ public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
     @Override public void onCreate(final MediaWrapper media) {
         view.updateBackground(media.getMedia().getPoster());
 
-        if (media.isMovie()) {
+        if (media.isStreamable()) {
             view.displayFragment(TVMovieDetailsFragment.newInstance(media));
         } else if (media.isShow()) {
             view.displayFragment(TVShowDetailsFragment.newInstance(media));
         } else if (media.isSeason()) {
             view.displayFragment(TVShowDetailsFragment.newInstance(media));
-        } else { // TODO: 7/30/17 Handle episode
+        } else {
             throw new IllegalStateException("Unknow media type");
         }
     }
