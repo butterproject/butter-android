@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.detail.movie;
+package butter.droid.tv.ui.detail.streamable;
 
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
@@ -27,12 +27,12 @@ import butter.droid.tv.R;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
 
 
-public class TVMovieDetailsPresenterImpl extends TVBaseDetailsPresenterImpl implements TVMovieDetailsPresenter {
+public class TVStreamableDetailsPresenterImpl extends TVBaseDetailsPresenterImpl implements TVStreamableDetailsPresenter {
 
-    private final TVMovieDetailsView view;
+    private final TVStreamableDetailsView view;
     private final MediaDisplayManager mediaDisplayManager;
 
-    public TVMovieDetailsPresenterImpl(final TVMovieDetailsView view, final ProviderManager providerManager,
+    public TVStreamableDetailsPresenterImpl(final TVStreamableDetailsView view, final ProviderManager providerManager,
             final MediaDisplayManager mediaDisplayManager) {
         super(view, providerManager);
 

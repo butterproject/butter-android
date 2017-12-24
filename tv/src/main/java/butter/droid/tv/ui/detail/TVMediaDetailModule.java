@@ -22,8 +22,8 @@ import butter.droid.base.ui.ActivityScope;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.tv.manager.internal.background.BackgroundUpdaterModule;
 import butter.droid.tv.ui.detail.TVMediaDetailModule.TVMediaDetailBindModule;
-import butter.droid.tv.ui.detail.movie.TVMovieDetailsFragment;
-import butter.droid.tv.ui.detail.movie.TVMovieDetailsModule;
+import butter.droid.tv.ui.detail.streamable.TVStreamableDetailsFragment;
+import butter.droid.tv.ui.detail.streamable.TVStreamableDetailsModule;
 import butter.droid.tv.ui.detail.show.TVShowDetailModule;
 import butter.droid.tv.ui.detail.show.TVShowDetailsFragment;
 import dagger.Binds;
@@ -49,8 +49,8 @@ public class TVMediaDetailModule {
         @Binds Activity bindActivity(TVMediaDetailActivity activity);
 
         @FragmentScope
-        @ContributesAndroidInjector(modules = TVMovieDetailsModule.class)
-        TVMovieDetailsFragment contributeTVMovieDetailFragmentInjector();
+        @ContributesAndroidInjector(modules = TVStreamableDetailsModule.class)
+        TVStreamableDetailsFragment contributeTVMovieDetailFragmentInjector();
 
         @FragmentScope
         @ContributesAndroidInjector(modules = TVShowDetailModule.class)

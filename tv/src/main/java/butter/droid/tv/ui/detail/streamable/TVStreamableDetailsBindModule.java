@@ -15,13 +15,17 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.detail.movie;
+package butter.droid.tv.ui.detail.streamable;
 
-import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenter;
+import dagger.Binds;
+import dagger.Module;
 
-public interface TVMovieDetailsPresenter extends TVBaseDetailsPresenter {
+@Module
+public interface TVStreamableDetailsBindModule {
 
-    void onCreate(MediaWrapper item);
+    @Binds TVBaseDetailsPresenter bindBasePresenter(TVStreamableDetailsPresenter presenter);
+
+    @Binds TVStreamableDetailsView bindView(TVStreamableDetailsFragment fragment);
 
 }

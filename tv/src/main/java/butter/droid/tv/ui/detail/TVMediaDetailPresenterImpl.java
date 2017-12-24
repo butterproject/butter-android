@@ -18,7 +18,7 @@
 package butter.droid.tv.ui.detail;
 
 import butter.droid.base.providers.media.model.MediaWrapper;
-import butter.droid.tv.ui.detail.movie.TVMovieDetailsFragment;
+import butter.droid.tv.ui.detail.streamable.TVStreamableDetailsFragment;
 import butter.droid.tv.ui.detail.show.TVShowDetailsFragment;
 
 public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
@@ -33,7 +33,7 @@ public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
         view.updateBackground(media.getMedia().getPoster());
 
         if (media.isStreamable()) {
-            view.displayFragment(TVMovieDetailsFragment.newInstance(media));
+            view.displayFragment(TVStreamableDetailsFragment.newInstance(media));
         } else if (media.isShow()) {
             view.displayFragment(TVShowDetailsFragment.newInstance(media));
         } else if (media.isSeason()) {

@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.detail.movie;
+package butter.droid.tv.ui.detail.streamable;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -33,9 +33,9 @@ import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
 import org.parceler.Parcels;
 
-public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVMovieDetailsView {
+public class TVStreamableDetailsFragment extends TVBaseDetailsFragment implements TVStreamableDetailsView {
 
-    @Inject TVMovieDetailsPresenter presenter;
+    @Inject TVStreamableDetailsPresenter presenter;
     @Inject PreferencesHandler preferencesHandler;
 
     @Override public void onAttach(final Context context) {
@@ -69,7 +69,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements TVM
     }
 
     public static Fragment newInstance(final MediaWrapper media) {
-        TVMovieDetailsFragment fragment = new TVMovieDetailsFragment();
+        TVStreamableDetailsFragment fragment = new TVStreamableDetailsFragment();
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_ITEM, Parcels.wrap(media));
