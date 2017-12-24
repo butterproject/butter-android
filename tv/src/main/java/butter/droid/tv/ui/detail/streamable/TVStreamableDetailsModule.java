@@ -26,8 +26,8 @@ import dagger.Provides;
 @Module(includes = TVStreamableDetailsBindModule.class)
 public class TVStreamableDetailsModule {
 
-    @Provides @FragmentScope public TVStreamableDetailsPresenter providePresenter(TVStreamableDetailsView view, ProviderManager providerManager,
-            MediaDisplayManager mediaDisplayManager) {
+    @Provides @FragmentScope public TVStreamableDetailsPresenter providePresenter(TVStreamableDetailsView view,
+            ProviderManager providerManager, MediaDisplayManager mediaDisplayManager) {
         return new TVStreamableDetailsPresenterImpl(view, providerManager, mediaDisplayManager);
     }
 
