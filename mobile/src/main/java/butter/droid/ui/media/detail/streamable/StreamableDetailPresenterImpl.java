@@ -238,6 +238,7 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
                                 }
 
                                 selectedSub = selectedItem;
+                                parentPresenter.selectSubtitle(selectedItem.getSubtitle());
                             }
                         }
 
