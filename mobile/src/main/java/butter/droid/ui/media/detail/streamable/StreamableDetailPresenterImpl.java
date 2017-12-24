@@ -27,6 +27,7 @@ import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.model.Format;
 import butter.droid.provider.base.model.Movie;
@@ -124,7 +125,7 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
         item.setSelected(true);
 
         String language = item.getLanguage();
-        parentPresenter.selectSubtitle(item.getSubtitle());
+        parentPresenter.selectSubtitle(new SubtitleWrapper(item.getSubtitle()));
 
         if (language == null) {
             view.setSubtitleText(R.string.no_subs);
@@ -193,23 +194,23 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
             view.setSubtitleText(R.string.loading_subs);
             view.setSubtitleEnabled(false);
 
-                providerManager.getCurrentSubsProvider().list(mediaWrapper.getMedia())
-                        .flatMap(subs -> {
-                            if (subs.isEmpty()) {
-                                return Single.<List<UiSubItem>>just(Collections.EMPTY_LIST);
-                            } else {
-                                final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
-                                return Observable.fromIterable(subs)
-                                        .map(sub -> new UiSubItem(sub, defaultSubtitle.equals(sub.getLanguage())))
-                                        .startWith(new UiSubItem(null, defaultSubtitle == null))
-                                        .toList();
-                            }
-                        })
+            providerManager.getCurrentSubsProvider().list(mediaWrapper.getMedia())
+                    .flatMap(subs -> {
+                        if (subs.isEmpty()) {
+                            return Single.<List<UiSubItem>>just(Collections.EMPTY_LIST);
+                        } else {
+                            final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
+                            return Observable.fromIterable(subs)
+                                    .map(sub -> new UiSubItem(sub, defaultSubtitle.equals(sub.getLanguage())))
+                                    .startWith(new UiSubItem(null, defaultSubtitle == null))
+                                    .toList();
+                        }
+                    })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SingleObserver<List<UiSubItem>>() {
                         @Override public void onSubscribe(final Disposable d) {
-
+                            // TODO
                         }
 
                         @Override public void onSuccess(final List<UiSubItem> subs) {
@@ -238,7 +239,12 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
                                 }
 
                                 selectedSub = selectedItem;
-                                parentPresenter.selectSubtitle(selectedItem.getSubtitle());
+
+                                if (selectedItem.getLanguage() == null) {
+                                    parentPresenter.selectSubtitle(new SubtitleWrapper());
+                                } else {
+                                    parentPresenter.selectSubtitle(new SubtitleWrapper(selectedItem.getSubtitle()));
+                                }
                             }
                         }
 

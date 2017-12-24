@@ -20,8 +20,8 @@ package butter.droid.ui.media.detail;
 import android.support.annotation.NonNull;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.provider.base.model.Torrent;
-import butter.droid.provider.subs.model.Subtitle;
 
 public interface MediaDetailPresenter {
     void onCreate(@NonNull MediaWrapper media);
@@ -34,7 +34,7 @@ public interface MediaDetailPresenter {
 
     void openYouTube(String url);
 
-    void selectSubtitle(Subtitle subtitle);
+    void selectSubtitle(SubtitleWrapper subtitle);
 
     void healthClicked();
 }
