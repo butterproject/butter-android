@@ -224,9 +224,9 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         String subsLocation = null;
 
         SubtitleWrapper subtitle = info.getSubtitle();
-        if(subtitle != null && subtitle.getFileUri() != null) {
+        if (subtitle != null && subtitle.getFileUri() != null) {
             BeamServer.setCurrentSubs(subtitle.getFileUri().getPath());
-            if(mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Vtt)) {
+            if (mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Vtt)) {
                 subsLocation = BeamServer.getSubsURL(BeamServer.VTT);
             } else if (mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Srt)) {
                 subsLocation = BeamServer.getSubsURL(BeamServer.SRT);
