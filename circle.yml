@@ -37,8 +37,6 @@ jobs:
             path: tv/build/outputs/apk/release/
             destination: apk/tv
 
-
-
 workflows:
   version: 2
   build_deploy:
