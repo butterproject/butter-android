@@ -3,9 +3,9 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-          - image: circleci/android:api-27-alpha
+      - image: circleci/android:api-27-alpha
     environment:
-          JVM_OPTS: -Xmx3200m
+      JVM_OPTS: -Xmx3200m
     steps:
       - checkout
       - restore_cache:
@@ -20,3 +20,35 @@ jobs:
       - run:
           name: Run Tests
           command: ./gradlew check
+  deploy:
+      working_directory: ~/code
+      docker:
+        - image: circleci/android:api-27-alpha
+      environment:
+        JVM_OPTS: -Xmx3200m
+      branches:
+        only:
+          - release
+          - master
+          - eature/cicleStup
+      steps:
+        - checkout
+        - restore_cache:
+            key: jars-{{ checksum "build.gradle" }}-{{ checksum  "base/build.gradle" }}-{{ checksum  "mobile/build.gradle" }}-{{ checksum  "tv/build.gradle" }}-{{ checksum  "provider/media/base/build.gradle" }}-{{ checksum  "provider/media/mock/build.gradle" }}-{{ checksum  "provider/media/provider/build.gradle" }}-{{ checksum  "provider/media/vodo/build.gradle" }}-{{ checksum  "provider/subs/provider/build.gradle" }}-{{ checksum  "provider/subs/mock/build.gradle" }}-{{ checksum  "connectsdk/core/build.gradle" }}-{{ checksum  "connectsdk/modules/firetv/build.gradle" }}-{{ checksum  "connectsdk/modules/google_cast/build.gradle" }}
+        - run:
+            name: Download Dependencies
+            command: ./gradlew androidDependencies
+        - save_cache:
+            paths:
+              - ~/.gradle
+            key: jars-{{ checksum "build.gradle" }}-{{ checksum  "base/build.gradle" }}-{{ checksum  "mobile/build.gradle" }}-{{ checksum  "tv/build.gradle" }}-{{ checksum  "provider/media/base/build.gradle" }}-{{ checksum  "provider/media/mock/build.gradle" }}-{{ checksum  "provider/media/provider/build.gradle" }}-{{ checksum  "provider/media/vodo/build.gradle" }}-{{ checksum  "provider/subs/provider/build.gradle" }}-{{ checksum  "provider/subs/mock/build.gradle" }}-{{ checksum  "connectsdk/core/build.gradle" }}-{{ checksum  "connectsdk/modules/firetv/build.gradle" }}-{{ checksum  "connectsdk/modules/google_cast/build.gradle" }}
+        - run:
+            name: Run Tests
+            command: ./gradlew clean assambleRelease
+        - store_artifacts:
+            path: mobie/build/outputs/apk/release/
+            destination: apk/mobile
+        - store_artifacts:
+            path: tv/build/outputs/apk/release/
+            destination: apk/tv
+
