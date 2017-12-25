@@ -92,6 +92,10 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
         }
     }
 
+    @Override public void surfaceChanged(final int width, final int height) {
+        player.surfaceChanged(width, height);
+    }
+
     @Override public void onSeekChange(int jump) {
         // Adjust the jump
         long currentTime = getCurrentTime();

@@ -21,16 +21,12 @@ import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_
 import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_4_3;
 import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_BEST_FIT;
 import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FILL;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_HORIZONTAL;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_VERTICAL;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_SCREEN;
 import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_ORIGINAL;
 
-import android.graphics.Point;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.view.Display;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SizePolicy;
 import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
@@ -38,12 +34,10 @@ import org.videolan.libvlc.Media;
 import org.videolan.libvlc.Media.Slave.Type;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.MediaPlayer.Event;
-import timber.log.Timber;
 
 public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, IVLCVout.OnNewVideoLayoutListener {
 
     @Nullable private final LibVLC libVLC;
-    private final WindowManager windowManager;
 
     private final LayoutHolder layoutHolder;
 
@@ -51,13 +45,9 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
 
     private PlayerCallback callback;
 
-    public VlcPlayer(@Nullable final LibVLC libVLC, final WindowManager windowManager) {
+    public VlcPlayer(@Nullable final LibVLC libVLC) {
         this.libVLC = libVLC;
-        this.windowManager = windowManager;
-
-        Point point = new Point();
-        windowManager.getDefaultDisplay().getSize(point);
-        layoutHolder = new LayoutHolder(point);
+        layoutHolder = new LayoutHolder();
     }
 
     public boolean initialize() {
@@ -134,11 +124,11 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
         mediaPlayer.setRate(rate);
     }
 
-    public void attachToSurface(SurfaceView videSurface, SurfaceView subsSurface) {
+    public void attachToSurface(SurfaceView videoSurface, SurfaceView subsSurface) {
         final IVLCVout vlcVout = mediaPlayer.getVLCVout();
 
         if (!vlcVout.areViewsAttached()) {
-            vlcVout.setVideoView(videSurface);
+            vlcVout.setVideoView(videoSurface);
             vlcVout.setSubtitlesView(subsSurface);
             vlcVout.addCallback(this);
             vlcVout.attachViews(this);
@@ -207,15 +197,15 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
 
     @Override public void onNewVideoLayout(final IVLCVout vlcVout, final int width, final int height, final int visibleWidth,
             final int visibleHeight, final int sarNum, final int sarDen) {
-        Display display = windowManager.getDefaultDisplay();
+//        Display display = windowManager.getDefaultDisplay();
 
-        Point size = new Point();
-        display.getSize(size);
-
-        int screenWidth = size.x;
-        int screenHeight = size.y;
-
-        vlcVout.setWindowSize(screenWidth, screenHeight);
+//        Point size = new Point();
+//        display.getSize(size);
+//
+//        int screenWidth = size.x;
+//        int screenHeight = size.y;
+//
+//        vlcVout.setWindowSize(screenWidth, screenHeight);
 
         layoutHolder.height = height;
         layoutHolder.width = width;
@@ -231,12 +221,13 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
 
         // sanity check
         if (!layoutHolder.isValid()) {
-            Timber.e("Invalid surface size");
+            // TODO surface may still be 0
+            changeMediaPlayerLayout(); // Uses OpenGL use media library API for scaling
             return;
         }
 
-        double displayWidth = layoutHolder.displaySize.x;
-        double displayHeight = layoutHolder.displaySize.y;
+        double displayWidth = layoutHolder.surfaceWidth;
+        double displayHeight = layoutHolder.surfaceHeight;
 
         // compute the aspect ratio
         double aspectRatio;
@@ -262,11 +253,12 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
                     displayWidth = displayHeight * aspectRatio;
                 }
                 break;
-            case SURFACE_FIT_HORIZONTAL:
-                displayHeight = displayWidth / aspectRatio;
-                break;
-            case SURFACE_FIT_VERTICAL:
-                displayWidth = displayHeight * aspectRatio;
+            case SURFACE_FIT_SCREEN:
+                if (displayAspectRatio >= aspectRatio) {
+                    displayHeight = displayWidth / aspectRatio;
+                } else {
+                    displayWidth = displayHeight * aspectRatio;
+                }
                 break;
             case SURFACE_FILL:
                 break;
@@ -305,6 +297,68 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
 
     }
 
+    private void changeMediaPlayerLayout() {
+        /* Change the video placement using MediaPlayer API */
+        switch (layoutHolder.sizePolicy) {
+            case SURFACE_BEST_FIT:
+                mediaPlayer.setAspectRatio(null);
+                mediaPlayer.setScale(0);
+                break;
+            case SURFACE_FIT_SCREEN:
+            case SURFACE_FILL: {
+                Media.VideoTrack vtrack = mediaPlayer.getCurrentVideoTrack();
+                if (vtrack == null) {
+                    return;
+                }
+                final boolean videoSwapped = vtrack.orientation == Media.VideoTrack.Orientation.LeftBottom
+                        || vtrack.orientation == Media.VideoTrack.Orientation.RightTop;
+                if (layoutHolder.sizePolicy == SURFACE_FIT_SCREEN) {
+                    int videoW = vtrack.width;
+                    int videoH = vtrack.height;
+
+                    if (videoSwapped) {
+                        int swap = videoW;
+                        videoW = videoH;
+                        videoH = swap;
+                    }
+                    if (vtrack.sarNum != vtrack.sarDen) {
+                        videoW = videoW * vtrack.sarNum / vtrack.sarDen;
+                    }
+
+                    float ar = videoW / (float) videoH;
+                    float dar = layoutHolder.surfaceWidth / (float) layoutHolder.surfaceHeight;
+
+                    float scale;
+                    if (dar >= ar) {
+                        scale = layoutHolder.surfaceWidth / (float) videoW; /* horizontal */
+                    } else {
+                        scale = layoutHolder.surfaceHeight / (float) videoH; /* vertical */
+                    }
+                    mediaPlayer.setScale(scale);
+                    mediaPlayer.setAspectRatio(null);
+                } else {
+                    mediaPlayer.setScale(0);
+                    mediaPlayer.setAspectRatio(!videoSwapped ? "" + layoutHolder.surfaceWidth + ":" + layoutHolder.surfaceHeight
+                            : "" + layoutHolder.surfaceHeight + ":" + layoutHolder.surfaceWidth);
+                }
+                break;
+            }
+            case SURFACE_16_9:
+                mediaPlayer.setAspectRatio("16:9");
+                mediaPlayer.setScale(0);
+                break;
+            case SURFACE_4_3:
+                mediaPlayer.setAspectRatio("4:3");
+                mediaPlayer.setScale(0);
+                break;
+            case SURFACE_ORIGINAL:
+                mediaPlayer.setAspectRatio(null);
+                mediaPlayer.setScale(1);
+                break;
+        }
+    }
+
+
     @Override public void onSurfacesCreated(final IVLCVout vlcVout) {
         // nothing to do
     }
@@ -313,33 +367,39 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
         // nothing to do
     }
 
+    public void surfaceChanged(final int width, final int height) {
+        mediaPlayer.getVLCVout().setWindowSize(width, height);
+        layoutHolder.setSurfaceSize(width, height);
+    }
+
     private class LayoutHolder {
 
-        private final Point displaySize;
         private int width;
         private int height;
         private int visibleWidth;
         private int visibleHeight;
+        private int surfaceWidth;
+        private int surfaceHeight;
         private int sarNum;
         private int sarDen;
         @SizePolicy private int sizePolicy = SURFACE_BEST_FIT;
 
-        public LayoutHolder(final Point displaySize) {
-            this.displaySize = displaySize;
-
-            if (displaySize.x < displaySize.y) {
-                displaySize.x += displaySize.y;
-                displaySize.y = displaySize.x - displaySize.y;
-                displaySize.x -= displaySize.y;
+        private void setSurfaceSize(int width, int height) {
+            if (width < height) {
+                width += height;
+                height = width - height;
+                width -= height;
             }
+            surfaceWidth = width;
+            surfaceHeight = height;
         }
 
         private boolean isValid() {
-            return displaySize.x * displaySize.y > 0 && width * height > 0;
+            return surfaceWidth * surfaceHeight > 0 && width * height > 0;
         }
 
         private double getDisplayAspectRation() {
-            return displaySize.x / displaySize.y;
+            return surfaceWidth / surfaceHeight;
         }
     }
 
