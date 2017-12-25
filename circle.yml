@@ -27,6 +27,7 @@ jobs:
       environment:
         JVM_OPTS: -Xmx3200m
       steps:
+        - checkout
         - run:
             name: Build release
             command: ./gradlew clean assambleRelease
@@ -44,10 +45,10 @@ workflows:
       - build
       - deploy:
           requires:
-           - build
-#        filters:
-#          branches:
-#            only:
+            - build
+          filters:
+            branches:
+              only:
+                - feature/cicleStup
 #              - release
 #              - master
-#              - feature/cicleStup
