@@ -50,5 +50,5 @@ workflows:
             branches:
               only:
                 - feature/cicleStup
-              - release
-              - master
+                - release
+                - master
