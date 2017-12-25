@@ -19,7 +19,6 @@ package butter.droid.tv.ui.player.video;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.view.WindowManager;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.subtitle.SubtitleManager;
@@ -38,8 +37,8 @@ public class TVPlayerModule {
         return new TVPlayerPresenterImpl(view, context, preferencesHandler, providerManager, playerManager, vlcPlayer, subtitleManager);
     }
 
-    @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC, WindowManager windowManager) {
-        return new VlcPlayer(libVLC, windowManager);
+    @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC) {
+        return new VlcPlayer(libVLC);
     }
 
 }

@@ -27,7 +27,6 @@ import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
-import android.view.WindowManager;
 import butter.droid.base.BaseApplicationComponent;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.base.manager.network.NetworkManager;
@@ -73,7 +72,5 @@ public interface ProviderComponent {
     ContentResolver contentResolver();
 
     AudioManager audioManager();
-
-    WindowManager windowManager();
 
 }

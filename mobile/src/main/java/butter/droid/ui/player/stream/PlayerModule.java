@@ -19,7 +19,6 @@ package butter.droid.ui.player.stream;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.view.WindowManager;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
@@ -44,8 +43,8 @@ public class PlayerModule {
                 beamManager, brightnessManager, audioManager, touchHandler, player, subtitleManager);
     }
 
-    @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC, WindowManager windowManager) {
-        return new VlcPlayer(libVLC, windowManager);
+    @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC) {
+        return new VlcPlayer(libVLC);
     }
 
 }

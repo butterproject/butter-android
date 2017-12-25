@@ -21,4 +21,5 @@ import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter;
 
 public interface TVAbsPlayerPresenter extends BaseVideoPlayerPresenter {
 
+    void surfaceChanged(int width, int height);
 }

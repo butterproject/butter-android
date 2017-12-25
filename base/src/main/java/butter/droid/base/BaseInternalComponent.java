@@ -25,7 +25,6 @@ import android.content.res.Resources;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
-import android.view.WindowManager;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
@@ -66,7 +65,5 @@ public interface BaseInternalComponent {
     ContentResolver contentResolver();
 
     AudioManager audioManager();
-
-    WindowManager windowManager();
 
 }

@@ -25,4 +25,5 @@ public interface AbsPlayerPresenter extends BaseVideoPlayerPresenter {
 
     void onProgressChanged(int progress);
 
+    void surfaceChanged(int width, int height);
 }
