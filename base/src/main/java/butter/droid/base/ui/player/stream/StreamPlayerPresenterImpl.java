@@ -24,15 +24,16 @@ import android.text.TextUtils;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.subtitle.SubtitleManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
+import butter.droid.provider.subs.SubsProvider;
 import io.reactivex.MaybeObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import java.io.File;
 import timber.log.Timber;
 
@@ -44,6 +45,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     private final VlcPlayer player;
     private final ProviderManager providerManager;
     private final PlayerManager playerManager;
+    private final SubtitleManager subtitleManager;
 
     protected StreamInfo streamInfo;
 
@@ -55,7 +57,8 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     private int streamerProgress;
 
     public StreamPlayerPresenterImpl(final StreamPlayerView view, final Context context, final PreferencesHandler preferencesHandler,
-            final ProviderManager providerManager, final PlayerManager playerManager, final VlcPlayer player) {
+            final ProviderManager providerManager, final PlayerManager playerManager, final VlcPlayer player,
+            final SubtitleManager subtitleManager) {
         super(view, preferencesHandler, player);
         this.view = view;
         this.context = context;
@@ -63,6 +66,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         this.player = player;
         this.providerManager = providerManager;
         this.playerManager = playerManager;
+        this.subtitleManager = subtitleManager;
     }
 
     @Override public void onCreate(final StreamInfo streamInfo, final long resumePosition) {
@@ -247,37 +251,28 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
     private void loadSubtitle() {
         SubtitleWrapper subtitle = streamInfo.getSubtitle();
-        if (subtitle != null) {
-            Uri fileUri = subtitle.getFileUri();
-            if (fileUri != null) { // TODO file exists
-                loadSubs(fileUri);
-            } else {
-                providerManager.getCurrentSubsProvider()
-                        .downloadSubs(streamInfo.getMedia().getMedia(), subtitle.getSubtitle())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new MaybeObserver<Uri>() {
-                            @Override public void onSubscribe(final Disposable d) {
-                                disposeSubs();
-                                subsDisposable = d;
-                            }
+        SubsProvider provider = providerManager.getCurrentSubsProvider();
+        subtitleManager.downloadSubtitle(provider, streamInfo.getMedia().getMedia(), subtitle)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MaybeObserver<SubtitleWrapper>() {
+                    @Override public void onSubscribe(final Disposable d) {
+                        disposeSubs();
+                        subsDisposable = d;
+                    }
 
-                            @Override public void onSuccess(final Uri subs) {
-                                subtitle.setFileUri(subs); // TODO should be saved in instance sate so we can reuse subs
-                                loadSubs(subs);
-                            }
+                    @Override public void onSuccess(final SubtitleWrapper subs) {
+                        loadSubs(subs.getFileUri());
+                    }
 
-                            @Override public void onError(final Throwable e) {
-                                // TODO show error loading subs
-                                Timber.d("Error loading subs");
-                            }
+                    @Override public void onError(final Throwable e) {
+                        // TODO show error loading subs
+                        Timber.d("Error loading subs");
+                    }
 
-                            @Override public void onComplete() {
-                                Timber.d("Maybe empty");
-                            }
-                        });
-            }
-        }
+                    @Override public void onComplete() {
+                        Timber.d("Maybe empty");
+                    }
+                });
     }
 
     private void disposeSubs() {

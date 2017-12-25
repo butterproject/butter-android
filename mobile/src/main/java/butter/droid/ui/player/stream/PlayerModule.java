@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.subtitle.SubtitleManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.ui.FragmentScope;
@@ -38,9 +39,9 @@ public class PlayerModule {
 
     @Provides @FragmentScope PlayerPresenter providePresenter(PlayerView view, Context context, PreferencesHandler preferencesHandler,
             ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager, AudioManager audioManager,
-            BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player) {
+            BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player, SubtitleManager subtitleManager) {
         return new PlayerPresenterImpl(view, context, preferencesHandler, providerManager, playerManager,
-                beamManager, brightnessManager, audioManager, touchHandler, player);
+                beamManager, brightnessManager, audioManager, touchHandler, player, subtitleManager);
     }
 
     @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC, WindowManager windowManager) {

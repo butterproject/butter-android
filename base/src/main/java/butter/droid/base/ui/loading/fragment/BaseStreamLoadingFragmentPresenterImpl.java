@@ -35,6 +35,7 @@ import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import io.reactivex.MaybeObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.Disposable;
 
@@ -207,6 +208,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
         SubtitleWrapper subtitle = streamInfo.getSubtitle();
 
         subtitleManager.downloadSubtitle(subsProvider, media, subtitle)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MaybeObserver<SubtitleWrapper>() {
                     @Override public void onSubscribe(final Disposable d) {
                         subtitleDisposable = d;
