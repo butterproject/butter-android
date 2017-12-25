@@ -31,6 +31,7 @@ import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.provider.base.model.Media;
 import java.io.File;
@@ -118,14 +119,15 @@ public class PlayerManager {
             String[] playerData = defaultPlayer.split(DELIMITER);
             if (playerData.length > 1) {
                 Intent intent = new Intent();
-                // TODO: 11/1/17 Subtitles
-//                if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals(
-//                        "no-subs")) {
-//                    File subsLocation = new File(getStorageLocation(), media.getId() + "-" + subLanguage + ".srt");
-//                    BeamServer.setCurrentSubs(subsLocation);
-//                    intent.putExtra("subs", new Uri[]{Uri.parse(BeamServer.getSubsURL())});
-//                    intent.putExtra("subs.name", new String[]{LocaleUtils.toLocale(subLanguage).getDisplayLanguage()});
-//                }
+                SubtitleWrapper subtitle = streamInfo.getSubtitle();
+                if (subtitle != null && subtitle.getFileUri() != null) {
+                    File subsLocation = new File(subtitle.getFileUri().getPath());
+                    BeamServer.setCurrentSubs(subsLocation);
+                    intent.putExtra("subs", new Uri[]{subtitle.getFileUri()});
+                    if (subtitle.getSubtitle() != null) {
+                        intent.putExtra("subs.name", new String[]{subtitle.getSubtitle().getName()});
+                    }
+                }
 
                 BeamServer.setCurrentVideo(streamInfo.getStreamUrl());
                 BeamServerService.getServer().start();

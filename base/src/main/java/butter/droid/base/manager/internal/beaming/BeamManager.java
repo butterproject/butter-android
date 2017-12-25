@@ -30,6 +30,7 @@ import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import com.connectsdk.core.ImageInfo;
 import com.connectsdk.core.MediaInfo;
 import com.connectsdk.device.ConnectableDevice;
@@ -221,12 +222,10 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         }
 
         String subsLocation = null;
-        // TODO: 11/1/17 Subtitles
-        /*
-        if(info.getSubtitleLanguage() != null && !info.getSubtitleLanguage().isEmpty() && !info.getSubtitleLanguage().equals("no-subs")) {
-            File srtFile = new File(playerManager.getStorageLocation(), mStreamInfo.getStreamable().getId() đ
-                    + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
-            BeamServer.setCurrentSubs(srtFile);
+
+        SubtitleWrapper subtitle = info.getSubtitle();
+        if(subtitle != null && subtitle.getFileUri() != null) {
+            BeamServer.setCurrentSubs(subtitle.getFileUri().getPath());
             if(mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Vtt)) {
                 subsLocation = BeamServer.getSubsURL(BeamServer.VTT);
             } else if (mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Srt)) {
@@ -235,7 +234,6 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         } else {
             BeamServer.removeSubs();
         }
-        */
 
         try {
             URL url = new URL(location);

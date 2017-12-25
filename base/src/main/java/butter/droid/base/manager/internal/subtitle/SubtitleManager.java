@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import butter.droid.base.Internal;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
+import butter.droid.base.utils.LocaleUtils;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.SubsProvider;
 import butter.droid.provider.subs.model.Subtitle;
@@ -54,13 +55,16 @@ public class SubtitleManager {
                 String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 
                 if (subtitleLanguage != null) {
+                    Subtitle s = new Subtitle(subtitleLanguage, LocaleUtils.toLocale(subtitleLanguage).getDisplayName());
+                    final SubtitleWrapper newWrapper = new SubtitleWrapper(s);
+
                     return subsProvider.list(media)
                             .flattenAsObservable(it -> it)
                             .filter(sub -> subtitleLanguage.equals(sub.getLanguage()))
                             .firstElement()
                             .flatMap(sub -> subsProvider.downloadSubs(media, sub))
-                            .doOnSuccess(wrapper::setFileUri)
-                            .map(uri -> wrapper);
+                            .doOnSuccess(newWrapper::setFileUri)
+                            .map(uri -> newWrapper);
                 } else {
                     return Maybe.empty();
                 }
