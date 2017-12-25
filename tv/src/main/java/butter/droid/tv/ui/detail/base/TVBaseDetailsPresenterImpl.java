@@ -67,7 +67,7 @@ public class TVBaseDetailsPresenterImpl implements TVBaseDetailsPresenter {
     }
 
     private void loadDetails() {
-        providerManager.getProvider(item.getProviderId())
+        providerManager.getMediaProvider(item.getProviderId())
                 .detail(item.getMedia())
                 .map(m -> new MediaWrapper(m, item.getProviderId(), item.getColor()))
                 .subscribeOn(Schedulers.io())

@@ -90,7 +90,7 @@ public class RecommendationService extends DaggerIntentService {
 //        if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_MOVIE)) {
 //            Timber.d("Fetching movies");
 //            //noinspection ConstantConditions
-//            providerManager.getProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
+//            providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
 //                    .getList(movieFilter, new MediaProvider.Callback() {
 //                        @Override
 //                        public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items, boolean changed) {

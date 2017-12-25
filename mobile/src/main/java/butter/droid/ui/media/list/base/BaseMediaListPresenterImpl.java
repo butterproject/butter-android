@@ -74,7 +74,7 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
             showLoading();
         }
 
-        providerManager.getProvider(providerId)
+        providerManager.getMediaProvider(providerId)
                 .items(filter, new Pager(endCursor))
                 .flatMap(w -> Single.zip(Single.just(w.getPaging()),
                         Observable.fromIterable(w.getMedia())
@@ -117,7 +117,7 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
         view.showMediaLoadingDialog();
 
         cancelDetailsCall();
-        providerManager.getProvider(providerId)
+        providerManager.getMediaProvider(providerId)
                 .detail(media.getMedia())
                 .map(m -> new MediaWrapper(m, media.getProviderId(), media.getColor()))
                 .subscribeOn(Schedulers.io())

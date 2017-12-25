@@ -35,16 +35,20 @@ public class ProviderManager {
         this.providers = providers;
     }
 
-    @NonNull public MediaProvider getProvider(int providerId) {
-        return providers[providerId].getMediaProvider();
-    }
-
     @NonNull public ProviderWrapper[] getProviders() {
         return providers;
     }
 
+    @NonNull public ProviderWrapper getProvider(int providerId) {
+        return providers[providerId];
+    }
+
     public int getProviderCount() {
         return providers.length;
+    }
+
+    @NonNull public MediaProvider getMediaProvider(int providerId) {
+        return providers[providerId].getMediaProvider();
     }
 
     public SubsProvider getSubsProvider(int providerId) {

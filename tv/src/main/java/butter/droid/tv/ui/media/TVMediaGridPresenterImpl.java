@@ -68,7 +68,7 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
 
     private void loadItems(@Nullable String endCursor) {
         cancelCurrentCall();
-        providerManager.getProvider(providerId)
+        providerManager.getMediaProvider(providerId)
                 .items(filter, new Pager(endCursor))
                 .flatMap(i -> Single.zip(
                         Single.just(i)

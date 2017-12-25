@@ -17,6 +17,7 @@
 
 package butter.droid.ui.media.list;
 
+import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.provider.base.filter.Filter;
@@ -29,19 +30,17 @@ import butter.droid.ui.media.list.base.BaseMediaListPresenterImpl;
 public class MediaListPresenterImpl extends BaseMediaListPresenterImpl implements MediaListPresenter, OnGenreChangeListener {
 
     private final MediaListView view;
-    private final ProviderManager providerManager;
     private final MainPresenter parentPresenter;
 
     public MediaListPresenterImpl(MediaListView view, ProviderManager providerManager, PreferencesHandler preferencesHandler,
             MainPresenter parentPresenter) {
         super(view, providerManager, preferencesHandler);
         this.view = view;
-        this.providerManager = providerManager;
         this.parentPresenter = parentPresenter;
     }
 
     @Override protected int getLoadingMessage() {
-        return providerManager.getProvider(providerId).getLoadingMessage();
+        return R.string.loading;
     }
 
     @Override public void onCreate() {

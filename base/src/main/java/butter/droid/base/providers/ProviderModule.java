@@ -18,6 +18,7 @@
 package butter.droid.base.providers;
 
 import android.content.Context;
+import butter.droid.base.R;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.provider.base.ProviderScope;
 import butter.droid.provider.mock.MockMediaProvider;
@@ -45,11 +46,12 @@ public class ProviderModule {
 
     @Provides @ProviderScope @IntoSet ProviderWrapper provideMockWrapper(final MockMediaProvider mediaProvider,
             final MockSubsProvider subsProvider) {
-        return new ProviderWrapper(mediaProvider, subsProvider);
+        return new ProviderWrapper(mediaProvider, subsProvider, butter.droid.provider.mock.R.string.title_movies,
+                butter.droid.provider.mock.R.drawable.ic_nav_movies);
     }
 
     @Provides @ProviderScope @IntoSet ProviderWrapper provideVodoWrapper(final VodoProvider mediaProvider) {
-        return new ProviderWrapper(mediaProvider, null);
+        return new ProviderWrapper(mediaProvider, null, R.string.vodo_label, 0);
     }
 
 }

@@ -27,6 +27,7 @@ import android.support.v4.content.ContextCompat;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.rx.KeyDisposable;
 import butter.droid.provider.MediaProvider;
@@ -86,7 +87,7 @@ public class MainPresenterImpl implements MainPresenter {
             view.checkIntentAction();
         }
 
-        view.setScreenTitle(providerManager.getProvider(selectedProviderId).getName());
+        view.setScreenTitle(providerManager.getProvider(selectedProviderId).getDisplayName());
 
         displayProviderData(selectedProviderId);
 
@@ -150,14 +151,15 @@ public class MainPresenterImpl implements MainPresenter {
 
     private void displayProviderData(final int providerId) {
         this.selectedProviderId = providerId;
-        MediaProvider provider = providerManager.getProvider(providerId);
+        final ProviderWrapper provider = providerManager.getProvider(providerId);
+        final MediaProvider mediaProvider = provider.getMediaProvider();
 
         unsubscribeProviderId(providerId);
-        Observable.concat(provider.genres()
+        Observable.concat(mediaProvider.genres()
                         .filter(genres -> genres != null && genres.size() > 0)
                         .map(g -> new NavInfo(R.id.nav_item_genre, 0, R.string.genres, providerId))
                         .toObservable(),
-                provider.navigation()
+                mediaProvider.navigation()
                         .flatMapObservable(Observable::fromIterable)
                         .map(item -> new NavInfo(item, providerId)))
                 .toList()
@@ -171,7 +173,7 @@ public class MainPresenterImpl implements MainPresenter {
                     @Override public void onSuccess(final List<NavInfo> value) {
                         // TODO: 8/5/17 Do we need this
 //                        boolean hasGenres = value.first != null && value.first.size() > 0;
-                        view.displayProvider(provider.getName(), value);
+                        view.displayProvider(provider.getDisplayName(), value);
                     }
 
                     @Override public void onError(final Throwable e) {

@@ -50,7 +50,7 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
     @Override public void onViewCreated(final int providerId) {
         disposeGenres();
 
-        providerManager.getProvider(providerId).genres()
+        providerManager.getMediaProvider(providerId).genres()
                 .flatMapObservable(Observable::fromIterable)
                 .map(UiGenre::new)
                 .toList()

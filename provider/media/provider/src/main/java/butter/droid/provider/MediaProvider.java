@@ -17,12 +17,10 @@
 
 package butter.droid.provider;
 
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
 import android.support.annotation.RestrictTo.Scope;
-import android.support.annotation.StringRes;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;
@@ -55,14 +53,5 @@ public interface MediaProvider {
     @NonNull Maybe<List<NavItem>> navigation();
 
     @NonNull Single<Optional<Sorter>> getDefaultSorter();
-
-    // TODO: 8/5/17 This should be moved to procider configuration
-    @StringRes int getLoadingMessage();
-
-    // TODO: 8/5/17 This should be moved to procider configuration
-    @DrawableRes int getIcon();
-
-    // TODO: 8/5/17 This should be moved to procider configuration
-    @StringRes int getName();
 
 }

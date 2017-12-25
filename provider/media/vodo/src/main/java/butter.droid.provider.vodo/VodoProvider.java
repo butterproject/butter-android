@@ -123,14 +123,6 @@ public class VodoProvider extends AbsMediaProvider {
         return Single.just(Optional.of(SORTER_SEEDS));
     }
 
-    @Override public int getIcon() {
-        return 0;
-    }
-
-    @Override public int getName() {
-        return R.string.vodo_label;
-    }
-
     private Movie mapVodoMovie(@NonNull VodoMovie vodoMovie) {
 
         Torrent torrent = new Torrent(vodoMovie.getTorrentUrl(), parseFormat(vodoMovie.getQuality()), 0, vodoMovie.getSizeBytes(), null, null);

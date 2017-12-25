@@ -91,18 +91,6 @@ public class MockMediaProvider extends AbsMediaProvider {
         return Single.just(Optional.<Sorter>empty());
     }
 
-    @Override public int getLoadingMessage() {
-        return R.string.loading_movies;
-    }
-
-    @Override public int getIcon() {
-        return R.drawable.ic_nav_movies;
-    }
-
-    @Override public int getName() {
-        return R.string.title_movies;
-    }
-
     private <R> R parseResponse(String fileName, Class<R> tClass) {
         return gson.fromJson(readFile(fileName), tClass);
     }

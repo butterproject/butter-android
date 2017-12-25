@@ -105,7 +105,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
     private void loadProviderMedia(final int providerId) {
         cancelMovieCall(providerId);
-        final butter.droid.provider.MediaProvider provider = providerManager.getProvider(providerId);
+        final butter.droid.provider.MediaProvider provider = providerManager.getMediaProvider(providerId);
         provider.getDefaultSorter()
                 .flatMap(sorter -> {
                     Filter f;
@@ -149,7 +149,7 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
     private void loadProviderSorters(final int providerId) {
         cancelMovieSortersCall(providerId);
-        providerManager.getProvider(providerId).navigation()
+        providerManager.getMediaProvider(providerId).navigation()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MaybeObserver<List<NavItem>>() {

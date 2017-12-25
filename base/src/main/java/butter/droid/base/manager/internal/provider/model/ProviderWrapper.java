@@ -17,8 +17,10 @@
 
 package butter.droid.base.manager.internal.provider.model;
 
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import butter.droid.provider.MediaProvider;
 import butter.droid.provider.subs.SubsProvider;
 
@@ -27,9 +29,15 @@ public class ProviderWrapper {
     @NonNull private final MediaProvider mediaProvider;
     @Nullable private final SubsProvider subsProvider;
 
-    public ProviderWrapper(@NonNull final MediaProvider mediaProvider, final SubsProvider subsProvider) {
+    @StringRes private final int displayName;
+    @DrawableRes private final int icon;
+
+    public ProviderWrapper(@NonNull final MediaProvider mediaProvider, @Nullable final SubsProvider subsProvider, final int displayName,
+            final int icon) {
         this.mediaProvider = mediaProvider;
         this.subsProvider = subsProvider;
+        this.displayName = displayName;
+        this.icon = icon;
     }
 
     @NonNull public MediaProvider getMediaProvider() {
@@ -39,4 +47,13 @@ public class ProviderWrapper {
     @Nullable public SubsProvider getSubsProvider() {
         return subsProvider;
     }
+
+    @StringRes public final int getDisplayName() {
+        return displayName;
+    }
+
+    @DrawableRes public final int getIcon() {
+        return icon;
+    }
+
 }
