@@ -29,6 +29,9 @@ jobs:
       steps:
         - checkout
         - run:
+            name: Download Dependencies
+            command: ./gradlew androidDependencies
+        - run:
             name: Build release
             command: ./gradlew mobile:assembleRelease
         - run:
