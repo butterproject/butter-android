@@ -106,8 +106,9 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     @Override public void onDestroyView() {
         super.onDestroyView();
 
-        if (surfaceLayoutListener != null) {
-            getSurfaceView().removeOnLayoutChangeListener(surfaceLayoutListener);
+        SurfaceView surfaceView = getSurfaceView();
+        if (surfaceLayoutListener != null && surfaceView != null) {
+            surfaceView.removeOnLayoutChangeListener(surfaceLayoutListener);
             surfaceLayoutListener = null;
         }
     }

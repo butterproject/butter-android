@@ -54,12 +54,12 @@ public class VodoProvider extends AbsMediaProvider {
             SORTER_TRENDING);
     private static final List<Genre> GENRES = Arrays.asList(Genre.DOCUMENTARY, Genre.DRAMA, Genre.HORROR, Genre.SCI_FI, Genre.THRILLER);
     private static final List<NavItem> NAV_ITEMS = Arrays.asList(
-            new NavItem(0, R.string.sorter_vodo_popularity, SORTER_SEEDS),
-            new NavItem(0, R.string.sorter_vodo_year, SORTER_YEAR),
-            new NavItem(0, R.string.sorter_vodo_date_added, SORTER_DATE_ADDED),
-            new NavItem(0, R.string.sorter_vodo_rating, SORTER_RATING),
-            new NavItem(0, R.string.sorter_vodo_alphabet, SORTER_TITLE),
-            new NavItem(0, R.string.sorter_vodo_trending, SORTER_TRENDING)
+            new NavItem(R.drawable.filter_popular_now, R.string.sorter_vodo_popularity, SORTER_SEEDS),
+            new NavItem(R.drawable.filter_release_date, R.string.sorter_vodo_year, SORTER_YEAR),
+            new NavItem(R.drawable.filter_updated, R.string.sorter_vodo_date_added, SORTER_DATE_ADDED),
+            new NavItem(R.drawable.filter_top_rated, R.string.sorter_vodo_rating, SORTER_RATING),
+            new NavItem(R.drawable.filter_a_to_z, R.string.sorter_vodo_alphabet, SORTER_TITLE),
+            new NavItem(R.drawable.filter_trending, R.string.sorter_vodo_trending, SORTER_TRENDING)
     );
 
     private static final int ITEMS_PER_PAGE = 30;

@@ -45,7 +45,7 @@ public class MockSubsProvider extends AbsSubsProvider {
     }
 
     @Override protected Maybe<InputStream> provideSubs(@NonNull final Media media, @NonNull final Subtitle subtitle) {
-        return Maybe.fromCallable(() -> context.getAssets().open("big_buck_bunny.pt.srt"));
+        return Maybe.fromCallable(() -> context.getAssets().open("big_buck_bunny." + subtitle.getLanguage() + ".srt"));
     }
 
 }

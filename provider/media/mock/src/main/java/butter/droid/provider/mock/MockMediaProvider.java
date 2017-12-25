@@ -49,6 +49,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import okio.BufferedSource;
 import okio.Okio;
@@ -71,12 +72,12 @@ public class MockMediaProvider extends AbsMediaProvider {
                 .map(l -> new ItemsWrapper(l, new Paging("", false)));
     }
 
-    @Override public Single<Media> detail(Media media) {
+    @NonNull @Override public Single<Media> detail(Media media) {
         return Single.just(media);
     }
 
     @NonNull @Override public Maybe<List<Sorter>> sorters() {
-        return Maybe.just(Arrays.asList(new Sorter("alphabet", R.string.sorter_alphabet)));
+        return Maybe.just(Collections.singletonList(new Sorter("alphabet", R.string.sorter_alphabet)));
     }
 
     @NonNull @Override public Maybe<List<Genre>> genres() {
@@ -84,7 +85,7 @@ public class MockMediaProvider extends AbsMediaProvider {
     }
 
     @NonNull @Override public Maybe<List<NavItem>> navigation() {
-        return Maybe.just(Arrays.asList(new NavItem(0, R.string.genre_action, null)));
+        return Maybe.just(Collections.singletonList(new NavItem(R.drawable.ic_nav_movies, R.string.genre_action, null)));
     }
 
     @NonNull @Override public Single<Optional<Sorter>> getDefaultSorter() {

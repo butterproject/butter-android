@@ -51,7 +51,7 @@ public class ProviderModule {
     }
 
     @Provides @ProviderScope @IntoSet ProviderWrapper provideVodoWrapper(final VodoProvider mediaProvider) {
-        return new ProviderWrapper(mediaProvider, null, R.string.vodo_label, 0);
+        return new ProviderWrapper(mediaProvider, null, R.string.vodo_label, butter.droid.provider.mock.R.drawable.ic_nav_movies);
     }
 
 }

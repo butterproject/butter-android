@@ -209,7 +209,7 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
                         } else {
                             final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
                             return Observable.fromIterable(subs)
-                                    .map(sub -> new UiSubItem(sub, defaultSubtitle.equals(sub.getLanguage())))
+                                    .map(sub -> new UiSubItem(sub, sub.getLanguage().equals(defaultSubtitle)))
                                     .startWith(new UiSubItem(null, defaultSubtitle == null))
                                     .toList();
                         }
