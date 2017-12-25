@@ -20,6 +20,7 @@ package butter.droid.ui.main.navigation;
 import android.os.Bundle;
 import butter.droid.R;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.provider.MediaProvider;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.navigation.NavigationDrawerFragment.AbsNavDrawerItem;
@@ -102,8 +103,9 @@ public class NavigationDrawerPresenterImpl implements NavigationDrawerPresenter 
 
         navItems.add(new HeaderNavDrawerItem());
 
-        for (int i = 0; i < providerManager.getProviders().length; i++) {
-            final MediaProvider provider = providerManager.getProvider(i);
+        ProviderWrapper[] providers = providerManager.getProviders();
+        for (int i = 0; i < providers.length; i++) {
+            final MediaProvider provider = providers[i].getMediaProvider();
             navItems.add(new ProviderNavDrawerItem(provider.getName(), provider.getIcon(), i));
         }
 

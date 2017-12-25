@@ -18,29 +18,38 @@
 package butter.droid.base.providers;
 
 import android.content.Context;
+import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.provider.base.ProviderScope;
 import butter.droid.provider.mock.MockMediaProvider;
-import butter.droid.provider.subs.SubsProvider;
 import butter.droid.provider.subs.mock.MockSubsProvider;
 import butter.droid.provider.vodo.VodoModule;
+import butter.droid.provider.vodo.VodoProvider;
 import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
+import dagger.multibindings.IntoSet;
 
-@Module(includes = VodoModule.class)
+@Module(includes = {
+        ProviderBindModule.class,
+        VodoModule.class}
+)
 public class ProviderModule {
 
-    @Provides @ProviderScope
-    public SubsProvider provideSubsProvider(final Context context) {
-        return new MockSubsProvider(context);
-    }
-
-    @Provides @ProviderScope public MockMediaProvider provideMockMoviesProvider(Context context, Gson gson) {
+    @Provides @ProviderScope MockMediaProvider provideMockMoviesProvider(Context context, Gson gson) {
         return new MockMediaProvider(context, gson);
     }
 
     @Provides @ProviderScope MockSubsProvider provideMockSubsProvider(final Context context) {
         return new MockSubsProvider(context);
+    }
+
+    @Provides @ProviderScope @IntoSet ProviderWrapper provideMockWrapper(final MockMediaProvider mediaProvider,
+            final MockSubsProvider subsProvider) {
+        return new ProviderWrapper(mediaProvider, subsProvider);
+    }
+
+    @Provides @ProviderScope @IntoSet ProviderWrapper provideVodoWrapper(final VodoProvider mediaProvider) {
+        return new ProviderWrapper(mediaProvider, null);
     }
 
 }

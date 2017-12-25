@@ -198,11 +198,11 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     }
 
     private void displaySubtitles() {
-        if (providerManager.hasCurrentSubsProvider()) {
+        if (providerManager.hasSubsProvider(mediaWrapper.getProviderId())) {
             view.setSubtitleText(R.string.loading_subs);
             view.setSubtitleEnabled(false);
 
-            providerManager.getCurrentSubsProvider().list(mediaWrapper.getMedia())
+            providerManager.getSubsProvider(mediaWrapper.getProviderId()).list(mediaWrapper.getMedia())
                     .flatMap(subs -> {
                         if (subs.isEmpty()) {
                             return Single.<List<UiSubItem>>just(Collections.EMPTY_LIST);

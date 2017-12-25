@@ -27,6 +27,7 @@ import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.subtitle.SubtitleManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
@@ -212,8 +213,9 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
     private void loadSubtitle() {
         SubtitleWrapper subtitle = streamInfo.getSubtitle();
-        SubsProvider provider = providerManager.getCurrentSubsProvider();
-        subtitleManager.downloadSubtitle(provider, streamInfo.getMedia().getMedia(), subtitle)
+        MediaWrapper media = streamInfo.getMedia();
+        SubsProvider provider = providerManager.getSubsProvider(media.getProviderId());
+        subtitleManager.downloadSubtitle(provider, media.getMedia(), subtitle)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MaybeObserver<SubtitleWrapper>() {
                     @Override public void onSubscribe(final Disposable d) {

@@ -27,13 +27,12 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.view.WindowManager;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
+import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.torrent.TorrentService;
-import butter.droid.provider.mock.MockMediaProvider;
-import butter.droid.provider.subs.mock.MockSubsProvider;
-import butter.droid.provider.vodo.VodoProvider;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import java.util.Set;
 import okhttp3.OkHttpClient;
 
 public interface BaseInternalComponent {
@@ -46,11 +45,7 @@ public interface BaseInternalComponent {
 
     Picasso picasso();
 
-    VodoProvider vodoProvider();
-
-    MockMediaProvider mockMediaProvider();
-
-    MockSubsProvider mockSubsProvider();
+    Set<ProviderWrapper> providers();
 
     OkHttpClient okHttpClient();
 
@@ -73,4 +68,5 @@ public interface BaseInternalComponent {
     AudioManager audioManager();
 
     WindowManager windowManager();
+
 }

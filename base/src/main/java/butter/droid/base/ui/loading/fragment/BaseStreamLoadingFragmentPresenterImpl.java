@@ -24,12 +24,12 @@ import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.subtitle.SubtitleManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
-import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.SubsProvider;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
@@ -203,11 +203,11 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
      * Downloads the subs file
      */
     private void loadSubtitles() {
-        Media media = streamInfo.getMedia().getMedia();
-        SubsProvider subsProvider = providerManager.getCurrentSubsProvider();
+        MediaWrapper media = streamInfo.getMedia();
+        SubsProvider subsProvider = providerManager.getSubsProvider(media.getProviderId());
         SubtitleWrapper subtitle = streamInfo.getSubtitle();
 
-        subtitleManager.downloadSubtitle(subsProvider, media, subtitle)
+        subtitleManager.downloadSubtitle(subsProvider, media.getMedia(), subtitle)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MaybeObserver<SubtitleWrapper>() {
                     @Override public void onSubscribe(final Disposable d) {

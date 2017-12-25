@@ -29,14 +29,13 @@ import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 import android.view.WindowManager;
 import butter.droid.base.BaseApplicationComponent;
+import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.provider.base.ProviderScope;
-import butter.droid.provider.mock.MockMediaProvider;
-import butter.droid.provider.subs.mock.MockSubsProvider;
-import butter.droid.provider.vodo.VodoProvider;
 import com.google.gson.Gson;
 import dagger.Component;
+import java.util.Set;
 import okhttp3.OkHttpClient;
 
 @Component(
@@ -51,11 +50,7 @@ public interface ProviderComponent {
 
     OkHttpClient okHttpClient();
 
-    VodoProvider vodoProvider();
-
-    MockMediaProvider mockMediaProvider();
-
-    MockSubsProvider mockSubsProvider();
+    Set<ProviderWrapper> providers();
 
     Gson gson();
 

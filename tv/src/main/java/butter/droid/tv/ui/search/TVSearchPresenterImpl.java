@@ -19,6 +19,7 @@ package butter.droid.tv.ui.search;
 
 import android.support.annotation.StringRes;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.MediaProvider;
 import butter.droid.provider.base.filter.Filter;
@@ -122,8 +123,9 @@ public class TVSearchPresenterImpl implements TVSearchPresenter {
 
         List<Single<SearchResult>> requests = new ArrayList<>();
 
-        for (int i = 0; i < providerManager.getProviders().length; i++) {
-            MediaProvider provider = providerManager.getProvider(i);
+        ProviderWrapper[] providers = providerManager.getProviders();
+        for (int i = 0; i < providers.length; i++) {
+            MediaProvider provider = providers[i].getMediaProvider();
             final int providerId = i;
             // TODO: 6/17/17 Define title of search row
             requests.add(provider.items(new Filter(null, null, query), new Pager(null))

@@ -182,8 +182,8 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment impleme
         }
 
         // TODO: 11/4/17 Subs
-//        if (providerManager.hasCurrentSubsProvider()) {
-//            providerManager.getCurrentSubsProvider().cancel();
+//        if (providerManager.hasSubsProvider()) {
+//            providerManager.getSubsProvider().cancel();
 //        }
     }
 
@@ -251,11 +251,11 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment impleme
             updateMagnet();
         });
 
-        if (providerManager.hasCurrentSubsProvider()) {
+        if (providerManager.hasSubsProvider(mediaMeta.getProviderId())) {
             subtitlesPreview.setText(R.string.loading_subs);
             subtitlesPreview.setClickable(false);
 
-            providerManager.getCurrentSubsProvider().list(episode)
+            providerManager.getSubsProvider(mediaMeta.getProviderId()).list(episode)
                     .flatMap(subs -> {
                         if (subs.isEmpty()) {
                             return Single.<List<UiSubItem>>just(Collections.EMPTY_LIST);
