@@ -346,6 +346,8 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
                 mediaPlayer.setAspectRatio(null);
                 mediaPlayer.setScale(1);
                 break;
+            default:
+                throw new IllegalStateException("Unknown size policy");
         }
     }
 
