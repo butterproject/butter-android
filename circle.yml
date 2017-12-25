@@ -30,7 +30,7 @@ jobs:
         - checkout
         - run:
             name: Build release
-            command: ./gradlew clean assambleRelease
+            command: ./gradlew clean assembleRelease
         - store_artifacts:
             path: mobie/build/outputs/apk/release/
             destination: apk/mobile
