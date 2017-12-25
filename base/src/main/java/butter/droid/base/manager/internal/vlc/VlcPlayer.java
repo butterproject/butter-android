@@ -197,15 +197,6 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
 
     @Override public void onNewVideoLayout(final IVLCVout vlcVout, final int width, final int height, final int visibleWidth,
             final int visibleHeight, final int sarNum, final int sarDen) {
-//        Display display = windowManager.getDefaultDisplay();
-
-//        Point size = new Point();
-//        display.getSize(size);
-//
-//        int screenWidth = size.x;
-//        int screenHeight = size.y;
-//
-//        vlcVout.setWindowSize(screenWidth, screenHeight);
 
         layoutHolder.height = height;
         layoutHolder.width = width;
