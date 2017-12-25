@@ -70,6 +70,10 @@ public class TrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl i
         }
     }
 
+    @Override public void surfaceChanged(final int width, final int height) {
+        player.surfaceChanged(width, height);
+    }
+
     @Override public void onStop() {
         brightnessManager.restoreBrightness();
     }

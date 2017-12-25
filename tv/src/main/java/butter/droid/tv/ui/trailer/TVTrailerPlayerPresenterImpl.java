@@ -26,9 +26,16 @@ import butter.droid.base.ui.trailer.BaseTrailerPlayerPresenterImpl;
 
 public class TVTrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl implements TVTrailerPlayerPresenter {
 
+    private final VlcPlayer player;
+
     public TVTrailerPlayerPresenterImpl(final TVTrailerPlayerView view, final PreferencesHandler preferencesHandler, final VlcPlayer player,
             final YouTubeManager youTubeManager, final NetworkManager networkManager, final PhoneManager phoneManager) {
         super(view, preferencesHandler, player, youTubeManager, networkManager, phoneManager);
+
+        this.player = player;
     }
 
+    @Override public void surfaceChanged(final int width, final int height) {
+        player.surfaceChanged(width, height);
+    }
 }

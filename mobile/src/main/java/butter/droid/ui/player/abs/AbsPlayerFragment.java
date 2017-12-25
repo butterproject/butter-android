@@ -39,6 +39,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnLayoutChangeListener;
 import android.view.View.OnSystemUiVisibilityChangeListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -95,6 +96,7 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
     protected MediaControllerCompat mediaController;
     protected PlaybackStateCompat.Builder stateBuilder;
     private MediaMetadataCompat.Builder metadataBuilder;
+    private OnLayoutChangeListener videoSurfaceListener;
 
     private int lastSystemUIVisibility;
     protected boolean overlayVisible;
@@ -134,11 +136,21 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
         setupProgressBar();
         initControlls();
         setProgressVisible(true);
+        initSurface();
 
         subsSurface.setZOrderMediaOverlay(true);
         subsSurface.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 
         presenter.onViewCreated();
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        if (videoSurfaceListener != null) {
+            videoSurface.removeOnLayoutChangeListener(videoSurfaceListener);
+            videoSurfaceListener = null;
+        }
     }
 
     @Override public void onResume() {
@@ -410,6 +422,15 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
         playerInfo.setVisibility(View.INVISIBLE);
     }
 
+    private void initSurface() {
+        videoSurfaceListener = (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (left != oldLeft && top != oldTop && right != oldRight && bottom != oldBottom) {
+                presenter.surfaceChanged(v.getWidth(), v.getHeight());
+            }
+        };
+        videoSurface.addOnLayoutChangeListener(videoSurfaceListener);
+    }
+
     private Callback controllerCallback = new Callback() {
 
         @Override public void onPlaybackStateChanged(final PlaybackStateCompat state) {
@@ -444,12 +465,7 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
         }
     };
 
-    private Runnable infoHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hidePlayerInfo();
-        }
-    };
+    private Runnable infoHideRunnable = this::hidePlayerInfo;
 
     private SeekBar.OnSeekBarChangeListener controlBarListener = new SeekBar.OnSeekBarChangeListener() {
         @Override

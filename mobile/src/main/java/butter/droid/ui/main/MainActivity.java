@@ -271,7 +271,7 @@ public class MainActivity extends ButterBaseActivity implements MainView {
 
     private void setupDrawer() {
         // Set up the drawer.
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(R.id.drawer_layout);
         drawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.primary_dark));
 
         navigationDrawerFragment =

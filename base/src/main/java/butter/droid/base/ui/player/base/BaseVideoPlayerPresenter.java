@@ -46,19 +46,18 @@ public interface BaseVideoPlayerPresenter {
 
     // region IntDef
 
-    @IntDef({SURFACE_BEST_FIT, SURFACE_FIT_HORIZONTAL, SURFACE_FIT_VERTICAL, SURFACE_FILL, SURFACE_16_9, SURFACE_4_3, SURFACE_ORIGINAL})
+    @IntDef({SURFACE_BEST_FIT, SURFACE_FIT_SCREEN, SURFACE_FILL, SURFACE_16_9, SURFACE_4_3, SURFACE_ORIGINAL})
     @Retention(RetentionPolicy.SOURCE)
     public @interface SizePolicy {
 
     }
 
     int SURFACE_BEST_FIT = 0;
-    int SURFACE_FIT_HORIZONTAL = 1;
-    int SURFACE_FIT_VERTICAL = 2;
-    int SURFACE_FILL = 3;
-    int SURFACE_16_9 = 4;
-    int SURFACE_4_3 = 5;
-    int SURFACE_ORIGINAL = 6;
+    int SURFACE_FIT_SCREEN = 1;
+    int SURFACE_FILL = 2;
+    int SURFACE_16_9 = 3;
+    int SURFACE_4_3 = 4;
+    int SURFACE_ORIGINAL = 5;
 
     // endregion IntDef
 

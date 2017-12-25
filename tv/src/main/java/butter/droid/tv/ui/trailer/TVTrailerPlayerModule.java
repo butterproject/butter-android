@@ -18,7 +18,6 @@
 package butter.droid.tv.ui.trailer;
 
 import android.support.annotation.Nullable;
-import android.view.WindowManager;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
@@ -38,8 +37,8 @@ public class TVTrailerPlayerModule {
                 phoneManager);
     }
 
-    @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC, WindowManager windowManager) {
-        return new VlcPlayer(libVLC, windowManager);
+    @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC) {
+        return new VlcPlayer(libVLC);
     }
 
 }

@@ -28,6 +28,7 @@ import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 public class TVPlayerPresenterImpl extends StreamPlayerPresenterImpl implements TVPlayerPresenter {
 
     private final TVPlayerView view;
+    private final VlcPlayer player;
 
     public TVPlayerPresenterImpl(final TVPlayerView view, final Context context, final PreferencesHandler preferencesHandler,
             final ProviderManager providerManager, final PlayerManager playerManager, final VlcPlayer vlcPlayer,
@@ -35,6 +36,10 @@ public class TVPlayerPresenterImpl extends StreamPlayerPresenterImpl implements 
         super(view, context, preferencesHandler, providerManager, playerManager, vlcPlayer, subtitleManager);
 
         this.view = view;
+        this.player = vlcPlayer;
     }
 
+    @Override public void surfaceChanged(final int width, final int height) {
+        player.surfaceChanged(width, height);
+    }
 }
