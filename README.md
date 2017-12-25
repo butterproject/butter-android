@@ -34,7 +34,7 @@ Want to report a bug, request a feature, contribute or translate Butter? Check o
 
 ## Build Instructions
 
-[![Build Status](https://travis-ci.org/butterproject/butter-android.svg?branch=development)](https://travis-ci.org/butterproject/butter-android)
+[![CircleCI](https://circleci.com/gh/blazsolar/butter-android.svg?style=svg)](https://circleci.com/gh/blazsolar/butter-android)
 
 The [gradle build system](https://developer.android.com/studio/build/index.html) will fetch all dependencies and generate
 files you need to build the project. You first need to generate the

@@ -1,0 +1,61 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-27-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "base/build.gradle" }}-{{ checksum  "mobile/build.gradle" }}-{{ checksum  "tv/build.gradle" }}-{{ checksum  "provider/media/base/build.gradle" }}-{{ checksum  "provider/media/mock/build.gradle" }}-{{ checksum  "provider/media/provider/build.gradle" }}-{{ checksum  "provider/media/vodo/build.gradle" }}-{{ checksum  "provider/subs/provider/build.gradle" }}-{{ checksum  "provider/subs/mock/build.gradle" }}-{{ checksum  "connectsdk/core/build.gradle" }}-{{ checksum  "connectsdk/modules/firetv/build.gradle" }}-{{ checksum  "connectsdk/modules/google_cast/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "base/build.gradle" }}-{{ checksum  "mobile/build.gradle" }}-{{ checksum  "tv/build.gradle" }}-{{ checksum  "provider/media/base/build.gradle" }}-{{ checksum  "provider/media/mock/build.gradle" }}-{{ checksum  "provider/media/provider/build.gradle" }}-{{ checksum  "provider/media/vodo/build.gradle" }}-{{ checksum  "provider/subs/provider/build.gradle" }}-{{ checksum  "provider/subs/mock/build.gradle" }}-{{ checksum  "connectsdk/core/build.gradle" }}-{{ checksum  "connectsdk/modules/firetv/build.gradle" }}-{{ checksum  "connectsdk/modules/google_cast/build.gradle" }}
+      - run:
+          name: Run Tests
+          command: ./gradlew check
+  deploy:
+      working_directory: ~/code
+      docker:
+        - image: circleci/android:api-27-alpha
+      environment:
+        JVM_OPTS: -Xmx3200m
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+      steps:
+        - checkout
+        - run:
+            name: Download Dependencies
+            command: ./gradlew androidDependencies
+        - run:
+            name: Build release
+            command: ./gradlew mobile:assembleRelease
+        - run:
+            name: Build tv
+            command: ./gradlew tv:assembleRelease
+        - store_artifacts:
+            path: mobie/build/outputs/apk/release/
+            destination: apk/mobile
+        - store_artifacts:
+            path: tv/build/outputs/apk/release/
+            destination: apk/tv
+
+workflows:
+  version: 2
+  build_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - release
+                - master
