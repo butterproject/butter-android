@@ -20,6 +20,7 @@ package butter.droid.ui.loading.fragment;
 import android.content.Context;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.subtitle.SubtitleManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
@@ -31,8 +32,8 @@ import dagger.Provides;
 public class StreamLoadingFragmentModule {
 
     @Provides @FragmentScope public StreamLoadingFragmentPresenter providePresenter(StreamLoadingFragmentView view,
-            ProviderManager providerManager, PlayerManager playerManager, Context context, BeamManager beamManager) {
-        return new StreamLoadingFragmentPresenterImpl(view, providerManager, playerManager,
-                context, beamManager);
+            ProviderManager providerManager, SubtitleManager subtitleManager, PlayerManager playerManager, Context context,
+            BeamManager beamManager) {
+        return new StreamLoadingFragmentPresenterImpl(view, providerManager, subtitleManager, playerManager, context, beamManager);
     }
 }

@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.subtitle.SubtitleManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentPresenterImpl;
@@ -37,9 +38,9 @@ public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmen
 
     private Torrent currentTorrent;
 
-    public StreamLoadingFragmentPresenterImpl(StreamLoadingFragmentView view, ProviderManager providerManager, PlayerManager playerManager,
-            Context context, BeamManager beamManager) {
-        super(view, providerManager, preferencesHandler, playerManager, context);
+    public StreamLoadingFragmentPresenterImpl(StreamLoadingFragmentView view, ProviderManager providerManager,
+            SubtitleManager subtitleManager, PlayerManager playerManager, Context context, BeamManager beamManager) {
+        super(view, providerManager, subtitleManager, playerManager, context);
         this.view = view;
         this.context = context;
         this.beamManager = beamManager;

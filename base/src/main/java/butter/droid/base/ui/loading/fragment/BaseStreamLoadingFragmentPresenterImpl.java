@@ -18,12 +18,11 @@
 package butter.droid.base.ui.loading.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import butter.droid.base.R;
-import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
 import butter.droid.base.manager.internal.provider.ProviderManager;
+import butter.droid.base.manager.internal.subtitle.SubtitleManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
@@ -32,21 +31,18 @@ import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.SubsProvider;
-import butter.droid.provider.subs.model.Subtitle;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
-import io.reactivex.Maybe;
 import io.reactivex.MaybeObserver;
 import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoadingFragmentPresenter,
-        TorrentListener {
+public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStreamLoadingFragmentPresenter, TorrentListener {
 
     private final BaseStreamLoadingFragmentView view;
     private final ProviderManager providerManager;
-    private final PreferencesHandler preferencesHandler;
+    private final SubtitleManager subtitleManager;
     protected final PlayerManager playerManager;
     private final Context context;
 
@@ -58,10 +54,10 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     protected Boolean playerStarted = false;
 
     public BaseStreamLoadingFragmentPresenterImpl(BaseStreamLoadingFragmentView view, ProviderManager providerManager,
-            final PreferencesHandler preferencesHandler, PlayerManager playerManager, Context context) {
+            final SubtitleManager subtitleManager, PlayerManager playerManager, Context context) {
         this.view = view;
         this.providerManager = providerManager;
-        this.preferencesHandler = preferencesHandler;
+        this.subtitleManager = subtitleManager;
         this.playerManager = playerManager;
         this.context = context;
     }
@@ -208,54 +204,29 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
     private void loadSubtitles() {
         Media media = streamInfo.getMedia().getMedia();
         SubsProvider subsProvider = providerManager.getCurrentSubsProvider();
-        if (subsProvider == null) {
-            return;
-        }
-
         SubtitleWrapper subtitle = streamInfo.getSubtitle();
-        if (subtitle != null) {
 
-            Subtitle s = subtitle.getSubtitle();
+        subtitleManager.downloadSubtitle(subsProvider, media, subtitle)
+                .subscribe(new MaybeObserver<SubtitleWrapper>() {
+                    @Override public void onSubscribe(final Disposable d) {
+                        subtitleDisposable = d;
+                    }
 
-            final Maybe<Uri> maybe;
-            if (s != null) {
-                maybe = subsProvider.downloadSubs(media, s);
-            } else {
-                String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
+                    @Override public void onSuccess(final SubtitleWrapper wrapper) {
+                        subtitleDisposable = null;
+                        startPlayer();
+                    }
 
-                if (subtitleLanguage != null) {
-                    maybe = subsProvider.list(media)
-                            .flattenAsObservable(it -> it)
-                            .filter(sub -> subtitleLanguage.equals(sub.getLanguage()))
-                            .firstElement()
-                            .flatMap(sub -> subsProvider.downloadSubs(media, sub));
-                } else {
-                    return;
-                }
-            }
+                    @Override public void onError(final Throwable e) {
+                        subtitleDisposable = null;
+                        startPlayer();
+                    }
 
-            maybe.subscribe(new MaybeObserver<Uri>() {
-                @Override public void onSubscribe(final Disposable d) {
-                    subtitleDisposable = d;
-                }
-
-                @Override public void onSuccess(final Uri uri) {
-                    subtitleDisposable = null;
-                    streamInfo.getSubtitle().setFileUri(uri);
-                    startPlayer();
-                }
-
-                @Override public void onError(final Throwable e) {
-                    subtitleDisposable = null;
-                    startPlayer();
-                }
-
-                @Override public void onComplete() {
-                    subtitleDisposable = null;
-                    startPlayer();
-                }
-            });
-        }
+                    @Override public void onComplete() {
+                        subtitleDisposable = null;
+                        startPlayer();
+                    }
+                });
     }
 
     private void updateStatus(final StreamStatus status) {
