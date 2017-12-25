@@ -17,7 +17,6 @@
 
 package butter.droid.tv.ui.detail.show;
 
-import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
@@ -26,9 +25,8 @@ import dagger.Provides;
 @Module(includes = TVShowDetailBindModule.class)
 public class TVShowDetailModule {
 
-    @Provides @FragmentScope TVShowDetailsPresenter providePresenter(final TVShowDetailsView view, final ProviderManager providerManager,
-            final PreferencesHandler preferencesHandler) {
-        return new TVShowDetailPresenterImpl(view, providerManager, preferencesHandler);
+    @Provides @FragmentScope TVShowDetailsPresenter providePresenter(final TVShowDetailsView view, final ProviderManager providerManager) {
+        return new TVShowDetailPresenterImpl(view, providerManager);
     }
 
 }

@@ -17,10 +17,10 @@
 
 package butter.droid.tv.ui.detail.show;
 
-import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Show;
@@ -30,14 +30,11 @@ import butter.droid.tv.ui.detail.base.TVBaseDetailsPresenterImpl;
 public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implements TVShowDetailsPresenter {
 
     private final TVShowDetailsView view;
-    private final PreferencesHandler preferencesHandler;
 
-    public TVShowDetailPresenterImpl(final TVShowDetailsView view, final ProviderManager providerManager,
-            final PreferencesHandler preferencesHandler) {
+    public TVShowDetailPresenterImpl(final TVShowDetailsView view, final ProviderManager providerManager) {
         super(view, providerManager);
 
         this.view = view;
-        this.preferencesHandler = preferencesHandler;
     }
 
     @Override public void onCreate(final MediaWrapper item) {
@@ -71,11 +68,8 @@ public class TVShowDetailPresenterImpl extends TVBaseDetailsPresenterImpl implem
     }
 
     private void startTorrent(final MediaWrapper episode, final Torrent torrent) {
-        String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
-
-        // TODO subs
-        StreamInfo info = new StreamInfo(torrent, episode, item, null);
-
+        // Load default subtitles
+        StreamInfo info = new StreamInfo(torrent, episode, item, new SubtitleWrapper());
         view.torrentSelected(info);
     }
 }
