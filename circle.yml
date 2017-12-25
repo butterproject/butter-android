@@ -30,7 +30,7 @@ jobs:
         only:
           - release
           - master
-          - eature/cicleStup
+          - feature/cicleStup
       steps:
         - checkout
         - restore_cache:
