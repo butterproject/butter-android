@@ -71,11 +71,11 @@ dependencies {
     api project(':connectsdk:modules:google_cast')
 
     api project(':provider:media:provider')
-    api project(':provider:media:mock')
     api project(':provider:media:vodo')
+    debugApi project(':provider:media:mock')
 
     api project(':provider:subs:provider')
-    api project(':provider:subs:mock')
+    debugApi project(':provider:subs:mock')
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"

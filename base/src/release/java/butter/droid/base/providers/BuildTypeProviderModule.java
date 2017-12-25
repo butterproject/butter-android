@@ -17,24 +17,9 @@
 
 package butter.droid.base.providers;
 
-import butter.droid.base.R;
-import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
-import butter.droid.provider.base.ProviderScope;
-import butter.droid.provider.vodo.VodoModule;
-import butter.droid.provider.vodo.VodoProvider;
 import dagger.Module;
-import dagger.Provides;
-import dagger.multibindings.IntoSet;
 
-@Module(includes = {
-        ProviderBindModule.class,
-        BuildTypeProviderModule.class,
-        VodoModule.class}
-)
-public class ProviderModule {
-
-    @Provides @ProviderScope @IntoSet ProviderWrapper provideVodoWrapper(final VodoProvider mediaProvider) {
-        return new ProviderWrapper(mediaProvider, null, R.string.vodo_label, R.drawable.ic_nav_movies);
-    }
+@Module
+public class BuildTypeProviderModule {
 
 }
