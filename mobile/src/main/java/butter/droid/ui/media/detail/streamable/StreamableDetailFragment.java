@@ -97,6 +97,11 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
         presenter.onCreate(movie);
     }
 
+    @Override public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
+
     private void setQuality(int position) {
         presenter.selectQuality(position);
     }

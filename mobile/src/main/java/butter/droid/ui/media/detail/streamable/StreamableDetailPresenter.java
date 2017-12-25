@@ -24,6 +24,8 @@ import butter.droid.ui.media.detail.model.UiSubItem;
 public interface StreamableDetailPresenter {
     void onCreate(MediaWrapper movie);
 
+    void onDestroy();
+
     void openTrailer();
 
     void selectQuality(int position);

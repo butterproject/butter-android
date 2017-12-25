@@ -34,7 +34,7 @@ public class TVStreamLoadingFragmentModule {
             ProviderManager providerManager, SubtitleManager subtitleManager, PlayerManager playerManager, Context context) {
         return new TVStreamLoadingFragmentPresenterImpl(view, providerManager, subtitleManager, playerManager, context);
     }
-    
+
 }
 
 

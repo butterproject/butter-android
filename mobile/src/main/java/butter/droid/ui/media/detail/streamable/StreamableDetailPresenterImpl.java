@@ -61,6 +61,8 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     private List<UiSubItem> subtitleList;
     private UiSubItem selectedSub;
 
+    private Disposable subtitlesRequest;
+
     public StreamableDetailPresenterImpl(StreamableDetailView view, MediaDetailPresenter parentPresenter,
             YouTubeManager youTubeManager, PreferencesHandler preferencesHandler, ProviderManager providerManager,
             PlayerManager playerManager, Resources resources,
@@ -87,6 +89,13 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
             displayQualities();
         } else {
             throw new IllegalStateException("Movie can not be null");
+        }
+    }
+
+    @Override public void onDestroy() {
+        if (subtitlesRequest != null) {
+            subtitlesRequest.dispose();
+            subtitlesRequest = null;
         }
     }
 
@@ -188,7 +197,6 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
         }
     }
 
-
     private void displaySubtitles() {
         if (providerManager.hasCurrentSubsProvider()) {
             view.setSubtitleText(R.string.loading_subs);
@@ -210,7 +218,7 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SingleObserver<List<UiSubItem>>() {
                         @Override public void onSubscribe(final Disposable d) {
-                            // TODO
+                            subtitlesRequest = d;
                         }
 
                         @Override public void onSuccess(final List<UiSubItem> subs) {
