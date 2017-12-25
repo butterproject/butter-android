@@ -40,6 +40,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnLayoutChangeListener;
 import android.view.ViewGroup;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.providers.media.model.StreamInfo;
@@ -62,6 +63,8 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     private PlayerMediaControllerGlue mediaControllerGlue;
 
     private SurfaceView subsSurface;
+
+    private OnLayoutChangeListener surfaceLayoutListener;
 
     @Override public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +103,15 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         presenter.onViewCreated();
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        if (surfaceLayoutListener != null) {
+            getSurfaceView().removeOnLayoutChangeListener(surfaceLayoutListener);
+            surfaceLayoutListener = null;
+        }
+    }
+
     @Override public void onResume() {
         super.onResume();
 
@@ -131,7 +143,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
 
         MediaControllerCompat mediaController = new MediaControllerCompat(getContext(), mediaSession);
 
-        mediaControllerGlue = new PlayerMediaControllerGlue(getContext(), new int[]{ 1 }, new int[]{ 1 });
+        mediaControllerGlue = new PlayerMediaControllerGlue(getContext(), new int[]{1}, new int[]{1});
         mediaControllerGlue.attachToMediaController(mediaController);
 
         PlaybackControlsRowPresenter controlsRowPresenter = new PlaybackControlsRowPresenter(new DescriptionPresenter());
@@ -150,7 +162,15 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     }
 
     @Override public void attachVlcViews() {
-        player.attachToSurface(getSurfaceView(), subsSurface);
+        SurfaceView surfaceView = getSurfaceView();
+        player.attachToSurface(surfaceView, subsSurface);
+
+        surfaceLayoutListener = (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (left != oldLeft || top != oldTop || right != oldRight && bottom != oldBottom) {
+                presenter.surfaceChanged(v.getWidth(), v.getHeight());
+            }
+        };
+        surfaceView.addOnLayoutChangeListener(surfaceLayoutListener);
     }
 
     @Override public void showOverlay() {
