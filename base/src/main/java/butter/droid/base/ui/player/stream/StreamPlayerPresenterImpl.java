@@ -78,7 +78,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
         this.streamInfo = streamInfo;
 
-        loadDefaultSubtitles();
+        loadSubtitle();
     }
 
     @Override public void onResume() {
@@ -173,8 +173,6 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
     @Override protected void seek(final int delta) {
         super.seek(delta);
-
-//        lastSubs = null;
     }
 
     @Override public void showCustomSubsPicker() {
@@ -186,17 +184,12 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     @Override public void onSubsTimingChanged(final int value) {
-        // TODO: 11/4/17 Subtitle offset
         subtitleOffset = value;
+        player.setSubsDelay(value);
     }
 
     @Override public void onSubsClicked() {
-        // TODO subs
-        /*
-        if (media != null && media.subtitles != null) {
-            view.showSubsSelectorDialog();
-        }
-        */
+        view.showSubsSelectorDialog();
     }
 
     @Override public void streamProgressUpdated(final float progress) {
@@ -215,38 +208,6 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
     protected int getStreamerProgress() {
         return streamerProgress;
-    }
-
-    /**
-     * Called when subtitle for current media successfully loaded or disabled.
-     *
-     * @param enabled Whether subtitle is loaded or disabled.
-     */
-    protected void onSubtitleEnabledStateChanged(boolean enabled) {
-        // override if needed
-    }
-
-//    protected void setLastSubtitleCaption(Caption sub) {
-//        lastSubs = sub;
-//    }
-
-    private void loadDefaultSubtitles() {
-        // TODO: 11/1/17 Subs
-//        if (streamInfo.getSubtitleLanguage() == null) {
-//            // Get selected default subtitle
-//            String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
-//            streamInfo.setSubtitleLanguage(defaultSubtitle);
-//            currentSubsLang = defaultSubtitle;
-//            Timber.d("Using default subtitle: %s", currentSubsLang);
-//        }
-//
-//        if (!streamInfo.getSubtitleLanguage().equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-//            Timber.d("Download default subtitle");
-//            currentSubsLang = streamInfo.getSubtitleLanguage();
-//            loadSubtitle();
-//        }
-
-        loadSubtitle();
     }
 
     private void loadSubtitle() {

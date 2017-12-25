@@ -83,6 +83,10 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
         mediaPlayer.addSlave(Type.Subtitle, uri, true);
     }
 
+    public void setSubsDelay(long delay) {
+        mediaPlayer.setSpuDelay(delay);
+    }
+
     public void play() {
         mediaPlayer.play();
     }
