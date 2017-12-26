@@ -40,8 +40,8 @@ jobs:
             name: Build mobile
             command: ./gradlew mobile:assembleRelease
         - store_artifacts:
-            path: tv/build/outputs/apk/release/
-            destination: apk/tv
+            path: mobile/build/outputs/apk/release/
+            destination: apk/mobile
   deploy_tv:
       working_directory: ~/code
       docker:
@@ -77,7 +77,6 @@ workflows:
               only:
                 - release
                 - master
-                - feature/releaseKeystore
       - deploy_tv:
           requires:
             - build
