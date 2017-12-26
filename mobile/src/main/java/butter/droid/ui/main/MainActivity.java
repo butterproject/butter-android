@@ -259,7 +259,7 @@ public class MainActivity extends ButterBaseActivity implements MainView {
             try {
                 streamUrl = URLDecoder.decode(streamUrl, "UTF-8");
                 // TODO: 7/29/17 Check if actual torrent
-                final Media clip = new Clip("0", streamUrl, 0, new Genre[0], null, "", "", "",
+                final Media clip = new Clip("0", streamUrl, 0, new Genre[0], -1, "", "", "",
                         streamUrl);
                 StreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl, new MediaWrapper(clip, -1), null));
                 finish();

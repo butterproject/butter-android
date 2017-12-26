@@ -16,9 +16,6 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -60,9 +57,6 @@ dependencies {
     api "com.android.support:appcompat-v7:$appCompatVersion"
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
     api "com.google.dagger:dagger:$daggerVersion"
-
-    api 'org.parceler:parceler-api:1.1.9'
-    kapt 'org.parceler:parceler:1.1.9'
 
     testApi "junit:junit:4.12"
     testApi 'org.mockito:mockito-core:2.8.47'

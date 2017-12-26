@@ -22,7 +22,6 @@ import android.support.annotation.Nullable;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class MediaListFragment extends BaseMediaListFragment implements MediaListView {
 
@@ -42,7 +41,7 @@ public class MediaListFragment extends BaseMediaListFragment implements MediaLis
     public static BaseMediaListFragment newInstance(final int providerId, final Filter filter) {
         Bundle args = new Bundle();
         args.putInt(EXTRA_PROVIDER, providerId);
-        args.putParcelable(EXTRA_FILTER, Parcels.wrap(filter));
+        args.putParcelable(EXTRA_FILTER, filter);
 
         MediaListFragment fragment = new MediaListFragment();
         fragment.setArguments(args);

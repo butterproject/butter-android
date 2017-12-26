@@ -38,7 +38,6 @@ import butter.droid.widget.LinearList;
 import dagger.android.support.DaggerFragment;
 import java.util.List;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDetailSeasonView, OnClickListener {
 
@@ -57,7 +56,7 @@ public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDeta
 
         Bundle args = getArguments();
         MediaMeta mediaMeta = args.getParcelable(ARG_MEDIA_META);
-        Season season = Parcels.unwrap(args.getParcelable(ARG_SEASON));
+        Season season = args.getParcelable(ARG_SEASON);
 
         presenter.onCreate(mediaMeta, season);
     }
@@ -106,7 +105,7 @@ public class ShowDetailSeasonFragment extends DaggerFragment implements ShowDeta
     public static ShowDetailSeasonFragment newInstance(final MediaMeta mediaMeta, final Season season) {
         Bundle args = new Bundle(2);
         args.putParcelable(ARG_MEDIA_META, mediaMeta);
-        args.putParcelable(ARG_SEASON, Parcels.wrap(season));
+        args.putParcelable(ARG_SEASON, season);
 
         ShowDetailSeasonFragment fragment = new ShowDetailSeasonFragment();
         fragment.setArguments(args);

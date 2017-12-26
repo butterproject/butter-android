@@ -31,7 +31,6 @@ import butter.droid.tv.ui.loading.TVStreamLoadingActivity;
 import butter.droid.tv.ui.trailer.TVTrailerPlayerActivity;
 import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class TVStreamableDetailsFragment extends TVBaseDetailsFragment implements TVStreamableDetailsView {
 
@@ -46,7 +45,7 @@ public class TVStreamableDetailsFragment extends TVBaseDetailsFragment implement
         super.onCreate(savedInstanceState);
 
         Bundle arguments = getArguments();
-        final MediaWrapper item = Parcels.unwrap(arguments.getParcelable(EXTRA_ITEM));
+        final MediaWrapper item = arguments.getParcelable(EXTRA_ITEM);
 
         presenter.onCreate(item);
     }
@@ -70,7 +69,7 @@ public class TVStreamableDetailsFragment extends TVBaseDetailsFragment implement
         TVStreamableDetailsFragment fragment = new TVStreamableDetailsFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(EXTRA_ITEM, Parcels.wrap(media));
+        bundle.putParcelable(EXTRA_ITEM, media);
 
         fragment.setArguments(bundle);
         return fragment;

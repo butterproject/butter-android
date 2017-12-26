@@ -27,7 +27,6 @@ import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.ui.TVBaseActivity;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDetailView {
 
@@ -44,7 +43,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
 
         backgroundUpdater.initialise(this, R.color.black);
         Bundle extras = getIntent().getExtras();
-        final MediaWrapper media = Parcels.unwrap(extras.getParcelable(EXTRA_ITEM));
+        final MediaWrapper media = extras.getParcelable(EXTRA_ITEM);
 
         if (VersionUtils.isLollipop()) {
             postponeEnterTransition();
@@ -79,7 +78,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
 
     public static Intent getIntent(final Context context, final MediaWrapper item) {
         Intent intent = new Intent(context, TVMediaDetailActivity.class);
-        intent.putExtra(EXTRA_ITEM, Parcels.wrap(item));
+        intent.putExtra(EXTRA_ITEM, item);
         return intent;
     }
 

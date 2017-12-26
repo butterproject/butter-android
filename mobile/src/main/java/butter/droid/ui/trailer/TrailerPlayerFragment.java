@@ -24,7 +24,6 @@ import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
 import butterknife.ButterKnife;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerPlayerView {
 
@@ -39,7 +38,7 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
 
         Bundle args = getArguments();
         String uri = args.getString(ARG_URI);
-        MediaWrapper media = Parcels.unwrap(args.getParcelable(ARG_MEDIA));
+        MediaWrapper media = args.getParcelable(ARG_MEDIA);
 
         presenter.onCreate(media, uri, getResumePosition(savedInstanceState));
     }
@@ -61,7 +60,7 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
 
     public static TrailerPlayerFragment newInstance(final MediaWrapper media, final String trailerUri) {
         Bundle args = new Bundle(2);
-        args.putParcelable(ARG_MEDIA, Parcels.wrap(media));
+        args.putParcelable(ARG_MEDIA, media);
         args.putString(ARG_URI, trailerUri);
 
         TrailerPlayerFragment fragment = new TrailerPlayerFragment();

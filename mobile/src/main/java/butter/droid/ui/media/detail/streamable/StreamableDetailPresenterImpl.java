@@ -180,8 +180,8 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     }
 
     private void displayRating() {
-        Float rating = mediaWrapper.getMedia().getRating();
-        if (rating != null) {
+        float rating = mediaWrapper.getMedia().getRating();
+        if (rating > -1) {
             view.displayRating((int) (rating * 10));
         } else {
             view.hideRating();

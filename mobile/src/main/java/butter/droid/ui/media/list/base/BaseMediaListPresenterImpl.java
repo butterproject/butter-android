@@ -26,7 +26,7 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.model.Paging;
+import butter.droid.provider.base.paging.Paging;
 import butter.droid.provider.filter.Pager;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -90,7 +90,7 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
 
                     @Override public void onSuccess(final Pair<Paging, List<MediaWrapper>> value) {
                         Paging paging = value.first;
-                        view.addItems(value.second, !paging.getHasNextPage(), paging.getEndCursor());
+                        view.addItems(value.second, !paging.hasNextPage(), paging.getEndCursor());
                         items.addAll(value.second);
                         showLoaded();
                     }

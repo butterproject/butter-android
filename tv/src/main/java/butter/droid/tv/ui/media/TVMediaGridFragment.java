@@ -49,7 +49,6 @@ import com.squareup.picasso.Picasso;
 import dagger.android.AndroidInjection;
 import java.util.List;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 /*
  * VerticalGridFragment shows a grid of videos
@@ -85,7 +84,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         Bundle args = getArguments();
 
         int providerId = args.getInt(ARG_PROVIDER);
-        Filter filter = Parcels.unwrap(args.getParcelable(ARG_FILTER));
+        Filter filter = args.getParcelable(ARG_FILTER);
         presenter.onCreate(providerId, filter);
     }
 
@@ -171,7 +170,7 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
     public static TVMediaGridFragment newInstance(final int provider, @StringRes int title, Filter filter) {
         final Bundle args = new Bundle();
         args.putInt(ARG_TITLE, title);
-        args.putParcelable(ARG_FILTER, Parcels.wrap(filter));
+        args.putParcelable(ARG_FILTER, filter);
         args.putInt(ARG_PROVIDER, provider);
 
         TVMediaGridFragment fragment = new TVMediaGridFragment();

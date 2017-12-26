@@ -27,11 +27,10 @@ import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Format;
-import butter.droid.provider.base.model.FormatKt;
-import butter.droid.provider.base.model.ItemsWrapper;
+import butter.droid.provider.base.paging.ItemsWrapper;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;
-import butter.droid.provider.base.model.Paging;
+import butter.droid.provider.base.paging.Paging;
 import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Show;
 import butter.droid.provider.base.model.Torrent;
@@ -109,10 +108,10 @@ public class MockMediaProvider extends AbsMediaProvider {
         return Single.fromCallable(() -> parseResponse("movie_list.json", MockMovies.class))
                 .map(MockMovies::getMovies)
                 .flattenAsObservable(mockMovies -> mockMovies)
-                .map(m -> new Movie(String.valueOf(m.getId()), m.getTitle(), m.getYear(), new Genre[0], null, m.getPoster(),
+                .map(m -> new Movie(String.valueOf(m.getId()), m.getTitle(), m.getYear(), new Genre[0], -1, m.getPoster(),
                         m.getBackdrop(), m.getSynopsis(),
                         new Torrent[] {
-                                new Torrent(m.getTorrent(), new Format(m.getQuality(), FormatKt.FORMAT_NORMAL), 0, null, null, null)
+                                new Torrent(m.getTorrent(), new Format(m.getQuality(), Format.FORMAT_NORMAL), 0)
                         }, m.getTrailer()));
     }
 
@@ -120,8 +119,8 @@ public class MockMediaProvider extends AbsMediaProvider {
         return Single.fromCallable(() -> parseResponse("show_list.json", MockShows.class))
                 .map(MockShows::getShow)
                 .flattenAsObservable(mockShows -> mockShows)
-                .map(s -> new Show(String.valueOf(s.getId()), s.getTitle(), s.getYear(), new Genre[0], s.getBackdrop(), s.getSynopsis(), null,
-                        s.getPoster(), mapSeasons(s.getSeasons())));
+                .map(s -> new Show(String.valueOf(s.getId()), s.getTitle(), s.getYear(), new Genre[0], -1, s.getPoster(),
+                        s.getBackdrop(), s.getSynopsis(), mapSeasons(s.getSeasons())));
     }
 
     private Observable<Media> parseSeasons() {
@@ -149,9 +148,9 @@ public class MockMediaProvider extends AbsMediaProvider {
         for (int i = 0; i < mockEpisodes.length; i++) {
             MockEpisode episode = mockEpisodes[i];
             episodes[i] = new Episode(String.valueOf(episode.getId()), episode.getTitle(), episode.getYear(), new Genre[0],
-                    null, episode.getPoster(), episode.getBackdrop(), episode.getSynopsis(),
+                    -1, episode.getPoster(), episode.getBackdrop(), episode.getSynopsis(),
                     new Torrent[] {
-                            new Torrent(episode.getTorrent(), new Format(episode.getQuality(), FormatKt.FORMAT_NORMAL), 0, null, null, null)
+                            new Torrent(episode.getTorrent(), new Format(episode.getQuality(), Format.FORMAT_NORMAL), 0)
                     }, episode.getEpisdoe());
         }
         return episodes;
@@ -160,7 +159,7 @@ public class MockMediaProvider extends AbsMediaProvider {
 
     private Season mapSeason(MockSeason season) {
         return new Season(String.valueOf(season.getId()), season.getTitle(), season.getYear(), new Genre[0],
-                null, season.getPoster(), season.getBackdrop(), season.getSynopsis(), mapEpisodes(season.getEpisodes()));
+                -1, season.getPoster(), season.getBackdrop(), season.getSynopsis(), mapEpisodes(season.getEpisodes()));
     }
 
 }

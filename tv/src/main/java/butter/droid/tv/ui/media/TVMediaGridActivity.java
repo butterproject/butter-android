@@ -25,7 +25,6 @@ import android.support.annotation.StringRes;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.TVBaseActivity;
-import org.parceler.Parcels;
 
 public class TVMediaGridActivity extends TVBaseActivity {
 
@@ -39,7 +38,7 @@ public class TVMediaGridActivity extends TVBaseActivity {
         super.onCreate(savedInstanceState, R.layout.activity_movie_media_grid);
 
         Bundle extras = getIntent().getExtras();
-        final Filter filter = Parcels.unwrap(extras.getParcelable(EXTRA_FILTER));
+        final Filter filter = extras.getParcelable(EXTRA_FILTER);
         @StringRes int title = extras.getInt(EXTRA_TITLE);
         final int providerId = extras.getInt(EXTRA_PROVIDER);
 
@@ -51,7 +50,7 @@ public class TVMediaGridActivity extends TVBaseActivity {
     public static Intent newIntent(Context context, final int providerId, @StringRes int title, Filter filter) {
         Intent intent = new Intent(context, TVMediaGridActivity.class);
         intent.putExtra(EXTRA_TITLE, title);
-        intent.putExtra(EXTRA_FILTER, Parcels.wrap(filter));
+        intent.putExtra(EXTRA_FILTER, filter);
         intent.putExtra(EXTRA_PROVIDER, providerId);
         return intent;
     }

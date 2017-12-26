@@ -63,7 +63,6 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class MediaDetailActivity extends ButterBaseActivity implements MediaDetailView, EpisodeDialogFragment.FragmentListener {
 
@@ -93,7 +92,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         // parallaxLayout doesn't exist? Then this is a tablet or big screen device
         isTablet = floatingActionButton == null;
 
-        MediaWrapper media = Parcels.unwrap(getIntent().getExtras().getParcelable(EXTRA_MEDIA));
+        MediaWrapper media = getIntent().getExtras().getParcelable(EXTRA_MEDIA);
         if (media == null) {
             finish();
             return;
@@ -226,7 +225,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
 
     public static Intent getIntent(@NonNull Context context, @NonNull MediaWrapper media) {
         Intent intent = new Intent(context, MediaDetailActivity.class);
-        intent.putExtra(EXTRA_MEDIA, Parcels.wrap(media));
+        intent.putExtra(EXTRA_MEDIA, media);
         return intent;
     }
 

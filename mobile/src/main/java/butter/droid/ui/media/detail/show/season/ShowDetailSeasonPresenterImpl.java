@@ -49,7 +49,6 @@ public class ShowDetailSeasonPresenterImpl implements ShowDetailSeasonPresenter 
     }
 
     @Override public void episodeSelected(int position) {
-        // TODO media wrapper
         view.showEpisodeDialog(mediaMeta, season.getEpisodes()[position]);
     }
 

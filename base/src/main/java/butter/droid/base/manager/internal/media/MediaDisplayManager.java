@@ -24,7 +24,6 @@ import butter.droid.base.Internal;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.provider.base.model.Format;
-import butter.droid.provider.base.model.FormatKt;
 import butter.droid.provider.base.model.Torrent;
 import java.util.Arrays;
 import javax.inject.Inject;
@@ -44,7 +43,7 @@ public class MediaDisplayManager {
     public String getFormatDisplayName(@NonNull Format format) {
         @StringRes int textRes;
         if (format.getType() == 0) {
-            if (format.getQuality() == FormatKt.QUALITY_4K) {
+            if (format.getQuality() == Format.QUALITY_4K) {
                 textRes = R.string.picker_format_normal_4K;
             } else {
                 textRes = R.string.picker_format_normal;

@@ -23,7 +23,6 @@ import butter.droid.R;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class SearchFragment extends BaseMediaListFragment implements SearchView {
 
@@ -46,7 +45,7 @@ public class SearchFragment extends BaseMediaListFragment implements SearchView 
     public static SearchFragment newInstance(final int providerId, final Filter filter) {
         Bundle args = new Bundle();
         args.putInt(EXTRA_PROVIDER, providerId);
-        args.putParcelable(EXTRA_FILTER, Parcels.wrap(filter));
+        args.putParcelable(EXTRA_FILTER, filter);
 
         SearchFragment fragment = new SearchFragment();
         fragment.setArguments(args);

@@ -22,8 +22,8 @@ import android.util.Pair;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.model.ItemsWrapper;
-import butter.droid.provider.base.model.Paging;
+import butter.droid.provider.base.paging.ItemsWrapper;
+import butter.droid.provider.base.paging.Paging;
 import butter.droid.provider.filter.Pager;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import io.reactivex.Observable;
@@ -89,7 +89,7 @@ public class TVMediaGridPresenterImpl implements TVMediaGridPresenter {
                     }
 
                     @Override public void onSuccess(final Pair<List<MediaCardItem>, Paging> value) {
-                        view.appendItems(value.first, !value.second.getHasNextPage(), value.second.getEndCursor());
+                        view.appendItems(value.first, !value.second.hasNextPage(), value.second.getEndCursor());
                     }
 
                     @Override public void onError(final Throwable e) {

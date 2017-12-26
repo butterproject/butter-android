@@ -23,7 +23,7 @@ import butter.droid.base.manager.internal.vlc.VLCMediaOptions;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StorageUtils;
-import butter.droid.provider.base.model.FormatKt;
+import butter.droid.provider.base.model.Format;
 import dagger.Reusable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -658,7 +658,7 @@ public class PreferencesHandler {
     }
 
     public int getDefaultQuality() {
-        return prefManager.get(Prefs.QUALITY_DEFAULT, FormatKt.QUALITY_HD);
+        return prefManager.get(Prefs.QUALITY_DEFAULT, Format.QUALITY_HD);
     }
 
     @ColorInt public int getSubtitleStrokeColor() {

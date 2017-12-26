@@ -26,7 +26,6 @@ import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.provider.subs.model.Subtitle;
 import java.util.Locale;
-import org.parceler.Parcels;
 
 public class StreamInfo implements Parcelable {
 
@@ -42,6 +41,7 @@ public class StreamInfo implements Parcelable {
         this(torrent, media, parentMedia, null, subtitle);
     }
 
+    // TODO we should use clip instead
     public StreamInfo(@NonNull final String streamUrl, @NonNull final MediaWrapper media, @Nullable final MediaWrapper parentMedia) {
         this(null, media, parentMedia, streamUrl, null);
     }
@@ -56,9 +56,9 @@ public class StreamInfo implements Parcelable {
     }
 
     private StreamInfo(Parcel in) {
-        this.media = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
-        this.parentMedia = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
-        this.torrent = Parcels.unwrap(in.readParcelable(Torrent.class.getClassLoader()));
+        this.media = in.readParcelable(Media.class.getClassLoader());
+        this.parentMedia = in.readParcelable(Media.class.getClassLoader());
+        this.torrent = in.readParcelable(Torrent.class.getClassLoader());
         this.subtitle = in.readParcelable(Subtitle.class.getClassLoader());
 
         this.streamUrl = in.readString();
@@ -133,9 +133,9 @@ public class StreamInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(Parcels.wrap(this.media), 0);
-        dest.writeParcelable(Parcels.wrap(this.parentMedia), 0);
-        dest.writeParcelable(Parcels.wrap(this.torrent), 0);
+        dest.writeParcelable(this.media, 0);
+        dest.writeParcelable(this.parentMedia, 0);
+        dest.writeParcelable(this.torrent, 0);
         dest.writeParcelable(subtitle, 0);
 
         dest.writeString(streamUrl);

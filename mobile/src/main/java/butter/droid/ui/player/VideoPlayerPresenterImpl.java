@@ -45,7 +45,7 @@ public class VideoPlayerPresenterImpl implements VideoPlayerPresenter {
         if (Intent.ACTION_VIEW.equals(action)) {
             String videoLocation = StreamInfoUtils.getActionViewVideoLocation(contentResolver, intent);
             if (videoLocation != null) {
-                final Media media = new Clip("0", videoLocation, -1, new Genre[0], null, "", "", "",
+                final Media media = new Clip("0", videoLocation, -1, new Genre[0], -1, "", "", "",
                         videoLocation);
                 this.streamInfo = new StreamInfo(videoLocation, new MediaWrapper(media, -1), null);
                 this.resumePosition = intent.getLongExtra("position", 0);

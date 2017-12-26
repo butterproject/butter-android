@@ -24,11 +24,10 @@ import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.model.Format;
-import butter.droid.provider.base.model.FormatKt;
-import butter.droid.provider.base.model.ItemsWrapper;
+import butter.droid.provider.base.paging.ItemsWrapper;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;
-import butter.droid.provider.base.model.Paging;
+import butter.droid.provider.base.paging.Paging;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.provider.base.util.Optional;
@@ -99,6 +98,7 @@ public class VodoProvider extends AbsMediaProvider {
                 .map(VodoResponse::getDownloads)
                 .flatMapObservable(Observable::fromArray)
                 .map(this::mapVodoMovie)
+                .cast(Media.class)
                 .toList()
                 .map(m -> new ItemsWrapper(m, new Paging(String.valueOf(page + 1), m.size() == ITEMS_PER_PAGE)));
     }
@@ -125,7 +125,7 @@ public class VodoProvider extends AbsMediaProvider {
 
     private Movie mapVodoMovie(@NonNull VodoMovie vodoMovie) {
 
-        Torrent torrent = new Torrent(vodoMovie.getTorrentUrl(), parseFormat(vodoMovie.getQuality()), 0, vodoMovie.getSizeBytes(), null, null);
+        Torrent torrent = new Torrent(vodoMovie.getTorrentUrl(), parseFormat(vodoMovie.getQuality()), 0, vodoMovie.getSizeBytes(), -1, -1);
 
         return new Movie(vodoMovie.getImdbCode(), vodoMovie.getMovieTitleClean(), vodoMovie.getMovieYear(), new Genre[0],
                 vodoMovie.getRating() / 10f, vodoMovie.getCoverImage(), vodoMovie.getCoverImage(), vodoMovie.getSynopsis(),
@@ -136,10 +136,10 @@ public class VodoProvider extends AbsMediaProvider {
         int formatType;
         int quality;
         if ("3D".equals(vodoQuality)) {
-            formatType = FormatKt.FORMAT_3D;
+            formatType = Format.FORMAT_3D;
             quality = 0;
         } else {
-            formatType = FormatKt.FORMAT_NORMAL;
+            formatType = Format.FORMAT_NORMAL;
             if (vodoQuality != null) {
                 try {
                     quality = Integer.parseInt(vodoQuality.substring(0, vodoQuality.indexOf('p')));

@@ -109,7 +109,7 @@ public class TVLaunchActivity extends DaggerActivity implements TVLaunchView {
             String streamUrl = data.toString();
             try {
                 streamUrl = URLDecoder.decode(streamUrl, "utf-8");
-                final Media media = new Clip("0", streamUrl, -1, new Genre[0], null, "", "", "",
+                final Media media = new Clip("0", streamUrl, -1, new Genre[0], -1, null, "", "",
                         streamUrl);
                 TVStreamLoadingActivity.startActivity(this, new StreamInfo(streamUrl, new MediaWrapper(media, -1), null));
                 finish();

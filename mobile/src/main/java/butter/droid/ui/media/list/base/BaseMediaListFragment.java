@@ -45,7 +45,6 @@ import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
 import java.util.List;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 /**
  * This fragment is the main screen for viewing a collection of media items.
@@ -122,7 +121,7 @@ public class BaseMediaListFragment extends DaggerFragment implements BaseMediaLi
 
         Bundle arguments = getArguments();
         int providerId = arguments.getInt(EXTRA_PROVIDER);
-        Filter filter = Parcels.unwrap(arguments.getParcelable(EXTRA_FILTER));
+        Filter filter = arguments.getParcelable(EXTRA_FILTER);
 
         presenter.onActivityCreated(providerId, filter);
     }

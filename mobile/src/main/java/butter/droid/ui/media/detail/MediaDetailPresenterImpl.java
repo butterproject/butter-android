@@ -97,8 +97,8 @@ public class MediaDetailPresenterImpl implements MediaDetailPresenter {
             torrent = movie.getTorrents()[0];
         }
 
-        Integer seeds = torrent.getSeeds();
-        Integer peers = torrent.getPeers();
+        int seeds = torrent.getSeeds();
+        int peers = torrent.getPeers();
         TorrentHealth health = TorrentHealth.calculate(seeds, peers);
 
         view.displayHealthInfo(health, seeds, peers);

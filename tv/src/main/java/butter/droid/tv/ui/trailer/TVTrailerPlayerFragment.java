@@ -23,7 +23,6 @@ import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
 import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class TVTrailerPlayerFragment extends TVAbsPlayerFragment implements TVTrailerPlayerView {
 
@@ -42,7 +41,7 @@ public class TVTrailerPlayerFragment extends TVAbsPlayerFragment implements TVTr
 
         Bundle args = getArguments();
         String uri = args.getString(ARG_URI);
-        MediaWrapper media = Parcels.unwrap(args.getParcelable(ARG_MEDIA));
+        MediaWrapper media = args.getParcelable(ARG_MEDIA);
 
         presenter.onCreate(media, uri, getResumePosition(savedInstanceState));
     }
@@ -56,7 +55,7 @@ public class TVTrailerPlayerFragment extends TVAbsPlayerFragment implements TVTr
 
     public static TVTrailerPlayerFragment newInstance(final MediaWrapper media, final String trailerUri) {
         Bundle args = new Bundle(2);
-        args.putParcelable(ARG_MEDIA, Parcels.wrap(media));
+        args.putParcelable(ARG_MEDIA, media);
         args.putString(ARG_URI, trailerUri);
 
         TVTrailerPlayerFragment fragment = new TVTrailerPlayerFragment();

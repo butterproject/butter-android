@@ -24,7 +24,7 @@ import android.support.annotation.RestrictTo.Scope;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;
-import butter.droid.provider.base.model.ItemsWrapper;
+import butter.droid.provider.base.paging.ItemsWrapper;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.provider.base.util.Optional;

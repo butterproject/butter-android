@@ -55,7 +55,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class StreamableDetailFragment extends DaggerFragment implements StreamableDetailView, SubsPickerCallback {
 
@@ -93,7 +92,7 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
 
         subtitlesPreview.setOnClickListener(v -> presenter.onSubtitlesClicked());
 
-        MediaWrapper movie = Parcels.unwrap(getArguments().getParcelable(EXTRA_MOVIE));
+        MediaWrapper movie = getArguments().getParcelable(EXTRA_MOVIE);
         presenter.onCreate(movie);
     }
 
@@ -112,9 +111,9 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
     }
 
     @Override public void renderHealth(Torrent torrent) {
-        Integer seeds = torrent.getSeeds();
-        Integer peers = torrent.getPeers();
-        if (seeds != null && peers != null) {
+        int seeds = torrent.getSeeds();
+        int peers = torrent.getPeers();
+        if (seeds >= 0 && peers >= 0) {
             TorrentHealth health = TorrentHealth.calculate(seeds, peers);
             this.health.setImageResource(health.getImageResource());
             this.health.setVisibility(View.VISIBLE);
@@ -267,7 +266,7 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
 
     public static StreamableDetailFragment newInstance(MediaWrapper movie) {
         Bundle args = new Bundle();
-        args.putParcelable(EXTRA_MOVIE, Parcels.wrap(movie));
+        args.putParcelable(EXTRA_MOVIE, movie);
 
         StreamableDetailFragment fragment = new StreamableDetailFragment();
         fragment.setArguments(args);

@@ -63,8 +63,8 @@ public class ShowDetailAboutPresenterImpl implements ShowDetailAboutPresenter {
         view.displayImage(show.getPoster());
     }
 
-    private void displayRating(@Nullable Float rating) {
-        if (rating != null) {
+    private void displayRating(float rating) {
+        if (rating > -1) {
             int ratingInt = (int) (rating * 10);
             String cd = "Rating: " + ratingInt + " out of 10";
             view.displayRating(ratingInt, cd);

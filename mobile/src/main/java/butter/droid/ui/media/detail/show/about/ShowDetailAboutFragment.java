@@ -38,7 +38,6 @@ import butterknife.OnClick;
 import com.squareup.picasso.Picasso;
 import dagger.android.support.DaggerFragment;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class ShowDetailAboutFragment extends DaggerFragment implements ShowDetailAboutView {
 
@@ -59,7 +58,7 @@ public class ShowDetailAboutFragment extends DaggerFragment implements ShowDetai
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MediaWrapper show = Parcels.unwrap(getArguments().getParcelable(ARG_SHOW));
+        MediaWrapper show = getArguments().getParcelable(ARG_SHOW);
 
         presenter.onCreate(show);
     }
@@ -152,7 +151,7 @@ public class ShowDetailAboutFragment extends DaggerFragment implements ShowDetai
 
     public static ShowDetailAboutFragment newInstance(MediaWrapper show) {
         Bundle args = new Bundle();
-        args.putParcelable(ARG_SHOW, Parcels.wrap(show));
+        args.putParcelable(ARG_SHOW, show);
 
         ShowDetailAboutFragment fragment = new ShowDetailAboutFragment();
         fragment.setArguments(args);

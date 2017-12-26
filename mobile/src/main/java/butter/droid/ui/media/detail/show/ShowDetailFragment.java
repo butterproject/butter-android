@@ -36,7 +36,6 @@ import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
 import java.util.List;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 public class ShowDetailFragment extends DaggerFragment implements ShowDetailView {
 
@@ -55,7 +54,7 @@ public class ShowDetailFragment extends DaggerFragment implements ShowDetailView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MediaWrapper show = Parcels.unwrap(getArguments().getParcelable(ARG_SHOW));
+        MediaWrapper show = getArguments().getParcelable(ARG_SHOW);
 
         presenter.onCreate(show);
     }
@@ -119,7 +118,7 @@ public class ShowDetailFragment extends DaggerFragment implements ShowDetailView
 
     public static ShowDetailFragment newInstance(MediaWrapper show) {
         Bundle args = new Bundle(1);
-        args.putParcelable(ARG_SHOW, Parcels.wrap(show));
+        args.putParcelable(ARG_SHOW, show);
 
         ShowDetailFragment fragment = new ShowDetailFragment();
         fragment.setArguments(args);

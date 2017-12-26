@@ -27,7 +27,6 @@ import butter.droid.provider.base.model.Movie;
 import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Show;
 import butter.droid.provider.base.model.Streamable;
-import org.parceler.Parcels;
 
 public class MediaWrapper implements Parcelable {
 
@@ -49,8 +48,8 @@ public class MediaWrapper implements Parcelable {
     }
 
     private MediaWrapper(Parcel in) {
-        this.media = Parcels.unwrap(in.readParcelable(Media.class.getClassLoader()));
-        this.mediaMeta = Parcels.unwrap(in.readParcelable(MediaMeta.class.getClassLoader()));
+        this.media = in.readParcelable(Media.class.getClassLoader());
+        this.mediaMeta = in.readParcelable(MediaMeta.class.getClassLoader());
     }
 
     @NonNull public Media getMedia() {
@@ -102,8 +101,8 @@ public class MediaWrapper implements Parcelable {
     }
 
     @Override public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeParcelable(Parcels.wrap(media), flags);
-        dest.writeParcelable(Parcels.wrap(mediaMeta), flags);
+        dest.writeParcelable(media, flags);
+        dest.writeParcelable(mediaMeta, flags);
     }
 
     public static final Creator<MediaWrapper> CREATOR = new Creator<MediaWrapper>() {

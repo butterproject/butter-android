@@ -68,7 +68,6 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 
 /**
  * @deprecated Use {@link butter.droid.ui.media.detail.streamable.StreamableDetailFragment} instead.
@@ -125,7 +124,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment impleme
         bottom = PixelUtils.getPixelsFromDp(activity, 33);
         Bundle args = getArguments();
         mediaMeta = args.getParcelable(EXTRA_MEDIA_META);
-        episode = Parcels.unwrap(args.getParcelable(EXTRA_EPISODE));
+        episode = args.getParcelable(EXTRA_EPISODE);
         // TODO: 6/17/17
         //        metaProvider = episode.getMetaProvider();
     }
@@ -443,7 +442,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment impleme
         EpisodeDialogFragment frag = new EpisodeDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_MEDIA_META, mediaMeta);
-        args.putParcelable(EXTRA_EPISODE, Parcels.wrap(episode));
+        args.putParcelable(EXTRA_EPISODE, episode);
         frag.setArguments(args);
         return frag;
     }
