@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Run Tests
           command: ./gradlew check
-  deploy:
+  deploy_mobile:
       working_directory: ~/code
       docker:
         - image: circleci/android:api-27-alpha
@@ -32,16 +32,28 @@ jobs:
         - checkout
         - run:
             name: Download Dependencies
-            command: ./gradlew androidDependencies
+            command: ./gradlew mobile:androidDependencies
         - run:
-            name: Build release
+            name: Build mobile
             command: ./gradlew mobile:assembleRelease
+        - store_artifacts:
+            path: tv/build/outputs/apk/release/
+            destination: apk/tv
+  deploy_tv:
+      working_directory: ~/code
+      docker:
+        - image: circleci/android:api-27-alpha
+      environment:
+        JVM_OPTS: -Xmx3200m
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+      steps:
+        - checkout
+        - run:
+            name: Download Dependencies
+            command: ./gradlew tv:androidDependencies
         - run:
             name: Build tv
             command: ./gradlew tv:assembleRelease
-        - store_artifacts:
-            path: mobie/build/outputs/apk/release/
-            destination: apk/mobile
         - store_artifacts:
             path: tv/build/outputs/apk/release/
             destination: apk/tv
@@ -51,7 +63,7 @@ workflows:
   build_deploy:
     jobs:
       - build
-      - deploy:
+      - deploy_mobile:
           requires:
             - build
           filters:
@@ -59,3 +71,13 @@ workflows:
               only:
                 - release
                 - master
+                - feature/ciReleaseSeparation
+      - deploy_tv:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - release
+                - master
+                - feature/ciReleaseSeparation

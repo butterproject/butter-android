@@ -23,7 +23,7 @@ public class Pager {
 
     @Nullable private final String endCursor;
 
-    public Pager(final String endCursor) {
+    public Pager(@Nullable final String endCursor) {
         this.endCursor = endCursor;
     }
 
