@@ -48,10 +48,10 @@ file:
 
 You can now sync, build and install the project:
 
-    $ ./gradlew assembleDebug # assemble the debug .apk
+    $ ./gradlew assembleDebug   # assemble the debug .apk
     $ ./gradlew assembleRelease # assemble the release .apk (signing keys are required)
-    $ ./gradlew installDebug  # install the debug .apk if you have an
-                              # emulator or an Android device connected
+    $ ./gradlew installDebug    # install the debug .apk if you have an
+                                # emulator or an Android device connected
 
 You can use [Android Studio](http://developer.android.com/sdk/installing/studio.html) by it as existing project.
 
