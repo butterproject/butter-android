@@ -31,14 +31,17 @@ jobs:
       steps:
         - checkout
         - run:
+            name: Set signing key
+            command: config/ci/download_keystore.sh
+        - run:
             name: Download Dependencies
             command: ./gradlew mobile:androidDependencies
         - run:
             name: Build mobile
             command: ./gradlew mobile:assembleRelease
         - store_artifacts:
-            path: tv/build/outputs/apk/release/
-            destination: apk/tv
+            path: mobile/build/outputs/apk/release/
+            destination: apk/mobile
   deploy_tv:
       working_directory: ~/code
       docker:
@@ -48,6 +51,9 @@ jobs:
         GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
       steps:
         - checkout
+        - run:
+            name: Set signing key
+            command: config/ci/download_keystore.sh
         - run:
             name: Download Dependencies
             command: ./gradlew tv:androidDependencies

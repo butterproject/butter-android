@@ -24,19 +24,9 @@ android {
         minSdkVersion 21
     }
 
-    signingConfigs {
-        mainConfig {
-            keyAlias System.getenv("S_ALIAS").toString() ?: ""
-            keyPassword System.getenv("S_KEYPASS").toString() ?: ""
-            storeFile System.getenv("S_KEYSTORE").toString() ? file(System.getenv("S_KEYSTORE").toString()) : file("")
-            storePassword System.getenv("S_KEYPASS").toString() ?: ""
-        }
-    }
-
     buildTypes {
         release {
-            // TODO should be added back by final release
-            //signingConfig signingConfigs.mainConfig
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
