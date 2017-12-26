@@ -49,6 +49,15 @@ android {
         javaMaxHeapSize "512M"
     }
 
+    signingConfigs {
+        release {
+            storeFile project.hasProperty("butterReleaseStoreFile") ? file(butterReleaseStoreFile) : null
+            storePassword project.hasProperty("butterReleaseStorePassword") ? butterReleaseStorePassword : null
+            keyAlias project.hasProperty("butterReleaseKeyAlias") ? butterReleaseKeyAlias : null
+            keyPassword project.hasProperty("butterReleaseKeyPassword") ? butterReleaseKeyPassword : null
+        }
+    }
+
 }
 
 dependencies {

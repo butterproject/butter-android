@@ -31,6 +31,9 @@ jobs:
       steps:
         - checkout
         - run:
+            name: Set signing key
+            command: config/ci/download_keystore.sh
+        - run:
             name: Download Dependencies
             command: ./gradlew mobile:androidDependencies
         - run:
@@ -48,6 +51,9 @@ jobs:
         GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
       steps:
         - checkout
+        - run:
+            name: Set signing key
+            command: config/ci/download_keystore.sh
         - run:
             name: Download Dependencies
             command: ./gradlew tv:androidDependencies
@@ -71,6 +77,7 @@ workflows:
               only:
                 - release
                 - master
+                - feature/releaseKeystore
       - deploy_tv:
           requires:
             - build
