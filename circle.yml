@@ -71,7 +71,6 @@ workflows:
               only:
                 - release
                 - master
-                - feature/ciReleaseSeparation
       - deploy_tv:
           requires:
             - build
@@ -80,4 +79,3 @@ workflows:
               only:
                 - release
                 - master
-                - feature/ciReleaseSeparation
