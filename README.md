@@ -16,7 +16,7 @@ Keep track of Butter development and community activity.
 
 ### pre 1.0.0
  - [x] 0.4.0 - Migrating app to MVP arhitecture
- - [ ] 0.5.0 - Refactor media providers
+ - [x] 0.5.0 - Refactor media providers
  - [ ] 0.6.0 - Update video player and resolve media streaming issues
  - [ ] 0.7.0 - Refactor updater to work on p2p protocol
  - [ ] 0.8.0 - Updating connect SDK
@@ -27,6 +27,9 @@ Keep track of Butter development and community activity.
  - Make media providers available through Content Providers.
  - Make desktop JS media providers available on Android.
  - Support multiple audio sources.
+ - Make media available offline.
+ - Adding support for Chromebooks.
+ - Picture in picture support.
 
 ## Getting Involved
 
@@ -46,6 +49,7 @@ file:
 You can now sync, build and install the project:
 
     $ ./gradlew assembleDebug # assemble the debug .apk
+    $ ./gradlew assembleRelease # assemble the release .apk (signing keys are required)
     $ ./gradlew installDebug  # install the debug .apk if you have an
                               # emulator or an Android device connected
 
@@ -53,53 +57,31 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
 
 ## Directory structure ##
 
-    `|-- base                            # base module (contains providers and streamer)
-     |    |-- build.gradle               # base build script
-     |    `-- src
-     |          |-- main
-     |                |-- assets         # base module assets
-     |                |-- java           # base module java code
-     |                `-- res            # base module resources
+    `|-- base                            # base module (contains all the core functionallity)
     `|-- mobile                          # mobile module (smartphone/tablet application)
-     |    |-- build.gradle               # mobile build script
-     |    `-- src
-     |          |-- main
-     |                |-- java           # mobile module java code
-     |                `-- res            # mobile module resources
     `|-- tv                              # tv module (Android TV application)
-     |    |-- build.gradle               # tv build script
-     |    `-- src
-     |          |-- main
-     |                |-- java           # tv module java code
-     |                `-- res            # tv module resources
-    `|-- connectsdk                      # connectsdk module
-          |-- build.gradle               # connectsdk build script
-          `-- src
-          |     |-- java                 # connectsdk module java code
-          `-- core
-          |     |-- src                  # connectsdk module core java code
+    `|-- provider                        # includes provider implementations
+          `-- media                      # media provider implementation and SDK
+                |-- base                 # Contains models for working with providers
+                |-- mock                 # Provider implementation with mock data for testing purposes
+                |-- provide              # Media provider SDK
+                `-- vodo                 # Vodo provider implementation
+          `-- subs                       # subtitle provider implementation and SDK
+                |-- mock                 # Subs provider implementation with mock data for testing purposes
+                |-- provide              # Subs provider SDK
+    `|-- connectsdk                      # connectsdk module responsible for streaming on external device such as Chromecas or Apple TV
+          |-- core                       # connectsdk module core implementation
           `-- modules
-                |-- google_cast
-                      |-- src            # connectsdk module google cast java code
-                |-- firetv
-                      |-- src            # connectsdk module google cast java code
+                |-- google_cast          # connectsdk module google cast implementation
+                |-- firetv               # connectsdk module fire tv implementation
 
 ## Versioning
 
 For transparency and insight into our release cycle, and for striving to maintain backward compatibility, Butter will be maintained according to the [Semantic Versioning](http://semver.org/) guidelines as much as possible.
 
-### Beta versions
-
-Beta releases will be numbered with the following format:
-
-`0.<major>.<minor>-<patch>`
-
-### Stable versions
-
 Releases will be numbered with the following format:
 
 `<major>.<minor>.<patch>`
-
 
 Constructed with the following guidelines:
 * A new *major* release indicates a large change where backwards compatibility is broken.
