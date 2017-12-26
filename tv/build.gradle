@@ -1,3 +1,5 @@
+import si.kamino.gradle.extensions.version.FileAppVersion
+
 /*
  * This file is part of Butter.
  *
@@ -15,16 +17,6 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
-
-androidVersion {
-
-    appVersion {
-        major 0
-        minor 1
-        build 2
-    }
-
-}
 
 android {
     defaultConfig {
@@ -85,4 +77,12 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
+}
+
+androidVersion {
+
+    appVersion(FileAppVersion) {
+        sourceFile rootProject.file(".butter/tv.properties")
+    }
+
 }

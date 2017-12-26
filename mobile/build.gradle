@@ -1,3 +1,5 @@
+import si.kamino.gradle.extensions.version.FileAppVersion
+
 /*
  * This file is part of Butter.
  *
@@ -14,18 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
-
 apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
-
-androidVersion {
-
-    appVersion {
-        major 0
-        minor 2
-        build 8
-    }
-
-}
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -99,4 +90,12 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.8.47'
+}
+
+androidVersion {
+
+    appVersion(FileAppVersion) {
+        sourceFile rootProject.file(".butter/mobile.properties")
+    }
+
 }
