@@ -45,6 +45,7 @@ public class Movie extends Streamable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeString(trailer);
     }
 
