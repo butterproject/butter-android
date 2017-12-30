@@ -44,6 +44,7 @@ public class Episode extends Streamable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeInt(episode);
     }
 
