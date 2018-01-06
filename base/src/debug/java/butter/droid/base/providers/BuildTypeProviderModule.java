@@ -17,23 +17,31 @@
 
 package butter.droid.base.providers;
 
+import android.content.Context;
+import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
+import butter.droid.provider.base.ProviderScope;
+import butter.droid.provider.mock.MockMediaProvider;
+import butter.droid.provider.subs.mock.MockSubsProvider;
+import com.google.gson.Gson;
 import dagger.Module;
+import dagger.Provides;
+import dagger.multibindings.IntoSet;
 
 @Module
 public class BuildTypeProviderModule {
 
-//    @Provides @ProviderScope MockMediaProvider provideMockMoviesProvider(Context context, Gson gson) {
-//        return new MockMediaProvider(context, gson);
-//    }
-//
-//    @Provides @ProviderScope MockSubsProvider provideMockSubsProvider(final Context context) {
-//        return new MockSubsProvider(context);
-//    }
-//
-//    @Provides @ProviderScope @IntoSet ProviderWrapper provideMockWrapper(final MockMediaProvider mediaProvider,
-//            final MockSubsProvider subsProvider) {
-//        return new ProviderWrapper(mediaProvider, subsProvider, butter.droid.provider.mock.R.string.title_movies,
-//                butter.droid.provider.mock.R.drawable.ic_nav_movies);
-//    }
+    @Provides @ProviderScope MockMediaProvider provideMockMoviesProvider(Context context, Gson gson) {
+        return new MockMediaProvider(context, gson);
+    }
+
+    @Provides @ProviderScope MockSubsProvider provideMockSubsProvider(final Context context) {
+        return new MockSubsProvider(context);
+    }
+
+    @Provides @ProviderScope @IntoSet ProviderWrapper provideMockWrapper(final MockMediaProvider mediaProvider,
+            final MockSubsProvider subsProvider) {
+        return new ProviderWrapper(mediaProvider, subsProvider, butter.droid.provider.mock.R.string.title_movies,
+                butter.droid.provider.mock.R.drawable.ic_nav_movies);
+    }
 
 }
