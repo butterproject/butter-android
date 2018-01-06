@@ -23,7 +23,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "butter.droid"
+        applicationId "org.butterproject.butter"
         minSdkVersion rootProject.ext.minSdk
     }
 

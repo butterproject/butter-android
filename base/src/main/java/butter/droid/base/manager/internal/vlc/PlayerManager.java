@@ -87,7 +87,7 @@ public class PlayerManager {
             final String playerActivity = resolveInfo.activityInfo.name;
             final String playerPackageName = resolveInfo.activityInfo.packageName;
 
-            if (!playerPackageName.startsWith("butter.droid")) {
+            if (!playerPackageName.startsWith("org.butterproject.butter")) {
                 returnMap.put(playerActivity + DELIMITER + playerPackageName, applicationName);
             }
         }
