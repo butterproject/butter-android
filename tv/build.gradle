@@ -20,7 +20,7 @@ apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
 
 android {
     defaultConfig {
-        applicationId "butter.droid.tv"
+        applicationId "butter.droid"
         minSdkVersion 21
     }
 
