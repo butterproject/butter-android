@@ -32,12 +32,15 @@ public class ProviderWrapper {
     @StringRes private final int displayName;
     @DrawableRes private final int icon;
 
+    private final int position;
+
     public ProviderWrapper(@NonNull final MediaProvider mediaProvider, @Nullable final SubsProvider subsProvider, final int displayName,
-            final int icon) {
+            final int icon, final int position) {
         this.mediaProvider = mediaProvider;
         this.subsProvider = subsProvider;
         this.displayName = displayName;
         this.icon = icon;
+        this.position = position;
     }
 
     @NonNull public MediaProvider getMediaProvider() {
@@ -56,4 +59,7 @@ public class ProviderWrapper {
         return icon;
     }
 
+    public int getPosition() {
+        return position;
+    }
 }
