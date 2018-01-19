@@ -76,8 +76,6 @@ public class VersionUtils {
                 return "arm64-v8a";
             } else if (versionCode > 20000000) {
                 return "armeabi-v7a";
-            } else if (versionCode > 10000000) {
-                return "armeabi";
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

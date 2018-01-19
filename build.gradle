@@ -60,12 +60,6 @@ allprojects {
 
                 splits {
                     abi {
-                        armeabi {
-                            versionCode(IncreaseVersionCode) {
-                                add 1000000
-                            }
-                        }
-
                         "armeabi-v7a" {
                             versionCode(IncreaseVersionCode) {
                                 add 2000000
