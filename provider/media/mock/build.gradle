@@ -52,9 +52,16 @@ repositories {
 }
 
 dependencies {
-    api project(':provider:media:provider')
+    implementation project(':provider:media:provider')
+    implementation project(':provider:subs:provider')
+    implementation project(':provider:subs:mock')
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation 'com.squareup.okio:okio:1.13.0'
+
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
+
     testImplementation 'junit:junit:4.12'
 
     androidTestApi('com.android.support.test.espresso:espresso-core:2.2.2', {

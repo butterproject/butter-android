@@ -20,6 +20,9 @@ package butter.droid.base.providers;
 import butter.droid.base.R;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.provider.base.ProviderScope;
+import butter.droid.provider.mock.MockMediaProvider;
+import butter.droid.provider.mock.MockProviderModule;
+import butter.droid.provider.subs.mock.MockSubsProvider;
 import butter.droid.provider.vodo.VodoModule;
 import butter.droid.provider.vodo.VodoProvider;
 import dagger.Module;
@@ -28,13 +31,19 @@ import dagger.multibindings.IntoSet;
 
 @Module(includes = {
         ProviderBindModule.class,
-        BuildTypeProviderModule.class,
-        VodoModule.class}
+        VodoModule.class,
+        MockProviderModule.class}
 )
 public class ProviderModule {
 
     @Provides @ProviderScope @IntoSet ProviderWrapper provideVodoWrapper(final VodoProvider mediaProvider) {
         return new ProviderWrapper(mediaProvider, null, R.string.vodo_label, R.drawable.ic_nav_movies);
+    }
+
+    @Provides @ProviderScope @IntoSet ProviderWrapper provideMockWrapper(final MockMediaProvider mediaProvider,
+            final MockSubsProvider subsProvider) {
+        return new ProviderWrapper(mediaProvider, subsProvider, butter.droid.provider.mock.R.string.title_movies,
+                butter.droid.provider.mock.R.drawable.ic_nav_movies);
     }
 
 }
