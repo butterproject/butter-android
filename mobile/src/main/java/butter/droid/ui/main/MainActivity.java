@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -236,7 +237,10 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     }
 
     @Override public void showFirsContentScreen() {
-        tabs.getTabAt(1).select();
+        Tab tab = tabs.getTabAt(1);
+        if (tab != null) {
+            tab.select();
+        } // TODO something should be done here
     }
 
     @Override public void writeStateData(@NonNull final Bundle outState, final int providerId) {
@@ -287,7 +291,6 @@ public class MainActivity extends ButterBaseActivity implements MainView {
     }
 
     private void setupTabs() {
-
         tabs.setupWithViewPager(viewPager);
         tabs.setTabGravity(TabLayout.GRAVITY_CENTER);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);

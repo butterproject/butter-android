@@ -213,7 +213,7 @@ public class DiscoveryManager implements ConnectableDeviceListener, DiscoveryPro
         receiver = new BroadcastReceiver() { 
 
             @Override 
-            public void onReceive(Context context, Intent intent) { 
+                public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
 
                 if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
