@@ -27,14 +27,14 @@ import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Format;
-import butter.droid.provider.base.paging.ItemsWrapper;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;
-import butter.droid.provider.base.paging.Paging;
 import butter.droid.provider.base.model.Season;
 import butter.droid.provider.base.model.Show;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.provider.base.nav.NavItem;
+import butter.droid.provider.base.paging.ItemsWrapper;
+import butter.droid.provider.base.paging.Paging;
 import butter.droid.provider.base.util.Optional;
 import butter.droid.provider.filter.Pager;
 import butter.droid.provider.mock.model.MockEpisode;
@@ -67,6 +67,8 @@ public class MockMediaProvider extends AbsMediaProvider {
         return parseMovies()
                 .concatWith(parseShows())
                 .concatWith(parseSeasons())
+                .filter(media -> filter == null || filter.getQuery() == null
+                        || media.getTitle().toLowerCase().contains(filter.getQuery().toLowerCase()))
                 .toList()
                 .map(l -> new ItemsWrapper(l, new Paging("", false)));
     }
