@@ -89,13 +89,4 @@ androidVersion {
         }
     }
 
-    variants {
-        release {
-
-        }
-        debug {
-
-        }
-    }
-
 }
