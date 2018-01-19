@@ -85,7 +85,7 @@ androidVersion {
     appVersion(FileAppVersion) {
         sourceFile rootProject.file(".butter/tv.properties")
         versionCode(SimpleIncreaseVersionCode) {
-
+            digits 2
         }
     }
 
