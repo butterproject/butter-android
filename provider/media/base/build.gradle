@@ -19,8 +19,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildToolsVersion
-
 
     defaultConfig {
         minSdkVersion 16
@@ -58,11 +56,11 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
     api "com.google.dagger:dagger:$daggerVersion"
 
-    testApi "junit:junit:4.12"
-    testApi 'org.mockito:mockito-core:2.8.47'
+    testImplementation "junit:junit:4.12"
+    testImplementation 'org.mockito:mockito-core:2.8.47'
 
-    androidTestApi('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestApi 'org.mockito:mockito-android:2.8.47'
+    androidTestImplementation 'org.mockito:mockito-android:2.8.47'
 }

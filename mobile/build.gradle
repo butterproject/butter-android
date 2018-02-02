@@ -20,7 +20,6 @@ apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "org.butterproject.butter"

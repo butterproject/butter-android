@@ -19,7 +19,6 @@ apply from: "${project.rootDir}/config/gradle/checkstyle.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         targetSdkVersion rootProject.ext.targetSdk
