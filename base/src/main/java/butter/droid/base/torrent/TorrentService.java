@@ -279,7 +279,8 @@ public class TorrentService extends DaggerService implements TorrentListener {
         Action stopAction = new Builder(R.drawable.ic_clear,
                 getString(R.string.stop), pendingStopIntent).build();
 
-        notificationManager.createChannel(ButterNotificationManager.CHANNEL_STREAMING, "Straming", NotificationManager.IMPORTANCE_LOW); // TODO text to resources
+        // TODO text to resources
+        notificationManager.createChannel(ButterNotificationManager.CHANNEL_STREAMING, "Straming", NotificationManager.IMPORTANCE_LOW);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, ButterNotificationManager.CHANNEL_STREAMING)
                 .setSmallIcon(R.drawable.ic_notif_logo)
                 .setContentTitle(getString(R.string.app_name) + " - " + getString(R.string.running))
