@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.PowerManager;
 import android.telephony.TelephonyManager;
 import dagger.Module;
 import dagger.Provides;
@@ -54,6 +55,10 @@ public class BaseAndroidModule {
 
     @Provides @Singleton AudioManager provideAudioManager(Context context) {
         return (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    }
+
+    @Provides @Singleton PowerManager providePowerManager(Context context) {
+        return (PowerManager) context.getSystemService(Context.POWER_SERVICE);
     }
 
 }

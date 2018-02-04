@@ -119,7 +119,6 @@ public abstract class TorrentBaseActivity extends DaggerAppCompatActivity implem
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             torrentStream = ((TorrentService.ServiceBinder) service).getService();
-            torrentStream.setCurrentActivity(TorrentBaseActivity.this);
             onTorrentServiceConnected(torrentStream);
         }
 

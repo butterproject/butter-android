@@ -173,11 +173,6 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
     }
 
     @Override public void playStream(StreamInfo streamInfo) {
-        TorrentService torrentService = getTorrentService();
-        if (torrentService != null) {
-            torrentService.startForeground();
-        }
-
         if (VersionUtils.isLollipop()) {
             scrollView.smoothScrollTo(0, 0);
             StreamLoadingActivity.startActivity(this, streamInfo,
