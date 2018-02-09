@@ -64,12 +64,6 @@ public class TrailerPlayerPresenterImpl extends BaseTrailerPlayerPresenterImpl i
         displayTitle();
     }
 
-    @Override public void onProgressChanged(final int progress) {
-        if (progress <= player.getLength()) {
-            setCurrentTime(progress);
-        }
-    }
-
     @Override public void surfaceChanged(final int width, final int height) {
         player.surfaceChanged(width, height);
     }

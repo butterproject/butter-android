@@ -87,12 +87,6 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
         touchHandler.setListener(null);
     }
 
-    @Override public void onProgressChanged(final int progress) {
-        if (progress <= (player.getLength() / 100 * getStreamerProgress())) {
-            setCurrentTime(progress);
-        }
-    }
-
     @Override public void surfaceChanged(final int width, final int height) {
         player.surfaceChanged(width, height);
     }
