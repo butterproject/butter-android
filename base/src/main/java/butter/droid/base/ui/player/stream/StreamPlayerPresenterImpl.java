@@ -172,10 +172,6 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         }
     }
 
-    @Override protected void seek(final int delta) {
-        super.seek(delta);
-    }
-
     @Override public void showCustomSubsPicker() {
         view.showSubsFilePicker();
     }

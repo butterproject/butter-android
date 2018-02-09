@@ -23,13 +23,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.VideoSupportFragment;
 import android.support.v17.leanback.app.VideoSupportFragmentGlueHost;
+import android.support.v17.leanback.media.MediaControllerAdapter;
 import android.support.v17.leanback.media.MediaControllerGlue;
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import android.support.v17.leanback.media.PlaybackTransportControlGlue;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
 import android.support.v17.leanback.widget.PlaybackControlsRow.ClosedCaptioningAction;
-import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -43,7 +43,6 @@ import android.view.View;
 import android.view.View.OnLayoutChangeListener;
 import android.view.ViewGroup;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
-import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;
 import java.util.ArrayList;
@@ -60,7 +59,6 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     protected MediaSessionCompat mediaSession;
     protected PlaybackStateCompat.Builder stateBuilder;
     private MediaMetadataCompat.Builder metadataBuilder;
-    private PlayerMediaControllerGlue mediaControllerGlue;
 
     private SurfaceView subsSurface;
 
@@ -138,20 +136,15 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     }
 
     @Override public void setupControls(final String title) {
-        // TODO: 5/10/17 Define fast forward arrays
-
         mediaSession.setPlaybackState(stateBuilder.build());
 
         MediaControllerCompat mediaController = new MediaControllerCompat(getContext(), mediaSession);
 
-        mediaControllerGlue = new PlayerMediaControllerGlue(getContext(), new int[]{1}, new int[]{1});
-        mediaControllerGlue.attachToMediaController(mediaController);
-
-        PlaybackControlsRowPresenter controlsRowPresenter = new PlaybackControlsRowPresenter(new DescriptionPresenter());
-        controlsRowPresenter.setSecondaryActionsHidden(false);
-        mediaControllerGlue.setControlsRowPresenter(controlsRowPresenter);
-
-        mediaControllerGlue.setControlsRow(new PlaybackControlsRow(null));
+        PlaybackTransportControlGlue<MediaControllerAdapter> mediaControllerGlue
+                = new PlaybackTransportControlGlue<>(getActivity(), new MediaControllerAdapter(mediaController));
+        mediaControllerGlue.setTitle(title);
+        mediaControllerGlue.setControlsOverlayAutoHideEnabled(true);
+        mediaControllerGlue.setSeekEnabled(true);
 
         VideoSupportFragmentGlueHost videoSupportFragmentGlueHost = new VideoSupportFragmentGlueHost(this);
         mediaControllerGlue.setHost(videoSupportFragmentGlueHost);
@@ -215,7 +208,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     }
 
     @Override public void detachMediaSession() {
-        mediaControllerGlue.detach();
+//        mediaControllerGlue.detach();
         mediaSession.release();
     }
 
@@ -256,6 +249,10 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
             presenter.pause();
         }
 
+        @Override public void onSeekTo(final long pos) {
+            presenter.seekTo(pos);
+        }
+
         @Override public void onSkipToNext() {
 
         }
@@ -264,43 +261,11 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
 
         }
 
-        @Override public void onFastForward() {
-            presenter.seekForwardClick();
-        }
-
-        @Override public void onRewind() {
-            presenter.seekBackwardClick();
-        }
-
         @Override public void onCustomAction(final String action, final Bundle extras) {
             if (!TVAbsPlayerFragment.this.onCustomAction(action, extras)) {
                 super.onCustomAction(action, extras);
             }
         }
-    }
-
-    /**
-     * Detail presenter to allow showing movie or TV show details properly.
-     */
-    private static class DescriptionPresenter extends AbstractDetailsDescriptionPresenter {
-
-        @Override
-        protected void onBindDescription(ViewHolder viewHolder, Object item) {
-            if (!(item instanceof StreamInfo)) {
-                return;
-            }
-
-            StreamInfo streamInfo = (StreamInfo) item;
-
-            if (streamInfo.hasParentMedia()) {
-                viewHolder.getTitle().setText(streamInfo.getParentMediaTitle());
-                viewHolder.getSubtitle().setText(streamInfo.getMediaTitle());
-
-            } else {
-                viewHolder.getTitle().setText(streamInfo.getFullTitle());
-            }
-        }
-
     }
 
     protected class PlayerMediaControllerGlue extends MediaControllerGlue {
