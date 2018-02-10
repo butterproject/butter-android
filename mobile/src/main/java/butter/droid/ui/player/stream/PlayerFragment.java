@@ -29,9 +29,9 @@ import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
 import butterknife.OnClick;
-import com.github.se_bastiaan.torrentstream.StreamStatus;
-import com.github.se_bastiaan.torrentstream.Torrent;
-import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import org.butterproject.torrentstream.StreamStatus;
+import org.butterproject.torrentstream.Torrent;
+import org.butterproject.torrentstream.listeners.TorrentListener;
 import java.util.Arrays;
 import javax.inject.Inject;
 

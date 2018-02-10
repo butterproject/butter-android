@@ -25,9 +25,9 @@ import android.widget.Toast;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
-import com.github.se_bastiaan.torrentstream.StreamStatus;
-import com.github.se_bastiaan.torrentstream.Torrent;
-import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import org.butterproject.torrentstream.StreamStatus;
+import org.butterproject.torrentstream.Torrent;
+import org.butterproject.torrentstream.listeners.TorrentListener;
 import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
 
