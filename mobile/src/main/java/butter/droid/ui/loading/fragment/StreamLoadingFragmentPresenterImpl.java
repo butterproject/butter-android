@@ -27,7 +27,7 @@ import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentPresenterImpl;
 import butter.droid.base.utils.PixelUtils;
-import com.github.se_bastiaan.torrentstream.Torrent;
+import org.butterproject.torrentstream.Torrent;
 
 public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmentPresenterImpl
         implements StreamLoadingFragmentPresenter {

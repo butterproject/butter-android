@@ -39,11 +39,6 @@ import butter.droid.base.manager.internal.foreground.ForegroundListener;
 import butter.droid.base.manager.internal.foreground.ForegroundManager;
 import butter.droid.base.manager.internal.notification.ButterNotificationManager;
 import butter.droid.base.utils.StringUtils;
-import com.github.se_bastiaan.torrentstream.StreamStatus;
-import com.github.se_bastiaan.torrentstream.Torrent;
-import com.github.se_bastiaan.torrentstream.TorrentOptions;
-import com.github.se_bastiaan.torrentstream.TorrentStream;
-import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import dagger.android.DaggerService;
 import java.io.File;
 import java.util.ArrayList;
@@ -51,6 +46,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.inject.Inject;
+import org.butterproject.torrentstream.StreamStatus;
+import org.butterproject.torrentstream.Torrent;
+import org.butterproject.torrentstream.TorrentOptions;
+import org.butterproject.torrentstream.TorrentStream;
+import org.butterproject.torrentstream.listeners.TorrentListener;
 
 public class TorrentService extends DaggerService implements TorrentListener {
 

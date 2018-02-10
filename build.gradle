@@ -30,7 +30,7 @@ ext {
     okHttpVersion = "3.4.2"
     daggerVersion = "2.14.1"
     javaxAnnotationVersion = "1.2"
-    torrentstreamVersion = '2.4.0'
+    torrentstreamVersion = '2.5.0'
     filePickerVersion = '1.1.0'
     changeloglibVersion = '2.1.0'
     gsonVersion = '2.8.1'
@@ -43,7 +43,7 @@ allprojects {
         google()
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'http://guardian.github.com/maven/repo-releases' }
-        maven { url "https://jitpack.io" }
+        maven { url "https://dl.bintray.com/butterproject/maven/" }
     }
 
     //let project evaluate its script first
