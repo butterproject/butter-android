@@ -131,9 +131,14 @@ public class SSDPClient {
             multicastSocket.close();
         }
 
-        if (datagramSocket != null) {
-            datagramSocket.disconnect();
-            datagramSocket.close();
+        final DatagramSocket socket = this.datagramSocket;
+        if (socket != null) {
+            new Thread(new Runnable() {
+                @Override public void run() {
+                    socket.disconnect();
+                    socket.close();
+                }
+            }).start();
         }
     }
 
