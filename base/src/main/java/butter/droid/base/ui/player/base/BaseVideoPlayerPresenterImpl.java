@@ -94,12 +94,18 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
         view.showOverlay();
     }
 
-    @Override public void seekForwardClick() {
-        seek(10000);
-    }
+    @Override public void seekTo(final long pos) {
+        if (player.getLength() <= 0) {
+            return;
+        }
 
-    @Override public void seekBackwardClick() {
-        seek(-10000);
+        long position = pos;
+        if (pos < 0) {
+            position = 0;
+        }
+
+        setCurrentTime(position);
+        view.showOverlay();
     }
 
     /**

@@ -496,16 +496,8 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
             presenter.pause();
         }
 
-        @Override public void onFastForward() {
-            presenter.seekForwardClick();
-        }
-
-        @Override public void onRewind() {
-            presenter.seekBackwardClick();
-        }
-
         @Override public void onSeekTo(final long pos) {
-            presenter.onProgressChanged((int) pos);
+            presenter.seekTo(pos);
         }
 
         @Override public void onCustomAction(final String action, final Bundle extras) {

@@ -38,11 +38,9 @@ public interface BaseVideoPlayerPresenter {
 
     void onScaleClicked();
 
-    void seekForwardClick();
-
-    void seekBackwardClick();
-
     void onSaveInstanceState(Bundle outState);
+
+    void seekTo(long pos);
 
     // region IntDef
 

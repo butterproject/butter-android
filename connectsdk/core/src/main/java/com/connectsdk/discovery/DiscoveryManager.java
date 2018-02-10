@@ -195,8 +195,8 @@ public class DiscoveryManager implements ConnectableDeviceListener, DiscoveryPro
         this.context = context;
         this.connectableDeviceStore = connectableDeviceStore;
 
-        allDevices = new ConcurrentHashMap<String, ConnectableDevice>(8, 0.75f, 2);
-        compatibleDevices = new ConcurrentHashMap<String, ConnectableDevice>(8, 0.75f, 2);
+        allDevices = new ConcurrentHashMap<>(8, 0.75f, 2);
+        compatibleDevices = new ConcurrentHashMap<>(8, 0.75f, 2);
 
         deviceClasses = new ConcurrentHashMap<String, Class<? extends DeviceService>>(4, 0.75f, 2);
         discoveryProviders = new CopyOnWriteArrayList<DiscoveryProvider>();
@@ -207,7 +207,7 @@ public class DiscoveryManager implements ConnectableDeviceListener, DiscoveryPro
         multicastLock = wifiMgr.createMulticastLock(Util.T);
         multicastLock.setReferenceCounted(true);
 
-        capabilityFilters = new ArrayList<CapabilityFilter>();
+        capabilityFilters = new ArrayList<>();
         pairingLevel = PairingLevel.OFF;
 
         receiver = new BroadcastReceiver() {

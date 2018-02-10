@@ -12,7 +12,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0-beta1'
+        classpath 'com.android.tools.build:gradle:3.1.0-beta2'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.1"
@@ -28,7 +28,7 @@ ext {
     minSdk = 16
     butterknifeVersion = "8.8.1"
     okHttpVersion = "3.4.2"
-    daggerVersion = "2.13"
+    daggerVersion = "2.14.1"
     javaxAnnotationVersion = "1.2"
     torrentstreamVersion = '2.4.0'
     filePickerVersion = '1.1.0'
