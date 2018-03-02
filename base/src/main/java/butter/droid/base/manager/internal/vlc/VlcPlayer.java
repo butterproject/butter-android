@@ -55,8 +55,10 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
             return false;
         }
 
-        mediaPlayer = new MediaPlayer(libVLC);
-        mediaPlayer.setEventListener(this);
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer(libVLC);
+            mediaPlayer.setEventListener(this);
+        }
         return true;
     }
 
@@ -200,7 +202,7 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
     }
 
     @Override public void onNewVideoLayout(final IVLCVout vlcVout, final int width, final int height, final int visibleWidth,
-            final int visibleHeight, final int sarNum, final int sarDen) {
+                                           final int visibleHeight, final int sarNum, final int sarDen) {
 
         layoutHolder.height = height;
         layoutHolder.width = width;

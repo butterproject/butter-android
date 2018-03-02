@@ -37,9 +37,9 @@ import org.videolan.libvlc.LibVLC;
 public class PlayerModule {
 
     @Provides @FragmentScope PlayerPresenter providePresenter(PlayerView view, Context context, PreferencesHandler preferencesHandler,
-            ProviderManager providerManager, PlayerManager playerManager, BeamManager beamManager, AudioManager audioManager,
+            ProviderManager providerManager, BeamManager beamManager, AudioManager audioManager,
             BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player, SubtitleManager subtitleManager) {
-        return new PlayerPresenterImpl(view, context, preferencesHandler, providerManager, playerManager,
+        return new PlayerPresenterImpl(view, context, preferencesHandler, providerManager,
                 beamManager, brightnessManager, audioManager, touchHandler, player, subtitleManager);
     }
 
