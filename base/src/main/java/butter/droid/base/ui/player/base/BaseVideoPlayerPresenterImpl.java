@@ -20,6 +20,7 @@ package butter.droid.base.ui.player.base;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.vlc.VlcPlayer.PlayerCallback;
@@ -41,16 +42,16 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     }
 
     protected void onCreate(final long resumePosition) {
-        if (!player.initialize()) {
+        try {
+            player.initialize();
+        } catch (IllegalStateException e) {
             view.close();
             Timber.e("Error initializing media player");
             return;
         }
 
         player.setCallback(this);
-
         this.resumePosition = resumePosition;
-
     }
 
     @Override public void onResume() {
