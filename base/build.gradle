@@ -48,7 +48,7 @@ dependencies {
 
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
-    api 'com.jakewharton.timber:timber:4.6.0'
+    api 'com.jakewharton.timber:timber:4.6.1'
     api "com.squareup.okhttp3:okhttp:$okHttpVersion"
     api 'com.squareup.picasso:picasso:2.5.2'
     api 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
