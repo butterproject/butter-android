@@ -76,6 +76,7 @@ dependencies {
 
     api project(':provider:subs:provider')
     api project(':provider:subs:mock')
+    api project(':provider:subs:opensubs')
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"

@@ -1,3 +1,3 @@
 include ':mobile', ':base', ':tv', ':provider:media:base', ':provider:media:provider', ':provider:media:mock',
-        ':provider:media:vodo', ':provider:subs:provider', ':provider:subs:mock',
+        ':provider:media:vodo', ':provider:subs:provider', ':provider:subs:mock', ':provider:subs:opensubs',
         ':connectsdk:core', ':connectsdk:modules:firetv', ':connectsdk:modules:google_cast'
