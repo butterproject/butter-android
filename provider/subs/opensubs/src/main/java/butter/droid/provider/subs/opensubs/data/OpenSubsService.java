@@ -29,7 +29,7 @@ public interface OpenSubsService {
 
     @XmlRpc("LogIn") @POST("xml-rpc") Single<LoginResponse> login(@Body String[] request);
 
-    @XmlRpc("SearchSubtitles") @POST("xml-rpc") Single<SearchResponse> search(@Body LoginRequest request);
+    @XmlRpc("SearchSubtitles") @POST("xml-rpc") Single<SearchResponse> search(@Body String[] request);
 
 
 }
