@@ -17,7 +17,6 @@
 
 package butter.droid.provider.subs.opensubs.data;
 
-import butter.droid.provider.subs.opensubs.data.model.request.LoginRequest;
 import butter.droid.provider.subs.opensubs.data.model.response.LoginResponse;
 import butter.droid.provider.subs.opensubs.data.model.response.SearchResponse;
 import io.reactivex.Single;
@@ -29,7 +28,7 @@ public interface OpenSubsService {
 
     @XmlRpc("LogIn") @POST("xml-rpc") Single<LoginResponse> login(@Body String[] request);
 
-    @XmlRpc("SearchSubtitles") @POST("xml-rpc") Single<SearchResponse> search(@Body String[] request);
+    @XmlRpc("SearchSubtitles") @POST("xml-rpc") Single<SearchResponse> search(@Body Object[] request);
 
 
 }
