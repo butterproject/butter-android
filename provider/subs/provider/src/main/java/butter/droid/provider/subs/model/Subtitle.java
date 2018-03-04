@@ -20,26 +20,54 @@ package butter.droid.provider.subs.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Subtitle implements Parcelable {
 
     @NonNull private final String language; // ISO language code
     @NonNull private final String name; // Usually full language name
 
+    /**
+     * Additional meta data that can be used when downloading subtitles;
+     */
+    @Nullable private final Map<String, String> meta;
+
     public Subtitle(@NonNull final String language, @NonNull final String name) {
+        this(language, name, null);
+    }
+
+    public Subtitle(@NonNull final String language, @NonNull final String name, @Nullable final Map<String, String> meta) {
         this.language = language;
         this.name = name;
+        this.meta = meta;
     }
 
     protected Subtitle(Parcel in) {
         language = in.readString();
         name = in.readString();
+        meta = new HashMap<>();
+        in.readMap(meta, Map.class.getClassLoader());
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Nullable public Map<String, String> getMeta() {
+        return meta;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(language);
         dest.writeString(name);
+        dest.writeMap(meta);
     }
 
     @Override
@@ -81,11 +109,4 @@ public class Subtitle implements Parcelable {
         }
     };
 
-    public String getLanguage() {
-        return language;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

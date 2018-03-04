@@ -17,15 +17,15 @@
 
 package butter.droid.provider.subs.opensubs.data.model.request;
 
-import io.reactivex.annotations.NonNull;
 import io.reactivex.annotations.Nullable;
 
-public class LoginRequest {
+public class QuerySearchRequest {
 
-    @Nullable public final String username = "Popcorn Time v1";
-    @Nullable public final String password = "Popcorn Time v1";
-    @Nullable public final String language = "Popcorn Time v1";
-    @NonNull public final String useragent = "Popcorn Time v1";
+    @Nullable public final String query;
+    @Nullable public final String sublanguageid = "all";
 
+    public QuerySearchRequest(final String query) {
+        this.query = query;
+    }
 }
 

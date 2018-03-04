@@ -20,15 +20,20 @@ package butter.droid.provider.subs.opensubs.data;
 import butter.droid.provider.subs.opensubs.data.model.response.LoginResponse;
 import butter.droid.provider.subs.opensubs.data.model.response.SearchResponse;
 import io.reactivex.Single;
+import java.util.List;
 import nl.nl2312.xmlrpc.XmlRpc;
+import okhttp3.ResponseBody;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Url;
 
 public interface OpenSubsService {
 
     @XmlRpc("LogIn") @POST("xml-rpc") Single<LoginResponse> login(@Body String[] request);
 
-    @XmlRpc("SearchSubtitles") @POST("xml-rpc") Single<SearchResponse> search(@Body Object[] request);
+    @XmlRpc("SearchSubtitles") @POST("xml-rpc") Single<SearchResponse> search(@Body List<Object> request);
 
+    @GET Single<ResponseBody> download(@Url String downloadLink);
 
 }

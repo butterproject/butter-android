@@ -45,7 +45,7 @@ public class ProviderModule {
             final OpenSubsProvider openSubsProvider, final MockMediaProvider mockProvider, final MockSubsProvider mockSubsProvider) {
         Set<ProviderWrapper> set = new TreeSet<>((o1, o2) -> o1.getPosition() - o2.getPosition());
         set.add(new ProviderWrapper(vodoProvider, openSubsProvider, R.string.vodo_label, R.drawable.ic_nav_movies, 0));
-        set.add(new ProviderWrapper(mockProvider, openSubsProvider, butter.droid.provider.mock.R.string.title_movies,
+        set.add(new ProviderWrapper(mockProvider, mockSubsProvider“, butter.droid.provider.mock.R.string.title_movies,
                 butter.droid.provider.mock.R.drawable.ic_nav_movies, 1));
         return set;
     }

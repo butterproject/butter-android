@@ -15,16 +15,17 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.subs.opensubs.data.model.response;
+package butter.droid.provider.subs.opensubs.data.model.request;
 
-import java.util.List;
-import nl.nl2312.xmlrpc.deserialization.MemberName;
+import io.reactivex.annotations.Nullable;
 
-public class SearchResponse {
+public class ImdbSearchRequest {
 
-    @MemberName("data") List<OpenSubItem> data;
+    @Nullable public final String imdbid;
+    @Nullable public final String sublanguageid = "all";
 
-    public List<OpenSubItem> getData() {
-        return data;
+    public ImdbSearchRequest(final String imdbid) {
+        this.imdbid = imdbid;
     }
 }
+
