@@ -64,7 +64,7 @@ dependencies {
     api "com.google.dagger:dagger-android:$daggerVersion"
     api "com.google.dagger:dagger-android-support:$daggerVersion"
 
-    api 'com.butterproject:vlc-android-sdk:3.0.0'
+    api 'com.butterproject:vlc-android-sdk:3.0.3-1'
 
     api project(':connectsdk:core')
     api project(':connectsdk:modules:firetv')
