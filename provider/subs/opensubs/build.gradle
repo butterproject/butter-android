@@ -43,6 +43,7 @@ android {
 
     lintOptions {
         textReport true
+        lintConfig file("lint.xml")
     }
 }
 
@@ -57,7 +58,11 @@ dependencies {
     api 'com.squareup.retrofit2:retrofit:2.3.0'
     api "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
 
-    implementation 'org.simpleframework:simple-xml:2.7.1'
+    implementation('org.simpleframework:simple-xml:2.7.1') {
+        exclude module: 'stax'
+        exclude module: 'stax-api'
+        exclude module: 'xpp3'
+    }
     implementation 'net.iharder:base64:2.3.9'
     implementation files("libs/retrofit-xmlrpc-0.1.jar")
 
