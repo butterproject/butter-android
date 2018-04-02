@@ -27,6 +27,7 @@ import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.SubsProvider;
 import butter.droid.provider.subs.model.Subtitle;
 import io.reactivex.Maybe;
+import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 
 @Internal
@@ -50,7 +51,8 @@ public class SubtitleManager {
             } else if (subtitle != null) {
                 return subsProvider.downloadSubs(media, subtitle)
                         .doOnSuccess(wrapper::setFileUri)
-                        .map(uri -> wrapper);
+                        .map(uri -> wrapper)
+                        .subscribeOn(Schedulers.io());
             } else {
                 String subtitleLanguage = preferencesHandler.getSubtitleDefaultLanguage();
 
@@ -64,7 +66,8 @@ public class SubtitleManager {
                             .firstElement()
                             .flatMap(sub -> subsProvider.downloadSubs(media, sub))
                             .doOnSuccess(newWrapper::setFileUri)
-                            .map(uri -> newWrapper);
+                            .map(uri -> newWrapper)
+                            .subscribeOn(Schedulers.io());
                 } else {
                     return Maybe.empty();
                 }
