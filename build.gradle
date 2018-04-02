@@ -35,6 +35,7 @@ ext {
     changeloglibVersion = '2.1.0'
     gsonVersion = '2.8.1'
     rxJavaVersion = '2.1.8'
+    retrofitVersion = '2.4.0'
 }
 
 allprojects {
