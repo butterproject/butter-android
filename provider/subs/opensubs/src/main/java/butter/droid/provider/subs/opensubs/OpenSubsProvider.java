@@ -85,7 +85,7 @@ public class OpenSubsProvider extends AbsSubsProvider {
                             int diff = getItemScore(openSubItem2) - getItemScore(openSubItem);
                             // TODO downloads count
 //                            if (diff > 0 || diff == 0 && openSubItem2.getDownloads() > openSubItem.getDownloads()) {
-                            if (diff > 0) {
+                            if (diff >= 0) {
                                 return openSubItem2;
                             } else {
                                 return openSubItem;
