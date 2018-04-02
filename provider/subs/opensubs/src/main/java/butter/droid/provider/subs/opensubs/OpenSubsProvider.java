@@ -19,18 +19,7 @@ package butter.droid.provider.subs.opensubs;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import butter.droid.provider.base.model.Media;
-import butter.droid.provider.subs.AbsSubsProvider;
-import butter.droid.provider.subs.model.Subtitle;
-import butter.droid.provider.subs.opensubs.data.OpenSubsService;
-import butter.droid.provider.subs.opensubs.data.model.request.QuerySearchRequest;
-import butter.droid.provider.subs.opensubs.data.model.response.LoginResponse;
-import butter.droid.provider.subs.opensubs.data.model.response.SearchResponse;
-import io.reactivex.Maybe;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.functions.Function;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +27,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import butter.droid.provider.base.model.Media;
+import butter.droid.provider.subs.AbsSubsProvider;
+import butter.droid.provider.subs.model.Subtitle;
+import butter.droid.provider.subs.opensubs.data.OpenSubsService;
+import butter.droid.provider.subs.opensubs.data.model.request.QuerySearchRequest;
+import butter.droid.provider.subs.opensubs.data.model.response.LoginResponse;
+import butter.droid.provider.subs.opensubs.data.model.response.OpenSubItem;
+import butter.droid.provider.subs.opensubs.data.model.response.SearchResponse;
+import io.reactivex.Maybe;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Single;
+import io.reactivex.SingleSource;
+import io.reactivex.functions.Function;
+import io.reactivex.observables.GroupedObservable;
 import okhttp3.ResponseBody;
 
 public class OpenSubsProvider extends AbsSubsProvider {
@@ -63,7 +68,7 @@ public class OpenSubsProvider extends AbsSubsProvider {
 
     @Override public Single<List<Subtitle>> list(@NonNull final Media media) {
         // TODO cache token
-        return service.login(new String[] { "", "", Locale.getDefault().getLanguage(), USER_AGENT }) // TODO add constants
+        return service.login(new String[]{"", "", Locale.getDefault().getLanguage(), USER_AGENT}) // TODO add constants
                 .flatMap((Function<LoginResponse, SingleSource<SearchResponse>>) loginResponse -> {
                     List<Object> params = new ArrayList<>();
                     params.add(loginResponse.getTokem());
@@ -74,12 +79,38 @@ public class OpenSubsProvider extends AbsSubsProvider {
                 })
                 .map(SearchResponse::getData)
                 .flatMapObservable(Observable::fromIterable)
-//                .groupBy(OpenSubItem::getLanguageCode) // TODO group and rank
+                .groupBy(OpenSubItem::getLanguageCode)
+                .concatMap((Function<GroupedObservable<String, OpenSubItem>, ObservableSource<OpenSubItem>>) observable ->
+                        observable.reduce((openSubItem, openSubItem2) -> {
+                            int diff = getItemScore(openSubItem2) - getItemScore(openSubItem);
+                            // TODO downloads count
+//                            if (diff > 0 || diff == 0 && openSubItem2.getDownloads() > openSubItem.getDownloads()) {
+                            if (diff > 0 || diff == 0) {
+                                return openSubItem2;
+                            } else {
+                                return openSubItem;
+                            }
+                        }).toObservable())
                 .map(openSubItem -> {
                     Map<String, String> meta = new HashMap<>(1);
                     meta.put(META_DOWNLOAD_LINK, openSubItem.getDownalodLink().replace(".gz", ".srt")); // TODO download gz files
                     return new Subtitle(openSubItem.getLanguageCode(), openSubItem.getLanguageName(), meta);
                 })
-                .toList();
+                .toSortedList((o1, o2) -> o1.getName().compareTo(o2.getName())); // TODO shouldn't be dependent on provider
+    }
+
+    private int getItemScore(OpenSubItem item) {
+        int score = 0;
+
+        if (item != null) {
+            if ("tag".equals(item.getMatchedBy())) {
+                score += 50;
+            }
+            if ("trusted".equals(item.getUserRank())) {
+                score += 100;
+            }
+        }
+
+        return score;
     }
 }
