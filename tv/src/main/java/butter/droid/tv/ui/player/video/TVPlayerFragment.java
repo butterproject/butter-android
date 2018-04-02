@@ -51,7 +51,8 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
         StreamInfo streamInfo = getArguments().getParcelable(ARG_STREAM_INFO);
         long resumePosition = getResumePosition(savedInstanceState);
 
-//        stateBuilder.addCustomAction(PlayerMediaControllerGlue.ACTION_CLOSE_CAPTION, getString(R.string.subtitles), R.drawable.ic_av_subs);
+//        stateBuilder.addCustomAction(PlayerMediaControllerGlue.ACTION_CLOSE_CAPTION, getString(R.string.subtitles),
+// R.drawable.ic_av_subs);g
 
         presenter.onCreate(streamInfo, resumePosition);
     }
