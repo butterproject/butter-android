@@ -17,23 +17,25 @@
 
 package butter.droid.base.manager.internal.vlc;
 
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_16_9;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_4_3;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_BEST_FIT;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FILL;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_SCREEN;
-import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_ORIGINAL;
-
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.view.SurfaceView;
-import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SizePolicy;
+
 import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.Media.Slave.Type;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.MediaPlayer.Event;
+
+import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SizePolicy;
+
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_16_9;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_4_3;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_BEST_FIT;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FILL;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_FIT_SCREEN;
+import static butter.droid.base.ui.player.base.BaseVideoPlayerPresenter.SURFACE_ORIGINAL;
 
 public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, IVLCVout.OnNewVideoLayoutListener {
 
@@ -50,14 +52,17 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
         layoutHolder = new LayoutHolder();
     }
 
-    public boolean initialize() {
+    public void initialize() throws IllegalStateException {
         if (libVLC == null) {
-            return false;
+            throw new IllegalStateException("Trying to initialise VlcPlayer but libVLC is null");
+        }
+
+        if (mediaPlayer != null) {
+            throw new IllegalStateException("MediaPlayer is already initialized");
         }
 
         mediaPlayer = new MediaPlayer(libVLC);
         mediaPlayer.setEventListener(this);
-        return true;
     }
 
     public void loadMedia(Uri uri, int hardwareAcceleration) {
@@ -200,7 +205,7 @@ public class VlcPlayer implements MediaPlayer.EventListener, IVLCVout.Callback, 
     }
 
     @Override public void onNewVideoLayout(final IVLCVout vlcVout, final int width, final int height, final int visibleWidth,
-            final int visibleHeight, final int sarNum, final int sarDen) {
+                                           final int visibleHeight, final int sarNum, final int sarDen) {
 
         layoutHolder.height = height;
         layoutHolder.width = width;

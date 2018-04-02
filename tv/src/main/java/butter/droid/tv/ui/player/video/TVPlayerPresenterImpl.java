@@ -17,11 +17,9 @@
 
 package butter.droid.tv.ui.player.video;
 
-import android.content.Context;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.subtitle.SubtitleManager;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 
@@ -30,10 +28,10 @@ public class TVPlayerPresenterImpl extends StreamPlayerPresenterImpl implements 
     private final TVPlayerView view;
     private final VlcPlayer player;
 
-    public TVPlayerPresenterImpl(final TVPlayerView view, final Context context, final PreferencesHandler preferencesHandler,
-            final ProviderManager providerManager, final PlayerManager playerManager, final VlcPlayer vlcPlayer,
+    public TVPlayerPresenterImpl(final TVPlayerView view, final PreferencesHandler preferencesHandler,
+            final ProviderManager providerManager, final VlcPlayer vlcPlayer,
             final SubtitleManager subtitleManager) {
-        super(view, context, preferencesHandler, providerManager, playerManager, vlcPlayer, subtitleManager);
+        super(view, preferencesHandler, providerManager, vlcPlayer, subtitleManager);
 
         this.view = view;
         this.player = vlcPlayer;

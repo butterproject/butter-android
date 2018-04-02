@@ -28,8 +28,8 @@ public class TorrentBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(STOP)) {
-            TorrentService.stop();
+        if (STOP.equals(intent.getAction())) {
+            TorrentService.stop(context);
         }
     }
 

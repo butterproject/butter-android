@@ -30,18 +30,6 @@ public class MediaDetailsDescriptionPresenter extends AbstractDetailsDescription
         if (itemWrapper != null) {
             Media media = itemWrapper.getMedia();
             viewHolder.getTitle().setText(media.getTitle());
-
-            Genre[] genres = media.getGenres();
-            if (genres.length > 0) {
-                StringBuffer genresText = new StringBuffer();
-                for (int i = 0; i < genres.length; i++) {
-                    if (i != 0) {
-                        genresText.append(", ");
-                    }
-                    genresText.append(genres[i].getName());
-                }
-            }
-
             viewHolder.getBody().setText(media.getSynopsis());
         }
     }
