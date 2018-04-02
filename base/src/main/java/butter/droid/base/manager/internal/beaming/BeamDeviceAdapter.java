@@ -19,15 +19,13 @@ package butter.droid.base.manager.internal.beaming;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatImageView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import butter.droid.base.R;
-import butter.droid.base.utils.ThreadUtils;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.discovery.DiscoveryManagerListener;
@@ -39,9 +37,17 @@ import com.connectsdk.service.NetcastTVService;
 import com.connectsdk.service.RokuService;
 import com.connectsdk.service.WebOSTVService;
 import com.connectsdk.service.command.ServiceCommandError;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+
+import butter.droid.base.R;
+import butter.droid.base.utils.ThreadUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class BeamDeviceAdapter extends BaseAdapter {
 
@@ -103,40 +109,37 @@ public class BeamDeviceAdapter extends BaseAdapter {
         ConnectableDevice device = getItem(position);
 
         int imgResource = R.drawable.ic_dlna;
-        String serviceText = "";
-        for (DeviceService service : device.getServices()) {
-            String addText = "";
+
+        Collection<DeviceService> services = device.getServices();
+        ArrayList<String> textServices = new ArrayList<>(services.size());
+
+        for (DeviceService service : services) {
             if (service instanceof CastService) {
                 imgResource = R.drawable.ic_googlecast;
-                addText += "Google Cast";
+                textServices.add("Google Cast");
             } else if (service instanceof DLNAService) {
                 imgResource = R.drawable.ic_dlna;
-                addText += "DLNA";
+                textServices.add("DLNA");
             } else if (service instanceof AirPlayService) {
                 imgResource = R.drawable.ic_airplay;
-                addText += "AirPlay";
+                textServices.add("AirPlay");
             } else if (service instanceof RokuService) {
                 imgResource = R.drawable.ic_dlna;
-                addText += "Roku";
+                textServices.add("Roku");
             } else if (service instanceof WebOSTVService) {
                 imgResource = R.drawable.ic_dlna;
-                addText += "webOS TV";
+                textServices.add("webOS TV");
             } else if (service instanceof NetcastTVService) {
                 imgResource = R.drawable.ic_dlna;
-                addText += "Netcast";
-            }
-
-            if (!addText.isEmpty()) {
-                if (serviceText.isEmpty()) {
-                    serviceText = addText;
-                } else {
-                    serviceText += ", " + addText;
-                }
+                textServices.add("Netcast");
             }
         }
 
-        if (serviceText.isEmpty()) {
+        String serviceText;
+        if (textServices.size() == 0) {
             serviceText = "Beaming Device";
+        } else {
+            serviceText = TextUtils.join(",", textServices);
         }
 
         holder.icon.setImageResource(imgResource);
@@ -146,41 +149,26 @@ public class BeamDeviceAdapter extends BaseAdapter {
         return convertView;
     }
 
-    DiscoveryManagerListener mListener = new DiscoveryManagerListener() {
+    private DiscoveryManagerListener mListener = new DiscoveryManagerListener() {
         @Override
         public void onDeviceAdded(DiscoveryManager manager, ConnectableDevice device) {
             devices = beamManager.getDevices();
             keys = new ArrayList<>(devices.keySet());
-            ThreadUtils.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    notifyDataSetChanged();
-                }
-            });
+            ThreadUtils.runOnUiThread(() -> notifyDataSetChanged());
         }
 
         @Override
         public void onDeviceUpdated(DiscoveryManager manager, ConnectableDevice device) {
             devices = beamManager.getDevices();
             keys = new ArrayList<>(devices.keySet());
-            ThreadUtils.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    notifyDataSetChanged();
-                }
-            });
+            ThreadUtils.runOnUiThread(() -> notifyDataSetChanged());
         }
 
         @Override
         public void onDeviceRemoved(DiscoveryManager manager, ConnectableDevice device) {
             devices = beamManager.getDevices();
             keys = new ArrayList<>(devices.keySet());
-            ThreadUtils.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    notifyDataSetChanged();
-                }
-            });
+            ThreadUtils.runOnUiThread(() -> notifyDataSetChanged());
         }
 
         @Override

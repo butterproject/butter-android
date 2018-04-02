@@ -44,10 +44,10 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
     private final BeamManager beamManager;
 
     public PlayerPresenterImpl(final PlayerView view, final Context context, final PreferencesHandler preferencesHandler,
-            final ProviderManager providerManager, final PlayerManager playerManager, final BeamManager beamManager,
+            final ProviderManager providerManager, final BeamManager beamManager,
             final BrightnessManager brightnessManager, final AudioManager audioManager, final VideoPlayerTouchHandler touchHandler,
             final VlcPlayer player, final SubtitleManager subtitleManager) {
-        super(view, context, preferencesHandler, providerManager, playerManager, player, subtitleManager);
+        super(view, preferencesHandler, providerManager, player, subtitleManager);
 
         this.view = view;
         this.context = context;

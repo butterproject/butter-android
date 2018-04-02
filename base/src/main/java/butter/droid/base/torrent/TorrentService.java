@@ -54,8 +54,6 @@ public class TorrentService extends DaggerService implements TorrentListener {
 
     private static String WAKE_LOCK = "TorrentService_WakeLock";
 
-    private static TorrentService sThis;
-
     @Inject PreferencesHandler preferencesHandler;
     @Inject ForegroundManager foregroundManager;
 
@@ -84,7 +82,6 @@ public class TorrentService extends DaggerService implements TorrentListener {
     public void onCreate() {
         super.onCreate();
 
-        sThis = this;
         foregroundManager.setListener(foregroundListener);
 
         final TorrentOptions.Builder builder = new TorrentOptions.Builder()
@@ -112,6 +109,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
         }
 
         foregroundManager.setListener(null);
+        stopStreaming();
     }
 
     @Override
@@ -306,8 +304,9 @@ public class TorrentService extends DaggerService implements TorrentListener {
         context.startService(torrentServiceIntent);
     }
 
-    protected static void stop() {
-        sThis.stopStreaming();
+    protected static void stop(Context context) {
+        Intent torrentServiceIntent = new Intent(context, TorrentService.class);
+        context.stopService(torrentServiceIntent);
     }
 
     public Torrent getCurrentTorrent() {
