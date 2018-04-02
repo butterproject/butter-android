@@ -55,8 +55,8 @@ repositories {
 dependencies {
     implementation project(':provider:subs:provider')
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
     implementation('org.simpleframework:simple-xml:2.7.1') {
         exclude module: 'stax'
