@@ -18,6 +18,11 @@
 package butter.droid.base.ui.loading.fragment;
 
 import android.content.Context;
+
+import org.butterproject.torrentstream.StreamStatus;
+import org.butterproject.torrentstream.Torrent;
+import org.butterproject.torrentstream.listeners.TorrentListener;
+
 import butter.droid.base.R;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
@@ -31,9 +36,6 @@ import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.provider.subs.SubsProvider;
-import org.butterproject.torrentstream.StreamStatus;
-import org.butterproject.torrentstream.Torrent;
-import org.butterproject.torrentstream.listeners.TorrentListener;
 import io.reactivex.MaybeObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.Nullable;
@@ -207,6 +209,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
         SubsProvider subsProvider = providerManager.getSubsProvider(media.getProviderId());
         SubtitleWrapper subtitle = streamInfo.getSubtitle();
 
+        // TODO dispose
         subtitleManager.downloadSubtitle(subsProvider, media.getMedia(), subtitle)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MaybeObserver<SubtitleWrapper>() {

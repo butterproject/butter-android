@@ -24,30 +24,30 @@ import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.VideoSupportFragment;
 import android.support.v17.leanback.app.VideoSupportFragmentGlueHost;
 import android.support.v17.leanback.media.MediaControllerAdapter;
-import android.support.v17.leanback.media.MediaControllerGlue;
 import android.support.v17.leanback.media.PlaybackTransportControlGlue;
+import android.support.v17.leanback.media.PlayerAdapter;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
 import android.support.v17.leanback.widget.PlaybackControlsRow.ClosedCaptioningAction;
-import android.support.v4.content.ContextCompat;
+import android.support.v17.leanback.widget.PlaybackControlsRow.PictureInPictureAction;
+import android.support.v17.leanback.widget.PlaybackControlsRow.SkipNextAction;
+import android.support.v17.leanback.widget.PlaybackControlsRow.SkipPreviousAction;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v4.media.session.PlaybackStateCompat.CustomAction;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnLayoutChangeListener;
 import android.view.ViewGroup;
+
+import javax.inject.Inject;
+
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.tv.BuildConfig;
-import butter.droid.tv.R;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
 
 public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPlayerView {
 
@@ -67,26 +67,22 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     @Override public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mediaSession = new MediaSessionCompat(getContext(), BuildConfig.APPLICATION_ID);
-        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        mediaSession = new MediaSessionCompat(requireContext(), BuildConfig.APPLICATION_ID);
+        mediaSession.setFlags(
+                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mediaSession.setMediaButtonReceiver(null);
         mediaSession.setCallback(new PlayerSessionCallback());
 
-        stateBuilder = new PlaybackStateCompat.Builder()
-                .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE
-                        | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
-                        | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-                        | PlaybackStateCompat.ACTION_REWIND
-                        | PlaybackStateCompat.ACTION_FAST_FORWARD
-                        | PlaybackStateCompat.ACTION_SEEK_TO)
-                .addCustomAction(PlayerMediaControllerGlue.ACTION_SCALE, getString(R.string.scale), R.drawable.ic_av_aspect_ratio);
+        stateBuilder = new PlaybackStateCompat.Builder();
 
         metadataBuilder = new MediaMetadataCompat.Builder();
     }
 
-    @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+            final Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
-        subsSurface = (SurfaceView) inflater.inflate(android.support.v17.leanback.R.layout.lb_video_surface, root, false);
+        subsSurface = (SurfaceView) inflater.inflate(android.support.v17.leanback.R.layout.lb_video_surface, root,
+                false);
         root.addView(subsSurface, 1); // above video view
 
         subsSurface.setZOrderMediaOverlay(true);
@@ -141,7 +137,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         MediaControllerCompat mediaController = new MediaControllerCompat(getContext(), mediaSession);
 
         PlaybackTransportControlGlue<MediaControllerAdapter> mediaControllerGlue
-                = new PlaybackTransportControlGlue<>(getActivity(), new MediaControllerAdapter(mediaController));
+                = new PlayerMediaControllerGlue<>(requireContext(), new MediaControllerAdapter(mediaController));
         mediaControllerGlue.setTitle(title);
         mediaControllerGlue.setControlsOverlayAutoHideEnabled(true);
         mediaControllerGlue.setSeekEnabled(true);
@@ -149,7 +145,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         VideoSupportFragmentGlueHost videoSupportFragmentGlueHost = new VideoSupportFragmentGlueHost(this);
         mediaControllerGlue.setHost(videoSupportFragmentGlueHost);
 
-        MediaControllerCompat.setMediaController(getActivity(), mediaController);
+        MediaControllerCompat.setMediaController(requireActivity(), mediaController);
 
         metadataBuilder.putText(MediaMetadataCompat.METADATA_KEY_TITLE, title);
         mediaSession.setMetadata(metadataBuilder.build());
@@ -189,7 +185,8 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
 
     @Override public void updateControlsState(final boolean playing, final long currentTime, final long duration) {
         stateBuilder.setBufferedPosition(duration);
-        stateBuilder.setState(playing ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED, currentTime, 1);
+        stateBuilder.setState(playing ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
+                currentTime, 1);
         mediaSession.setPlaybackState(stateBuilder.build());
 
         metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration);
@@ -222,10 +219,10 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
 
     protected boolean onCustomAction(final String action, final Bundle extras) {
         switch (action) {
-            case PlayerMediaControllerGlue.ACTION_SCALE:
-                presenter.onScaleClicked();
-                tickle();
-                return true;
+//            case PlayerMediaControllerGlue.ACTION_SCALE:
+//                presenter.onScaleClicked();
+//                tickle();
+//                return true;
             default:
                 return false;
         }
@@ -254,11 +251,11 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         }
 
         @Override public void onSkipToNext() {
-
+            // TODO handle
         }
 
         @Override public void onSkipToPrevious() {
-
+            // TODO handle
         }
 
         @Override public void onCustomAction(final String action, final Bundle extras) {
@@ -268,81 +265,50 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         }
     }
 
-    protected class PlayerMediaControllerGlue extends MediaControllerGlue {
+    protected class PlayerMediaControllerGlue<T extends PlayerAdapter> extends PlaybackTransportControlGlue<T> {
 
-        static final String ACTION_SCALE = "butter.droid.tv.ui.player.video.action.SCALE";
-        public static final String ACTION_CLOSE_CAPTION = "butter.droid.tv.ui.player.video.action.CLOSE_CAPTION";
+//        static final String ACTION_SCALE = "butter.droid.tv.ui.player.video.action.SCALE";
 
-        private final List<String> actionsList = new ArrayList<>();
+        private final PlaybackControlsRow.SkipPreviousAction skipPreviousAction;
+        private final PlaybackControlsRow.SkipNextAction skipNextAction;
+
+        private final PlaybackControlsRow.ClosedCaptioningAction ccAction;
+        private final PlaybackControlsRow.PictureInPictureAction pipAction;
 
         /**
          * Constructor for the glue.
          *
-         * @param fastForwardSpeeds Array of seek speeds for fast forward.
-         * @param rewindSpeeds Array of seek speeds for rewind.
+         * @param context
+         * @param impl Implementation to underlying media player.
          */
-        public PlayerMediaControllerGlue(final Context context, final int[] fastForwardSpeeds, final int[] rewindSpeeds) {
-            super(context, fastForwardSpeeds, rewindSpeeds);
+        public PlayerMediaControllerGlue(Context context, T impl) {
+            super(context, impl);
+
+            skipPreviousAction = new SkipPreviousAction(context);
+            skipNextAction = new SkipNextAction(context);
+            pipAction = new PictureInPictureAction(context);
+
+            ccAction = new ClosedCaptioningAction(context);
         }
 
-        @Override protected void onStateChanged() {
-            super.onStateChanged();
-
-            PlaybackControlsRow controlsRow = getControlsRow();
-
-            if (controlsRow == null) {
-                return;
-            }
-
-            List<CustomAction> customActions = getMediaController().getPlaybackState().getCustomActions();
-
-            ArrayObjectAdapter adapter = (ArrayObjectAdapter) controlsRow.getSecondaryActionsAdapter();
-
-            if (customActions != null && customActions.size() > 0) {
-
-                for (int i = 0; i < customActions.size(); i++) {
-
-                    CustomAction customAction = customActions.get(i);
-
-                    if (actionsList.size() == i || !customAction.getAction().equals(actionsList.get(i))) {
-                        switch (customAction.getAction()) {
-                            case ACTION_SCALE:
-                                adapter.add(new Action(R.id.control_scale, customAction.getName(), null,
-                                        ContextCompat.getDrawable(getContext(), customAction.getIcon())));
-                                break;
-                            case ACTION_CLOSE_CAPTION:
-                                adapter.add(new ClosedCaptioningAction(getContext()));
-                                break;
-                            default:
-                                // nothing to do
-                                break;
-                        }
-                        actionsList.add(i, customAction.getAction());
-                    }
-
-                }
-
-                if (actionsList.size() > customActions.size()) {
-                    adapter.removeItems(actionsList.size() - 1, actionsList.size() - customActions.size());
-                    for (int i = actionsList.size() - 1; i < customActions.size(); i++) {
-                        actionsList.remove(i);
-                    }
-                }
-
-            } else {
-                adapter.clear();
-            }
-
+        @Override protected void onCreatePrimaryActions(ArrayObjectAdapter primaryActionsAdapter) {
+            super.onCreatePrimaryActions(primaryActionsAdapter);
+            primaryActionsAdapter.add(skipPreviousAction);
+            primaryActionsAdapter.add(skipNextAction);
         }
 
-        @Override public void onActionClicked(final Action action) {
-            if (action.getId() == R.id.control_scale) {
-                getMediaController().getTransportControls().sendCustomAction(ACTION_SCALE, null);
-            } else if (action.getId() == R.id.lb_control_closed_captioning) {
-                getMediaController().getTransportControls().sendCustomAction(ACTION_CLOSE_CAPTION, null);
-            } else {
-                super.onActionClicked(action);
-            }
+        @Override protected void onCreateSecondaryActions(ArrayObjectAdapter secondaryActionsAdapter) {
+            super.onCreateSecondaryActions(secondaryActionsAdapter);
+
+            secondaryActionsAdapter.add(ccAction);
+//            primaryActionsAdapter.add(pipAction); // TODO when implemented
+            // TODO VLC vide scale action
+        }
+
+        @Override public void onActionClicked(Action action) {
+            super.onActionClicked(action);
+
+            // TODO for secondary actions
         }
     }
 
