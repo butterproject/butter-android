@@ -22,14 +22,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.widget.Toast;
-import butter.droid.base.providers.media.model.StreamInfo;
-import butter.droid.tv.R;
-import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
+
 import org.butterproject.torrentstream.StreamStatus;
 import org.butterproject.torrentstream.Torrent;
 import org.butterproject.torrentstream.listeners.TorrentListener;
-import dagger.android.support.AndroidSupportInjection;
+
 import javax.inject.Inject;
+
+import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
+import dagger.android.support.AndroidSupportInjection;
 
 public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerView, TorrentListener {
 
@@ -49,7 +51,7 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
         StreamInfo streamInfo = getArguments().getParcelable(ARG_STREAM_INFO);
         long resumePosition = getResumePosition(savedInstanceState);
 
-        stateBuilder.addCustomAction(PlayerMediaControllerGlue.ACTION_CLOSE_CAPTION, getString(R.string.subtitles), R.drawable.ic_av_subs);
+//        stateBuilder.addCustomAction(PlayerMediaControllerGlue.ACTION_CLOSE_CAPTION, getString(R.string.subtitles), R.drawable.ic_av_subs);
 
         presenter.onCreate(streamInfo, resumePosition);
     }
@@ -81,10 +83,10 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
 
     @Override protected boolean onCustomAction(final String action, final Bundle extras) {
         switch (action) {
-            case PlayerMediaControllerGlue.ACTION_CLOSE_CAPTION:
-                presenter.onSubsClicked();
-                tickle();
-                return true;
+//            case PlayerMediaControllerGlue.ACTION_CLOSE_CAPTION:
+//                presenter.onSubsClicked();
+//                tickle();
+//                return true;
             default:
                 return super.onCustomAction(action, extras);
         }
