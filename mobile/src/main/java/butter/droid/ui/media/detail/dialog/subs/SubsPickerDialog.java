@@ -31,12 +31,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butter.droid.R;
 import butter.droid.ui.media.detail.model.UiSubItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SubsPickerDialog extends BottomSheetDialogFragment {
 
@@ -45,7 +47,7 @@ public class SubsPickerDialog extends BottomSheetDialogFragment {
     @BindView(R.id.items_layout) LinearLayout itemsLayout;
 
     @NonNull @Override public Dialog onCreateDialog(final Bundle savedInstanceState) {
-        return new CustomWidthBottomSheetDialog(getContext(), getTheme());
+        return new CustomWidthBottomSheetDialog(requireContext(), getTheme());
     }
 
     @Nullable @Override
