@@ -43,7 +43,7 @@ public class ProviderModule {
 
     @Provides @ProviderScope @ElementsIntoSet Set<ProviderWrapper> provideVodoWrapper(final VodoProvider vodoProvider,
             final OpenSubsProvider openSubsProvider, final MockMediaProvider mockProvider, final MockSubsProvider mockSubsProvider) {
-        Set<ProviderWrapper> set = new TreeSet<>((o1, o2) -> o1.getPosition() - o2.getPosition());
+        Set<ProviderWrapper> set = new TreeSet<>((o1, o2) -> o2.getPosition() - o1.getPosition());
         set.add(new ProviderWrapper(vodoProvider, openSubsProvider, R.string.vodo_label, R.drawable.ic_nav_movies, 0));
         set.add(new ProviderWrapper(mockProvider, mockSubsProvider, butter.droid.provider.mock.R.string.title_movies,
                 butter.droid.provider.mock.R.drawable.ic_nav_movies, 1));
