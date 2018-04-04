@@ -28,6 +28,14 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.NotificationCompat;
+
+import com.jakewharton.threetenabp.AndroidThreeTen;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+
+import javax.inject.Inject;
+
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.foreground.ForegroundManager;
@@ -37,12 +45,7 @@ import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StorageUtils;
 import butter.droid.base.utils.VersionUtils;
-import com.jakewharton.threetenabp.AndroidThreeTen;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.picasso.Picasso;
 import dagger.android.support.DaggerApplication;
-import java.io.File;
-import javax.inject.Inject;
 import timber.log.Timber;
 
 public abstract class ButterApplication extends DaggerApplication implements ButterUpdateManager.Listener {
@@ -70,8 +73,6 @@ public abstract class ButterApplication extends DaggerApplication implements But
         AndroidThreeTen.init(this);
 
         sDefSystemLanguage = LocaleUtils.getCurrentAsString();
-
-        LeakCanary.install(this);
 
         Constants.DEBUG_ENABLED = false;
         try {
