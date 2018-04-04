@@ -21,7 +21,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.v17.leanback.app.BrowseFragment;
+import android.support.v17.leanback.app.BrowseSupportFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.HeaderItem;
@@ -35,6 +35,13 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.nav.NavItem;
@@ -49,12 +56,9 @@ import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import butter.droid.tv.ui.media.TVMediaGridActivity;
 import butter.droid.tv.ui.preferences.TVPreferencesActivity;
 import butter.droid.tv.ui.search.TVSearchActivity;
-import com.squareup.picasso.Picasso;
-import dagger.android.AndroidInjection;
-import java.util.List;
-import javax.inject.Inject;
+import dagger.android.support.AndroidSupportInjection;
 
-public class TVOverviewFragment extends BrowseFragment implements TVOverviewView, OnItemViewClickedListener, OnItemViewSelectedListener {
+public class TVOverviewFragment extends BrowseSupportFragment implements TVOverviewView, OnItemViewClickedListener, OnItemViewSelectedListener {
 
     @Inject TVOverviewPresenter presenter;
     @Inject BackgroundUpdater backgroundUpdater;
@@ -65,7 +69,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     private ArrayObjectAdapter[] moreOptionsAdapters;
 
     @Override public void onAttach(final Context context) {
-        AndroidInjection.inject(this);
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
     }
 
@@ -146,7 +150,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
 
     private ArrayObjectAdapter addMoreOptionsAdapter() {
         HeaderItem moreOptionsHeader = new HeaderItem(getString(R.string.more_movies));
-        MorePresenter morePresenter = new MorePresenter(getActivity());
+        MorePresenter morePresenter = new MorePresenter(requireContext());
         ArrayObjectAdapter moreOptionsAdapter = new ArrayObjectAdapter(morePresenter);
         rowsAdapter.add(new ListRow(moreOptionsHeader, moreOptionsAdapter));
         return moreOptionsAdapter;
@@ -154,7 +158,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
 
     @Override public void setupMoreRow() {
         HeaderItem gridHeader = new HeaderItem(getString(R.string.more));
-        MorePresenter gridPresenter = new MorePresenter(getActivity());
+        MorePresenter gridPresenter = new MorePresenter(requireContext());
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
 
         gridRowAdapter.add(new MorePresenter.MoreItem(R.id.more_item_settings, R.string.preferences, R.drawable.ic_settings));
@@ -169,9 +173,10 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     }
 
     private ArrayObjectAdapter addNewMediaListAdapter() {
+        Context context = requireContext();
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
-        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity(), picasso));
-        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(getActivity()));
+        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(context, picasso));
+        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(context));
 
         ArrayObjectAdapter mediaAdapter = new ArrayObjectAdapter(presenterSelector);
         mediaAdapter.add(new LoadingCardItem());
@@ -183,14 +188,15 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     }
 
     private void setupUIElements() {
-        setBadgeDrawable(ActivityCompat.getDrawable(getActivity(), R.drawable.header_logo));
+        Context context = requireContext();
+        setBadgeDrawable(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher_foreground));
         setTitle(getString(R.string.app_name)); // Badge, when set, takes precedent over title
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
         // set fastLane (or headers) background color
-        setBrandColor(ActivityCompat.getColor(getActivity(), R.color.primary));
+        setBrandColor(ActivityCompat.getColor(context, R.color.primary));
         // set search icon color
-        setSearchAffordanceColor(ActivityCompat.getColor(getActivity(), R.color.primary_dark));
+        setSearchAffordanceColor(ActivityCompat.getColor(context, R.color.primary_dark));
     }
 
     private void setupEventListeners() {
@@ -209,7 +215,7 @@ public class TVOverviewFragment extends BrowseFragment implements TVOverviewView
     }
 
     private void onMediaItemClicked(MediaCardPresenter.CustomImageCardView view, MediaCardPresenter.MediaCardItem media) {
-        Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view.getMainImageView(),
+        Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view.getMainImageView(),
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
 
         MediaWrapper mediaItem = media.getMediaWrapper();
