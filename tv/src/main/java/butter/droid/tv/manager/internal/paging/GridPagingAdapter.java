@@ -20,12 +20,15 @@ package butter.droid.tv.manager.internal.paging;
 import android.support.annotation.Nullable;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.PresenterSelector;
-import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
+
 import java.util.List;
 
-public class GridPagingAdapter extends ArrayObjectAdapter implements ObjectPagingAdapter<Object> {
+import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
+import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 
-    private boolean showLoading = true;
+public class GridPagingAdapter extends ArrayObjectAdapter implements ObjectPagingAdapter<MediaCardItem> {
+
+    private boolean showLoading = false;
 
     public GridPagingAdapter(final PresenterSelector presenterSelector) {
         super(presenterSelector);
@@ -42,7 +45,7 @@ public class GridPagingAdapter extends ArrayObjectAdapter implements ObjectPagin
     }
 
     @Override public Object get(final int index) {
-        if (showLoading && index == super.size()) {
+        if (showLoading() && index == super.size()) {
             return new LoadingCardItem();
         } else {
             return super.get(index);
@@ -53,26 +56,27 @@ public class GridPagingAdapter extends ArrayObjectAdapter implements ObjectPagin
         return size();
     }
 
-    @Override public void addItems(@Nullable final List<Object> items) {
+    @Override public void addItems(@Nullable List<MediaCardItem> items) {
         if (items != null) {
             addAll(super.size(), items);
         }
     }
 
     @Override public void showLoading(final boolean show) {
-        if (showLoading != show) {
-            boolean before = showLoading();
-            showLoading = show;
-            boolean after = showLoading();
-
-            if (before != after) {
-                if (after) {
-                    notifyItemRangeInserted(super.size(), 1);
-                } else {
-                    notifyItemRangeInserted(super.size(), 1);
-                }
-            }
-        }
+        // TODO hide for now, it causes crashes
+        //        if (showLoading != show) {
+//            boolean before = showLoading();
+//            showLoading = show;
+//            boolean after = showLoading();
+//
+//            if (before != after) {
+//                if (after) {
+//                    notifyItemRangeInserted(super.size(), 1);
+//                } else {
+//                    notifyItemRangeRemoved(super.size(), 1);
+//                }
+//            }
+//        }
     }
 
     private boolean showLoading() {
