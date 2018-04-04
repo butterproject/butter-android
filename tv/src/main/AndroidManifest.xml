@@ -183,7 +183,8 @@
             </intent-filter>
         </receiver>
 
-        <provider android:authorities="butter.droid.tv.RecommendationContentProvider"
+        <provider
+            android:authorities="${applicationId}.RecommendationContentProvider"
             android:name="butter.droid.tv.service.recommendation.RecommendationContentProvider"
             android:exported="true" />
 
