@@ -58,7 +58,8 @@ import butter.droid.tv.ui.preferences.TVPreferencesActivity;
 import butter.droid.tv.ui.search.TVSearchActivity;
 import dagger.android.support.AndroidSupportInjection;
 
-public class TVOverviewFragment extends BrowseSupportFragment implements TVOverviewView, OnItemViewClickedListener, OnItemViewSelectedListener {
+public class TVOverviewFragment extends BrowseSupportFragment implements TVOverviewView, OnItemViewClickedListener,
+        OnItemViewSelectedListener {
 
     @Inject TVOverviewPresenter presenter;
     @Inject BackgroundUpdater backgroundUpdater;
