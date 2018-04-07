@@ -135,19 +135,18 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
             int color = mediaWrapper.getColor();
             collapsingToolbar.setContentScrimColor(color);
             collapsingToolbar.setStatusBarScrimColor(color);
+
+            if (!isTablet) {
+                //noinspection ConstantConditions
+                floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(color));
+            }
         }
 
         collapsingToolbar.setTitleEnabled(false);
 
         // Calculate toolbar scrolling variables
         int topHeight = PixelUtils.getScreenHeight(this) / 3 * 2;
-        if (!isTablet) {
-            if (mediaWrapper.hasColor()) {
-                int color = mediaWrapper.getColor();
-                //noinspection ConstantConditions
-                floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(color));
-            }
-        } else {
+        if (isTablet) {
             LayoutParams params =
                     (LayoutParams) scrollView.getLayoutParams();
             ScrollingViewBehavior behavior =

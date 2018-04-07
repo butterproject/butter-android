@@ -104,9 +104,8 @@ public class BaseMediaListFragment extends DaggerFragment implements BaseMediaLi
 
         final MediaGridSpacingItemDecoration gridSpacingDecoration = new MediaGridSpacingItemDecoration(context, columns);
         final int itemHeight = gridSpacingDecoration.getItemHeight();
-        final int itemWidth = gridSpacingDecoration.getItemWidth();
 
-        adapter = new MediaGridAdapter(itemHeight, itemWidth);
+        adapter = new MediaGridAdapter(itemHeight);
 
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(gridSpacingDecoration);
