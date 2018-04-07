@@ -104,7 +104,7 @@ public class MediaCardPresenter extends Presenter {
         cardView.getMainImageView().setPadding(0, 0, 0, 0);
         cardView.setMainImageDimensions(cardWidth, cardHeight);
         cardView.getMainImageView().setVisibility(View.GONE);
-//        cardView.setCustomSelectedColor(null);
+        cardView.setCustomSelectedColor(MediaMeta.COLOR_NONE);
 
         if (item.getPoster() != null) {
             //load image
@@ -135,11 +135,11 @@ public class MediaCardPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        ImageCardView cardView = (ImageCardView) viewHolder.view;
+        CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
         // Remove references to images so that the garbage collector can free up memory
         cardView.setBadgeImage(null);
         cardView.setMainImage(null);
-        GlideApp.with(context).clear(((ImageCardView) viewHolder.view).getMainImageView());
+        GlideApp.with(context).clear(cardView.getMainImageView());
     }
 
     public static class CustomImageCardView extends ImageCardView {
