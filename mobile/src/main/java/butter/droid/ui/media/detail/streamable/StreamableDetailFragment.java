@@ -19,6 +19,7 @@ package butter.droid.ui.media.detail.streamable;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +33,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
+import javax.inject.Inject;
+
 import butter.droid.R;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.torrent.Magnet;
@@ -49,12 +59,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
-import com.squareup.picasso.Picasso;
 import dagger.android.support.DaggerFragment;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import javax.inject.Inject;
 
 public class StreamableDetailFragment extends DaggerFragment implements StreamableDetailView, SubsPickerCallback {
 
@@ -80,12 +85,12 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
     private SubsPickerDialog subsDialog;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_moviedetail, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
@@ -260,7 +265,7 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
         }
     }
 
-    @Override public void onSubsItemSelected(final int position, final UiSubItem item) {
+    @Override public void onSubsItemSelected(final UiSubItem item) {
         presenter.subtitleSelected(item);
     }
 

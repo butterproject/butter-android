@@ -17,43 +17,74 @@
 
 package butter.droid.ui.media.detail.dialog.subs;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView.Adapter;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.List;
+
 import butter.droid.R;
-import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.SubsPickerCallback;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerAdapter.SubViewHolder;
 import butter.droid.ui.media.detail.model.UiSubItem;
 
-public class SubsPickerAdapter extends StaticAdapter<UiSubItem, View> {
+public class SubsPickerAdapter extends Adapter<SubViewHolder> {
 
-    @NonNull private final SubsPickerCallback callback;
+    private final LayoutInflater inflater;
 
-    public SubsPickerAdapter(final ViewGroup containerViewGroup, @NonNull final SubsPickerCallback callback) {
-        super(containerViewGroup);
-        this.callback = callback;
+    @Nullable private List<UiSubItem> items;
+
+    public SubsPickerAdapter(@NonNull Context context) {
+        this.inflater = LayoutInflater.from(context);
     }
 
-    @Override protected View createView(final LayoutInflater inflater, final ViewGroup parent) {
-        return inflater.inflate(R.layout.item_single_choice, parent, false);
-
+    @NonNull @Override public SubViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new SubViewHolder(inflater.inflate(R.layout.item_single_choice, parent, false));
     }
 
-    @Override protected void bindView(final View view, final UiSubItem item, final int position) {
-        ImageView checkView = view.findViewById(android.R.id.icon);
+    @Override public void onBindViewHolder(@NonNull SubViewHolder holder, int position) {
+        UiSubItem item = getItem(position);
+        ImageView checkView = holder.itemView.findViewById(android.R.id.icon);
         checkView.setVisibility(item.isSelected() ? View.VISIBLE : View.INVISIBLE);
 
-        TextView nameView = view.findViewById(android.R.id.text1);
+        TextView nameView = holder.itemView.findViewById(android.R.id.text1);
         String name = item.getName();
         if (name == null) {
             nameView.setText(R.string.no_subs);
         } else {
             nameView.setText(name);
         }
-
-        view.setOnClickListener(v -> callback.onSubsItemSelected(position, item));
     }
-    
+
+    public void setItems(List<UiSubItem> items) {
+        this.items = items;
+        notifyDataSetChanged();
+    }
+
+    @NonNull public UiSubItem getItem(int position) {
+        return items.get(position);
+    }
+
+    @Override public int getItemCount() {
+        List<UiSubItem> items = this.items;
+        if (items == null) {
+            return 0;
+        } else {
+            return items.size();
+        }
+    }
+
+    static class SubViewHolder extends ViewHolder {
+
+        SubViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
 }

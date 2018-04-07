@@ -33,6 +33,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.Collections;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
@@ -57,7 +65,6 @@ import butter.droid.widget.OptionSelector;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.squareup.picasso.Picasso;
 import dagger.android.support.DaggerAppCompatDialogFragment;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -65,9 +72,6 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import java.util.Collections;
-import java.util.List;
-import javax.inject.Inject;
 
 /**
  * @deprecated Use {@link butter.droid.ui.media.detail.streamable.StreamableDetailFragment} instead.
@@ -392,7 +396,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment impleme
         smoothDismiss();
     }
 
-    @Override public void onSubsItemSelected(final int position, final UiSubItem item) {
+    @Override public void onSubsItemSelected(final UiSubItem item) {
         UiSubItem selectedSub = this.selectedSub;
         if (selectedSub != null) {
             selectedSub.setSelected(false);

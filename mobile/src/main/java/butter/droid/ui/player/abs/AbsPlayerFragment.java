@@ -18,6 +18,7 @@
 package butter.droid.ui.player.abs;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -26,6 +27,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -50,6 +52,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import javax.inject.Inject;
+
 import butter.droid.R;
 import butter.droid.base.BuildConfig;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
@@ -64,7 +69,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerFragment;
-import javax.inject.Inject;
 
 public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, BaseVideoPlayerView, OnSystemUiVisibilityChangeListener {
 
@@ -105,7 +109,7 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        mediaSession = new MediaSessionCompat(getContext(), BuildConfig.APPLICATION_ID);
+        mediaSession = new MediaSessionCompat(requireContext(), BuildConfig.APPLICATION_ID);
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mediaSession.setMediaButtonReceiver(null);
         mediaSession.setCallback(new PlayerSessionCallback());
@@ -121,12 +125,12 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_videoplayer, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.setOnTouchListener(touchHandler);
         ButterKnife.bind(this, view);
@@ -165,7 +169,7 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
         presenter.onPause();
     }
 
-    @Override public void onSaveInstanceState(final Bundle outState) {
+    @Override public void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
 
         presenter.onSaveInstanceState(outState);
@@ -376,15 +380,16 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
     }
 
     private void setupDecorView() {
-        decorView = getActivity().getWindow().getDecorView();
+        decorView = requireActivity().getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(this);
     }
 
     private void setupProgressBar() {
-        int color = ContextCompat.getColor(getContext(), R.color.primary);
+        Context context = requireContext();
+        int color = ContextCompat.getColor(context, R.color.primary);
         LayerDrawable progressDrawable;
         if (!VersionUtils.isLollipop()) {
-            progressDrawable = (LayerDrawable) ContextCompat.getDrawable(getContext(), R.drawable.scrubber_progress_horizontal);
+            progressDrawable = (LayerDrawable) ContextCompat.getDrawable(context, R.drawable.scrubber_progress_horizontal);
         } else {
             if (controlBar.getProgressDrawable() instanceof StateListDrawable) {
                 StateListDrawable stateListDrawable = (StateListDrawable) controlBar.getProgressDrawable();
