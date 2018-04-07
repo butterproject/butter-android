@@ -33,8 +33,6 @@ import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -68,7 +66,6 @@ public class TVMediaGridFragment extends VerticalGridSupportFragment implements 
 
     @Inject TVMediaGridPresenter presenter;
     @Inject BackgroundUpdater backgroundUpdater;
-    @Inject Picasso picasso;
 
     private GridPagingAdapter adapter;
     private GridPagingManager<MediaCardItem> pagingManager;
@@ -153,9 +150,10 @@ public class TVMediaGridFragment extends VerticalGridSupportFragment implements 
         gridPresenter.setNumberOfColumns(NUM_COLUMNS);
         setGridPresenter(gridPresenter);
 
+        Context context = requireContext();
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
-        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity(), picasso));
-        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(getActivity()));
+        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(context));
+        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(context));
 
         adapter = new GridPagingAdapter(presenterSelector);
         setAdapter(adapter);

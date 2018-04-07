@@ -21,6 +21,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -61,7 +63,12 @@ import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
+import timber.log.Timber;
+
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso.LoadedFrom;
+import com.squareup.picasso.Target;
+
 import javax.inject.Inject;
 
 public class MediaDetailActivity extends ButterBaseActivity implements MediaDetailView, EpisodeDialogFragment.FragmentListener {
@@ -128,8 +135,8 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         Media media = mediaWrapper.getMedia();
         getSupportActionBar().setTitle(media.getTitle());
 
-        int color = mediaWrapper.getColor();
         if (mediaWrapper.hasColor()) {
+            int color = mediaWrapper.getColor();
             collapsingToolbar.setContentScrimColor(color);
             collapsingToolbar.setStatusBarScrimColor(color);
         }
@@ -140,6 +147,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         int topHeight = PixelUtils.getScreenHeight(this) / 3 * 2;
         if (!isTablet) {
             if (mediaWrapper.hasColor()) {
+                int color = mediaWrapper.getColor();
                 //noinspection ConstantConditions
                 floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(color));
             }

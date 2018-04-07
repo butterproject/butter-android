@@ -28,7 +28,7 @@ ext {
     minSdk = 16
     butterknifeVersion = "8.8.1"
     okHttpVersion = "3.4.2"
-    daggerVersion = "2.14.1"
+    daggerVersion = "2.15"
     javaxAnnotationVersion = "1.2"
     torrentstreamVersion = '2.5.0'
     filePickerVersion = '1.1.0'
@@ -36,6 +36,7 @@ ext {
     gsonVersion = '2.8.1'
     rxJavaVersion = '2.1.8'
     retrofitVersion = '2.4.0'
+    glideVersion = '4.6.1'
 }
 
 allprojects {

@@ -36,8 +36,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -63,7 +61,6 @@ public class TVOverviewFragment extends BrowseSupportFragment implements TVOverv
 
     @Inject TVOverviewPresenter presenter;
     @Inject BackgroundUpdater backgroundUpdater;
-    @Inject Picasso picasso;
 
     private ArrayObjectAdapter rowsAdapter;
     private ArrayObjectAdapter[] mediaListAdapters;
@@ -176,7 +173,7 @@ public class TVOverviewFragment extends BrowseSupportFragment implements TVOverv
     private ArrayObjectAdapter addNewMediaListAdapter() {
         Context context = requireContext();
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
-        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(context, picasso));
+        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(context));
         presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(context));
 
         ArrayObjectAdapter mediaAdapter = new ArrayObjectAdapter(presenterSelector);
@@ -218,13 +215,7 @@ public class TVOverviewFragment extends BrowseSupportFragment implements TVOverv
     private void onMediaItemClicked(MediaCardPresenter.CustomImageCardView view, MediaCardPresenter.MediaCardItem media) {
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view.getMainImageView(),
                 TVMediaDetailActivity.SHARED_ELEMENT_NAME).toBundle();
-
         MediaWrapper mediaItem = media.getMediaWrapper();
-
-        if (view.getCustomSelectedSwatch() != null) {
-            mediaItem.setColor(view.getCustomSelectedSwatch().getRgb());
-        }
-
         startActivity(TVMediaDetailActivity.getIntent(getActivity(), mediaItem), options);
     }
 

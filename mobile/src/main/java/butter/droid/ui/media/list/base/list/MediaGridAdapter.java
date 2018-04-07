@@ -26,7 +26,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Shader;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -35,17 +37,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.request.target.ImageViewTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.squareup.picasso.Transformation;
+
+import java.util.List;
+
 import butter.droid.R;
+import butter.droid.base.manager.internal.glide.GlideApp;
+import butter.droid.base.manager.internal.glide.GlideRequests;
+import butter.droid.base.manager.internal.glide.transcode.PaletteBitmap;
+import butter.droid.base.manager.internal.glide.transition.PaletteBitmapTransitionOptions;
+import butter.droid.base.manager.internal.paging.PagingAdapter;
+import butter.droid.base.providers.media.model.MediaMeta;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
-import butter.droid.base.manager.internal.paging.PagingAdapter;
 import butter.droid.provider.base.model.Media;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
-import java.util.List;
 
 public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements PagingAdapter<MediaWrapper> {
 
@@ -64,8 +75,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.itemWidth = itemWidth;
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final Context context = parent.getContext();
         final LayoutInflater inflater = LayoutInflater.from(context);
         View view;
@@ -82,20 +93,63 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, int position) {
         if (getItemViewType(position) == VIEW_TYPE_ITEM) {
             final ViewHolder videoViewHolder = (ViewHolder) viewHolder;
-            final Media item = getItem(position).getMedia();
+            final MediaWrapper mediaWrapper = getItem(position);
+            final Media item = mediaWrapper.getMedia();
 
             videoViewHolder.title.setText(item.getTitle());
             videoViewHolder.year.setText(String.valueOf(item.getYear()));
 
             if (!TextUtils.isEmpty(item.getPoster())) {
-                // TODO: 7/30/17 Do we need color information here?
                 final Context context = videoViewHolder.coverImage.getContext();
-                Picasso.with(context).load(item.getPoster()).resize(itemWidth, itemHeight).transform(DrawGradient.INSTANCE)
-                        .into(videoViewHolder.coverImage);
-            }
+
+                // TODO: Image gradient needed
+                GlideRequests glide = GlideApp.with(context);
+                glide.clear(videoViewHolder.coverImage);
+                glide.as(PaletteBitmap.class)
+                        .load(item.getPoster())
+                        .transition(PaletteBitmapTransitionOptions.withCrossFade())
+                        .into(new ImageViewTarget<PaletteBitmap>(videoViewHolder.coverImage) {
+                            @Override public void onResourceReady(@NonNull PaletteBitmap resource,
+                                    @Nullable Transition<? super PaletteBitmap> transition) {
+                                super.onResourceReady(resource, transition);
+
+                                Palette palette = resource.getPalette();
+                                mediaWrapper.setColor(palette.getVibrantColor(MediaMeta.COLOR_NONE));
+                            }
+
+                            @Override protected void setResource(@Nullable PaletteBitmap resource) {
+                                if (resource != null) {
+                                    view.setImageBitmap(resource.getBitmap());
+                                } else {
+                                    view.setImageBitmap(null);
+                                }
+                            }
+                        });
+//                        .into(new ViewTarget<ImageView, PaletteBitmap>(videoViewHolder.coverImage) {
+//                            @Override public void onResourceReady(@NonNull PaletteBitmap resource,
+//                                    @Nullable Transition<? super PaletteBitmap> transition) {
+//                                transition.transition(resource, new ViewAdapter() {
+//                                    @Override public View getView() {
+//                                        return videoViewHolder.coverImage;
+//                                    }
+//
+//                                    @Nullable @Override public Drawable getCurrentDrawable() {
+//                                        return videoViewHolder.coverImage.getDrawable();
+//                                    }
+//
+//                                    @Override public void setDrawable(Drawable drawable) {
+//                                        videoViewHolder.coverImage.setImageDrawable(drawable);
+//                                    }
+//                                });
+//
+//                                Palette palette = resource.getPalette();
+//                                mediaWrapper.setColor(palette.getVibrantColor(MediaMeta.COLOR_NONE));
+//                            }
+//                        });
+                }
         }
     }
 
@@ -211,7 +265,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         @Override
-        public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent, final RecyclerView.State state) {
+        public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent,
+                final RecyclerView.State state) {
             final GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) view.getLayoutParams();
             layoutParams.height = itemHeight;
             view.setLayoutParams(layoutParams);
@@ -303,4 +358,5 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
     }
+
 }

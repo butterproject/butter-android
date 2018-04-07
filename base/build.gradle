@@ -61,6 +61,8 @@ dependencies {
     api "com.google.dagger:dagger-android:$daggerVersion"
     api "com.google.dagger:dagger-android-support:$daggerVersion"
 
+    api "com.github.bumptech.glide:glide:$glideVersion"
+
     api 'com.butterproject:vlc-android-sdk:3.0.3-1'
 
     api project(':connectsdk:core')
@@ -78,6 +80,7 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
     compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
 }

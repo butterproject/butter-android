@@ -31,6 +31,11 @@ import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
@@ -39,16 +44,12 @@ import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
-import com.squareup.picasso.Picasso;
 import dagger.android.AndroidInjection;
-import java.util.List;
-import javax.inject.Inject;
 
 public class TVSearchFragment extends android.support.v17.leanback.app.SearchFragment
         implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider, TVSearchView {
 
     @Inject TVSearchPresenter presenter;
-    @Inject Picasso picasso;
     @Inject BackgroundUpdater backgroundUpdater;
 
     private ArrayObjectAdapter rowsAdapter;
@@ -88,7 +89,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
         final HeaderItem loadingHeader = new HeaderItem(getString(R.string.search_results));
 
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
-        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity(), picasso));
+        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity()));
         presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(getActivity()));
 
         ArrayObjectAdapter loadingRowAdapter = new ArrayObjectAdapter(presenterSelector);
@@ -120,7 +121,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
         rowsAdapter.remove(loadingRow);
 
         HeaderItem header = new HeaderItem(getString(title));
-        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity(), picasso));
+        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new MediaCardPresenter(getActivity()));
         listRowAdapter.addAll(0, items);
         ListRow row = new ListRow(header, listRowAdapter);
         if (rowsAdapter.size() > index) {
