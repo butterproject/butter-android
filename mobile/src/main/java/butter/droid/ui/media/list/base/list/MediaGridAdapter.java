@@ -128,28 +128,7 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 }
                             }
                         });
-//                        .into(new ViewTarget<ImageView, PaletteBitmap>(videoViewHolder.coverImage) {
-//                            @Override public void onResourceReady(@NonNull PaletteBitmap resource,
-//                                    @Nullable Transition<? super PaletteBitmap> transition) {
-//                                transition.transition(resource, new ViewAdapter() {
-//                                    @Override public View getView() {
-//                                        return videoViewHolder.coverImage;
-//                                    }
-//
-//                                    @Nullable @Override public Drawable getCurrentDrawable() {
-//                                        return videoViewHolder.coverImage.getDrawable();
-//                                    }
-//
-//                                    @Override public void setDrawable(Drawable drawable) {
-//                                        videoViewHolder.coverImage.setImageDrawable(drawable);
-//                                    }
-//                                });
-//
-//                                Palette palette = resource.getPalette();
-//                                mediaWrapper.setColor(palette.getVibrantColor(MediaMeta.COLOR_NONE));
-//                            }
-//                        });
-                }
+            }
         }
     }
 
