@@ -23,28 +23,28 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butter.droid.R;
+import butter.droid.base.widget.recycler.RecyclerItemClickListener;
 import butter.droid.ui.media.detail.model.UiSubItem;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SubsPickerDialog extends BottomSheetDialogFragment {
 
     private static final String ARG_ITEMS = "butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.items";
-
-    @BindView(R.id.items_layout) LinearLayout itemsLayout;
 
     @NonNull @Override public Dialog onCreateDialog(final Bundle savedInstanceState) {
         return new CustomWidthBottomSheetDialog(requireContext(), getTheme());
@@ -71,15 +71,21 @@ public class SubsPickerDialog extends BottomSheetDialogFragment {
             throw new IllegalStateException("Parent has to implement SubsPickerCallback");
         }
 
-        SubsPickerAdapter subsPickerAdapter = new SubsPickerAdapter(itemsLayout, callback);
+        SubsPickerAdapter adapter = new SubsPickerAdapter(view.getContext());
 
         ArrayList<UiSubItem> items = getArguments().getParcelableArrayList(ARG_ITEMS);
-        subsPickerAdapter.setData(items);
+        adapter.setItems(items);
+
+        RecyclerView recyclerView = view.findViewById(R.id.rv_items);
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(view.getContext(),
+                (view1, position) -> callback.onSubsItemSelected(adapter.getItem(position))));
     }
 
     static class CustomWidthBottomSheetDialog extends BottomSheetDialog {
 
-        public CustomWidthBottomSheetDialog(@NonNull Context context, @StyleRes int theme) {
+        CustomWidthBottomSheetDialog(@NonNull Context context, @StyleRes int theme) {
             super(context, theme);
         }
 
@@ -89,6 +95,16 @@ public class SubsPickerDialog extends BottomSheetDialogFragment {
             int width = getContext().getResources().getDimensionPixelSize(R.dimen.bottom_sheet_width);
             getWindow().setLayout(width > 0 ? width : ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
+
+
+            setOnShowListener(dialog -> {
+                BottomSheetDialog d = (BottomSheetDialog) dialog;
+
+                FrameLayout bottomSheet = d.findViewById(android.support.design.R.id.design_bottom_sheet);
+                BottomSheetBehavior<FrameLayout> behaviour = BottomSheetBehavior.from(bottomSheet);
+                behaviour.setState(BottomSheetBehavior.STATE_EXPANDED);
+                behaviour.setSkipCollapsed(true);
+            });
         }
     }
 
@@ -104,7 +120,7 @@ public class SubsPickerDialog extends BottomSheetDialogFragment {
 
     public interface SubsPickerCallback {
 
-        void onSubsItemSelected(int position, UiSubItem item);
+        void onSubsItemSelected(UiSubItem item);
 
     }
 

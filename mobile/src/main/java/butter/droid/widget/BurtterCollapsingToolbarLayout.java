@@ -19,7 +19,6 @@ package butter.droid.widget;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -80,18 +79,16 @@ public class BurtterCollapsingToolbarLayout extends CollapsingToolbarLayout {
                     animator.setInterpolator(interpolator);
 
                     final ArgbEvaluator evaluator = new ArgbEvaluator();
-                    animator.addUpdateListener(new AnimatorUpdateListener() {
-                        @Override public void onAnimationUpdate(ValueAnimator animation) {
-                            float fraction = animation.getAnimatedFraction();
-                            int color;
-                            if (shown) {
-                                color = (int) evaluator.evaluate(fraction, TEXT_COLOR_TRANSPARENT, TEXT_COLOR);
-                            } else {
-                                color = (int) evaluator.evaluate(fraction, TEXT_COLOR, TEXT_COLOR_TRANSPARENT);
-                            }
-                            toolbar.setTitleTextColor(color);
-
+                    animator.addUpdateListener(animation -> {
+                        float fraction = animation.getAnimatedFraction();
+                        int color;
+                        if (shown) {
+                            color = (int) evaluator.evaluate(fraction, TEXT_COLOR_TRANSPARENT, TEXT_COLOR);
+                        } else {
+                            color = (int) evaluator.evaluate(fraction, TEXT_COLOR, TEXT_COLOR_TRANSPARENT);
                         }
+                        toolbar.setTitleTextColor(color);
+
                     });
                     animator.start();
                 } else {
@@ -106,7 +103,7 @@ public class BurtterCollapsingToolbarLayout extends CollapsingToolbarLayout {
 
     private void findToolbar() {
         if (toolbar == null) {
-            toolbar = (Toolbar) findViewById(toolbarId);
+            toolbar = findViewById(toolbarId);
         }
     }
 
