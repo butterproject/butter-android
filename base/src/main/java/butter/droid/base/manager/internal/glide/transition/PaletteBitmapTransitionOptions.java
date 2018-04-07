@@ -65,12 +65,12 @@ public final class PaletteBitmapTransitionOptions extends TransitionOptions<Pale
     }
 
     @NonNull
-    public PaletteBitmapTransitionOptions transitionUsing(@NonNull TransitionFactory<Drawable> drawableCrossFadeFactory) {
-        return this.transition(new PaletteBitmapTransitionFactory(drawableCrossFadeFactory));
+    public PaletteBitmapTransitionOptions crossFade(@NonNull Builder builder) {
+        return this.transitionUsing(builder.build());
     }
 
     @NonNull
-    public PaletteBitmapTransitionOptions crossFade(@NonNull Builder builder) {
-        return this.transitionUsing(builder.build());
+    public PaletteBitmapTransitionOptions transitionUsing(@NonNull TransitionFactory<Drawable> drawableCrossFadeFactory) {
+        return this.transition(new PaletteBitmapTransitionFactory(drawableCrossFadeFactory));
     }
 }
