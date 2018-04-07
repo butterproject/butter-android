@@ -147,8 +147,6 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
                 //noinspection ConstantConditions
                 floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(color));
             }
-
-            bgImage.getLayoutParams().height = topHeight;
         } else {
             LayoutParams params =
                     (LayoutParams) scrollView.getLayoutParams();
