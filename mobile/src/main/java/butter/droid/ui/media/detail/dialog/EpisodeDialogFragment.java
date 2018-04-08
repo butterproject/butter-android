@@ -34,8 +34,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -43,6 +41,7 @@ import javax.inject.Inject;
 
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.internal.glide.GlideApp;
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.model.MediaMeta;
@@ -354,7 +353,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment impleme
 //                        Picasso.with(headerImage.getContext()).load(imageUrl).into(headerImage);
 //                    });
         } else {
-            Picasso.with(headerImage.getContext()).load(episode.getBackdrop()).into(headerImage);
+            GlideApp.with(this).load(episode.getBackdrop()).into(headerImage);
         }
     }
 

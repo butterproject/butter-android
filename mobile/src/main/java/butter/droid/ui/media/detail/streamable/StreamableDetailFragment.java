@@ -34,8 +34,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -43,6 +41,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import butter.droid.R;
+import butter.droid.base.manager.internal.glide.GlideApp;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.torrent.Magnet;
 import butter.droid.base.torrent.TorrentHealth;
@@ -261,7 +260,7 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
         }
 
         if (coverImage != null) {
-            Picasso.with(coverImage.getContext()).load(media.getBackdrop()).into(coverImage);
+            GlideApp.with(this).load(media.getBackdrop()).into(coverImage);
         }
     }
 

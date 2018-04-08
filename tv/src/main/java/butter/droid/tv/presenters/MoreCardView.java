@@ -19,7 +19,6 @@ package butter.droid.tv.presenters;
 
 import android.content.Context;
 import android.support.v17.leanback.widget.BaseCardView;
-import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,17 +26,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Target;
-
+import butter.droid.tv.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butter.droid.tv.R;
 
 public class MoreCardView extends BaseCardView implements View.OnFocusChangeListener {
-
-    private Palette.Swatch customSelectedSwatch;
-
-    private Target target;
 
     @BindView(R.id.main_image) ImageView imageView;
     @BindView(R.id.title_text) TextView titleTextView;

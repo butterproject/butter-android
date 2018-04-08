@@ -40,14 +40,13 @@ import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import javax.inject.Inject;
 
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
+import butter.droid.base.manager.internal.glide.GlideApp;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
@@ -213,10 +212,10 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
             imageUrl = media.getBackdrop();
         }
 
-        Picasso.with(this)
+        GlideApp.with(this)
+                .asDrawable()
                 .load(imageUrl)
                 .error(R.drawable.butter_logo)
-                .placeholder(R.drawable.butter_logo)
                 .into(bgImage);
     }
 

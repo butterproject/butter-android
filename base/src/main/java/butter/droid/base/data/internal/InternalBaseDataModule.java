@@ -17,25 +17,9 @@
 
 package butter.droid.base.data.internal;
 
-import android.content.Context;
-import butter.droid.base.Internal;
-import com.jakewharton.picasso.OkHttp3Downloader;
-import com.squareup.picasso.Picasso;
 import dagger.Module;
-import dagger.Provides;
-import okhttp3.OkHttpClient;
 
 @Module
 public class InternalBaseDataModule {
-
-    @Provides @Internal public OkHttp3Downloader provideOkHttpDownloader(OkHttpClient client) {
-        return new OkHttp3Downloader(client);
-    }
-
-    @Provides @Internal public Picasso providePicasso(Context context, OkHttp3Downloader okHttpDownloader) {
-        return new Picasso.Builder(context)
-                .downloader(okHttpDownloader)
-                .build();
-    }
 
 }

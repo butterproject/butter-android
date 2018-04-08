@@ -17,25 +17,26 @@
 
 package butter.droid.tv.manager.internal.background;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.BackgroundManager;
 
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.Reusable;
+/**
+ * Glide target for updating default_background images
+ */
+public class BackgroundManagerTarget extends SimpleTarget<Bitmap> {
 
-@Module
-public class BackgroundUpdaterModule {
+    private final BackgroundManager backgroundManager;
 
-    @Provides @Reusable BackgroundManager backgroundManager(Activity activity) {
-        return BackgroundManager.getInstance(activity);
+    public BackgroundManagerTarget(BackgroundManager backgroundManager) {
+        this.backgroundManager = backgroundManager;
     }
 
-    @Provides @Reusable Target<Bitmap> providePicassoTarget(BackgroundManager backgroundManager) {
-        return new BackgroundManagerTarget(backgroundManager);
+    @Override public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+        this.backgroundManager.setBitmap(resource);
     }
-
 }

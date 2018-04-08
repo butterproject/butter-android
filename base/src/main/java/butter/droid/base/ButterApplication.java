@@ -30,7 +30,6 @@ import android.support.multidex.MultiDex;
 import android.support.v4.app.NotificationCompat;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -53,7 +52,6 @@ public abstract class ButterApplication extends DaggerApplication implements But
     private static String sDefSystemLanguage;
     private static ButterApplication sThis;
 
-    @Inject Picasso picasso;
     @Inject ButterUpdateManager updateManager;
     @Inject BeamManager beamManager;
     @Inject PreferencesHandler preferencesHandler;
@@ -108,8 +106,6 @@ public abstract class ButterApplication extends DaggerApplication implements But
 
         Timber.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
         Timber.i("Chosen cache location: " + directory);
-
-        Picasso.setSingletonInstance(picasso);
     }
 
     @Override

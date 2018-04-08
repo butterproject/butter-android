@@ -18,16 +18,22 @@
 package butter.droid.tv.manager.internal.background;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.v17.leanback.app.BackgroundManager;
-import butter.droid.base.utils.ThreadUtils;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-import dagger.Reusable;
+
+import com.bumptech.glide.request.target.Target;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javax.inject.Inject;
+
+import butter.droid.base.manager.internal.glide.GlideApp;
+import butter.droid.base.manager.internal.glide.GlideRequests;
+import butter.droid.base.utils.ThreadUtils;
+import dagger.Reusable;
 
 @Reusable
 public class BackgroundUpdater {
@@ -35,24 +41,24 @@ public class BackgroundUpdater {
     private static final int BACKGROUND_UPDATE_DELAY = 300;
 
     private final BackgroundManager backgroundManager;
-    private final Target backgroundImageTarget;
-    private final Picasso picasso;
+    private final Target<Bitmap> backgroundImageTarget;
 
     private int defaultBackground;
     private Timer backgroundTimer;
     private String backgroundUrl;
+    private GlideRequests glide;
 
     @Inject
-    public BackgroundUpdater(final BackgroundManager backgroundManager, final Target backgroundImageTarget,
-            final Picasso picasso) {
+    public BackgroundUpdater(final BackgroundManager backgroundManager, final Target<Bitmap> backgroundImageTarget) {
         this.backgroundManager = backgroundManager;
         this.backgroundImageTarget = backgroundImageTarget;
-        this.picasso = picasso;
     }
 
     public void initialise(Activity activity, @DrawableRes int defaultBackground) {
         backgroundManager.attach(activity.getWindow());
         this.defaultBackground = defaultBackground;
+
+        glide = GlideApp.with(activity);
     }
 
     /**
@@ -71,21 +77,26 @@ public class BackgroundUpdater {
 
 
     public void updateBackground(final String uri) {
-        if (null != backgroundTimer) {
+        if (glide == null) {
+            return;
+        }
+
+        if (backgroundTimer != null) {
             backgroundTimer.cancel();
         }
 
         //load default background image
-        if (null == uri) {
-            picasso.load(defaultBackground).into(backgroundImageTarget);
-            return;
+        if (uri == null) {
+            glide.asBitmap()
+                    .load(defaultBackground)
+                    .into(backgroundImageTarget);
+        } else {
+            //load actual background image
+            glide.asBitmap()
+                    .load(uri)
+                    .error(defaultBackground)
+                    .into(backgroundImageTarget);
         }
-
-        //load actual background image
-        picasso
-                .load(uri)
-                .error(defaultBackground)
-                .into(backgroundImageTarget);
     }
 
     /**
@@ -116,14 +127,11 @@ public class BackgroundUpdater {
 
         @Override
         public void run() {
-            ThreadUtils.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (backgroundUrl != null) {
-                        updateBackground(backgroundUrl);
-                    }
-
+            ThreadUtils.runOnUiThread(() -> {
+                if (backgroundUrl != null) {
+                    updateBackground(backgroundUrl);
                 }
+
             });
         }
     }
@@ -133,7 +141,7 @@ public class BackgroundUpdater {
             backgroundTimer.cancel();
         }
 
-        picasso.cancelRequest(backgroundImageTarget);
+        glide.clear(backgroundImageTarget);
         backgroundManager.release();
     }
 

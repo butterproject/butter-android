@@ -17,8 +17,6 @@
 
 package butter.droid.base.manager.internal.beaming;
 
-import static butter.droid.base.ButterApplication.getAppContext;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,19 +24,25 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.app.NotificationCompat.MediaStyle;
-import butter.droid.base.R;
+
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.listeners.ResponseListener;
 import com.connectsdk.service.command.ServiceCommandError;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+
 import javax.inject.Inject;
+
+import butter.droid.base.R;
+import butter.droid.base.manager.internal.glide.GlideApp;
+
+import static butter.droid.base.ButterApplication.getAppContext;
 
 public class BeamPlayerNotificationService extends Service {
 
@@ -202,31 +206,16 @@ public class BeamPlayerNotificationService extends Service {
 
             mediaControl = manager.getMediaControl();
             mediaControl.subscribePlayState(playStateListener);
-            manager.addDeviceListener(mDeviceListener);
+            manager.addDeviceListener(deviceListener);
 
             mediaControl.getPlayState(playStateListener);
 
             if (manager.getStreamInfo().getPosterImage() != null) {
-                Picasso.with(this).load(manager.getStreamInfo().getPosterImage()).resize(400, 400).centerInside().into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        image = bitmap;
-
-                        if (!isPlaying) {
-                            buildNotification(generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY));
-                        } else {
-                            buildNotification(generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE));
-                        }
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    }
-                });
+                GlideApp.with(this)
+                        .asBitmap()
+                        .load(manager.getStreamInfo().getPosterImage())
+                        .centerCrop()
+                        .into(notificationGlideTarget);
             }
 
         }
@@ -240,9 +229,9 @@ public class BeamPlayerNotificationService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext()
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(1);
+
+        GlideApp.with(this)
+                .clear(notificationGlideTarget);
     }
 
     public static Intent getIntent(@NonNull Context context, boolean isPlaying) {
@@ -269,7 +258,20 @@ public class BeamPlayerNotificationService extends Service {
         }
     };
 
-    private BeamDeviceListener mDeviceListener = new BeamDeviceListener() {
+    private SimpleTarget<Bitmap> notificationGlideTarget = new SimpleTarget<Bitmap>() {
+        @Override public void onResourceReady(@NonNull Bitmap resource,
+                @Nullable Transition<? super Bitmap> transition) {
+            image = resource;
+
+            if (!isPlaying) {
+                buildNotification(generateAction(R.drawable.ic_av_play, "Play", ACTION_PLAY));
+            } else {
+                buildNotification(generateAction(R.drawable.ic_av_pause, "Pause", ACTION_PAUSE));
+            }
+        }
+    };
+
+    private BeamDeviceListener deviceListener = new BeamDeviceListener() {
         @Override
         public void onDeviceDisconnected(ConnectableDevice device) {
             super.onDeviceDisconnected(device);
