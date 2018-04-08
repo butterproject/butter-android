@@ -39,4 +39,6 @@ public interface StreamableDetailPresenter {
     void healthClicked();
 
     void onSubtitlesClicked();
+
+    void onQualityClicked();
 }

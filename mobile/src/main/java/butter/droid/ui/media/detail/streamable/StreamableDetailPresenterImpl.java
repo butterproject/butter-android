@@ -19,11 +19,15 @@ package butter.droid.ui.media.detail.streamable;
 
 import android.content.res.Resources;
 import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
@@ -34,6 +38,7 @@ import butter.droid.provider.base.model.Movie;
 import butter.droid.provider.base.model.Streamable;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
+import butter.droid.ui.media.detail.dialog.quality.model.UiQuality;
 import butter.droid.ui.media.detail.model.UiSubItem;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -41,8 +46,6 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import java.util.Collections;
-import java.util.List;
 
 public class StreamableDetailPresenterImpl implements StreamableDetailPresenter {
 
@@ -51,7 +54,6 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     private final YouTubeManager youTubeManager;
     private final PreferencesHandler preferencesHandler;
     private final ProviderManager providerManager;
-    private final PlayerManager playerManager;
     private final Resources resources;
     private final MediaDisplayManager mediaDisplayManager;
 
@@ -61,18 +63,19 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     private List<UiSubItem> subtitleList;
     private UiSubItem selectedSub;
 
+    // TODO: 11/5/17 Saved instance state
+    private int selectedQuality;
+
     private Disposable subtitlesRequest;
 
     public StreamableDetailPresenterImpl(StreamableDetailView view, MediaDetailPresenter parentPresenter,
             YouTubeManager youTubeManager, PreferencesHandler preferencesHandler, ProviderManager providerManager,
-            PlayerManager playerManager, Resources resources,
-            final MediaDisplayManager mediaDisplayManager) {
+            final Resources resources, final MediaDisplayManager mediaDisplayManager) {
         this.view = view;
         this.parentPresenter = parentPresenter;
         this.youTubeManager = youTubeManager;
         this.preferencesHandler = preferencesHandler;
         this.providerManager = providerManager;
-        this.playerManager = playerManager;
         this.resources = resources;
         this.mediaDisplayManager = mediaDisplayManager;
     }
@@ -86,6 +89,7 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
             displayRating();
             displaySynopsis();
             displaySubtitles();
+
             displayQualities();
         } else {
             throw new IllegalStateException("Movie can not be null");
@@ -110,10 +114,14 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     }
 
     @Override public void selectQuality(int position) {
+        // TODO torrent and format may not be in same order
+        selectedQuality = position;
         Torrent torrent = ((Streamable) mediaWrapper.getMedia()).getTorrents()[position];
         parentPresenter.selectTorrent(torrent);
         view.renderHealth(torrent);
         view.updateMagnet(torrent);
+        view.displayQuality(mediaDisplayManager.getFormatDisplayName(torrent.getFormat()));
+        view.hideDialog();
     }
 
     @Override public void openReadMore() {
@@ -153,6 +161,21 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
         if (subtitleList != null && !subtitleList.isEmpty()) {
             view.displaySubsPicker(subtitleList);
         } // else ignore click (TODO maybe show error)
+    }
+
+    @Override public void onQualityClicked() {
+        Torrent[] torrents = ((Streamable) mediaWrapper.getMedia()).getTorrents();
+        if (torrents.length > 0) {
+            Format[] formats = mediaDisplayManager.getSortedTorrentFormats(torrents);
+
+            ArrayList<UiQuality> qualities = new ArrayList<>(formats.length);
+            for (int i = 0; i < formats.length; i++) {
+                qualities.add(new UiQuality(selectedQuality == i,
+                        mediaDisplayManager.getFormatDisplayName(formats[i])));
+            }
+
+            view.displayQualityPicker(qualities);
+        }
     }
 
     private void displayMetaData() {
@@ -269,18 +292,12 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     }
 
     private void displayQualities() {
+        // TODO torrent and format may not be in same order
         Torrent[] torrents = ((Streamable) mediaWrapper.getMedia()).getTorrents();
         if (torrents.length > 0) {
             final Format[] formats = mediaDisplayManager.getSortedTorrentFormats(torrents);
-
             int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(formats);
-
-            String[] qualities = new String[formats.length];
-            for (int i = 0; i < formats.length; i++) {
-                qualities[i] = mediaDisplayManager.getFormatDisplayName(formats[i]);
-            }
-
-            view.setQualities(qualities, qualities[defaultFormatIndex]);
+            view.displayQuality(mediaDisplayManager.getFormatDisplayName(formats[defaultFormatIndex]));
             selectQuality(defaultFormatIndex);
         }
 

@@ -54,11 +54,11 @@
             android:layout_marginLeft="48dp"
             android:background="@color/div_white"/>
 
-    <butter.droid.widget.OptionSelector
+    <butter.droid.widget.OptionPreview
             android:id="@+id/quality"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            app:optionIcon="@drawable/ic_action_quality"
-            app:optionText="@string/quality"/>
+            app:op_icon="@drawable/ic_action_quality"
+            app:op_text="@string/quality"/>
 
 </LinearLayout>

@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.text.Layout;
 import android.text.TextUtils;
@@ -34,7 +35,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -48,19 +49,22 @@ import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;
 import butter.droid.provider.base.model.Torrent;
+import butter.droid.ui.media.detail.dialog.quality.QualityPickerDialog;
+import butter.droid.ui.media.detail.dialog.quality.QualityPickerDialog.QualityPickerCallback;
+import butter.droid.ui.media.detail.dialog.quality.model.UiQuality;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.SubsPickerCallback;
 import butter.droid.ui.media.detail.model.UiSubItem;
 import butter.droid.ui.media.detail.streamable.dialog.SynopsisDialogFragment;
 import butter.droid.widget.OptionPreview;
-import butter.droid.widget.OptionSelector;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 import dagger.android.support.DaggerFragment;
 
-public class StreamableDetailFragment extends DaggerFragment implements StreamableDetailView, SubsPickerCallback {
+public class StreamableDetailFragment extends DaggerFragment implements StreamableDetailView, SubsPickerCallback,
+        QualityPickerCallback{
 
     private static final String EXTRA_MOVIE = "butter.droid.ui.media.detail.movie.StreamableDetailFragment.movie";
 
@@ -78,10 +82,10 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
     @BindView(R.id.magnet) ImageButton openMagnet;
     @BindView(R.id.rating) RatingBar rating;
     @BindView(R.id.subtitles) OptionPreview subtitlesPreview;
-    @BindView(R.id.quality) OptionSelector quality;
+    @BindView(R.id.quality) OptionPreview qualityPreview;
     @Nullable @BindView(R.id.cover_image) ImageView coverImage;
 
-    private SubsPickerDialog subsDialog;
+    private BottomSheetDialogFragment pickerDialog;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -95,6 +99,7 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
         ButterKnife.bind(this, view);
 
         subtitlesPreview.setOnClickListener(v -> presenter.onSubtitlesClicked());
+        qualityPreview.setOnClickListener(v -> presenter.onQualityClicked());
 
         MediaWrapper movie = getArguments().getParcelable(EXTRA_MOVIE);
         presenter.onCreate(movie);
@@ -103,10 +108,6 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
     @Override public void onDestroy() {
         presenter.onDestroy();
         super.onDestroy();
-    }
-
-    private void setQuality(int position) {
-        presenter.selectQuality(position);
     }
 
     @Override
@@ -202,21 +203,27 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
 
         SubsPickerDialog dialog = SubsPickerDialog.newInstance(items);
         dialog.show(getChildFragmentManager(), "dialog");
-        subsDialog = dialog;
+        pickerDialog = dialog;
+    }
+
+    @Override public void displayQualityPicker(ArrayList<UiQuality> qualities) {
+        hideDialog();
+
+        QualityPickerDialog dialog = QualityPickerDialog.newInstance(qualities);
+        dialog.show(getChildFragmentManager(), "dialog");
+        pickerDialog = dialog;
     }
 
     @Override public void hideDialog() {
-        SubsPickerDialog dialog = subsDialog;
+        BottomSheetDialogFragment dialog = pickerDialog;
         if (dialog != null) {
             dialog.dismiss();
-            subsDialog = null;
+            pickerDialog = null;
         }
     }
 
-    @Override public void setQualities(String[] qualities, String quality) {
-        this.quality.setData(qualities);
-        this.quality.setText(quality);
-        this.quality.setDefault(Arrays.asList(qualities).indexOf(quality));
+    @Override public void displayQuality(String quality) {
+        qualityPreview.setText(quality);
     }
 
     @OnClick(R.id.read_more) public void openReadMore() {
@@ -247,10 +254,6 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
 
         title.setText(media.getTitle());
 
-        quality.setFragmentManager(getFragmentManager());
-        quality.setTitle(R.string.quality);
-        quality.setListener((position, value) -> setQuality(position));
-
         if (fab != null && mediaWrapper.hasColor()) {
             fab.setBackgroundTintList(ColorStateList.valueOf(mediaWrapper.getColor()));
         }
@@ -268,6 +271,10 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
         presenter.subtitleSelected(item);
     }
 
+    @Override public void onQualityItemSelected(int position) {
+        presenter.selectQuality(position);
+    }
+
     public static StreamableDetailFragment newInstance(MediaWrapper movie) {
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_MOVIE, movie);
@@ -276,4 +283,5 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
         fragment.setArguments(args);
         return fragment;
     }
+
 }
