@@ -233,7 +233,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment impleme
 
         quality.setFragmentManager(getFragmentManager());
 
-        final Format[] formats = mediaDisplayManager.getSortedTorrentFormats(episode.getTorrents());
+        final Format[] formats = mediaDisplayManager.getSortedTorrents(episode.getTorrents());
         String[] formatDisplay = new String[formats.length];
         for (int i = 0; i < formats.length; i++) {
             formatDisplay[i] = mediaDisplayManager.getFormatDisplayName(formats[i]);

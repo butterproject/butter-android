@@ -1,6 +1,5 @@
 package butter.droid.ui.media.list.base.list;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.LinearGradient;
@@ -19,7 +18,6 @@ public class GradientDrawable extends Drawable {
         // Code borrowed from https://stackoverflow.com/questions/23657811/how-to-mask-bitmap-with-lineargradient-shader-properly
         int width = canvas.getWidth();
         int height = canvas.getHeight();
-        Bitmap overlay = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
         Paint paint = new Paint();
         float gradientHeight = height / 2f;

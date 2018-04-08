@@ -33,7 +33,6 @@ import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.provider.base.filter.Genre;
-import butter.droid.provider.base.model.Format;
 import butter.droid.provider.base.model.Movie;
 import butter.droid.provider.base.model.Streamable;
 import butter.droid.provider.base.model.Torrent;
@@ -64,6 +63,7 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     private UiSubItem selectedSub;
 
     // TODO: 11/5/17 Saved instance state
+    private Torrent[] sortedTorrents;
     private int selectedQuality;
 
     private Disposable subtitlesRequest;
@@ -89,7 +89,6 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
             displayRating();
             displaySynopsis();
             displaySubtitles();
-
             displayQualities();
         } else {
             throw new IllegalStateException("Movie can not be null");
@@ -114,9 +113,8 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     }
 
     @Override public void selectQuality(int position) {
-        // TODO torrent and format may not be in same order
         selectedQuality = position;
-        Torrent torrent = ((Streamable) mediaWrapper.getMedia()).getTorrents()[position];
+        Torrent torrent = sortedTorrents[position];
         parentPresenter.selectTorrent(torrent);
         view.renderHealth(torrent);
         view.updateMagnet(torrent);
@@ -164,14 +162,12 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     }
 
     @Override public void onQualityClicked() {
-        Torrent[] torrents = ((Streamable) mediaWrapper.getMedia()).getTorrents();
+        Torrent[] torrents = sortedTorrents;
         if (torrents.length > 0) {
-            Format[] formats = mediaDisplayManager.getSortedTorrentFormats(torrents);
-
-            ArrayList<UiQuality> qualities = new ArrayList<>(formats.length);
-            for (int i = 0; i < formats.length; i++) {
+            ArrayList<UiQuality> qualities = new ArrayList<>(torrents.length);
+            for (int i = 0; i < torrents.length; i++) {
                 qualities.add(new UiQuality(selectedQuality == i,
-                        mediaDisplayManager.getFormatDisplayName(formats[i])));
+                        mediaDisplayManager.getFormatDisplayName(torrents[i].getFormat())));
             }
 
             view.displayQualityPicker(qualities);
@@ -292,12 +288,11 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     }
 
     private void displayQualities() {
-        // TODO torrent and format may not be in same order
-        Torrent[] torrents = ((Streamable) mediaWrapper.getMedia()).getTorrents();
+        Torrent[] torrents = mediaDisplayManager.getSortedTorrents(((Streamable) mediaWrapper.getMedia()).getTorrents());
+        sortedTorrents = torrents;
         if (torrents.length > 0) {
-            final Format[] formats = mediaDisplayManager.getSortedTorrentFormats(torrents);
-            int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(formats);
-            view.displayQuality(mediaDisplayManager.getFormatDisplayName(formats[defaultFormatIndex]));
+            int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(torrents);
+            view.displayQuality(mediaDisplayManager.getFormatDisplayName(torrents[defaultFormatIndex].getFormat()));
             selectQuality(defaultFormatIndex);
         }
 
