@@ -52,7 +52,6 @@ import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.torrent.Magnet;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.provider.base.model.Episode;
-import butter.droid.provider.base.model.Format;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.SubsPickerCallback;
@@ -233,18 +232,18 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment impleme
 
         quality.setFragmentManager(getFragmentManager());
 
-        final Format[] formats = mediaDisplayManager.getSortedTorrents(episode.getTorrents());
-        String[] formatDisplay = new String[formats.length];
-        for (int i = 0; i < formats.length; i++) {
-            formatDisplay[i] = mediaDisplayManager.getFormatDisplayName(formats[i]);
-        }
-        quality.setData(formatDisplay);
+//        final Format[] formats = mediaDisplayManager.getSortedTorrents(episode.getTorrents());
+//        String[] formatDisplay = new String[formats.length];
+//        for (int i = 0; i < formats.length; i++) {
+//            formatDisplay[i] = mediaDisplayManager.getFormatDisplayName(formats[i]);
+//        }
+//        quality.setData(formatDisplay);
 
-        int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(formats);
-//        // TODO: 7/30/17 Handle sorting
-        selectedTorrent = episode.getTorrents()[defaultFormatIndex];
-        this.quality.setText(formatDisplay[defaultFormatIndex]);
-        this.quality.setDefault(defaultFormatIndex);
+//        int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(formats);
+////        // TODO: 7/30/17 Handle sorting
+//        selectedTorrent = episode.getTorrents()[defaultFormatIndex];
+//        this.quality.setText(formatDisplay[defaultFormatIndex]);
+//        this.quality.setDefault(defaultFormatIndex);
 
         updateMagnet();
 

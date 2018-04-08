@@ -64,7 +64,7 @@ import butterknife.Optional;
 import dagger.android.support.DaggerFragment;
 
 public class StreamableDetailFragment extends DaggerFragment implements StreamableDetailView, SubsPickerCallback,
-        QualityPickerCallback{
+        QualityPickerCallback {
 
     private static final String EXTRA_MOVIE = "butter.droid.ui.media.detail.movie.StreamableDetailFragment.movie";
 
