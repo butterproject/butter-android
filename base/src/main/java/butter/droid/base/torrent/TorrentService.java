@@ -33,6 +33,21 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Action;
 import android.support.v4.app.NotificationCompat.Action.Builder;
+
+import org.butterproject.torrentstream.StreamStatus;
+import org.butterproject.torrentstream.Torrent;
+import org.butterproject.torrentstream.TorrentOptions;
+import org.butterproject.torrentstream.TorrentStream;
+import org.butterproject.torrentstream.listeners.TorrentListener;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.inject.Inject;
+
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.foreground.ForegroundListener;
@@ -40,24 +55,11 @@ import butter.droid.base.manager.internal.foreground.ForegroundManager;
 import butter.droid.base.manager.internal.notification.ButterNotificationManager;
 import butter.droid.base.utils.StringUtils;
 import dagger.android.DaggerService;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import javax.inject.Inject;
-import org.butterproject.torrentstream.StreamStatus;
-import org.butterproject.torrentstream.Torrent;
-import org.butterproject.torrentstream.TorrentOptions;
-import org.butterproject.torrentstream.TorrentStream;
-import org.butterproject.torrentstream.listeners.TorrentListener;
 
 public class TorrentService extends DaggerService implements TorrentListener {
 
     public static final int NOTIFICATION_ID = 3423423;
     private static final String WAKE_LOCK = "TorrentService_WakeLock";
-
-    private static TorrentService sThis;
 
     @Inject PreferencesHandler preferencesHandler;
     @Inject ForegroundManager foregroundManager;
@@ -73,7 +75,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
     private boolean stopped = false;
 
     private IBinder binder = new ServiceBinder();
-    private List<TorrentListener> listener = new ArrayList<>();
+    private List<TorrentListener> listeners = new ArrayList<>();
 
     private PowerManager.WakeLock wakeLock;
     private Timer updateTimer;
@@ -89,7 +91,6 @@ public class TorrentService extends DaggerService implements TorrentListener {
     public void onCreate() {
         super.onCreate();
 
-        sThis = this;
         foregroundManager.setListener(foregroundListener);
 
         final TorrentOptions.Builder builder = new TorrentOptions.Builder()
@@ -114,6 +115,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
         foregroundManager.setListener(null);
         releaseWakeLock();
         stopUpdateTimer();
+        stopStreaming();
     }
 
     @Override
@@ -195,11 +197,11 @@ public class TorrentService extends DaggerService implements TorrentListener {
     }
 
     public void addListener(@NonNull TorrentListener listener) {
-        this.listener.add(listener);
+        listeners.add(listener);
     }
 
     public void removeListener(@NonNull TorrentListener listener) {
-        this.listener.remove(listener);
+        listeners.remove(listener);
     }
 
     public Torrent getCurrentTorrent() {
@@ -214,21 +216,21 @@ public class TorrentService extends DaggerService implements TorrentListener {
     public void onStreamPrepared(Torrent torrent) {
         currentTorrent = torrent;
 
-        for (TorrentListener listener : listener) {
+        for (TorrentListener listener : listeners) {
             listener.onStreamPrepared(torrent);
         }
     }
 
     @Override
     public void onStreamStarted(Torrent torrent) {
-        for (TorrentListener listener : listener) {
+        for (TorrentListener listener : listeners) {
             listener.onStreamStarted(torrent);
         }
     }
 
     @Override
     public void onStreamError(Torrent torrent, Exception e) {
-        for (TorrentListener listener : listener) {
+        for (TorrentListener listener : listeners) {
             listener.onStreamError(torrent, e);
         }
     }
@@ -238,14 +240,14 @@ public class TorrentService extends DaggerService implements TorrentListener {
         currentTorrent = torrent;
         isReady = true;
 
-        for (TorrentListener listener : listener) {
+        for (TorrentListener listener : listeners) {
             listener.onStreamReady(torrent);
         }
     }
 
     @Override
     public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
-        for (TorrentListener listener : listener) {
+        for (TorrentListener listener : listeners) {
             if (null != listener) {
                 listener.onStreamProgress(torrent, streamStatus);
             }
@@ -256,7 +258,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
 
     @Override
     public void onStreamStopped() {
-        for (TorrentListener listener : listener) {
+        for (TorrentListener listener : listeners) {
             if (listener != null) {
                 listener.onStreamStopped();
             }
@@ -341,8 +343,9 @@ public class TorrentService extends DaggerService implements TorrentListener {
         context.startService(intent);
     }
 
-    public static void stop() {
-        sThis.stopStreaming();
+    protected static void stop(Context context) {
+        Intent torrentServiceIntent = new Intent(context, TorrentService.class);
+        context.stopService(torrentServiceIntent);
     }
 
     private class UpdateTask extends TimerTask {

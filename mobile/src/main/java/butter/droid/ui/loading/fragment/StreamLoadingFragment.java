@@ -24,14 +24,19 @@ import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import javax.inject.Inject;
+
 import butter.droid.R;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
+import butter.droid.base.manager.internal.glide.GlideApp;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment;
 import butter.droid.base.utils.VersionUtils;
@@ -40,13 +45,10 @@ import butter.droid.ui.player.VideoPlayerActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.squareup.picasso.Picasso;
-import javax.inject.Inject;
 
 public class StreamLoadingFragment extends BaseStreamLoadingFragment implements StreamLoadingFragmentView {
 
     @Inject StreamLoadingFragmentPresenter presenter;
-    @Inject Picasso picasso;
 
     @BindView(R.id.background_imageview) ImageView backgroundImageView;
     @Nullable @BindView(R.id.startexternal_button) TextView startExternalButton;
@@ -63,7 +65,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment implements 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_streamloading, container, false);
     }
@@ -75,12 +77,13 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment implements 
 
         if (VersionUtils.isLollipop()) {
             //postpone the transitions until after the view is layed out.
-            getActivity().postponeEnterTransition();
+            final FragmentActivity activity = requireActivity();
+            activity.postponeEnterTransition();
 
             view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 public boolean onPreDraw() {
                     view.getViewTreeObserver().removeOnPreDrawListener(this);
-                    getActivity().startPostponedEnterTransition();
+                    activity.startPostponedEnterTransition();
                     return true;
                 }
             });
@@ -94,7 +97,11 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment implements 
     }
 
     @Override public void loadBackgroundImage(String url) {
-        picasso.load(url).error(R.color.bg).into(backgroundImageView);
+        GlideApp.with(this)
+                .asDrawable()
+                .load(url)
+                .error(R.color.bg)
+                .into(backgroundImageView);
     }
 
     @Override public void pickTorrentFile(String[] fileNames) {
@@ -103,11 +110,11 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment implements 
     }
 
     @Override public void startBeamActivity(StreamInfo streamInfo, int resumePosition) {
-        getActivity().startActivity(BeamPlayerActivity.getIntent(getActivity(), streamInfo, resumePosition));
+        requireActivity().startActivity(BeamPlayerActivity.getIntent(getActivity(), streamInfo, resumePosition));
     }
 
     @Override public void closeSelf() {
-        getActivity().finish();
+        requireActivity().finish();
     }
 
     @Override public void startExternalPlayer(@NonNull Intent intent) {

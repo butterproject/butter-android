@@ -18,8 +18,11 @@
 package butter.droid.tv.manager.internal.background;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.support.v17.leanback.app.BackgroundManager;
-import com.squareup.picasso.Target;
+
+import com.bumptech.glide.request.target.Target;
+
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
@@ -31,8 +34,8 @@ public class BackgroundUpdaterModule {
         return BackgroundManager.getInstance(activity);
     }
 
-    @Provides @Reusable Target providePicassoTarget(BackgroundManager backgroundManager) {
-        return new PicassoBackgroundManagerTarget(backgroundManager);
+    @Provides @Reusable Target<Bitmap> providePicassoTarget(BackgroundManager backgroundManager) {
+        return new BackgroundManagerTarget(backgroundManager);
     }
 
 }

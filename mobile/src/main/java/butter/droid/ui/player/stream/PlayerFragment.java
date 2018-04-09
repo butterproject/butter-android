@@ -21,6 +21,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
+
+import org.butterproject.torrentstream.StreamStatus;
+import org.butterproject.torrentstream.Torrent;
+import org.butterproject.torrentstream.listeners.TorrentListener;
+
+import java.util.Arrays;
+
+import javax.inject.Inject;
+
 import butter.droid.R;
 import butter.droid.base.fragments.dialog.FileSelectorDialogFragment;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
@@ -29,11 +39,6 @@ import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
 import butterknife.OnClick;
-import org.butterproject.torrentstream.StreamStatus;
-import org.butterproject.torrentstream.Torrent;
-import org.butterproject.torrentstream.listeners.TorrentListener;
-import java.util.Arrays;
-import javax.inject.Inject;
 
 public class PlayerFragment extends AbsPlayerFragment implements PlayerView, TorrentListener {
 
@@ -73,7 +78,8 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
     }
 
     @Override public void startBeamPlayerActivity(@NonNull final StreamInfo streamInfo, final long currentTime) {
-        getActivity().startActivity(BeamPlayerActivity.getIntent(getActivity(), streamInfo, currentTime));
+        FragmentActivity activity = requireActivity();
+        activity.startActivity(BeamPlayerActivity.getIntent(activity, streamInfo, currentTime));
     }
 
     @OnClick(R.id.subs_button) void onSubsClick() {

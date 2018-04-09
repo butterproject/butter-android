@@ -53,15 +53,15 @@ repositories {
 dependencies {
     implementation project(':provider:subs:provider')
     implementation "com.google.code.gson:gson:$gsonVersion"
-    api 'com.squareup.retrofit2:retrofit:2.3.0'
-    api "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
-    api 'com.squareup.retrofit2:converter-gson:2.3.0'
+    api "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    api "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    api "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.4'
-    testImplementation 'org.mockito:mockito-core:2.8.47'
-    testImplementation 'com.squareup.retrofit2:retrofit-mock:2.3.0'
+    testImplementation 'org.mockito:mockito-core:2.17.0'
+    testImplementation "com.squareup.retrofit2:retrofit-mock:$retrofitVersion"
 
 }

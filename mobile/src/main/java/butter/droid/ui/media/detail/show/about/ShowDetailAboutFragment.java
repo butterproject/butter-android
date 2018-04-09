@@ -18,6 +18,7 @@
 package butter.droid.ui.media.detail.show.about;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -29,15 +30,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import javax.inject.Inject;
+
 import butter.droid.R;
+import butter.droid.base.manager.internal.glide.GlideApp;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.ui.media.detail.streamable.dialog.SynopsisDialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.squareup.picasso.Picasso;
 import dagger.android.support.DaggerFragment;
-import javax.inject.Inject;
 
 public class ShowDetailAboutFragment extends DaggerFragment implements ShowDetailAboutView {
 
@@ -64,7 +67,7 @@ public class ShowDetailAboutFragment extends DaggerFragment implements ShowDetai
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_about, container, false);
 
         if (container != null) {
@@ -74,7 +77,7 @@ public class ShowDetailAboutFragment extends DaggerFragment implements ShowDetai
         return view;
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
@@ -145,7 +148,7 @@ public class ShowDetailAboutFragment extends DaggerFragment implements ShowDetai
     @Override
     public void displayImage(final String image) {
         if (coverImage != null) {
-            Picasso.with(coverImage.getContext()).load(image).into(coverImage);
+            GlideApp.with(this).load(image).into(coverImage);
         }
     }
 

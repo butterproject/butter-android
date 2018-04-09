@@ -22,16 +22,20 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v17.leanback.widget.BaseCardView;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+
+import butter.droid.base.manager.internal.glide.GlideApp;
 import butter.droid.provider.base.model.Episode;
 import butter.droid.tv.R;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 public class EpisodeCardPresenter extends Presenter {
 
@@ -83,6 +87,7 @@ public class EpisodeCardPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
+        ((ViewHolder) viewHolder).cancleImageLoading();
     }
 
 
@@ -91,12 +96,12 @@ public class EpisodeCardPresenter extends Presenter {
         private Episode episode;
         private ImageCardView cardView;
         private Drawable defaultImage;
-        private PicassoImageCardViewTarget imageCardViewTarget;
+        private ImageCardViewTarget imageCardViewTarget;
 
         public ViewHolder(View view) {
             super(view);
             cardView = (ImageCardView) view;
-            imageCardViewTarget = new PicassoImageCardViewTarget(cardView);
+            imageCardViewTarget = new ImageCardViewTarget(cardView);
             defaultImage = ActivityCompat.getDrawable(context, R.drawable.banner);
             cardView.setMainImage(defaultImage);
         }
@@ -114,38 +119,32 @@ public class EpisodeCardPresenter extends Presenter {
         }
 
         protected void updateCardViewImage(String uri) {
-            Picasso.with(context)
+            GlideApp.with(context)
+                    .asBitmap()
                     .load(uri)
-                    .resize(cardWidth, cardHeight)
                     .centerCrop()
                     .placeholder(defaultImage)
                     .error(defaultImage)
                     .into(imageCardViewTarget);
         }
+
+        protected void cancleImageLoading() {
+            GlideApp.with(context).clear(imageCardViewTarget);
+        }
     }
 
-    public class PicassoImageCardViewTarget implements Target {
+    public class ImageCardViewTarget extends SimpleTarget<Bitmap> {
 
         private ImageCardView imageCardView;
 
-        public PicassoImageCardViewTarget(ImageCardView imageCardView) {
+        ImageCardViewTarget(ImageCardView imageCardView) {
             this.imageCardView = imageCardView;
         }
 
         @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-            Drawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
+        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+            Drawable bitmapDrawable = new BitmapDrawable(context.getResources(), resource);
             imageCardView.setMainImage(bitmapDrawable);
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable drawable) {
-            imageCardView.setMainImage(drawable);
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable drawable) {
-            // Do nothing, default_background manager has its own transitions
         }
     }
 

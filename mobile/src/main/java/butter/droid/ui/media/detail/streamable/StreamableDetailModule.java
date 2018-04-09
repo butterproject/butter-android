@@ -22,7 +22,6 @@ import android.content.res.Resources;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.media.MediaDisplayManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
@@ -36,9 +35,9 @@ public class StreamableDetailModule {
 
     @Provides @FragmentScope StreamableDetailPresenter providePresenter(StreamableDetailView view,
             MediaDetailPresenter parentPresenter, YouTubeManager youTubeManager, PreferencesHandler preferencesHandler,
-            ProviderManager providerManager, PlayerManager playerManager, Resources resources, MediaDisplayManager mediaDisplayManager) {
+            ProviderManager providerManager, Resources resources, MediaDisplayManager mediaDisplayManager) {
         return new StreamableDetailPresenterImpl(view, parentPresenter, youTubeManager, preferencesHandler, providerManager,
-                playerManager, resources, mediaDisplayManager);
+                resources, mediaDisplayManager);
     }
 
     @Module

@@ -17,7 +17,6 @@
 #}
 
 -keep class org.eclipse.mat.** { *; }
--keep class com.squareup.leakcanary.** { *; }
 
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**

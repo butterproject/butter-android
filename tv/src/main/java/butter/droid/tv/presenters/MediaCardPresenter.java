@@ -18,9 +18,9 @@
 package butter.droid.tv.presenters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v17.leanback.widget.BaseCardView;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
@@ -29,14 +29,21 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.bumptech.glide.request.target.ViewTarget;
+import com.bumptech.glide.request.transition.Transition;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butter.droid.base.manager.internal.glide.GlideApp;
+import butter.droid.base.manager.internal.glide.transcode.PaletteBitmap;
+import butter.droid.base.manager.internal.glide.transition.PaletteBitmapTransitionOptions;
+import butter.droid.base.providers.media.model.MediaMeta;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.provider.base.model.Media;
 import butter.droid.tv.R;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-import java.util.ArrayList;
-import java.util.List;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand. 
@@ -45,16 +52,14 @@ import java.util.List;
 public class MediaCardPresenter extends Presenter {
 
     private final Context context;
-    private final Picasso picasso;
 
     private final int cardWidth;
     private final int cardHeight;
     @ColorInt private final int defaultInfoBackgroundColor;
     @ColorInt private final int defaultSelectedInfoBackgroundColor;
 
-    public MediaCardPresenter(Context context, final Picasso picasso) {
+    public MediaCardPresenter(Context context) {
         this.context = context;
-        this.picasso = picasso;
         defaultSelectedInfoBackgroundColor = context.getResources().getColor(R.color.primary_dark);
         defaultInfoBackgroundColor = context.getResources().getColor(R.color.default_background);
         cardWidth = (int) context.getResources().getDimension(R.dimen.card_width);
@@ -66,8 +71,8 @@ public class MediaCardPresenter extends Presenter {
         final CustomImageCardView cardView = new CustomImageCardView(context) {
             @Override
             public void setSelected(boolean selected) {
-                if (getCustomSelectedSwatch() != null && selected) {
-                    setInfoAreaBackgroundColor(getCustomSelectedSwatch().getRgb());
+                if (getCustomSelectedColor() != MediaMeta.COLOR_NONE && selected) {
+                    setInfoAreaBackgroundColor(getCustomSelectedColor());
                 } else {
                     setInfoAreaBackgroundColor(selected ? defaultSelectedInfoBackgroundColor : defaultInfoBackgroundColor);
                 }
@@ -88,7 +93,8 @@ public class MediaCardPresenter extends Presenter {
 
     public void onBindMediaViewHolder(Presenter.ViewHolder viewHolder, MediaCardItem overview) {
 
-        Media item = overview.getMediaWrapper().getMedia();
+        final MediaWrapper mediaWrapper = overview.getMediaWrapper();
+        final Media item = mediaWrapper.getMedia();
         final CustomImageCardView cardView = (CustomImageCardView) viewHolder.view;
 
         cardView.setTitleText(item.getTitle());
@@ -98,37 +104,26 @@ public class MediaCardPresenter extends Presenter {
         cardView.getMainImageView().setPadding(0, 0, 0, 0);
         cardView.setMainImageDimensions(cardWidth, cardHeight);
         cardView.getMainImageView().setVisibility(View.GONE);
-        cardView.setCustomSelectedSwatch(null);
+        cardView.setCustomSelectedColor(MediaMeta.COLOR_NONE);
 
         if (item.getPoster() != null) {
-            Target target = new Target() {
-                @Override public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                    Palette.from(bitmap).maximumColorCount(16).generate(palette -> {
-                        Palette.Swatch swatch = palette.getDarkMutedSwatch();
-                        cardView.setCustomSelectedSwatch(swatch);
-
-                        cardView.getMainImageView().setImageBitmap(bitmap);
-                        cardView.getMainImageView().setVisibility(View.GONE);
-                        AnimUtils.fadeIn(cardView.getMainImageView());
-                    });
-                }
-
-                @Override public void onBitmapFailed(Drawable errorDrawable) {
-                    cardView.getMainImageView().setImageResource(R.drawable.placeholder_inset);
-                    cardView.getMainImageView().setAlpha(0.4f);
-                    cardView.getMainImageView().setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                    cardView.getMainImageView().setVisibility(View.GONE);
-                    AnimUtils.fadeIn(cardView.getMainImageView());
-
-                }
-
-                @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                }
-            };
             //load image
-            picasso.load(item.getPoster()).resize(cardWidth, cardHeight).centerCrop().into(target);
-            cardView.setTarget(target);
+            GlideApp.with(context)
+                    .as(PaletteBitmap.class)
+                    .load(item.getPoster())
+                    .transition(PaletteBitmapTransitionOptions.withCrossFade())
+                    .into(new ViewTarget<ImageView, PaletteBitmap>(cardView.getMainImageView()) {
+                        @Override public void onResourceReady(@NonNull PaletteBitmap resource,
+                                @Nullable Transition<? super PaletteBitmap> transition) {
+                            Palette palette = resource.getPalette();
+                            mediaWrapper.setColor(palette.getVibrantColor(MediaMeta.COLOR_NONE));
+                            cardView.setCustomSelectedColor(mediaWrapper.getColor());
+
+                            cardView.getMainImageView().setImageBitmap(resource.getBitmap());
+                            cardView.getMainImageView().setVisibility(View.GONE);
+                            AnimUtils.fadeIn(cardView.getMainImageView());
+                        }
+                    });
         } else {
             cardView.getMainImageView().setImageResource(R.drawable.placeholder_inset);
             cardView.getMainImageView().setAlpha(0.4f);
@@ -144,17 +139,12 @@ public class MediaCardPresenter extends Presenter {
         // Remove references to images so that the garbage collector can free up memory
         cardView.setBadgeImage(null);
         cardView.setMainImage(null);
-        if (cardView.getTarget() != null) {
-            picasso.cancelRequest(cardView.getTarget());
-            cardView.setTarget(null);
-        }
+        GlideApp.with(context).clear(cardView.getMainImageView());
     }
 
     public static class CustomImageCardView extends ImageCardView {
 
-        private Palette.Swatch customSelectedSwatch;
-
-        private Target target;
+        @ColorInt private int customSelectedColor;
 
         public CustomImageCardView(Context context) {
             super(context);
@@ -171,21 +161,14 @@ public class MediaCardPresenter extends Presenter {
             setInfoVisibility(BaseCardView.CARD_REGION_VISIBLE_ALWAYS);
         }
 
-        public Palette.Swatch getCustomSelectedSwatch() {
-            return customSelectedSwatch;
+        @ColorInt public int getCustomSelectedColor() {
+            return customSelectedColor;
         }
 
-        public void setCustomSelectedSwatch(Palette.Swatch customSelectedSwatch) {
-            this.customSelectedSwatch = customSelectedSwatch;
+        public void setCustomSelectedColor(@ColorInt int customSelectedColor) {
+            this.customSelectedColor = customSelectedColor;
         }
 
-        public Target getTarget() {
-            return target;
-        }
-
-        public void setTarget(Target target) {
-            this.target = target;
-        }
     }
 
     public static class MediaCardItem {

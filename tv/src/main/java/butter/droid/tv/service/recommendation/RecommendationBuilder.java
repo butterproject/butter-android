@@ -28,9 +28,9 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
-import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.R;
@@ -103,7 +103,7 @@ public class RecommendationBuilder {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public Notification build() throws IOException {
+    public Notification build() {
         if (VersionUtils.isLollipop()) {
 
             Log.d(TAG, "Building notification - " + this.toString());
@@ -118,11 +118,17 @@ public class RecommendationBuilder {
                 extras.putString(Notification.EXTRA_BACKGROUND_IMAGE_URI, backgroundUri);
             }
 
-            Bitmap image = Picasso.with(context)
-                    .load(imageUri)
-                    .resize((int) context.getResources().getDimension(R.dimen.card_width),
-                            (int) context.getResources().getDimension(R.dimen.card_height))
-                    .get();
+            Bitmap image;
+            try {
+                image = Glide.with(context)
+                        .asBitmap()
+                        .load(imageUri)
+                        .submit((int) context.getResources().getDimension(R.dimen.card_width),
+                                (int) context.getResources().getDimension(R.dimen.card_height))
+                        .get();
+            } catch (InterruptedException | ExecutionException e) {
+                image = null;
+            }
 
             Notification notification = new NotificationCompat.BigPictureStyle(
                     new NotificationCompat.Builder(context)

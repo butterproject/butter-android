@@ -44,14 +44,9 @@ dependencies {
     api "com.android.support:design:$appCompatVersion"
 
     debugImplementation 'com.github.simonpercic:oklog3:2.2.0'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
 
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-
-    api 'com.jakewharton.timber:timber:4.6.0'
+    api 'com.jakewharton.timber:timber:4.6.1'
     api "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    api 'com.squareup.picasso:picasso:2.5.2'
-    api 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     api "com.google.code.gson:gson:$gsonVersion"
     api "com.jakewharton:butterknife:$butterknifeVersion"
     api "com.github.gabrielemariotti.changeloglib:changelog:$changeloglibVersion"
@@ -64,7 +59,10 @@ dependencies {
     api "com.google.dagger:dagger-android:$daggerVersion"
     api "com.google.dagger:dagger-android-support:$daggerVersion"
 
-    api 'com.butterproject:vlc-android-sdk:3.0.0'
+    api "com.github.bumptech.glide:glide:$glideVersion"
+    api "com.github.bumptech.glide:okhttp3-integration:$glideVersion"
+
+    api 'com.butterproject:vlc-android-sdk:3.0.3-1'
 
     api project(':connectsdk:core')
     api project(':connectsdk:modules:firetv')
@@ -76,10 +74,12 @@ dependencies {
 
     api project(':provider:subs:provider')
     api project(':provider:subs:mock')
+    api project(':provider:subs:opensubs')
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
     compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
 }

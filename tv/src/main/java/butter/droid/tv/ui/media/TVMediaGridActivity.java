@@ -43,7 +43,7 @@ public class TVMediaGridActivity extends TVBaseActivity {
         final int providerId = extras.getInt(EXTRA_PROVIDER);
 
         //add media fragment
-        getFragmentManager().beginTransaction().replace(R.id.fragment, TVMediaGridFragment.newInstance(providerId, title, filter))
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, TVMediaGridFragment.newInstance(providerId, title, filter))
                 .commit();
     }
 

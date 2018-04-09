@@ -20,13 +20,16 @@ package butter.droid.base.manager.internal.media;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+
+import java.util.Arrays;
+
+import javax.inject.Inject;
+
 import butter.droid.base.Internal;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.provider.base.model.Format;
 import butter.droid.provider.base.model.Torrent;
-import java.util.Arrays;
-import javax.inject.Inject;
 
 @Internal
 public class MediaDisplayManager {
@@ -55,23 +58,20 @@ public class MediaDisplayManager {
         return resources.getString(textRes, format.getQuality());
     }
 
-    public Format[] getSortedTorrentFormats(Torrent[] torrents) {
-        final Format[] formats = new Format[torrents.length];
-        for (int i = 0; i < torrents.length; i++) {
-            formats[i] = torrents[i].getFormat();
-        }
-
-        return sortFormats(formats);
+    public Torrent[] getSortedTorrents(Torrent[] torrents) {
+        final Torrent[] newTorrents = new Torrent[torrents.length];
+        System.arraycopy(torrents, 0, newTorrents, 0, torrents.length);
+        return sortTorrentsByFormat(newTorrents);
     }
 
-    public int getDefaultFormatIndex(Format[] availableForamts) {
+    public int getDefaultFormatIndex(Torrent[] availableTorrents) {
         int quality = preferencesHandler.getDefaultQuality();
 
-        if (availableForamts != null && availableForamts.length > 0) {
+        if (availableTorrents != null && availableTorrents.length > 0) {
             int format3D = -1;
 
-            for (int i = 0; i < availableForamts.length; i++) {
-                Format format = availableForamts[i];
+            for (int i = 0; i < availableTorrents.length; i++) {
+                Format format = availableTorrents[i].getFormat();
                 if (format.getQuality() == quality) {
                     if (format.getType() == 0) {
                         return i;
@@ -91,17 +91,17 @@ public class MediaDisplayManager {
         }
     }
 
-    public Format[] sortFormats(Format[] formats) {
-        Arrays.sort(formats, (lhs, rhs) -> {
-            int i = lhs.getType() - rhs.getType();
+    private Torrent[] sortTorrentsByFormat(Torrent[] torrents) {
+        Arrays.sort(torrents, (lhs, rhs) -> {
+            int i = lhs.getFormat().getType() - rhs.getFormat().getType();
             if (i != 0) {
                 return i;
             }
 
-            return lhs.getQuality() - rhs.getQuality();
+            return lhs.getFormat().getQuality() - rhs.getFormat().getQuality();
         });
 
-        return formats;
+        return torrents;
     }
 
 }

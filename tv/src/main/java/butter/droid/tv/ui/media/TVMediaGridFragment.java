@@ -21,7 +21,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v17.leanback.app.VerticalGridFragment;
+import android.support.v17.leanback.app.VerticalGridSupportFragment;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
@@ -32,6 +32,11 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.VerticalGridPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.Toast;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import butter.droid.base.manager.internal.paging.CursorPagingListener;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.StringUtils;
@@ -45,15 +50,12 @@ import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
-import com.squareup.picasso.Picasso;
-import dagger.android.AndroidInjection;
-import java.util.List;
-import javax.inject.Inject;
+import dagger.android.support.AndroidSupportInjection;
 
 /*
  * VerticalGridFragment shows a grid of videos
  */
-public class TVMediaGridFragment extends VerticalGridFragment implements TVMediaGridView, OnItemViewClickedListener,
+public class TVMediaGridFragment extends VerticalGridSupportFragment implements TVMediaGridView, OnItemViewClickedListener,
         OnItemViewSelectedListener, CursorPagingListener {
 
     private static final String ARG_TITLE = "butter.droid.tv.ui.media.TVMediaGridFragment.title";
@@ -64,13 +66,12 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
 
     @Inject TVMediaGridPresenter presenter;
     @Inject BackgroundUpdater backgroundUpdater;
-    @Inject Picasso picasso;
 
     private GridPagingAdapter adapter;
-    private GridPagingManager pagingManager;
+    private GridPagingManager<MediaCardItem> pagingManager;
 
     @Override public void onAttach(final Context context) {
-        AndroidInjection.inject(this);
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
     }
 
@@ -149,14 +150,15 @@ public class TVMediaGridFragment extends VerticalGridFragment implements TVMedia
         gridPresenter.setNumberOfColumns(NUM_COLUMNS);
         setGridPresenter(gridPresenter);
 
+        Context context = requireContext();
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
-        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(getActivity(), picasso));
-        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(getActivity()));
+        presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(context));
+        presenterSelector.addClassPresenter(LoadingCardItem.class, new LoadingCardPresenter(context));
 
         adapter = new GridPagingAdapter(presenterSelector);
         setAdapter(adapter);
 
-        pagingManager = new GridPagingManager();
+        pagingManager = new GridPagingManager<>();
         pagingManager.init(NUM_COLUMNS, adapter, this);
 
         setOnItemViewClickedListener(this);

@@ -26,9 +26,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.AppBarLayout.ScrollingViewBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.CoordinatorLayout.LayoutParams;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -39,10 +39,14 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import javax.inject.Inject;
+
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
+import butter.droid.base.manager.internal.glide.GlideApp;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;
@@ -54,15 +58,13 @@ import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.loading.StreamLoadingActivity;
 import butter.droid.ui.media.detail.dialog.EpisodeDialogFragment;
 import butter.droid.ui.media.detail.dialog.MessageDialogFragment;
-import butter.droid.ui.media.detail.streamable.StreamableDetailFragment;
 import butter.droid.ui.media.detail.show.ShowDetailFragment;
+import butter.droid.ui.media.detail.streamable.StreamableDetailFragment;
 import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
-import com.squareup.picasso.Picasso;
-import javax.inject.Inject;
 
 public class MediaDetailActivity extends ButterBaseActivity implements MediaDetailView, EpisodeDialogFragment.FragmentListener {
 
@@ -128,32 +130,31 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
         Media media = mediaWrapper.getMedia();
         getSupportActionBar().setTitle(media.getTitle());
 
-        int color = mediaWrapper.getColor();
         if (mediaWrapper.hasColor()) {
+            int color = mediaWrapper.getColor();
             collapsingToolbar.setContentScrimColor(color);
             collapsingToolbar.setStatusBarScrimColor(color);
+
+            if (!isTablet) {
+                //noinspection ConstantConditions
+                floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(color));
+            }
         }
 
         collapsingToolbar.setTitleEnabled(false);
 
         // Calculate toolbar scrolling variables
         int topHeight = PixelUtils.getScreenHeight(this) / 3 * 2;
-        if (!isTablet) {
-            if (mediaWrapper.hasColor()) {
-                //noinspection ConstantConditions
-                floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(color));
-            }
-
-            bgImage.getLayoutParams().height = topHeight;
-        } else {
-            CoordinatorLayout.LayoutParams params =
-                    (CoordinatorLayout.LayoutParams) scrollView.getLayoutParams();
-            AppBarLayout.ScrollingViewBehavior behavior =
-                    (AppBarLayout.ScrollingViewBehavior) params.getBehavior();
+        if (isTablet) {
+            LayoutParams params =
+                    (LayoutParams) scrollView.getLayoutParams();
+            ScrollingViewBehavior behavior =
+                    (ScrollingViewBehavior) params.getBehavior();
             behavior.setOverlayTop(topHeight);
         }
 
         loadBackgroundImage(media);
+
     }
 
     @Override public void displayStreamable(MediaWrapper movie) {
@@ -206,10 +207,10 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
             imageUrl = media.getBackdrop();
         }
 
-        Picasso.with(this)
+        GlideApp.with(this)
+                .asDrawable()
                 .load(imageUrl)
                 .error(R.drawable.butter_logo)
-                .placeholder(R.drawable.butter_logo)
                 .into(bgImage);
     }
 

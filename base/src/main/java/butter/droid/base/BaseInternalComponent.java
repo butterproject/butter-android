@@ -26,14 +26,16 @@ import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
+
+import com.google.gson.Gson;
+
+import java.util.Set;
+
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.notification.ButterNotificationManager;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.torrent.TorrentService;
-import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
-import java.util.Set;
 import okhttp3.OkHttpClient;
 
 public interface BaseInternalComponent {
@@ -43,8 +45,6 @@ public interface BaseInternalComponent {
     void inject(TorrentService service);
 
     Context context();
-
-    Picasso picasso();
 
     Set<ProviderWrapper> providers();
 

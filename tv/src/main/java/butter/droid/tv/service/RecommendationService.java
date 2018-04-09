@@ -21,6 +21,14 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.inject.Inject;
+
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.VersionUtils;
@@ -33,11 +41,6 @@ import butter.droid.tv.service.recommendation.RecommendationBuilder;
 import butter.droid.tv.service.recommendation.RecommendationContentProvider;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
 import dagger.android.DaggerIntentService;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
-import javax.inject.Inject;
 import timber.log.Timber;
 
 // TODO this needs to be rewritten
@@ -153,7 +156,7 @@ public class RecommendationService extends DaggerIntentService {
 
         RecommendationBuilder builder = new RecommendationBuilder()
                 .setContext(getApplicationContext())
-                .setSmallIcon(R.drawable.header_logo);
+                .setSmallIcon(R.mipmap.ic_launcher_foreground);
 
         buildMovieRecommendations(builder);
         buildShowRecommendations(builder);

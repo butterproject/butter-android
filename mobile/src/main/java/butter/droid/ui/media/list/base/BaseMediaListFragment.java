@@ -19,6 +19,7 @@ package butter.droid.ui.media.list.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -29,6 +30,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import butter.droid.R;
 import butter.droid.base.manager.internal.paging.CursorPagingListener;
 import butter.droid.base.providers.media.model.MediaWrapper;
@@ -43,8 +49,6 @@ import butter.droid.ui.media.list.base.list.MediaGridAdapter.MediaGridSpacingIte
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
-import java.util.List;
-import javax.inject.Inject;
 
 /**
  * This fragment is the main screen for viewing a collection of media items.
@@ -64,8 +68,6 @@ public class BaseMediaListFragment extends DaggerFragment implements BaseMediaLi
 
     public static final String EXTRA_PROVIDER = "butter.droid.ui.media.list.base.BaseMediaListFragment.extra_provider";
     public static final String EXTRA_FILTER = "butter.droid.ui.media.list.base.BaseMediaListFragment.extra_filter";
-
-    public static final String DIALOG_LOADING_DETAIL = "DIALOG_LOADING_DETAIL";
 
     @Inject BaseMediaListPresenter presenter;
 
@@ -97,14 +99,13 @@ public class BaseMediaListFragment extends DaggerFragment implements BaseMediaLi
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         final MediaGridSpacingItemDecoration gridSpacingDecoration = new MediaGridSpacingItemDecoration(context, columns);
         final int itemHeight = gridSpacingDecoration.getItemHeight();
-        final int itemWidth = gridSpacingDecoration.getItemWidth();
 
-        adapter = new MediaGridAdapter(itemHeight, itemWidth);
+        adapter = new MediaGridAdapter(itemHeight);
 
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(gridSpacingDecoration);
@@ -139,30 +140,6 @@ public class BaseMediaListFragment extends DaggerFragment implements BaseMediaLi
     @Override public void onItemClick(View view, final int position) {
         final MediaWrapper media = adapter.getItem(position);
         presenter.onMediaItemClicked(media);
-
-        // TODO: 6/25/17 Colors
-//        RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(view);
-//        ImageView coverImage = ((MediaGridAdapter.ViewHolder) holder).getCoverImage();
-//
-//            if (coverImage.getDrawable() == null) {
-//                showLoadingDialog(position);
-//                return;
-//            }
-////
-//        Bitmap cover = ((BitmapDrawable) coverImage.getDrawable()).getBitmap();
-//        Palette.from(cover)
-//                .maximumColorCount(5)
-//                .generate(palette -> {
-//                    int vibrantColor = palette.getVibrantColor(Color.TRANSPARENT);
-//                    int paletteColor;
-//                    if (vibrantColor == Color.TRANSPARENT) {
-//                        paletteColor = palette.getMutedColor(ContextCompat.getColor(getContext(), R.color.primary));
-//                    } else {
-//                        paletteColor = vibrantColor;
-//                    }
-//                    media.setColor(paletteColor);
-//                    showLoadingDialog(position);
-//                });
     }
 
     @Override public void updateLoadingMessage(@StringRes int messageRes) {
