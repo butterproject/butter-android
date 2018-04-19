@@ -79,7 +79,6 @@ public class TorrentService extends DaggerService implements TorrentListener {
 
     private PowerManager.WakeLock wakeLock;
     private Timer updateTimer;
-    //    private Class currentActivityClass; // TODO This does not respect intent data required per screen
 
     public class ServiceBinder extends Binder {
         public TorrentService getService() {
@@ -266,6 +265,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
     }
 
     private void startForeground() {
+        // TODO for now show main activity, later we will have downloaded/in progress screen
         Intent notificationIntent = packageManager.getLaunchIntentForPackage(getPackageName());
         if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP && notificationIntent == null) {
             notificationIntent = packageManager.getLeanbackLaunchIntentForPackage(getPackageName());
