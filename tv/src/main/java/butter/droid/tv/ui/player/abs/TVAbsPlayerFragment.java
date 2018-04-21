@@ -302,7 +302,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
 
             secondaryActionsAdapter.add(ccAction);
 //            primaryActionsAdapter.add(pipAction); // TODO when implemented
-            // TODO VLC vide scale action
+            // TODO VLC wide scale action
         }
 
         @Override public void onActionClicked(Action action) {

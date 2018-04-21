@@ -21,20 +21,22 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import java.util.Locale;
+
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.provider.subs.model.Subtitle;
-import java.util.Locale;
 
 public class StreamInfo implements Parcelable {
 
     @NonNull private final MediaWrapper media;
     @Nullable private final MediaWrapper parentMedia;
     @Nullable private final Torrent torrent;
-    @Nullable private final SubtitleWrapper subtitle;
 
     @Nullable private String streamUrl;
+    @Nullable private SubtitleWrapper subtitle;
 
     public StreamInfo(@NonNull final Torrent torrent, @NonNull final MediaWrapper media, @Nullable final MediaWrapper parentMedia,
             @Nullable final SubtitleWrapper subtitle) {
@@ -82,6 +84,10 @@ public class StreamInfo implements Parcelable {
 
     @Nullable public SubtitleWrapper getSubtitle() {
         return subtitle;
+    }
+
+    public void setSubtitle(@Nullable SubtitleWrapper subtitle) {
+        this.subtitle = subtitle;
     }
 
     @NonNull public String getMediaTitle() {

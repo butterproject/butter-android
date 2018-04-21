@@ -23,12 +23,14 @@ import android.support.annotation.StringRes;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import javax.inject.Inject;
+
 import butter.droid.base.R2;
 import butter.droid.base.torrent.TorrentService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
-import javax.inject.Inject;
 
 
 /**
@@ -175,6 +177,11 @@ public abstract class BaseStreamLoadingFragment extends DaggerFragment implement
         if (service != null && service.isStreaming() && service.isReady()) {
             presenter.onStreamReady(service.getCurrentTorrent());
         }
+    }
+
+    @Override public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
 
     /**
