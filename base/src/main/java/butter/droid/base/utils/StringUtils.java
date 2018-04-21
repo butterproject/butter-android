@@ -78,6 +78,16 @@ public class StringUtils {
         return time;
     }
 
+    public static String formatSpeed(float speed) {
+        if (speed / 1024 < 1000) {
+            int i = (int) (speed / 102.4);
+            return i / 10 + "." + i % 10 + " KB/s";
+        } else {
+            int i = (int) (speed / 104857.6);
+            return i / 10 + "." + i % 10 + " MB/s";
+        }
+    }
+
     /**
      * Uppercase first character
      *

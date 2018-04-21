@@ -17,17 +17,16 @@
 
 package butter.droid.base;
 
-import butter.droid.base.data.internal.InternalBaseDataModule;
-import butter.droid.base.manager.internal.InternalBaseManagerModule;
+import android.app.NotificationManager;
+import android.content.Context;
 import dagger.Module;
+import dagger.Provides;
 
-@Module(
-        includes = {
-                InternalBaseDataModule.class,
-                InternalBaseManagerModule.class,
-                InternalBaseAndroidModule.class
-        }
-)
-public class InternalBaseModule {
+@Module
+public class InternalBaseAndroidModule {
+
+    @Provides @Internal NotificationManager provideNotificationManager(Context context) {
+        return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    }
 
 }

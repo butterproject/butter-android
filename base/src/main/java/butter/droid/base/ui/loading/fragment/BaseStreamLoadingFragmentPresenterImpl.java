@@ -254,16 +254,7 @@ public abstract class BaseStreamLoadingFragmentPresenterImpl implements BaseStre
         }
 
         String progressText = progress + "%";
-
-        String speedText;
-        if (status.downloadSpeed / 1024 < 1000) {
-            int i = (int) (status.downloadSpeed / 102.4);
-            speedText = i / 10 + "." + i % 10 + " KB/s";
-        } else {
-            int i = (int) (status.downloadSpeed / 104857.6);
-            speedText = i / 10 + "." + i % 10 + " MB/s";
-        }
-
+        String speedText = StringUtils.formatSpeed(status.downloadSpeed);
         String seedsText = status.seeds + " " + context.getString(R.string.seeds);
 
         view.displayDetails(progress, progressText, speedText, seedsText);
