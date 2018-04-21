@@ -55,8 +55,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     private int streamerProgress;
 
     public StreamPlayerPresenterImpl(final StreamPlayerView view, final PreferencesHandler preferencesHandler,
-                                     final ProviderManager providerManager, final VlcPlayer player,
-                                     final SubtitleManager subtitleManager) {
+            final ProviderManager providerManager, final VlcPlayer player, final SubtitleManager subtitleManager) {
         super(view, preferencesHandler, player);
         this.view = view;
         this.player = player;
@@ -202,7 +201,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     private void loadSubtitle() {
-        SubtitleWrapper subtitle = streamInfo.getSubtitle();
+        final SubtitleWrapper subtitle = streamInfo.getSubtitle();
         MediaWrapper media = streamInfo.getMedia();
         SubsProvider provider = providerManager.getSubsProvider(media.getProviderId());
         subtitleManager.downloadSubtitle(provider, media.getMedia(), subtitle)
@@ -214,6 +213,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
                     }
 
                     @Override public void onSuccess(final SubtitleWrapper subs) {
+                        streamInfo.setSubtitle(subs);
                         loadSubs(subs.getFileUri());
                     }
 
