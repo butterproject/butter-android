@@ -56,7 +56,6 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
     private final String[] providers;
     private final int[] qualities;
     private final String[] appLanguages;
-    private final String[] subsLanguages;
 
     public BasePreferencesPresenterImpl(BasePreferencesView view, PrefManager prefManager, PlayerManager playerManager,
             PreferencesHandler preferencesHandler, ButterUpdateManager updateManager, Resources resources,
@@ -71,7 +70,6 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
         keys = preferencesHandler.getPreferencesOrder(isTV);
         providers = resources.getStringArray(R.array.prefs_providers);
         qualities = resources.getIntArray(R.array.video_qualities);
-        subsLanguages = resources.getStringArray(R.array.subtitle_languages);
         appLanguages = resources.getStringArray(R.array.translation_languages);
         Arrays.sort(appLanguages);
     }
@@ -128,7 +126,7 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
                 if (position == 0) {
                     prefManager.remove(key);
                 } else {
-                    prefManager.save(key, subsLanguages[position - 1]);
+                    prefManager.save(key, PreferenceConstants.SUBS_LANGS[position - 1]);
                 }
                 break;
             default:
@@ -338,13 +336,13 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
         int currentPosition = 0;
         String currentValue = (String) item.getValue();
 
-        String[] items = new String[subsLanguages.length + 1];
+        String[] items = new String[PreferenceConstants.SUBS_LANGS.length + 1];
         items[0] = resources.getString(R.string.no_default_set);
 
-        for (int i = 0; i < subsLanguages.length; i++) {
-            Locale locale = LocaleUtils.toLocale(subsLanguages[i]);
+        for (int i = 0; i < PreferenceConstants.SUBS_LANGS.length; i++) {
+            Locale locale = LocaleUtils.toLocale(PreferenceConstants.SUBS_LANGS[i]);
             items[i + 1] = locale.getDisplayLanguage();
-            if (subsLanguages[i].equals(currentValue)) {
+            if (PreferenceConstants.SUBS_LANGS[i].equals(currentValue)) {
                 currentPosition = i + 1;
             }
         }

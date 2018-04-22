@@ -17,32 +17,25 @@
 
 package butter.droid.ui.media.detail.streamable;
 
-import android.content.res.Resources;
-
-import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.media.MediaDisplayManager;
-import butter.droid.base.manager.internal.provider.ProviderManager;
-import butter.droid.base.manager.internal.youtube.YouTubeManager;
-import butter.droid.base.ui.FragmentScope;
-import butter.droid.ui.media.detail.MediaDetailPresenter;
-import butter.droid.ui.media.detail.streamable.StreamableDetailModule.MovieDetailBindModule;
+import butter.droid.base.ui.SubFragmentScope;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerModule;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerParent;
 import dagger.Binds;
 import dagger.Module;
-import dagger.Provides;
+import dagger.android.ContributesAndroidInjector;
 
-@Module(includes = MovieDetailBindModule.class)
-public class StreamableDetailModule {
+@Module
+public interface StreamableDetailModule {
 
-    @Provides @FragmentScope StreamableDetailPresenter providePresenter(StreamableDetailView view,
-            MediaDetailPresenter parentPresenter, YouTubeManager youTubeManager, PreferencesHandler preferencesHandler,
-            ProviderManager providerManager, Resources resources, MediaDisplayManager mediaDisplayManager) {
-        return new StreamableDetailPresenterImpl(view, parentPresenter, youTubeManager, preferencesHandler, providerManager,
-                resources, mediaDisplayManager);
-    }
+    @Binds StreamableDetailView bindView(StreamableDetailFragment fragment);
 
-    @Module
-    public interface MovieDetailBindModule {
-        @Binds StreamableDetailView bindView(StreamableDetailFragment fragment);
-    }
+    @Binds StreamableDetailPresenter bindPresenter(StreamableDetailPresenterImpl presenter);
+
+    @Binds SubsPickerParent subsPickerParent(StreamableDetailPresenterImpl presenter);
+
+    @SubFragmentScope
+    @ContributesAndroidInjector(modules = SubsPickerModule.class)
+    SubsPickerDialog contributeSubsPickerDialogInjector();
 
 }

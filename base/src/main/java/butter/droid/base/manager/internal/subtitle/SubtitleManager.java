@@ -19,6 +19,9 @@ package butter.droid.base.manager.internal.subtitle;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import javax.inject.Inject;
+
 import butter.droid.base.Internal;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
@@ -28,7 +31,6 @@ import butter.droid.provider.subs.SubsProvider;
 import butter.droid.provider.subs.model.Subtitle;
 import io.reactivex.Maybe;
 import io.reactivex.schedulers.Schedulers;
-import javax.inject.Inject;
 
 @Internal
 public class SubtitleManager {
@@ -60,10 +62,7 @@ public class SubtitleManager {
                     Subtitle s = new Subtitle(subtitleLanguage, LocaleUtils.toLocale(subtitleLanguage).getDisplayName());
                     final SubtitleWrapper newWrapper = new SubtitleWrapper(s);
 
-                    return subsProvider.list(media)
-                            .flattenAsObservable(it -> it)
-                            .filter(sub -> subtitleLanguage.equals(sub.getLanguage()))
-                            .firstElement()
+                    return subsProvider.getSubtitle(media, subtitleLanguage)
                             .flatMap(sub -> subsProvider.downloadSubs(media, sub))
                             .doOnSuccess(newWrapper::setFileUri)
                             .map(uri -> newWrapper)

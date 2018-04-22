@@ -67,36 +67,57 @@ public class OpenSubsProvider extends AbsSubsProvider {
     }
 
     @Override public Single<List<Subtitle>> list(@NonNull final Media media) {
+        return fetchSubtitles(media);
+    }
+
+    @Override public Maybe<Subtitle> getSubtitle(@NonNull Media media, @NonNull String languageCode) {
+        if (LANGUAGE_CODE_MAP.containsKey(languageCode)) {
+            return fetchSubtitles(media, LANGUAGE_CODE_MAP.get(languageCode))
+                    .flattenAsObservable(it -> it)
+                    .firstElement();
+        } else {
+            return Maybe.empty();
+        }
+    }
+
+    private Single<List<Subtitle>> fetchSubtitles(@NonNull final Media media) {
+        return fetchSubtitles(media, QuerySearchRequest.LANGUAGE_ALL);
+    }
+
+    private Single<List<Subtitle>> fetchSubtitles(@NonNull final Media media, String languageCode) {
         // TODO cache token
         return service.login(new String[]{"", "", Locale.getDefault().getLanguage(), USER_AGENT}) // TODO add constants
                 .flatMap((Function<LoginResponse, SingleSource<SearchResponse>>) loginResponse -> {
                     List<Object> params = new ArrayList<>();
                     params.add(loginResponse.getTokem());
                     // TODO add imdb id search
-                    params.add(Collections.singletonList(new QuerySearchRequest(media.getTitle())));
+                    params.add(Collections.singletonList(new QuerySearchRequest(media.getTitle(), languageCode)));
 
                     return service.search(params);
                 })
                 .map(SearchResponse::getData)
                 .flatMapObservable(Observable::fromIterable)
                 .groupBy(OpenSubItem::getLanguageCode)
-                .concatMap((Function<GroupedObservable<String, OpenSubItem>, ObservableSource<OpenSubItem>>) observable ->
-                        observable.reduce((openSubItem, openSubItem2) -> {
-                            int diff = getItemScore(openSubItem2) - getItemScore(openSubItem);
-                            // TODO downloads count
+                .concatMap(
+                        (Function<GroupedObservable<String, OpenSubItem>, ObservableSource<OpenSubItem>>) observable ->
+                                observable.reduce((openSubItem, openSubItem2) -> {
+                                    int diff = getItemScore(openSubItem2) - getItemScore(openSubItem);
+                                    // TODO downloads count
 //                            if (diff > 0 || diff == 0 && openSubItem2.getDownloads() > openSubItem.getDownloads()) {
-                            if (diff >= 0) {
-                                return openSubItem2;
-                            } else {
-                                return openSubItem;
-                            }
-                        }).toObservable())
+                                    if (diff >= 0) {
+                                        return openSubItem2;
+                                    } else {
+                                        return openSubItem;
+                                    }
+                                }).toObservable())
                 .map(openSubItem -> {
                     Map<String, String> meta = new HashMap<>(1);
-                    meta.put(META_DOWNLOAD_LINK, openSubItem.getDownalodLink().replace(".gz", ".srt")); // TODO download gz files
+                    meta.put(META_DOWNLOAD_LINK,
+                            openSubItem.getDownalodLink().replace(".gz", ".srt")); // TODO download gz files
                     return new Subtitle(openSubItem.getLanguageCode(), openSubItem.getLanguageName(), meta);
                 })
-                .toSortedList((o1, o2) -> o1.getName().compareTo(o2.getName())); // TODO shouldn't be dependent on provider
+                .toSortedList(
+                        (o1, o2) -> o1.getName().compareTo(o2.getName())); // TODO shouldn't be dependent on provider
     }
 
     private int getItemScore(OpenSubItem item) {
@@ -112,5 +133,42 @@ public class OpenSubsProvider extends AbsSubsProvider {
         }
 
         return score;
+    }
+
+    private static final Map<String, String> LANGUAGE_CODE_MAP = new HashMap<>();
+    static {
+        LANGUAGE_CODE_MAP.put("ar", "ara");
+        LANGUAGE_CODE_MAP.put("bg", "bul");
+        LANGUAGE_CODE_MAP.put("bs", "bos");
+        LANGUAGE_CODE_MAP.put("cs", "cze");
+        LANGUAGE_CODE_MAP.put("da", "dan");
+        LANGUAGE_CODE_MAP.put("de", "ger");
+        LANGUAGE_CODE_MAP.put("el", "ell");
+        LANGUAGE_CODE_MAP.put("en", "eng");
+        LANGUAGE_CODE_MAP.put("es", "spa");
+        LANGUAGE_CODE_MAP.put("et", "est");
+        LANGUAGE_CODE_MAP.put("eu", "baq");
+        LANGUAGE_CODE_MAP.put("fa", "baq");
+        LANGUAGE_CODE_MAP.put("fi", "fin");
+        LANGUAGE_CODE_MAP.put("fr", "fre");
+        LANGUAGE_CODE_MAP.put("he", "heb");
+        LANGUAGE_CODE_MAP.put("hr", "hrv");
+        LANGUAGE_CODE_MAP.put("hu", "hun");
+        LANGUAGE_CODE_MAP.put("it", "ita");
+        LANGUAGE_CODE_MAP.put("lt", "lit");
+        LANGUAGE_CODE_MAP.put("mk", "mac");
+        LANGUAGE_CODE_MAP.put("nl", "dut");
+        LANGUAGE_CODE_MAP.put("pl", "pol");
+        LANGUAGE_CODE_MAP.put("pt", "por");
+        LANGUAGE_CODE_MAP.put("pt-br", "por");
+        LANGUAGE_CODE_MAP.put("ro", "rum");
+        LANGUAGE_CODE_MAP.put("ru", "rus");
+        LANGUAGE_CODE_MAP.put("sl", "slv");
+        LANGUAGE_CODE_MAP.put("sr", "scc");
+        LANGUAGE_CODE_MAP.put("sv", "swe");
+        LANGUAGE_CODE_MAP.put("th", "tha");
+        LANGUAGE_CODE_MAP.put("tr", "tur");
+        LANGUAGE_CODE_MAP.put("uk", "ukr");
+        LANGUAGE_CODE_MAP.put("zh", "chi");
     }
 }

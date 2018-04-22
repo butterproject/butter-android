@@ -17,9 +17,7 @@
 
 package butter.droid.ui.media.detail.streamable;
 
-import android.support.annotation.MainThread;
 import butter.droid.base.providers.media.model.MediaWrapper;
-import butter.droid.ui.media.detail.model.UiSubItem;
 
 public interface StreamableDetailPresenter {
     void onCreate(MediaWrapper movie);
@@ -33,8 +31,6 @@ public interface StreamableDetailPresenter {
     void openReadMore();
 
     void playMediaClicked();
-
-    @MainThread void subtitleSelected(UiSubItem item);
 
     void healthClicked();
 

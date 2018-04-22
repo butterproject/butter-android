@@ -52,7 +52,7 @@ public class QualityPickerDialog extends BottomSheetDialogFragment {
     @Nullable @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
             @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_bottom_subs, container, false);
+        return inflater.inflate(R.layout.dialog_bottom_quality, container, false);
     }
 
     @Override public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
