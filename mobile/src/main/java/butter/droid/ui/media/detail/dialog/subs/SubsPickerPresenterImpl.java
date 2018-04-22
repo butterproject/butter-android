@@ -42,7 +42,6 @@ public class SubsPickerPresenterImpl implements SubsPickerPresenter {
 //                    if (subs.isEmpty()) {
 //                        return Single.<List<UiSubItem>>just(Collections.EMPTY_LIST);
 //                    } else {
-//                            final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
                     return Observable.fromIterable(subs)
                             .map(sub -> new UiSubItem(sub, sub.getLanguage().equals(selectedLang)))
                             .startWith(new UiSubItem(null, selectedLang == null))
@@ -64,40 +63,12 @@ public class SubsPickerPresenterImpl implements SubsPickerPresenter {
                             view.showSubtitles(subs);
                         } else {
                             view.showSubtitles(subs);
-//                            view.setSubtitleEnabled(true);
-//                            subtitleList = subs;
-//
-//                            UiSubItem selectedItem = null;
-//                            for (final UiSubItem sub : subs) {
-//                                if (sub.isSelected()) {
-//                                    selectedItem = sub;
-//                                    String name = sub.getName();
-//                                    if (TextUtils.isEmpty(name)) {
-//                                        view.setSubtitleText(R.string.no_subs);
-//                                    } else {
-//                                        view.setSubtitleText(name);
-//                                    }
-//                                    break;
-//                                }
-//                            }
-//                            if (selectedItem == null) {
-//                                selectedItem = subs.get(0);
-//                            }
-//
-//                            selectedSub = selectedItem;
-//
-//                            if (selectedItem.getLanguage() == null) {
-//                                parentPresenter.selectSubtitle(new SubtitleWrapper());
-//                            } else {
-//                                parentPresenter.selectSubtitle(new SubtitleWrapper(selectedItem.getSubtitle()));
-//                            }
                         }
 
                     }
 
                     @Override public void onError(final Throwable e) {
                         // TODO
-//                        subtitleList = null;
 //                        view.setSubtitleText(R.string.no_subs_available);
                     }
                 });
