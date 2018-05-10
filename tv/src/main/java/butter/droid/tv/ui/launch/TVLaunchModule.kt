@@ -15,25 +15,25 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.launch;
+package butter.droid.tv.ui.launch
 
-import android.content.Context;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.tv.ui.launch.TVLaunchModule.TVLaunchBindModule;
-import dagger.Binds;
-import dagger.Module;
-import dagger.Provides;
+import android.content.Context
+import butter.droid.base.manager.prefs.PrefManager
+import butter.droid.base.ui.ActivityScope
+import butter.droid.tv.ui.launch.TVLaunchModule.TVLaunchBindModule
 
-@Module(includes = TVLaunchBindModule.class)
-public class TVLaunchModule {
+@Module(includes = TVLaunchBindModule::class)
+class TVLaunchModule {
 
-    @Provides @ActivityScope public TVLaunchPresenter providePresneter(TVLaunchView view, Context context, PrefManager prefManager) {
-        return new TVLaunchPresenterImpl(view, context, prefManager);
+    @Provides
+    @ActivityScope
+    fun providePresenter(view: TVLaunchView, context: Context, prefManager: PrefManager): TVLaunchPresenter {
+        return TVLaunchPresenterImpl(view, context, prefManager)
     }
 
     @Module
-    public interface TVLaunchBindModule {
-        @Binds TVLaunchView bindView(TVLaunchActivity activity);
+    interface TVLaunchBindModule {
+        @Binds
+        fun bindView(activity: TVLaunchActivity): TVLaunchView
     }
 }
