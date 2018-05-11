@@ -47,7 +47,7 @@ public class VersionUtils {
         if (BuildConfig.GIT_BRANCH.equalsIgnoreCase("local")) {
             return true;
         }
-g
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return Build.CPU_ABI.equalsIgnoreCase(buildAbi);
         } else {
