@@ -47,15 +47,18 @@ public class VersionUtils {
         if (BuildConfig.GIT_BRANCH.equalsIgnoreCase("local")) {
             return true;
         }
-
-        String deviceAbi;
+g
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            deviceAbi = Build.CPU_ABI;
+            return Build.CPU_ABI.equalsIgnoreCase(buildAbi);
         } else {
-            deviceAbi = Build.SUPPORTED_ABIS[0];
-        }
+            for (String supportedAbi : Build.SUPPORTED_ABIS) {
+                if (supportedAbi.equalsIgnoreCase(buildAbi)) {
+                    return true;
+                }
+            }
 
-        return deviceAbi.equalsIgnoreCase(buildAbi);
+            return false;
+        }
     }
 
     private static String getBuildAbi() {
@@ -68,13 +71,13 @@ public class VersionUtils {
                 return "local";
             }
 
-            if (versionCode > 50000000) {
+            if (versionCode > 5000000) {
                 return "x86_64";
-            } else if (versionCode > 40000000) {
+            } else if (versionCode > 4000000) {
                 return "x86";
-            } else if (versionCode > 30000000) {
+            } else if (versionCode > 3000000) {
                 return "arm64-v8a";
-            } else if (versionCode > 20000000) {
+            } else if (versionCode > 2000000) {
                 return "armeabi-v7a";
             }
         } catch (PackageManager.NameNotFoundException e) {
