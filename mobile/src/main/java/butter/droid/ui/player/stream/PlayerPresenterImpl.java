@@ -18,20 +18,21 @@
 package butter.droid.ui.player.stream;
 
 import android.content.Context;
+
+import com.connectsdk.device.ConnectableDevice;
+
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.subtitle.SubtitleManager;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 import butter.droid.manager.internal.audio.AudioManager;
 import butter.droid.manager.internal.brightness.BrightnessManager;
 import butter.droid.ui.player.VideoPlayerTouchHandler;
 import butter.droid.ui.player.VideoPlayerTouchHandler.OnVideoTouchListener;
-import com.connectsdk.device.ConnectableDevice;
 
 public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements PlayerPresenter, OnVideoTouchListener {
 

@@ -7,7 +7,7 @@ import dagger.Module;
 public interface SubsPickerModule {
 
     @Binds SubsPickerView bindView(SubsPickerDialog dialog);
-    
+
     @Binds SubsPickerPresenter bindPresenter(SubsPickerPresenterImpl presenter);
 
 }
