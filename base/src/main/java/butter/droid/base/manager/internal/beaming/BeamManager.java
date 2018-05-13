@@ -24,13 +24,7 @@ import android.text.InputType;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-import butter.droid.base.Internal;
-import butter.droid.base.R;
-import butter.droid.base.manager.internal.beaming.server.BeamServer;
-import butter.droid.base.manager.internal.beaming.server.BeamServerService;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
-import butter.droid.base.providers.media.model.StreamInfo;
-import butter.droid.base.providers.subs.model.SubtitleWrapper;
+
 import com.connectsdk.core.ImageInfo;
 import com.connectsdk.core.MediaInfo;
 import com.connectsdk.device.ConnectableDevice;
@@ -56,6 +50,7 @@ import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.sessions.LaunchSession;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -63,7 +58,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
+import butter.droid.base.Internal;
+import butter.droid.base.R;
+import butter.droid.base.manager.internal.beaming.server.BeamServer;
+import butter.droid.base.manager.internal.beaming.server.BeamServerService;
+import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import timber.log.Timber;
 
 /**
@@ -145,7 +149,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mDiscoveryManager.addListener(this);
 
         Intent castServerService = new Intent(context, BeamServerService.class);
-//        context.startService(castServerService);
+        context.startService(castServerService);
     }
 
     public void onDestroy() {

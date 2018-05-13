@@ -19,11 +19,13 @@ package butter.droid.ui.player.stream;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+
+import org.videolan.libvlc.LibVLC;
+
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.subtitle.SubtitleManager;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.manager.internal.audio.AudioManager;
@@ -31,7 +33,6 @@ import butter.droid.manager.internal.brightness.BrightnessManager;
 import butter.droid.ui.player.VideoPlayerTouchHandler;
 import dagger.Module;
 import dagger.Provides;
-import org.videolan.libvlc.LibVLC;
 
 @Module(includes = PlayerBindModule.class)
 public class PlayerModule {

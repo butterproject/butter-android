@@ -23,6 +23,7 @@ package com.connectsdk.service;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.connectsdk.core.ImageInfo;
@@ -614,7 +615,7 @@ public class CastService extends DeviceService implements MediaPlayer, MediaCont
                             mMediaPlayer.load(mApiClient, mediaInformation, true).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
 
                                 @Override
-                                public void onResult(MediaChannelResult result) {
+                                public void onResult(@NonNull MediaChannelResult result) {
                                     Status status = result.getStatus();
 
                                     if (status.isSuccess()) {

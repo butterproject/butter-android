@@ -96,7 +96,7 @@ public class BeamPlayerFragment extends DaggerFragment implements BeamPlayerView
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return rootView = inflater.inflate(R.layout.fragment_beamplayer, container, false);
     }
 

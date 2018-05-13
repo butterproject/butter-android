@@ -20,7 +20,6 @@ package butter.droid.base.manager.internal.beaming;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -41,10 +40,11 @@ import javax.inject.Inject;
 
 import butter.droid.base.R;
 import butter.droid.base.manager.internal.glide.GlideApp;
+import dagger.android.DaggerService;
 
 import static butter.droid.base.ButterApplication.getAppContext;
 
-public class BeamPlayerNotificationService extends Service {
+public class BeamPlayerNotificationService extends DaggerService {
 
     public static final Integer NOTIFICATION_ID = 6991;
 
@@ -58,15 +58,6 @@ public class BeamPlayerNotificationService extends Service {
     private MediaControl mediaControl;
     private Boolean isPlaying = false;
     private Bitmap image;
-
-    @Override public void onCreate() {
-        super.onCreate();
-
-        // TODO
-//        ButterApplication.getAppContext()
-//                .getInternalComponent()
-//                .inject(this);
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
