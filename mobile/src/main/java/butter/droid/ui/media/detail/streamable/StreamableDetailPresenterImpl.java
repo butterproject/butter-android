@@ -21,8 +21,8 @@ import android.content.res.Resources;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
+import javax.inject.Inject;
 
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
@@ -32,21 +32,22 @@ import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
+import butter.droid.base.ui.FragmentScope;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.model.Movie;
 import butter.droid.provider.base.model.Streamable;
 import butter.droid.provider.base.model.Torrent;
+import butter.droid.provider.subs.model.Subtitle;
 import butter.droid.ui.media.detail.MediaDetailPresenter;
 import butter.droid.ui.media.detail.dialog.quality.model.UiQuality;
-import butter.droid.ui.media.detail.model.UiSubItem;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerParent;
+import io.reactivex.MaybeObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class StreamableDetailPresenterImpl implements StreamableDetailPresenter {
+@FragmentScope
+public class StreamableDetailPresenterImpl implements StreamableDetailPresenter, SubsPickerParent {
 
     private final StreamableDetailView view;
     private final MediaDetailPresenter parentPresenter;
@@ -58,9 +59,7 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
 
     private MediaWrapper mediaWrapper;
 
-    // TODO: 11/5/17 Saved instance state
-    private List<UiSubItem> subtitleList;
-    private UiSubItem selectedSub;
+    private Subtitle selectedSub;
 
     // TODO: 11/5/17 Saved instance state
     private Torrent[] sortedTorrents;
@@ -68,6 +67,7 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
 
     private Disposable subtitlesRequest;
 
+    @Inject
     public StreamableDetailPresenterImpl(StreamableDetailView view, MediaDetailPresenter parentPresenter,
             YouTubeManager youTubeManager, PreferencesHandler preferencesHandler, ProviderManager providerManager,
             final Resources resources, final MediaDisplayManager mediaDisplayManager) {
@@ -130,24 +130,15 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
         parentPresenter.playMediaClicked();
     }
 
-    @Override public void subtitleSelected(UiSubItem item) {
-        UiSubItem selectedSub = this.selectedSub;
-        if (selectedSub != null) {
-            selectedSub.setSelected(false);
-        }
+    @Override public void subtitleSelected(Subtitle subtitle) {
+        this.selectedSub = subtitle;
+        parentPresenter.selectSubtitle(new SubtitleWrapper(subtitle));
 
-        this.selectedSub = item;
-        item.setSelected(true);
-
-        String language = item.getLanguage();
-        parentPresenter.selectSubtitle(new SubtitleWrapper(item.getSubtitle()));
-
-        if (language == null) {
+        if (subtitle.getLanguage() == null) {
             view.setSubtitleText(R.string.no_subs);
         } else {
-            view.setSubtitleText(item.getName());
+            view.setSubtitleText(subtitle.getName());
         }
-        view.hideDialog();
     }
 
     @Override public void healthClicked() {
@@ -155,10 +146,7 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
     }
 
     @Override public void onSubtitlesClicked() {
-        List<UiSubItem> subtitleList = this.subtitleList;
-        if (subtitleList != null && !subtitleList.isEmpty()) {
-            view.displaySubsPicker(subtitleList);
-        } // else ignore click (TODO maybe show error)
+        view.displaySubsPicker(mediaWrapper, selectedSub);
     }
 
     @Override public void onQualityClicked() {
@@ -218,77 +206,44 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter 
 
     private void displaySubtitles() {
         if (providerManager.hasSubsProvider(mediaWrapper.getProviderId())) {
+            view.subtitleVisibility(true);
             view.setSubtitleText(R.string.loading_subs);
-            view.setSubtitleEnabled(false);
 
-            providerManager.getSubsProvider(mediaWrapper.getProviderId()).list(mediaWrapper.getMedia())
-                    .flatMap(subs -> {
-                        if (subs.isEmpty()) {
-                            return Single.<List<UiSubItem>>just(Collections.EMPTY_LIST);
-                        } else {
-                            final String defaultSubtitle = preferencesHandler.getSubtitleDefaultLanguage();
-                            return Observable.fromIterable(subs)
-                                    .map(sub -> new UiSubItem(sub, sub.getLanguage().equals(defaultSubtitle)))
-                                    .startWith(new UiSubItem(null, defaultSubtitle == null))
-                                    .toList();
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SingleObserver<List<UiSubItem>>() {
-                        @Override public void onSubscribe(final Disposable d) {
-                            subtitlesRequest = d;
-                        }
-
-                        @Override public void onSuccess(final List<UiSubItem> subs) {
-                            if (subs.isEmpty()) {
-                                view.setSubtitleText(R.string.no_subs_available);
-                                subtitleList = null;
-                            } else {
-                                view.setSubtitleEnabled(true);
-                                subtitleList = subs;
-
-                                UiSubItem selectedItem = null;
-                                for (final UiSubItem sub : subs) {
-                                    if (sub.isSelected()) {
-                                        selectedItem = sub;
-                                        String name = sub.getName();
-                                        if (TextUtils.isEmpty(name)) {
-                                            view.setSubtitleText(R.string.no_subs);
-                                        } else {
-                                            view.setSubtitleText(name);
-                                        }
-                                        break;
-                                    }
-                                }
-                                if (selectedItem == null) {
-                                    selectedItem = subs.get(0);
-                                }
-
-                                selectedSub = selectedItem;
-
-                                if (selectedItem.getLanguage() == null) {
-                                    parentPresenter.selectSubtitle(new SubtitleWrapper());
-                                } else {
-                                    parentPresenter.selectSubtitle(new SubtitleWrapper(selectedItem.getSubtitle()));
-                                }
+            final String subsLanguage = preferencesHandler.getSubtitleDefaultLanguage();
+            if (subsLanguage != null) {
+                providerManager.getSubsProvider(mediaWrapper.getProviderId())
+                        .getSubtitle(mediaWrapper.getMedia(), subsLanguage)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new MaybeObserver<Subtitle>() {
+                            @Override public void onSubscribe(Disposable d) {
+                                subtitlesRequest = d;
                             }
-                        }
 
-                        @Override public void onError(final Throwable e) {
-                            subtitleList = null;
-                            view.setSubtitleText(R.string.no_subs_available);
-                            view.setSubtitleEnabled(false);
-                        }
-                    });
+                            @Override public void onSuccess(Subtitle subtitle) {
+                                subtitleSelected(subtitle);
+                            }
+
+                            @Override public void onError(Throwable e) {
+
+                            }
+
+                            @Override public void onComplete() {
+                                view.setSubtitleText(R.string.no_subs);
+                                parentPresenter.selectSubtitle(new SubtitleWrapper());
+                            }
+                        });
+            } else {
+                view.setSubtitleText(R.string.no_subs);
+            }
         } else {
-            view.setSubtitleText(R.string.no_subs_available);
-            view.setSubtitleEnabled(false);
+            view.subtitleVisibility(false);
         }
     }
 
     private void displayQualities() {
-        Torrent[] torrents = mediaDisplayManager.getSortedTorrents(((Streamable) mediaWrapper.getMedia()).getTorrents());
+        Torrent[] torrents = mediaDisplayManager.getSortedTorrents(
+                ((Streamable) mediaWrapper.getMedia()).getTorrents());
         sortedTorrents = torrents;
         if (torrents.length > 0) {
             int defaultFormatIndex = mediaDisplayManager.getDefaultFormatIndex(torrents);

@@ -53,8 +53,6 @@ import butter.droid.base.torrent.Magnet;
 import butter.droid.base.utils.PixelUtils;
 import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Torrent;
-import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
-import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.SubsPickerCallback;
 import butter.droid.ui.media.detail.model.UiSubItem;
 import butter.droid.ui.media.detail.streamable.dialog.SynopsisDialogFragment;
 import butter.droid.widget.BottomSheetScrollView;
@@ -75,7 +73,7 @@ import io.reactivex.schedulers.Schedulers;
  * @deprecated Use {@link butter.droid.ui.media.detail.streamable.StreamableDetailFragment} instead.
  */
 @Deprecated
-public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment implements SubsPickerCallback {
+public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
 
     private static final String EXTRA_MEDIA_META = "butter.droid.ui.media.detail.dialog.EpisodeDialogFragment.mediaMeta";
     private static final String EXTRA_EPISODE = "butter.droid.ui.media.detail.dialog.EpisodeDialogFragment.episode";
@@ -394,33 +392,33 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment impleme
         smoothDismiss();
     }
 
-    @Override public void onSubsItemSelected(final UiSubItem item) {
-        UiSubItem selectedSub = this.selectedSub;
-        if (selectedSub != null) {
-            selectedSub.setSelected(false);
-        }
-
-        this.selectedSub = item;
-        item.setSelected(true);
-
-        String language = item.getLanguage();
-        // TODO
-//        parentPresenter.selectSubtitle(item.getSubtitle());
-
-        if (language == null) {
-            subtitlesPreview.setText(R.string.no_subs);
-        } else {
-            subtitlesPreview.setText(item.getName());
-        }
-
-        subsDialog.dismiss();
-        subsDialog = null;
-    }
+//    @Override public void onSubsItemSelected(final UiSubItem item) {
+//        UiSubItem selectedSub = this.selectedSub;
+//        if (selectedSub != null) {
+//            selectedSub.setSelected(false);
+//        }
+//
+//        this.selectedSub = item;
+//        item.setSelected(true);
+//
+//        String language = item.getLanguage();
+//        // TODO
+////        parentPresenter.selectSubtitle(item.getSubtitle());
+//
+//        if (language == null) {
+//            subtitlesPreview.setText(R.string.no_subs);
+//        } else {
+//            subtitlesPreview.setText(item.getName());
+//        }
+//
+//        subsDialog.dismiss();
+//        subsDialog = null;
+//    }
 
     private void showSubsPickerDialog() {
-        SubsPickerDialog dialog = SubsPickerDialog.newInstance(subtitleList);
-        dialog.show(getChildFragmentManager(), "dialog");
-        subsDialog = dialog;
+//        SubsPickerDialog dialog = SubsPickerDialog.newInstance(subtitleList);
+//        dialog.show(getChildFragmentManager(), "dialog");
+//        subsDialog = dialog;
     }
 
     private void updateMagnet() {

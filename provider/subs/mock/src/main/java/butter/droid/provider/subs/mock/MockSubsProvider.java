@@ -19,14 +19,16 @@ package butter.droid.provider.subs.mock;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.AbsSubsProvider;
 import butter.droid.provider.subs.model.Subtitle;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
 
 public class MockSubsProvider extends AbsSubsProvider {
 
@@ -42,6 +44,17 @@ public class MockSubsProvider extends AbsSubsProvider {
                 new Subtitle("en", "English"),
                 new Subtitle("pl", "Polish")
         ));
+    }
+
+    @Override public Maybe<Subtitle> getSubtitle(@NonNull Media media, @NonNull String languageCode) {
+        switch (languageCode) {
+            case "en":
+                return Maybe.just(new Subtitle("en", "English"));
+            case "pl":
+                return Maybe.just(new Subtitle("pl", "Polish"));
+            default:
+                return Maybe.empty();
+        }
     }
 
     @Override protected Maybe<InputStream> provideSubs(@NonNull final Media media, @NonNull final Subtitle subtitle) {
