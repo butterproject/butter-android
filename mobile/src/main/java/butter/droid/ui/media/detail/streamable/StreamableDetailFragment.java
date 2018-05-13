@@ -188,12 +188,12 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
         subtitlesPreview.setText(subtitleText);
     }
 
-    @Override public void subtitleVisibility(boolean visible) {
-        subtitlesPreview.setVisibility(visible ? View.VISIBLE : View.GONE);
-    }
-
     @Override public void setSubtitleText(String subtitleText) {
         subtitlesPreview.setText(subtitleText);
+    }
+
+    @Override public void subtitleVisibility(boolean visible) {
+        subtitlesPreview.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override public void displaySubsPicker(@NonNull final MediaWrapper mediaWrapper, @Nullable Subtitle subtitle) {
