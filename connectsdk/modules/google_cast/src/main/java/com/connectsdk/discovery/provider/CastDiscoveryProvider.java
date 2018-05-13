@@ -226,24 +226,6 @@ public class CastDiscoveryProvider implements DiscoveryProvider {
 
             boolean isNew = foundService == null;
             boolean listUpdateFlag = false;
-//
-//            if (foundService == null) {
-//                foundService = new ServiceDescription(CastService.ID, uuid,
-//                        castDevice.getIpAddress().getHostAddress());
-//            }
-//
-//            foundService.setIpAddress(castDevice.getIpAddress().getHostAddress());
-//            foundService.setModelName(castDevice.getModelName());
-//            foundService.setModelNumber(castDevice.getDeviceVersion());
-//            foundService.setModelDescription(route.getDescription());
-//            foundService.setPort(castDevice.getServicePort());
-//            foundService.setDevice(castDevice);
-//
-//            if (!foundService.getFriendlyName().equals(castDevice.getFriendlyName())) {
-//                foundService.setFriendlyName(castDevice.getFriendlyName());
-//                listUpdateFlag = true;
-//            }
-
 
             if (isNew) {
                 foundService = new ServiceDescription(CastService.ID, uuid,
