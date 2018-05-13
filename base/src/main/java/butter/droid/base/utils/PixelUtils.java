@@ -24,6 +24,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
@@ -66,7 +67,7 @@ public class PixelUtils {
         return statusBarHeight;
     }
 
-    public static int getNavigationBarHeight(Context context) {
+    public static int getNavigationBarHeight(@NonNull Context context) {
         int navigationBarHeight = 0;
         boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
         boolean hasHomeKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_HOME);

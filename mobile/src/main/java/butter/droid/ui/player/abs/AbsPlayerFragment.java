@@ -372,10 +372,9 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            int statusBarHeight = PixelUtils.getStatusBarHeight(getActivity());
-            toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                    getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + statusBarHeight));
-            toolbar.setPadding(toolbar.getPaddingLeft(), statusBarHeight, toolbar.getPaddingRight(), toolbar.getPaddingBottom());
+            int statusBarHeight = PixelUtils.getStatusBarHeight(requireContext());
+            int navigationBarHeight = PixelUtils.getNavigationBarHeight(requireContext());
+            toolbar.setPadding(toolbar.getPaddingLeft(), statusBarHeight, navigationBarHeight, toolbar.getPaddingBottom());
         }
     }
 
