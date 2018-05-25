@@ -46,7 +46,6 @@ dependencies {
     implementation files('libs/java-websocket-patch.jar')
     implementation files('libs/javax.jmdns_3.4.1-patch2.jar')
 
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha1'
     implementation 'androidx.appcompat:appcompat:1.0.0-alpha1'
     implementation 'androidx.mediarouter:mediarouter:1.0.0-alpha1'
 
