@@ -17,7 +17,7 @@
 
 package butter.droid.base.manager.internal.provider;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.provider.MediaProvider;
 import butter.droid.provider.subs.SubsProvider;

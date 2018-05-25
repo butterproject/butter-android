@@ -19,8 +19,8 @@ package butter.droid.tv.ui.detail.streamable;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
-import android.support.v4.app.Fragment;
+import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
+import androidx.fragment.app.Fragment;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;

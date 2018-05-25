@@ -17,7 +17,7 @@
 
 package butter.droid.tv.ui.search;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.base.providers.media.model.MediaWrapper;

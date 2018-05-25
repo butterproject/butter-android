@@ -17,7 +17,7 @@
 
 package butter.droid.tv.presenters;
 
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.model.Media;

@@ -18,7 +18,7 @@
 package butter.droid.base.manager.internal;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import butter.droid.base.Internal;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;

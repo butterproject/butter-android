@@ -22,7 +22,7 @@ import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
@@ -43,7 +43,7 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
         HasFragmentInjector, HasSupportFragmentInjector {
 
     @Inject DispatchingAndroidInjector<Fragment> fragmentInjector;
-    @Inject DispatchingAndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector;
+    @Inject DispatchingAndroidInjector<androidx.fragment.app.Fragment> supportFragmentInjector;
     @Inject PreferencesHandler preferencesHandler;
 
     protected TorrentService torrentStream;
@@ -147,7 +147,7 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
         return fragmentInjector;
     }
 
-    @Override public AndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector() {
+    @Override public AndroidInjector<androidx.fragment.app.Fragment> supportFragmentInjector() {
         return supportFragmentInjector;
     }
 }

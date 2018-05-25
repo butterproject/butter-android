@@ -20,19 +20,19 @@ package butter.droid.tv.ui.player.abs;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v17.leanback.app.VideoSupportFragment;
-import android.support.v17.leanback.app.VideoSupportFragmentGlueHost;
-import android.support.v17.leanback.media.MediaControllerAdapter;
-import android.support.v17.leanback.media.PlaybackTransportControlGlue;
-import android.support.v17.leanback.media.PlayerAdapter;
-import android.support.v17.leanback.widget.Action;
-import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.PlaybackControlsRow;
-import android.support.v17.leanback.widget.PlaybackControlsRow.ClosedCaptioningAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.PictureInPictureAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.SkipNextAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.SkipPreviousAction;
+import androidx.annotation.Nullable;
+import androidx.leanback.app.VideoSupportFragment;
+import androidx.leanback.app.VideoSupportFragmentGlueHost;
+import androidx.leanback.media.MediaControllerAdapter;
+import androidx.leanback.media.PlaybackTransportControlGlue;
+import androidx.leanback.media.PlayerAdapter;
+import androidx.leanback.widget.Action;
+import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.PlaybackControlsRow;
+import androidx.leanback.widget.PlaybackControlsRow.ClosedCaptioningAction;
+import androidx.leanback.widget.PlaybackControlsRow.PictureInPictureAction;
+import androidx.leanback.widget.PlaybackControlsRow.SkipNextAction;
+import androidx.leanback.widget.PlaybackControlsRow.SkipPreviousAction;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -81,7 +81,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
     @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
             final Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
-        subsSurface = (SurfaceView) inflater.inflate(android.support.v17.leanback.R.layout.lb_video_surface, root,
+        subsSurface = (SurfaceView) inflater.inflate(androidx.leanback.R.layout.lb_video_surface, root,
                 false);
         root.addView(subsSurface, 1); // above video view
 

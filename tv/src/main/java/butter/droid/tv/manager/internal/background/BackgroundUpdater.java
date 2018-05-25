@@ -20,8 +20,8 @@ package butter.droid.tv.manager.internal.background;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.v17.leanback.app.BackgroundManager;
+import androidx.annotation.DrawableRes;
+import androidx.leanback.app.BackgroundManager;
 
 import com.bumptech.glide.request.target.Target;
 

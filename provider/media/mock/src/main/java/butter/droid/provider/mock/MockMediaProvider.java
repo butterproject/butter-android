@@ -19,8 +19,16 @@
 package butter.droid.provider.mock;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import butter.droid.provider.AbsMediaProvider;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
@@ -42,14 +50,9 @@ import butter.droid.provider.mock.model.MockMovies;
 import butter.droid.provider.mock.model.MockSeason;
 import butter.droid.provider.mock.model.MockSeasons;
 import butter.droid.provider.mock.model.MockShows;
-import com.google.gson.Gson;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import okio.BufferedSource;
 import okio.Okio;
 

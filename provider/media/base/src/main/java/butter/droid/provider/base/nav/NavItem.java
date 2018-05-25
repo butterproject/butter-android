@@ -17,9 +17,9 @@
 
 package butter.droid.provider.base.nav;
 
-import android.support.annotation.DrawableRes;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import butter.droid.provider.base.filter.Sorter;
 
 public final class NavItem {

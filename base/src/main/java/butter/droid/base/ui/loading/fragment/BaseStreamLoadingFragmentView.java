@@ -17,7 +17,7 @@
 
 package butter.droid.base.ui.loading.fragment;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 public interface BaseStreamLoadingFragmentView {
     void startStreamUrl(String torrentUrl);

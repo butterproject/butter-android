@@ -18,7 +18,7 @@
 package butter.droid.base.manager.internal.vlc;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.SurfaceView;
 
 import org.videolan.libvlc.IVLCVout;

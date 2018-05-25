@@ -17,7 +17,7 @@
 
 package butter.droid.ui.media.list.base;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import java.util.List;
 

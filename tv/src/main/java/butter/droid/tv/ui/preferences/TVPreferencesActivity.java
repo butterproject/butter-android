@@ -20,7 +20,7 @@ package butter.droid.tv.ui.preferences;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v17.leanback.app.GuidedStepFragment;
+import androidx.leanback.app.GuidedStepFragment;
 import butter.droid.tv.ui.TVBaseActivity;
 
 public class TVPreferencesActivity extends TVBaseActivity {

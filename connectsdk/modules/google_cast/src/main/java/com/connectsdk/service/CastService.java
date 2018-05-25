@@ -23,7 +23,7 @@ package com.connectsdk.service;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.connectsdk.core.ImageInfo;

@@ -20,7 +20,7 @@ package butter.droid.tv.ui.launch;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.ui.terms.TVTermsPresenterImpl;
 

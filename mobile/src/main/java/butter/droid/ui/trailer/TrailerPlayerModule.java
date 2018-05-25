@@ -18,7 +18,7 @@
 package butter.droid.ui.trailer;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;

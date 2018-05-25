@@ -20,22 +20,23 @@ package butter.droid.ui.media.detail.dialog.quality;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import butter.droid.R;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
 import butter.droid.ui.media.detail.dialog.quality.model.UiQuality;
@@ -99,7 +100,7 @@ public class QualityPickerDialog extends BottomSheetDialogFragment {
             setOnShowListener(dialog -> {
                 BottomSheetDialog d = (BottomSheetDialog) dialog;
 
-                FrameLayout bottomSheet = d.findViewById(android.support.design.R.id.design_bottom_sheet);
+                FrameLayout bottomSheet = d.findViewById(com.google.android.material.R.id.design_bottom_sheet);
                 BottomSheetBehavior<FrameLayout> behaviour = BottomSheetBehavior.from(bottomSheet);
                 behaviour.setState(BottomSheetBehavior.STATE_EXPANDED);
                 behaviour.setSkipCollapsed(true);

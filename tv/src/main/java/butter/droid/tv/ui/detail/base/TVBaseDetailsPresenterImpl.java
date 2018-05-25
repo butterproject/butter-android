@@ -17,9 +17,9 @@
 
 package butter.droid.tv.ui.detail.base;
 
-import android.support.annotation.CallSuper;
-import android.support.annotation.MainThread;
-import android.support.annotation.Nullable;
+import androidx.annotation.CallSuper;
+import androidx.annotation.MainThread;
+import androidx.annotation.Nullable;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import io.reactivex.SingleObserver;

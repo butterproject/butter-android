@@ -17,8 +17,8 @@
 
 package butter.droid.ui.main.genre;
 
-import android.support.annotation.MainThread;
-import android.support.annotation.Nullable;
+import androidx.annotation.MainThread;
+import androidx.annotation.Nullable;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.genre.list.model.UiGenre;

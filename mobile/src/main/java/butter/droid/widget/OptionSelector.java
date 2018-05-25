@@ -2,8 +2,8 @@ package butter.droid.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;

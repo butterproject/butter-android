@@ -19,8 +19,8 @@ package butter.droid.tv.ui.preferences;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
-import android.support.v17.leanback.widget.GuidedAction;
+import androidx.annotation.NonNull;
+import androidx.leanback.widget.GuidedAction;
 
 import java.util.List;
 

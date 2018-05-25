@@ -18,8 +18,8 @@
 package butter.droid.base.ui.preferences;
 
 import android.content.Intent;
-import android.support.annotation.ColorInt;
-import android.support.annotation.StringRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.StringRes;
 
 import butter.droid.base.content.preferences.Prefs.PrefKey;
 

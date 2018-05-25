@@ -17,7 +17,7 @@
 
 package butter.droid.ui.player.stream;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.ui.player.abs.AbsPlayerView;
 import butter.droid.base.ui.player.stream.StreamPlayerView;

@@ -2,8 +2,8 @@ package butter.droid.utils;
 
 import android.app.Activity;
 import android.net.Uri;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.content.ContextCompat;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
 import butter.droid.R;
 import butter.droid.utils.web.CustomTabActivityHelper;
 import butter.droid.utils.web.WebviewFallback;

@@ -18,8 +18,8 @@
 package butter.droid.provider.base.model;
 
 import android.os.Parcel;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import butter.droid.provider.base.filter.Genre;
 
 public class Movie extends Streamable {

@@ -17,7 +17,7 @@
 
 package butter.droid.ui.about;
 
-import android.support.annotation.IdRes;
+import androidx.annotation.IdRes;
 
 public interface AboutPresenter {
     void aboutButtonClicked(@IdRes int id);

@@ -17,7 +17,7 @@
 
 package butter.droid.provider.filter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public class Pager {
 
