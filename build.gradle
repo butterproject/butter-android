@@ -15,14 +15,14 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.1.2'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
-        classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.1"
+        classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.3"
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
 ext {
-    appCompatVersion = "27.1.0"
+    appCompatVersion = "27.1.1"
     targetSdk = 27
     compileSdk = 27
     minSdk = 16

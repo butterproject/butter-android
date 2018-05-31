@@ -62,7 +62,7 @@ dependencies {
     api "com.github.bumptech.glide:glide:$glideVersion"
     api "com.github.bumptech.glide:okhttp3-integration:$glideVersion"
 
-    api 'com.butterproject:vlc-android-sdk:3.0.3-1'
+    api 'com.butterproject:vlc-android-sdk:3.0.10'
 
     api project(':connectsdk:core')
     api project(':connectsdk:modules:firetv')
