@@ -64,7 +64,4 @@ dependencies {
     })
     androidTestImplementation 'org.mockito:mockito-android:2.17.0'
 
-    // TODO temporary
-    implementation 'androidx.multidex:multidex:2.0.0'
-    implementation 'androidx.multidex:multidex-instrumentation:2.0.0'
 }
