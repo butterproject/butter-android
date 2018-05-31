@@ -18,17 +18,19 @@
 package butter.droid.ui.main.pager;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+
+import java.util.List;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import butter.droid.R;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.ui.main.genre.GenreSelectionFragment;
 import butter.droid.ui.media.list.MediaListFragment;
-import java.util.List;
 
 public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 

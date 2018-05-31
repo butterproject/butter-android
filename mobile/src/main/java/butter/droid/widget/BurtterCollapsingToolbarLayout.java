@@ -22,15 +22,16 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
-import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.animation.Interpolator;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import butter.droid.R;
 
 public class BurtterCollapsingToolbarLayout extends CollapsingToolbarLayout {
@@ -53,7 +54,7 @@ public class BurtterCollapsingToolbarLayout extends CollapsingToolbarLayout {
                 R.styleable.CollapsingToolbarLayout, 0,
                 R.style.Widget_Design_CollapsingToolbar);
 
-        toolbarId = attr.getResourceId(android.support.design.R.styleable.CollapsingToolbarLayout_toolbarId, -1);
+        toolbarId = attr.getResourceId(com.google.android.material.R.styleable.CollapsingToolbarLayout_toolbarId, -1);
 
         attr.recycle();
 

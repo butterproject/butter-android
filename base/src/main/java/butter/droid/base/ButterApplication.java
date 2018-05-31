@@ -26,8 +26,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.support.multidex.MultiDex;
-import android.support.v4.app.NotificationCompat;
+import androidx.multidex.MultiDex;
+import androidx.core.app.NotificationCompat;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
 

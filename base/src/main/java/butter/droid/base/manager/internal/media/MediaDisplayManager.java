@@ -18,8 +18,8 @@
 package butter.droid.base.manager.internal.media;
 
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 
 import java.util.Arrays;
 

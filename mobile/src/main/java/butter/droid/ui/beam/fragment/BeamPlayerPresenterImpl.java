@@ -17,7 +17,7 @@
 
 package butter.droid.ui.beam.fragment;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
 import butter.droid.base.manager.internal.beaming.BeamManager;

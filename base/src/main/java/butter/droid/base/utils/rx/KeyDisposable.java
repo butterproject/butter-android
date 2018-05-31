@@ -17,7 +17,7 @@
 
 package butter.droid.base.utils.rx;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.SparseArray;
 import io.reactivex.disposables.Disposable;
 

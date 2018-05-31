@@ -17,7 +17,7 @@
 
 package butter.droid.tv.ui.player.video;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.videolan.libvlc.LibVLC;
 

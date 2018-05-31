@@ -17,7 +17,7 @@
 
 package butter.droid.provider.base.paging;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import butter.droid.provider.base.model.Media;
 import java.util.List;
 

@@ -21,8 +21,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
@@ -39,6 +39,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.fragment.app.DialogFragment;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.glide.GlideApp;
@@ -111,7 +112,7 @@ public class EpisodeDialogFragment extends DaggerAppCompatDialogFragment {
     @BindView(R.id.quality) OptionSelector quality;
     @BindView(R.id.magnet) @Nullable ImageButton openMagnet;
 
-    private android.support.v4.app.DialogFragment subsDialog;
+    private DialogFragment subsDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -17,8 +17,8 @@
 
 package butter.droid.tv.ui.main.overview;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;

@@ -22,14 +22,14 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<android.support.v7.widget.RecyclerView
+	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/recyclerView"
         android:focusable="true"
         android:focusableInTouchMode="false"
 		android:scrollbars="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 	<TextView
 		android:id="@+id/emptyView"

@@ -17,10 +17,10 @@
 
 package butter.droid.base.manager.internal.provider.model;
 
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import butter.droid.provider.MediaProvider;
 import butter.droid.provider.subs.SubsProvider;
 

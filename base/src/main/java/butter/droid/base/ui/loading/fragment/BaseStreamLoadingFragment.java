@@ -18,8 +18,8 @@
 package butter.droid.base.ui.loading.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;

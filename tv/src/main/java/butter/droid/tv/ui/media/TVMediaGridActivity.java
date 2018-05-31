@@ -21,7 +21,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.TVBaseActivity;

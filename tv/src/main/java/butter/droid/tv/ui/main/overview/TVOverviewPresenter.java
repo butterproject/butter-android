@@ -17,7 +17,7 @@
 
 package butter.droid.tv.ui.main.overview;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.tv.presenters.MorePresenter.MoreItem;
 

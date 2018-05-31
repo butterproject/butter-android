@@ -18,11 +18,11 @@
 package butter.droid.tv.presenters;
 
 import android.content.Context;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v17.leanback.widget.Presenter;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.leanback.widget.Presenter;
 import android.view.ViewGroup;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.provider.base.filter.Sorter;

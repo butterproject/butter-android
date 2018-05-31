@@ -18,7 +18,7 @@
 package butter.droid.ui.player.stream;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.videolan.libvlc.LibVLC;
 

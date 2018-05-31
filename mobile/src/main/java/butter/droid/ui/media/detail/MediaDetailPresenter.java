@@ -17,7 +17,7 @@
 
 package butter.droid.ui.media.detail;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;

@@ -20,7 +20,7 @@ package butter.droid.base.providers.media.model;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
+import androidx.annotation.ColorInt;
 
 public class MediaMeta implements Parcelable {
 

@@ -18,7 +18,7 @@
 package butter.droid;
 
 import android.content.Context;
-import android.support.multidex.MultiDex;
+import androidx.multidex.MultiDex;
 import butter.droid.base.BaseApplicationModule;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.providers.DaggerProviderComponent;

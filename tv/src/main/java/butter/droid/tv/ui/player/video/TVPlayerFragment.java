@@ -19,8 +19,8 @@ package butter.droid.tv.ui.player.video;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import android.widget.Toast;
 
 import org.butterproject.torrentstream.StreamStatus;

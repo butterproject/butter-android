@@ -20,7 +20,7 @@ package butter.droid.ui.beam.fragment.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentManager;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamDeviceAdapter;
 import butter.droid.base.manager.internal.beaming.BeamManager;

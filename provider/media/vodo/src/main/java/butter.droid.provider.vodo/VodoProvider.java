@@ -17,19 +17,22 @@
 
 package butter.droid.provider.vodo;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import butter.droid.provider.AbsMediaProvider;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.model.Format;
-import butter.droid.provider.base.paging.ItemsWrapper;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;
-import butter.droid.provider.base.paging.Paging;
 import butter.droid.provider.base.model.Torrent;
 import butter.droid.provider.base.nav.NavItem;
+import butter.droid.provider.base.paging.ItemsWrapper;
+import butter.droid.provider.base.paging.Paging;
 import butter.droid.provider.base.util.Optional;
 import butter.droid.provider.filter.Pager;
 import butter.droid.provider.vodo.api.VodoService;
@@ -37,9 +40,9 @@ import butter.droid.provider.vodo.api.model.VodoMovie;
 import butter.droid.provider.vodo.api.model.VodoResponse;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Single;
-import java.util.Arrays;
-import java.util.List;
+import io.reactivex.functions.Function;
 
 public class VodoProvider extends AbsMediaProvider {
 
@@ -95,8 +98,7 @@ public class VodoProvider extends AbsMediaProvider {
         }
 
         return vodoService.fetchMovies(query, genre, sorter, null, null, ITEMS_PER_PAGE, page)
-                .map(VodoResponse::getDownloads)
-                .flatMapObservable(Observable::fromArray)
+                .flatMapObservable((Function<VodoResponse, ObservableSource<VodoMovie>>) vodoResponse -> Observable.fromArray(vodoResponse.getDownloads()))
                 .map(this::mapVodoMovie)
                 .cast(Media.class)
                 .toList()

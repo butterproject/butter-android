@@ -17,7 +17,7 @@
 
 package butter.droid.tv.manager.internal.paging;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import butter.droid.base.manager.internal.paging.BasePagingManager;
 import butter.droid.base.manager.internal.paging.CursorPagingListener;
 

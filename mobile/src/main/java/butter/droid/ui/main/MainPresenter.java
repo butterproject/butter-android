@@ -19,7 +19,7 @@ package butter.droid.ui.main;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import butter.droid.ui.main.MainPresenterImpl.OnGenreChangeListener;
 import butter.droid.ui.main.genre.list.model.UiGenre;
 

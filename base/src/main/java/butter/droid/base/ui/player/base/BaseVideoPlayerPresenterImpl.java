@@ -19,7 +19,7 @@ package butter.droid.base.ui.player.base;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;

@@ -2,7 +2,7 @@ import si.kamino.gradle.extensions.version.code.IncreaseVersionCode
 
 buildscript {
     ext {
-        kotlinVersion = '1.2.40'
+        kotlinVersion = '1.2.41'
     }
 
     repositories {
@@ -12,23 +12,22 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha16'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
-        classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.1"
-        classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
+        classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.3"
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1' // TODO needs update
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
 ext {
-    appCompatVersion = "27.1.0"
-    targetSdk = 27
-    compileSdk = 27
+    targetSdk = 'P'
+    compileSdk = 'android-P'
     minSdk = 16
     butterknifeVersion = "8.8.1"
     okHttpVersion = "3.4.2"
-    daggerVersion = "2.15"
+    daggerVersion = "2.16"
     javaxAnnotationVersion = "1.2"
     torrentstreamVersion = '2.5.0'
     filePickerVersion = '1.1.0'

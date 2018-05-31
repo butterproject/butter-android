@@ -16,7 +16,7 @@
   ~ along with Butter. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v7.widget.RecyclerView
+<androidx.recyclerview.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rv_items"
@@ -24,4 +24,4 @@
     android:layout_width="match_parent"
     android:background="@color/bg"
     android:orientation="vertical"
-    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />

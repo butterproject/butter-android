@@ -19,8 +19,8 @@ package butter.droid.provider.base.filter;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import butter.droid.provider.base.R;
 
 public final class Genre implements Parcelable {
