@@ -2,24 +2,28 @@ import si.kamino.gradle.extensions.version.code.IncreaseVersionCode
 
 buildscript {
     ext {
-        kotlinVersion = '1.2.31'
+        kotlinVersion = '1.2.41'
     }
 
     repositories {
         google()
         maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
+        mavenLocal()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.1.1'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.1"
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath("solar.blaz.gradle:play-publisher:0.3.0-SNAPSHOT")
     }
 }
+
+apply plugin: "solar.blaz.play-publisher-parent"
 
 ext {
     appCompatVersion = "27.1.0"
@@ -91,3 +95,22 @@ allprojects {
         }
     }
 }
+
+playPublisher {
+    artifacts {
+        draftInternal {
+            appId = "org.butterproject.butter"
+            clientSecretJson = project.hasProperty("playPublishFile") ? file(playPublishFile) : null
+            action = "draft"
+            track = "internal"
+        }
+
+        draftProduction {
+            appId = "org.butterproject.butter"
+            clientSecretJson = project.hasProperty("playPublishFile") ? file(playPublishFile) : null
+            action = "draft"
+            track = "production"
+        }
+    }
+}
+

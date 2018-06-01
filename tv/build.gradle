@@ -19,6 +19,7 @@ import si.kamino.gradle.extensions.version.code.SimpleVersionCode
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
+apply plugin: "solar.blaz.play-publisher"
 
 android {
     defaultConfig {

@@ -21,8 +21,8 @@ jobs:
       - run:
           name: Run Tests
           command: ./gradlew check
-  deploy_mobile:
-      working_directory: ~/code
+  play_store_interna:
+    working_directory: ~/code
       docker:
         - image: circleci/android:api-27-alpha
       environment:
@@ -31,19 +31,26 @@ jobs:
       steps:
         - checkout
         - run:
-            name: Set signing key
-            command: config/ci/download_keystore.sh
+          name: Set signing key
+          command: config/ci/download_keystore.sh
         - run:
-            name: Download Dependencies
-            command: ./gradlew mobile:androidDependencies
+          name: Set play store config
+          command: config/ci/download_play_config.sh
         - run:
-            name: Build mobile
-            command: ./gradlew mobile:assembleRelease
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+        - run:
+          name: Build and deploy
+          command: ./gradlew playUploadDraftInternal
         - store_artifacts:
-            path: mobile/build/outputs/apk/release/
-            destination: apk/mobile
-  deploy_tv:
-      working_directory: ~/code
+          path: tv/build/outputs/apk/release/
+          destination: apk/tv
+        - store_artifacts:
+          path: mobile/build/outputs/apk/release/
+          destination: apk/mobile
+
+  play_store_production:
+    working_directory: ~/code
       docker:
         - image: circleci/android:api-27-alpha
       environment:
@@ -52,36 +59,41 @@ jobs:
       steps:
         - checkout
         - run:
-            name: Set signing key
-            command: config/ci/download_keystore.sh
+          name: Set signing key
+          command: config/ci/download_keystore.sh
         - run:
-            name: Download Dependencies
-            command: ./gradlew tv:androidDependencies
+          name: Set play store config
+          command: config/ci/download_play_config.sh
         - run:
-            name: Build tv
-            command: ./gradlew tv:assembleRelease
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+        - run:
+          name: Build and deploy
+          command: ./gradlew playUploadDraftProduction
         - store_artifacts:
-            path: tv/build/outputs/apk/release/
-            destination: apk/tv
+          path: tv/build/outputs/apk/release/
+          destination: apk/tv
+        - store_artifacts:
+          path: mobile/build/outputs/apk/release/
+          destination: apk/mobile
 
 workflows:
   version: 2
   build_deploy:
     jobs:
+    - build
+    - deploy_internal:
+      requires:
       - build
-      - deploy_mobile:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - release
-                - master
-      - deploy_tv:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - release
-                - master
+      filters:
+        branches:
+          only:
+          - release
+    - deploy_production:
+      requires:
+      - build
+      filters:
+        branches:
+          only:
+          - master
+
