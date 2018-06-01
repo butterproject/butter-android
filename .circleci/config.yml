@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Run Tests
           command: ./gradlew check
-  play_store_interna:
+  play_store_internal:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-27-alpha
@@ -81,19 +81,19 @@ workflows:
   version: 2
   build_deploy:
     jobs:
-    - build
-    - play_store_interna:
-      requires:
       - build
-      filters:
-        branches:
-          only:
-          - release
-    - play_store_production:
-      requires:
-      - build
-      filters:
-        branches:
-          only:
-          - master
+      - play_store_internal:
+          requires:
+          - build
+          filters:
+            branches:
+              only:
+                - release
+      - play_store_production:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
 
