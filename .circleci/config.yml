@@ -82,14 +82,14 @@ workflows:
   build_deploy:
     jobs:
     - build
-    - deploy_internal:
+    - play_store_interna:
       requires:
       - build
       filters:
         branches:
           only:
           - release
-    - deploy_production:
+    - play_store_production:
       requires:
       - build
       filters:
