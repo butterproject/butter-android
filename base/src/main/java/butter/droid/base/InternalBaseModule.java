@@ -24,7 +24,8 @@ import dagger.Module;
 @Module(
         includes = {
                 InternalBaseDataModule.class,
-                InternalBaseManagerModule.class
+                InternalBaseManagerModule.class,
+                InternalBaseAndroidModule.class
         }
 )
 public class InternalBaseModule {

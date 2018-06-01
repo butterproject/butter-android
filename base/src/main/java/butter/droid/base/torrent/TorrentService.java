@@ -23,56 +23,64 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Binder;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
-import butter.droid.base.R;
-import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.internal.foreground.ForegroundListener;
-import butter.droid.base.manager.internal.foreground.ForegroundManager;
-import butter.droid.base.ui.TorrentActivity;
+import android.support.v4.app.NotificationCompat.Action;
+import android.support.v4.app.NotificationCompat.Action.Builder;
+
 import org.butterproject.torrentstream.StreamStatus;
 import org.butterproject.torrentstream.Torrent;
 import org.butterproject.torrentstream.TorrentOptions;
 import org.butterproject.torrentstream.TorrentStream;
 import org.butterproject.torrentstream.listeners.TorrentListener;
-import dagger.android.DaggerService;
+
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javax.inject.Inject;
-import timber.log.Timber;
+
+import butter.droid.base.R;
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.internal.foreground.ForegroundListener;
+import butter.droid.base.manager.internal.foreground.ForegroundManager;
+import butter.droid.base.manager.internal.notification.ButterNotificationManager;
+import butter.droid.base.utils.StringUtils;
+import dagger.android.DaggerService;
 
 public class TorrentService extends DaggerService implements TorrentListener {
 
-    public static final Integer NOTIFICATION_ID = 3423423;
-
-    private static String WAKE_LOCK = "TorrentService_WakeLock";
+    public static final int NOTIFICATION_ID = 3423423;
+    private static final String WAKE_LOCK = "TorrentService_WakeLock";
 
     @Inject PreferencesHandler preferencesHandler;
     @Inject ForegroundManager foregroundManager;
+    @Inject PowerManager powerManager;
+    @Inject PackageManager packageManager;
+    @Inject ButterNotificationManager notificationManager;
 
     private TorrentStream torrentStream;
-    private Torrent mCurrentTorrent;
-    private StreamStatus mStreamStatus;
+    private Torrent currentTorrent;
+    private StreamStatus streamStatus;
 
-    private boolean mIsReady = false;
-    private boolean mStopped = false;
+    private boolean isReady = false;
+    private boolean stopped = false;
 
-    private IBinder mBinder = new ServiceBinder();
-    private List<TorrentListener> mListener = new ArrayList<>();
+    private IBinder binder = new ServiceBinder();
+    private List<TorrentListener> listeners = new ArrayList<>();
 
-    private PowerManager.WakeLock mWakeLock;
-    private Class mCurrentActivityClass;
-    private Timer mUpdateTimer;
+    private PowerManager.WakeLock wakeLock;
+    private Timer updateTimer;
 
     public class ServiceBinder extends Binder {
-
         public TorrentService getService() {
             return TorrentService.this;
         }
@@ -103,132 +111,37 @@ public class TorrentService extends DaggerService implements TorrentListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Timber.d("onDestroy");
-        if (mWakeLock != null && mWakeLock.isHeld()) {
-            mWakeLock.release();
-        }
-
         foregroundManager.setListener(null);
+        releaseWakeLock();
+        stopUpdateTimer();
         stopStreaming();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Timber.d("onStartCommand");
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        Timber.d("onBind");
-
-        if (foregroundManager.isInForeground()) {
-            stopForeground();
-        }
-
-        return mBinder;
+        return binder;
     }
 
     @Override
     public void onRebind(Intent intent) {
         super.onRebind(intent);
-        Timber.d("onRebind");
-
-        if (foregroundManager.isInForeground()) {
-            stopForeground();
-        }
-    }
-
-    public void setCurrentActivity(TorrentActivity activity) {
-        mCurrentActivityClass = activity.getClass();
-
-        if (foregroundManager.isInForeground()) {
-            stopForeground();
-            startForeground();
-        }
-    }
-
-    public void startForeground() {
-        if (foregroundManager.isInForeground()) {
-            return;
-        }
-        if (mCurrentActivityClass == null) {
-            return;
-        }
-
-        Intent notificationIntent = new Intent(this, mCurrentActivityClass);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
-        Intent stopIntent = new Intent();
-        stopIntent.setAction(TorrentBroadcastReceiver.STOP);
-        PendingIntent pendingStopIntent = PendingIntent.getBroadcast(this, TorrentBroadcastReceiver.REQUEST_CODE,
-                stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Action stopAction = new NotificationCompat.Action.Builder(R.drawable.abc_ic_clear_material,
-                getString(R.string.stop), pendingStopIntent).build();
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notif_logo)
-                .setContentTitle(getString(R.string.app_name) + " - " + getString(R.string.running))
-                .setContentText(getString(R.string.tap_to_resume))
-                .setOngoing(true)
-                .setOnlyAlertOnce(true)
-                .setPriority(Notification.PRIORITY_LOW)
-                .setContentIntent(pendingIntent)
-                .addAction(stopAction)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE);
-
-        if (mStreamStatus != null && mIsReady) {
-            String downloadSpeed;
-            DecimalFormat df = new DecimalFormat("#############0.00");
-            if (mStreamStatus.downloadSpeed / 1024 < 1000) {
-                downloadSpeed = df.format(mStreamStatus.downloadSpeed / 1024) + " KB/s";
-            } else {
-                downloadSpeed = df.format(mStreamStatus.downloadSpeed / (1024 * 1024)) + " MB/s";
-            }
-            String progress = df.format(mStreamStatus.progress);
-            builder.setContentText(progress + "%, ↓" + downloadSpeed);
-        }
-
-        Notification notification = builder.build();
-
-        NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notifManager.notify(NOTIFICATION_ID, notification);
-        startForeground(NOTIFICATION_ID, notification);
-
-        if (mUpdateTimer == null) {
-            mUpdateTimer = new Timer();
-            mUpdateTimer.scheduleAtFixedRate(new UpdateTask(), 5000, 5000);
-        }
-    }
-
-    public void stopForeground() {
-        stopForeground(true);
-        if (mUpdateTimer != null) {
-            mUpdateTimer.cancel();
-            mUpdateTimer.purge();
-            mUpdateTimer = null;
-        }
     }
 
     public void streamTorrent(@NonNull final String torrentUrl) {
-        Timber.d("streamTorrent");
-        mStopped = false;
+        stopped = false;
 
         if (torrentStream.isStreaming()) {
             return;
         }
 
-        Timber.d("Starting streaming");
-
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        if (mWakeLock != null && mWakeLock.isHeld()) {
-            mWakeLock.release();
-            mWakeLock = null;
-        }
-        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK);
-        mWakeLock.acquire();
+        releaseWakeLock();
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK);
+        wakeLock.acquire();
 
         final TorrentOptions.Builder builder = new TorrentOptions.Builder()
                 .removeFilesAfterStop(true)
@@ -241,23 +154,20 @@ public class TorrentService extends DaggerService implements TorrentListener {
             builder.listeningPort(preferencesHandler.getTorrentListeningPort());
         }
 
-        final TorrentOptions options = builder.build();
+        torrentStream.setOptions(builder.build());
 
-        torrentStream.setOptions(options);
-
-        mIsReady = false;
+        isReady = false;
         torrentStream.addListener(this);
         torrentStream.startStream(torrentUrl);
+
+        startForeground();
     }
 
     public void stopStreaming() {
-        mStopped = true;
+        stopped = true;
         torrentStream.removeListener(this);
 
-        if (mWakeLock != null && mWakeLock.isHeld()) {
-            mWakeLock.release();
-        }
-
+        releaseWakeLock();
         if (!torrentStream.isStreaming()) {
             return;
         }
@@ -265,9 +175,8 @@ public class TorrentService extends DaggerService implements TorrentListener {
         stopForeground();
 
         torrentStream.stopStream();
-        mIsReady = false;
+        isReady = false;
 
-        Timber.d("Stopped torrent and removed files if possible");
     }
 
     public boolean isStreaming() {
@@ -275,42 +184,27 @@ public class TorrentService extends DaggerService implements TorrentListener {
     }
 
     public boolean isReady() {
-        return mIsReady;
+        return isReady;
     }
 
     public boolean checkStopped() {
-        if (mStopped) {
-            mStopped = false;
+        if (stopped) {
+            stopped = false;
             return true;
         }
         return false;
     }
 
     public void addListener(@NonNull TorrentListener listener) {
-        mListener.add(listener);
+        listeners.add(listener);
     }
 
     public void removeListener(@NonNull TorrentListener listener) {
-        mListener.remove(listener);
-    }
-
-    public static void bindHere(Context context, ServiceConnection serviceConnection) {
-        Intent torrentServiceIntent = new Intent(context, TorrentService.class);
-        context.bindService(torrentServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    public static void start(Context context) {
-        Intent torrentServiceIntent = new Intent(context, TorrentService.class);
-        context.startService(torrentServiceIntent);
-    }
-
-    protected static void stop(Context context) {
-        Intent torrentServiceIntent = new Intent(context, TorrentService.class);
-        context.stopService(torrentServiceIntent);
+        listeners.remove(listener);
     }
 
     public Torrent getCurrentTorrent() {
-        return mCurrentTorrent;
+        return currentTorrent;
     }
 
     public String getCurrentTorrentUrl() {
@@ -319,57 +213,103 @@ public class TorrentService extends DaggerService implements TorrentListener {
 
     @Override
     public void onStreamPrepared(Torrent torrent) {
-        mCurrentTorrent = torrent;
+        currentTorrent = torrent;
 
-        for (TorrentListener listener : mListener) {
+        for (TorrentListener listener : listeners) {
             listener.onStreamPrepared(torrent);
         }
     }
 
     @Override
     public void onStreamStarted(Torrent torrent) {
-        for (TorrentListener listener : mListener) {
+        for (TorrentListener listener : listeners) {
             listener.onStreamStarted(torrent);
         }
     }
 
     @Override
     public void onStreamError(Torrent torrent, Exception e) {
-        for (TorrentListener listener : mListener) {
+        for (TorrentListener listener : listeners) {
             listener.onStreamError(torrent, e);
         }
     }
 
     @Override
     public void onStreamReady(Torrent torrent) {
-        mCurrentTorrent = torrent;
-        mIsReady = true;
+        currentTorrent = torrent;
+        isReady = true;
 
-        for (TorrentListener listener : mListener) {
+        for (TorrentListener listener : listeners) {
             listener.onStreamReady(torrent);
         }
     }
 
     @Override
     public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
-        for (TorrentListener listener : mListener) {
+        for (TorrentListener listener : listeners) {
             if (null != listener) {
                 listener.onStreamProgress(torrent, streamStatus);
             }
         }
 
-        if (foregroundManager.isInForeground()) {
-            mStreamStatus = streamStatus;
-        }
+        this.streamStatus = streamStatus;
     }
 
     @Override
     public void onStreamStopped() {
-        for (TorrentListener listener : mListener) {
+        for (TorrentListener listener : listeners) {
             if (listener != null) {
                 listener.onStreamStopped();
             }
         }
+    }
+
+    private void startForeground() {
+        // TODO for now show main activity, later we will have downloaded/in progress screen
+        Intent notificationIntent = packageManager.getLaunchIntentForPackage(getPackageName());
+        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP && notificationIntent == null) {
+            notificationIntent = packageManager.getLeanbackLaunchIntentForPackage(getPackageName());
+        }
+
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent stopIntent = new Intent();
+        stopIntent.setAction(TorrentBroadcastReceiver.STOP);
+        PendingIntent pendingStopIntent = PendingIntent.getBroadcast(this, TorrentBroadcastReceiver.REQUEST_CODE,
+                stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Action stopAction = new Builder(R.drawable.ic_clear,
+                getString(R.string.stop), pendingStopIntent).build();
+
+        // TODO text to resources
+        notificationManager.createChannel(ButterNotificationManager.CHANNEL_STREAMING, "Straming", NotificationManager.IMPORTANCE_LOW);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, ButterNotificationManager.CHANNEL_STREAMING)
+                .setSmallIcon(R.drawable.ic_notif_logo)
+                .setContentTitle(getString(R.string.app_name) + " - " + getString(R.string.running))
+                .setContentText(getString(R.string.tap_to_resume))
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setPriority(Notification.PRIORITY_LOW)
+                .setContentIntent(pendingIntent)
+                .addAction(stopAction)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE);
+
+        if (streamStatus != null && isReady) {
+            String downloadSpeed = StringUtils.formatSpeed(streamStatus.downloadSpeed);
+            builder.setContentText((int) streamStatus.progress + "%, ↓" + downloadSpeed);
+        }
+
+        startForeground(NOTIFICATION_ID, builder.build());
+
+        if (updateTimer == null) {
+            updateTimer = new Timer();
+            updateTimer.scheduleAtFixedRate(new UpdateTask(), 5000, 5000);
+        }
+    }
+
+    private void stopForeground() {
+        stopForeground(true);
+        stopUpdateTimer();
     }
 
     private String getStreamDir() {
@@ -378,29 +318,60 @@ public class TorrentService extends DaggerService implements TorrentListener {
         return directory.toString();
     }
 
+    private void stopUpdateTimer() {
+        if (updateTimer != null) {
+            updateTimer.cancel();
+            updateTimer.purge();
+            updateTimer = null;
+        }
+    }
+
+    private void releaseWakeLock() {
+        if (wakeLock != null && wakeLock.isHeld()) {
+            wakeLock.release();
+            wakeLock = null;
+        }
+    }
+
+    public static void bindHere(Context context, ServiceConnection serviceConnection) {
+        Intent torrentServiceIntent = new Intent(context, TorrentService.class);
+        context.bindService(torrentServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    public static void start(Context context) {
+        Intent intent = new Intent(context, TorrentService.class);
+        context.startService(intent);
+    }
+
+    protected static void stop(Context context) {
+        Intent torrentServiceIntent = new Intent(context, TorrentService.class);
+        context.stopService(torrentServiceIntent);
+    }
+
     private class UpdateTask extends TimerTask {
 
         @Override
         public void run() {
-            if (foregroundManager.isInForeground()) {
-                startForeground();
-            } else {
-                stopForeground();
-            }
+            // TODO update notification
+            //            if (foregroundManager.isInForeground()) {
+//                startForeground();
+//            } else {
+//                stopForeground();
+//            }
         }
     }
 
     private ForegroundListener foregroundListener = new ForegroundListener() {
         @Override public void isInForeground(final boolean inForeground) {
             if (inForeground) {
+                startForeground();
                 if (!torrentStream.isStreaming()) {
                     torrentStream.resumeSession();
-                } else {
-                    stopForeground();
                 }
             } else {
                 if (!torrentStream.isStreaming()) {
                     torrentStream.pauseSession();
+                    stopSelf();
                 } else {
                     startForeground();
                 }

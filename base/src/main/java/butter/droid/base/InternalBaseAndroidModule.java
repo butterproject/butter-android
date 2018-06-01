@@ -15,26 +15,18 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.ui.media.detail.streamable;
+package butter.droid.base;
 
-import butter.droid.base.providers.media.model.MediaWrapper;
+import android.app.NotificationManager;
+import android.content.Context;
+import dagger.Module;
+import dagger.Provides;
 
-public interface StreamableDetailPresenter {
-    void onCreate(MediaWrapper movie);
+@Module
+public class InternalBaseAndroidModule {
 
-    void onDestroy();
+    @Provides @Internal NotificationManager provideNotificationManager(Context context) {
+        return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    }
 
-    void openTrailer();
-
-    void selectQuality(int position);
-
-    void openReadMore();
-
-    void playMediaClicked();
-
-    void healthClicked();
-
-    void onSubtitlesClicked();
-
-    void onQualityClicked();
 }

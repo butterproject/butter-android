@@ -1,10 +1,10 @@
 /*
  * CastDiscoveryProvider
  * Connect SDK
- * 
+ *
  * Copyright (c) 2014 LG Electronics.
  * Created by Hyun Kook Khang on 20 Feb 2014
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -72,7 +72,7 @@ public class CastDiscoveryProvider implements DiscoveryProvider {
 
     @Override
     public void start() {
-        if (isRunning) 
+        if (isRunning)
             return;
 
         isRunning = true;
@@ -80,9 +80,9 @@ public class CastDiscoveryProvider implements DiscoveryProvider {
         if (mMediaRouteSelector == null) {
             try {
                 mMediaRouteSelector = new MediaRouteSelector.Builder()
-                .addControlCategory(CastMediaControlIntent.categoryForCast(
-                        CastService.getApplicationID()))
-                .build();
+                        .addControlCategory(CastMediaControlIntent.categoryForCast(
+                                CastService.getApplicationID()))
+                        .build();
             } catch (IllegalArgumentException e) {
                 Log.w(Util.T, "Invalid application ID: " + CastService.getApplicationID());
                 for (DiscoveryProviderListener listener : serviceListeners) {
@@ -151,13 +151,16 @@ public class CastDiscoveryProvider implements DiscoveryProvider {
     }
 
     @Override
-    public void addDeviceFilter(DiscoveryFilter filter) {}
+    public void addDeviceFilter(DiscoveryFilter filter) {
+    }
 
     @Override
-    public void removeDeviceFilter(DiscoveryFilter filter) {}
+    public void removeDeviceFilter(DiscoveryFilter filter) {
+    }
 
     @Override
-    public void setFilters(java.util.List<DiscoveryFilter> filters) {}
+    public void setFilters(java.util.List<DiscoveryFilter> filters) {
+    }
 
     @Override
     public boolean isEmpty() {
@@ -192,8 +195,7 @@ public class CastDiscoveryProvider implements DiscoveryProvider {
                 foundService.setDevice(castDevice);
 
                 listUpdateFlag = true;
-            }
-            else {
+            } else {
                 if (!foundService.getFriendlyName().equals(castDevice.getFriendlyName())) {
                     foundService.setFriendlyName(castDevice.getFriendlyName());
                     listUpdateFlag = true;
@@ -207,8 +209,8 @@ public class CastDiscoveryProvider implements DiscoveryProvider {
             foundServices.put(uuid, foundService);
 
             if (listUpdateFlag) {
-                for (DiscoveryProviderListener listenter: serviceListeners) {
-                    listenter.onServiceAdded(CastDiscoveryProvider.this, foundService);
+                for (DiscoveryProviderListener listener : serviceListeners) {
+                    listener.onServiceAdded(CastDiscoveryProvider.this, foundService);
                 }
             }
         }
@@ -225,27 +227,34 @@ public class CastDiscoveryProvider implements DiscoveryProvider {
             boolean isNew = foundService == null;
             boolean listUpdateFlag = false;
 
-            if (!isNew) {
-                foundService.setIpAddress(castDevice.getIpAddress().getHostAddress());
+            if (isNew) {
+                foundService = new ServiceDescription(CastService.ID, uuid,
+                        castDevice.getIpAddress().getHostAddress());
+                foundService.setFriendlyName(castDevice.getFriendlyName());
                 foundService.setModelName(castDevice.getModelName());
                 foundService.setModelNumber(castDevice.getDeviceVersion());
                 foundService.setModelDescription(route.getDescription());
                 foundService.setPort(castDevice.getServicePort());
+                foundService.setServiceID(CastService.ID);
                 foundService.setDevice(castDevice);
 
+                listUpdateFlag = true;
+            } else {
                 if (!foundService.getFriendlyName().equals(castDevice.getFriendlyName())) {
                     foundService.setFriendlyName(castDevice.getFriendlyName());
                     listUpdateFlag = true;
                 }
 
-                foundService.setLastDetection(new Date().getTime());
+                foundService.setDevice(castDevice);
+            }
 
-                foundServices.put(uuid, foundService);
+            foundService.setLastDetection(new Date().getTime());
 
-                if (listUpdateFlag) {
-                    for (DiscoveryProviderListener listenter: serviceListeners) {
-                        listenter.onServiceAdded(CastDiscoveryProvider.this, foundService);
-                    }
+            foundServices.put(uuid, foundService);
+
+            if (listUpdateFlag) {
+                for (DiscoveryProviderListener listener : serviceListeners) {
+                    listener.onServiceAdded(CastDiscoveryProvider.this, foundService);
                 }
             }
         }

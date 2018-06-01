@@ -21,11 +21,14 @@ import io.reactivex.annotations.Nullable;
 
 public class QuerySearchRequest {
 
-    @Nullable public final String query;
-    @Nullable public final String sublanguageid = "all";
+    public static final String LANGUAGE_ALL = "all";
 
-    public QuerySearchRequest(final String query) {
+    @Nullable public final String query;
+    @Nullable public final String sublanguageid;
+
+    public QuerySearchRequest(final String query, final String language) {
         this.query = query;
+        this.sublanguageid = language;
     }
 }
 

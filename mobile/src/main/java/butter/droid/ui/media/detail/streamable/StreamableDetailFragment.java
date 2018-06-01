@@ -36,7 +36,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -49,12 +48,11 @@ import butter.droid.base.torrent.TorrentHealth;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;
 import butter.droid.provider.base.model.Torrent;
+import butter.droid.provider.subs.model.Subtitle;
 import butter.droid.ui.media.detail.dialog.quality.QualityPickerDialog;
 import butter.droid.ui.media.detail.dialog.quality.QualityPickerDialog.QualityPickerCallback;
 import butter.droid.ui.media.detail.dialog.quality.model.UiQuality;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
-import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog.SubsPickerCallback;
-import butter.droid.ui.media.detail.model.UiSubItem;
 import butter.droid.ui.media.detail.streamable.dialog.SynopsisDialogFragment;
 import butter.droid.widget.OptionPreview;
 import butterknife.BindView;
@@ -63,7 +61,7 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import dagger.android.support.DaggerFragment;
 
-public class StreamableDetailFragment extends DaggerFragment implements StreamableDetailView, SubsPickerCallback,
+public class StreamableDetailFragment extends DaggerFragment implements StreamableDetailView,
         QualityPickerCallback {
 
     private static final String EXTRA_MOVIE = "butter.droid.ui.media.detail.movie.StreamableDetailFragment.movie";
@@ -194,14 +192,14 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
         subtitlesPreview.setText(subtitleText);
     }
 
-    @Override public void setSubtitleEnabled(boolean enabled) {
-        subtitlesPreview.setClickable(enabled);
+    @Override public void subtitleVisibility(boolean visible) {
+        subtitlesPreview.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
-    @Override public void displaySubsPicker(List<UiSubItem> items) {
+    @Override public void displaySubsPicker(@NonNull final MediaWrapper mediaWrapper, @Nullable Subtitle subtitle) {
         hideDialog();
 
-        SubsPickerDialog dialog = SubsPickerDialog.newInstance(items);
+        SubsPickerDialog dialog = SubsPickerDialog.newInstance(mediaWrapper, subtitle);
         dialog.show(getChildFragmentManager(), "dialog");
         pickerDialog = dialog;
     }
@@ -265,10 +263,6 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
         if (coverImage != null) {
             GlideApp.with(this).load(media.getBackdrop()).into(coverImage);
         }
-    }
-
-    @Override public void onSubsItemSelected(final UiSubItem item) {
-        presenter.subtitleSelected(item);
     }
 
     @Override public void onQualityItemSelected(int position) {

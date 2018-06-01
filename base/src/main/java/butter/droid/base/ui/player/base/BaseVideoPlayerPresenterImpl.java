@@ -33,6 +33,7 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     private final VlcPlayer player;
 
     private long resumePosition;
+    private long resumePositionSetter = -1;
 
     public BaseVideoPlayerPresenterImpl(final BaseVideoPlayerView view, final PreferencesHandler preferencesHandler,
             final VlcPlayer player) {
@@ -119,7 +120,7 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
         player.loadMedia(uri, ha);
 
         if (resumePosition > 0) {
-            player.setTime(resumePosition);
+            resumePositionSetter = resumePosition;
         }
 
         player.play();
@@ -171,6 +172,10 @@ public abstract class BaseVideoPlayerPresenterImpl implements BaseVideoPlayerPre
     }
 
     @Override public void playing() {
+        if (resumePositionSetter > 0) {
+            player.setTime(resumePositionSetter);
+            resumePositionSetter = -1;
+        }
         updateControls();
         view.setKeepScreenOn(true);
         view.setProgressVisible(false);

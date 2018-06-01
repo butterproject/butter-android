@@ -19,6 +19,9 @@ package butter.droid.base.ui.trailer;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+
+import java.net.URLDecoder;
+
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
@@ -26,7 +29,6 @@ import butter.droid.base.manager.internal.youtube.YouTubeManager;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
-import java.net.URLDecoder;
 import timber.log.Timber;
 
 public class BaseTrailerPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements BaseTrailerPlayerPresenter {
@@ -39,6 +41,7 @@ public class BaseTrailerPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl
     private QueryYouTubeTask queryYouTubeTask;
 
     protected MediaWrapper media;
+    protected String trailerUri;
 
     public BaseTrailerPlayerPresenterImpl(final BaseTrailerPlayerView view, final PreferencesHandler preferencesHandler,
             final VlcPlayer player, final YouTubeManager youTubeManager,
@@ -55,6 +58,11 @@ public class BaseTrailerPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl
         super.onCreate(resumePosition);
 
         this.media = media;
+        this.trailerUri = trailerUri;
+    }
+
+    @Override public void onResume() {
+        super.onResume();
 
         if (youTubeManager.isYouTubeUrl(trailerUri)) {
             queryYouTubeTask = new QueryYouTubeTask(youTubeManager, networkManager, phoneManager);

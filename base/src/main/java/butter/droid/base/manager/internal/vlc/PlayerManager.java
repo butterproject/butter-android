@@ -24,16 +24,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import butter.droid.base.ButterApplication;
-import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.content.preferences.Prefs;
-import butter.droid.base.manager.internal.beaming.server.BeamServer;
-import butter.droid.base.manager.internal.beaming.server.BeamServerService;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.providers.media.model.StreamInfo;
-import butter.droid.base.providers.subs.model.SubtitleWrapper;
-import butter.droid.base.utils.StringUtils;
-import butter.droid.provider.base.model.Media;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -41,7 +32,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
+import butter.droid.base.ButterApplication;
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.prefs.PrefManager;
+import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
+import butter.droid.base.utils.StringUtils;
+import butter.droid.base.manager.internal.beaming.server.BeamServer;
+import butter.droid.base.manager.internal.beaming.server.BeamServerService;
+import butter.droid.provider.base.model.Media;
 
 public class PlayerManager {
 

@@ -19,15 +19,19 @@ package butter.droid.provider.subs;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
+
+import java.util.List;
+
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.model.Subtitle;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
-import java.util.List;
 
 public interface SubsProvider {
 
     Single<List<Subtitle>> list(@NonNull Media media);
+
+    Maybe<Subtitle> getSubtitle(@NonNull Media media, @NonNull String languageCode);
 
     Maybe<Uri> downloadSubs(@NonNull Media media, @NonNull Subtitle subtitle);
 

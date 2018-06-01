@@ -26,6 +26,7 @@ import android.content.res.Resources;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.PowerManager;
 import android.telephony.TelephonyManager;
 import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.manager.prefs.PrefManager;
@@ -61,5 +62,7 @@ public interface BaseApplicationComponent {
     ContentResolver contentResolver();
 
     AudioManager audioManager();
+
+    PowerManager powerManager();
 
 }

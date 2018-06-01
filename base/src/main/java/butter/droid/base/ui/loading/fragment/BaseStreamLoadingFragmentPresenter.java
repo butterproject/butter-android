@@ -23,5 +23,8 @@ public interface BaseStreamLoadingFragmentPresenter extends TorrentListener {
 
     void onResume();
 
+    void onDestroy();
+
     void startStream();
+
 }

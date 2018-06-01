@@ -17,15 +17,16 @@
 
 package butter.droid.ui.media.detail.streamable;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.model.Torrent;
+import butter.droid.provider.subs.model.Subtitle;
 import butter.droid.ui.media.detail.dialog.quality.model.UiQuality;
-import butter.droid.ui.media.detail.model.UiSubItem;
 
 public interface StreamableDetailView {
     void initLayout(MediaWrapper movie);
@@ -50,13 +51,13 @@ public interface StreamableDetailView {
 
     void setSubtitleText(String subtitleText);
 
-    void setSubtitleEnabled(boolean enabled);
-
-    void displaySubsPicker(List<UiSubItem> items);
+    void displaySubsPicker(@NonNull MediaWrapper mediaWrapper, @Nullable Subtitle subtitle);
 
     void displayQuality(String quality);
 
     void hideDialog();
 
     void displayQualityPicker(ArrayList<UiQuality> qualities);
+
+    void subtitleVisibility(boolean visible);
 }

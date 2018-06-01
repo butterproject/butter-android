@@ -17,174 +17,174 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:baselineAligned="false"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical">
+
+    <SurfaceView
+        android:id="@+id/video_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <SurfaceView
+        android:id="@+id/surface_subs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:baselineAligned="false"
-        android:orientation="vertical">
-
-    <SurfaceView
-            android:id="@+id/video_surface"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    <SurfaceView
-            android:id="@+id/surface_subs"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true" />
 
     <ProgressBar
-            android:id="@+id/progress_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+        android:id="@+id/progress_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
     <RelativeLayout
-            android:id="@+id/control_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/player_controls_bottom_margin"
-            android:layout_marginLeft="@dimen/player_controls_margin"
-            android:layout_marginRight="@dimen/player_controls_margin"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:fitsSystemWindows="true">
+        android:id="@+id/control_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/player_controls_bottom_margin"
+        android:layout_marginLeft="@dimen/player_controls_margin"
+        android:layout_marginRight="@dimen/player_controls_margin"
+        android:fitsSystemWindows="true">
 
         <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/player_controls_padding"
-                android:background="@drawable/player_controls_background">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/player_controls_background"
+            android:padding="@dimen/player_controls_padding">
 
             <RelativeLayout
-                    android:id="@+id/time_bar"
-                    android:layout_width="match_parent"
+                android:id="@+id/time_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/player_controls_distance"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/current_time"
+                    android:layout_width="55dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/player_controls_distance"
-                    android:orientation="horizontal">
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end"
+                    tools:text="0:00" />
 
                 <TextView
-                        android:id="@+id/current_time"
-                        android:layout_width="55dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="end"
-                        tools:text="0:00"/>
-
-                <TextView
-                        android:id="@+id/length_time"
-                        android:layout_width="55dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="start"
-                        tools:text="0:00"/>
+                    android:id="@+id/length_time"
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="start"
+                    tools:text="0:00" />
 
                 <butter.droid.widget.SeekBar
-                        android:id="@+id/control_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/current_time"
-                        android:layout_toLeftOf="@id/length_time"
-                        android:layout_toRightOf="@id/current_time"
-                        android:layout_toStartOf="@id/length_time"/>
+                    android:id="@+id/control_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/current_time"
+                    android:layout_toLeftOf="@id/length_time"
+                    android:layout_toRightOf="@id/current_time"
+                    android:layout_toStartOf="@id/length_time" />
             </RelativeLayout>
 
             <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/play_button"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_below="@id/time_bar"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/player_controls_play_bg"
-                    android:contentDescription="@string/play"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/ic_av_play"/>
+                android:id="@+id/play_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/time_bar"
+                android:layout_centerInParent="true"
+                android:background="@drawable/player_controls_play_bg"
+                android:contentDescription="@string/play"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_av_play" />
 
             <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/rewind_button"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="@dimen/player_controls_distance"
-                    android:layout_marginRight="@dimen/player_controls_distance"
-                    android:layout_below="@id/time_bar"
-                    android:layout_toLeftOf="@id/play_button"
-                    android:layout_toStartOf="@id/play_button"
-                    android:background="@drawable/selectable_background"
-                    android:contentDescription="@string/rewind"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/ic_av_rewind"/>
+                android:id="@+id/rewind_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/time_bar"
+                android:layout_marginEnd="@dimen/player_controls_distance"
+                android:layout_marginRight="@dimen/player_controls_distance"
+                android:layout_toLeftOf="@id/play_button"
+                android:layout_toStartOf="@id/play_button"
+                android:background="@drawable/selectable_background"
+                android:contentDescription="@string/rewind"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_av_rewind" />
 
             <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/forward_button"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/player_controls_distance"
-                    android:layout_marginLeft="@dimen/player_controls_distance"
-                    android:layout_below="@id/time_bar"
-                    android:layout_toEndOf="@id/play_button"
-                    android:layout_toRightOf="@id/play_button"
-                    android:background="@drawable/selectable_background"
-                    android:contentDescription="@string/fastforward"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/ic_av_forward"/>
+                android:id="@+id/forward_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/time_bar"
+                android:layout_marginLeft="@dimen/player_controls_distance"
+                android:layout_marginStart="@dimen/player_controls_distance"
+                android:layout_toEndOf="@id/play_button"
+                android:layout_toRightOf="@id/play_button"
+                android:background="@drawable/selectable_background"
+                android:contentDescription="@string/fastforward"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_av_forward" />
 
             <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/scale_button"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="@dimen/player_controls_distance"
-                    android:layout_marginRight="@dimen/player_controls_distance"
-                    android:layout_below="@id/time_bar"
-                    android:layout_toLeftOf="@id/rewind_button"
-                    android:layout_toStartOf="@id/rewind_button"
-                    android:background="@drawable/selectable_background"
-                    android:contentDescription="@string/scale"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/ic_av_aspect_ratio"/>
+                android:id="@+id/scale_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/time_bar"
+                android:layout_marginEnd="@dimen/player_controls_distance"
+                android:layout_marginRight="@dimen/player_controls_distance"
+                android:layout_toLeftOf="@id/rewind_button"
+                android:layout_toStartOf="@id/rewind_button"
+                android:background="@drawable/selectable_background"
+                android:contentDescription="@string/scale"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_av_aspect_ratio" />
 
             <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/subs_button"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/player_controls_distance"
-                    android:layout_marginLeft="@dimen/player_controls_distance"
-                    android:layout_below="@id/time_bar"
-                    android:layout_toEndOf="@id/forward_button"
-                    android:layout_toRightOf="@id/forward_button"
-                    android:background="@drawable/selectable_background"
-                    android:contentDescription="@string/subtitles"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/ic_av_subs"/>
+                android:id="@+id/subs_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/time_bar"
+                android:layout_marginLeft="@dimen/player_controls_distance"
+                android:layout_marginStart="@dimen/player_controls_distance"
+                android:layout_toEndOf="@id/forward_button"
+                android:layout_toRightOf="@id/forward_button"
+                android:background="@drawable/selectable_background"
+                android:contentDescription="@string/subtitles"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_av_subs" />
         </RelativeLayout>
     </RelativeLayout>
 
     <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/player_overlay"
-            android:fitsSystemWindows="false"
-            android:minHeight="?attr/actionBarSize"/>
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/player_overlay"
+        android:minHeight="?attr/actionBarSize" />
 
     <TextView
-            android:id="@+id/player_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:padding="@dimen/player_controls_distance"
-            android:background="@drawable/player_controls_background"
-            android:textColor="#ffffff"
-            android:textSize="24sp"
-            android:visibility="invisible"/>
+        android:id="@+id/player_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:background="@drawable/player_controls_background"
+        android:padding="@dimen/player_controls_distance"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:visibility="invisible" />
 
 </RelativeLayout>
