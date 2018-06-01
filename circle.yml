@@ -23,59 +23,59 @@ jobs:
           command: ./gradlew check
   play_store_interna:
     working_directory: ~/code
-      docker:
-        - image: circleci/android:api-27-alpha
-      environment:
-        JVM_OPTS: -Xmx3200m
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
-      steps:
-        - checkout
-        - run:
-          name: Set signing key
-          command: config/ci/download_keystore.sh
-        - run:
-          name: Set play store config
-          command: config/ci/download_play_config.sh
-        - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
-        - run:
-          name: Build and deploy
-          command: ./gradlew playUploadDraftInternal
-        - store_artifacts:
-          path: tv/build/outputs/apk/release/
-          destination: apk/tv
-        - store_artifacts:
-          path: mobile/build/outputs/apk/release/
-          destination: apk/mobile
+    docker:
+      - image: circleci/android:api-27-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+    steps:
+      - checkout
+      - run:
+        name: Set signing key
+        command: config/ci/download_keystore.sh
+      - run:
+        name: Set play store config
+        command: config/ci/download_play_config.sh
+      - run:
+        name: Download Dependencies
+        command: ./gradlew androidDependencies
+      - run:
+        name: Build and deploy
+        command: ./gradlew playUploadDraftInternal
+      - store_artifacts:
+        path: tv/build/outputs/apk/release/
+        destination: apk/tv
+      - store_artifacts:
+        path: mobile/build/outputs/apk/release/
+        destination: apk/mobile
 
   play_store_production:
     working_directory: ~/code
-      docker:
-        - image: circleci/android:api-27-alpha
-      environment:
-        JVM_OPTS: -Xmx3200m
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
-      steps:
-        - checkout
-        - run:
-          name: Set signing key
-          command: config/ci/download_keystore.sh
-        - run:
-          name: Set play store config
-          command: config/ci/download_play_config.sh
-        - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
-        - run:
-          name: Build and deploy
-          command: ./gradlew playUploadDraftProduction
-        - store_artifacts:
-          path: tv/build/outputs/apk/release/
-          destination: apk/tv
-        - store_artifacts:
-          path: mobile/build/outputs/apk/release/
-          destination: apk/mobile
+    docker:
+      - image: circleci/android:api-27-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+    steps:
+      - checkout
+      - run:
+        name: Set signing key
+        command: config/ci/download_keystore.sh
+      - run:
+        name: Set play store config
+        command: config/ci/download_play_config.sh
+      - run:
+        name: Download Dependencies
+        command: ./gradlew androidDependencies
+      - run:
+        name: Build and deploy
+        command: ./gradlew playUploadDraftProduction
+      - store_artifacts:
+        path: tv/build/outputs/apk/release/
+        destination: apk/tv
+      - store_artifacts:
+        path: mobile/build/outputs/apk/release/
+        destination: apk/mobile
 
 workflows:
   version: 2
