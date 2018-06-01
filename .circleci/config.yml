@@ -84,7 +84,7 @@ workflows:
       - build
       - play_store_internal:
           requires:
-          - build
+            - build
           filters:
             branches:
               only:
