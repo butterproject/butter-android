@@ -31,23 +31,23 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Set signing key
-        command: config/ci/download_keystore.sh
+          name: Set signing key
+          command: config/ci/download_keystore.sh
       - run:
-        name: Set play store config
-        command: config/ci/download_play_config.sh
+          name: Set play store config
+          command: config/ci/download_play_config.sh
       - run:
-        name: Download Dependencies
-        command: ./gradlew androidDependencies
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
       - run:
-        name: Build and deploy
-        command: ./gradlew playUploadDraftInternal
+          name: Build and deploy
+          command: ./gradlew playUploadDraftInternal
       - store_artifacts:
-        path: tv/build/outputs/apk/release/
-        destination: apk/tv
+          path: tv/build/outputs/apk/release/
+          destination: apk/tv
       - store_artifacts:
-        path: mobile/build/outputs/apk/release/
-        destination: apk/mobile
+          path: mobile/build/outputs/apk/release/
+          destination: apk/mobile
 
   play_store_production:
     working_directory: ~/code
@@ -59,23 +59,23 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Set signing key
-        command: config/ci/download_keystore.sh
+          name: Set signing key
+          command: config/ci/download_keystore.sh
       - run:
-        name: Set play store config
-        command: config/ci/download_play_config.sh
+          name: Set play store config
+          command: config/ci/download_play_config.sh
       - run:
-        name: Download Dependencies
-        command: ./gradlew androidDependencies
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
       - run:
-        name: Build and deploy
-        command: ./gradlew playUploadDraftProduction
+          name: Build and deploy
+          command: ./gradlew playUploadDraftProduction
       - store_artifacts:
-        path: tv/build/outputs/apk/release/
-        destination: apk/tv
+          path: tv/build/outputs/apk/release/
+          destination: apk/tv
       - store_artifacts:
-        path: mobile/build/outputs/apk/release/
-        destination: apk/mobile
+          path: mobile/build/outputs/apk/release/
+          destination: apk/mobile
 
 workflows:
   version: 2
