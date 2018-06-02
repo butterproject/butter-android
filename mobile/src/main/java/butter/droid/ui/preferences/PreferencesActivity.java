@@ -247,8 +247,8 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == OPEN_DIRECTORY_SELECTOR_PERMISSION){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == OPEN_DIRECTORY_SELECTOR_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openDirectorySelector(Prefs.STORAGE_LOCATION, R.string.storage_location, preferencesHandler.getStorageLocation());
             }
         }
