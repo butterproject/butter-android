@@ -53,7 +53,7 @@ repositories {
 
 dependencies {
     api "com.android.support:appcompat-v7:$appCompatVersion"
-    api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     api "com.google.dagger:dagger:$daggerVersion"
 
     testImplementation "junit:junit:4.12"

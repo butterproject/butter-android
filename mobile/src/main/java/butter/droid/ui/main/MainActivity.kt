@@ -20,9 +20,16 @@ package butter.droid.ui.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.support.annotation.StringRes
+import android.support.design.widget.TabLayout
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewPager
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -43,6 +50,8 @@ import butter.droid.ui.search.SearchActivity
 import butter.droid.ui.terms.TermsActivity
 import butter.droid.utils.ToolbarUtils
 import butter.droid.widget.ScrimInsetsFrameLayout
+import butterknife.BindView
+import timber.log.Timber
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import javax.inject.Inject
@@ -64,27 +73,28 @@ class MainActivity : ButterBaseActivity(), MainView {
     @BindView(R.id.pager)
     lateinit var viewPager: ViewPager
 
-    private var navigationDrawerFragment: NavigationDrawerFragment? = null
-    private var drawerToggle: ActionBarDrawerToggle? = null
-    private var drawerLayout: DrawerLayout? = null
-    private var adapter: MediaPagerAdapter? = null
+    private lateinit var navigationDrawerFragment: NavigationDrawerFragment
+    private lateinit var drawerToggle: ActionBarDrawerToggle
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var adapter: MediaPagerAdapter
 
     @SuppressLint("MissingSuperCall")
-    fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_main)
 
         setSupportActionBar(toolbar)
-        val actionBar = getSupportActionBar()
-        actionBar.setDisplayHomeAsUpEnabled(true)
-        actionBar.setHomeButtonEnabled(true)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeButtonEnabled(true)
+        }
 
         setShowCasting(true)
-        ToolbarUtils.updateToolbarHeight(this, toolbar!!)
+        ToolbarUtils.updateToolbarHeight(this, toolbar)
         setupDrawer()
         setupTabs()
 
-        adapter = MediaPagerAdapter(getSupportFragmentManager(), this)
-        viewPager.setAdapter(adapter)
+        adapter = MediaPagerAdapter(supportFragmentManager, this)
+        viewPager.adapter = adapter
 
         var defaultProviderId = -1
         if (savedInstanceState != null) {
@@ -110,20 +120,9 @@ class MainActivity : ButterBaseActivity(), MainView {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        getMenuInflater().inflate(R.menu.activity_overview, menu)
+        menuInflater.inflate(R.menu.activity_overview, menu)
 
         return true
-    }
-
-    fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
-        when (requestCode) {
-            PERMISSIONS_REQUEST_STORAGE -> if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                presenter.storagePermissionDenied()
-            } else {
-                presenter.storagePermissionGranted()
-            }
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -143,22 +142,22 @@ class MainActivity : ButterBaseActivity(), MainView {
         }
     }
 
-    fun onConfigurationChanged(newConfig: Configuration) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         drawerToggle.onConfigurationChanged(newConfig)
     }
 
-    fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         presenter.onSaveInstanceState(outState)
     }
 
-    fun onDestroy() {
+    override fun onDestroy() {
         super.onDestroy()
         presenter.onDestroy()
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             REQUEST_CODE_TERMS -> if (resultCode == RESULT_CANCELED) {
                 finish()
@@ -185,7 +184,7 @@ class MainActivity : ButterBaseActivity(), MainView {
     }
 
     override fun initProviders(providerId: Int) {
-        navigationDrawerFragment!!.selectProvider(providerId)
+        navigationDrawerFragment.selectProvider(providerId)
     }
 
     override fun closeDrawer() {
@@ -212,8 +211,8 @@ class MainActivity : ButterBaseActivity(), MainView {
         tabs.getTabAt(1)?.select() // TODO something should be done here
     }
 
-    override fun writeStateData(@NonNull outState: Bundle, providerId: Int) {
-        outState.putInt(EXTRA_PROVIDER, providerId)
+    override fun writeStateData(outState: Bundle, selectedProviderId: Int) {
+        outState.putInt(EXTRA_PROVIDER, selectedProviderId)
     }
 
     override fun setScreenTitle(@StringRes title: Int) {
@@ -225,31 +224,29 @@ class MainActivity : ButterBaseActivity(), MainView {
     }
 
     private fun checkActions() {
-        val action = getIntent().getAction()
-        val data = getIntent().getData()
+        val action = intent.action
+        val data = intent.data
         if (action != null && action == Intent.ACTION_VIEW && data != null) {
-            var streamUrl = data!!.toString()
+
             try {
-                streamUrl = URLDecoder.decode(streamUrl, "UTF-8")
+                val streamUrl = URLDecoder.decode(data.toString(), "UTF-8")
                 // TODO: 7/29/17 Check if actual torrent
                 val clip = Clip("0", streamUrl, 0, arrayOfNulls(0), -1f, "", "", "",
                         streamUrl)
                 StreamLoadingActivity.startActivity(this, StreamInfo(streamUrl, MediaWrapper(clip, -1), null))
                 finish()
             } catch (e: UnsupportedEncodingException) {
-                Timber.d("Unknown encoding") // this should never happen
+                Timber.d("Unknown encoding", e) // this should never happen
             }
-
         }
     }
 
     private fun setupDrawer() {
         // Set up the drawer.
         drawerLayout = findViewById(R.id.drawer_layout)
-        drawerLayout!!.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.primary_dark))
+        drawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.primary_dark))
 
-        navigationDrawerFragment = getSupportFragmentManager().findFragmentById(
-                R.id.navigation_drawer_fragment)
+        navigationDrawerFragment = supportFragmentManager.findFragmentById(R.id.navigation_drawer_fragment) as NavigationDrawerFragment
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
@@ -260,20 +257,19 @@ class MainActivity : ButterBaseActivity(), MainView {
     }
 
     private fun setupTabs() {
-        tabs.setupWithViewPager(viewPager)
-        tabs.setTabGravity(TabLayout.GRAVITY_CENTER)
-        tabs.setTabMode(TabLayout.MODE_SCROLLABLE)
-        tabs.setVisibility(View.VISIBLE)
+        tabs.apply {
+            setupWithViewPager(viewPager)
+            tabGravity = TabLayout.GRAVITY_CENTER
+            tabMode = TabLayout.MODE_SCROLLABLE
+            visibility = View.VISIBLE
+            addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewPager))
+        }
 
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
-        tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewPager))
-
     }
 
     companion object {
-
         private const val EXTRA_PROVIDER = "butter.droid.ui.main.MainActivity.providerId"
-
         private const val REQUEST_CODE_TERMS = 1
         private const val PERMISSIONS_REQUEST_STORAGE = 1
     }

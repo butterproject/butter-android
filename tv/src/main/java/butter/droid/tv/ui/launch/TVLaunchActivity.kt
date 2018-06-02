@@ -17,18 +17,11 @@
 
 package butter.droid.tv.ui.launch
 
-import android.Manifest
-import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import butter.droid.base.providers.media.model.MediaWrapper
 import butter.droid.base.providers.media.model.StreamInfo
-import butter.droid.provider.base.filter.Genre
 import butter.droid.provider.base.model.Clip
-import butter.droid.provider.base.model.Media
 import butter.droid.tv.service.RecommendationService
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity
 import butter.droid.tv.ui.main.TVMainActivity
@@ -43,12 +36,12 @@ class TVLaunchActivity : DaggerActivity(), TVLaunchView {
     @Inject
     lateinit var presenter: TVLaunchPresenter
 
-    fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         presenter.onCreate()
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         when (requestCode) {
             REQUEST_CODE_TERMS -> if (resultCode == RESULT_CANCELED) {
                 presenter.termsCanceled()
@@ -58,22 +51,6 @@ class TVLaunchActivity : DaggerActivity(), TVLaunchView {
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
-    }
-
-    fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
-        when (requestCode) {
-            PERMISSIONS_REQUEST -> if (grantResults.size == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                presenter.permissionsGranted()
-            } else {
-                presenter.permissionsDenied()
-            }
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-    }
-
-    override fun requestPermissions() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSIONS_REQUEST)
     }
 
     override fun close() {
@@ -90,11 +67,11 @@ class TVLaunchActivity : DaggerActivity(), TVLaunchView {
     }
 
     override fun navigateForward() {
-        val action = getIntent().getAction()
-        val data = getIntent().getData()
+        val action = intent.action
+        val data = intent.data
 
         if (action != null && action == Intent.ACTION_VIEW && data != null) {
-            var streamUrl = data!!.toString()
+            var streamUrl = data.toString()
             try {
                 streamUrl = URLDecoder.decode(streamUrl, "utf-8")
                 val media = Clip("0", streamUrl, -1, arrayOfNulls(0), -1f, null, "", "",
@@ -113,8 +90,6 @@ class TVLaunchActivity : DaggerActivity(), TVLaunchView {
     }
 
     companion object {
-
         private const val REQUEST_CODE_TERMS = 1
-        private const val PERMISSIONS_REQUEST = 1232
     }
 }

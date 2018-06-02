@@ -17,18 +17,20 @@
 
 package butter.droid.tv.ui.launch
 
-import android.content.Context
 import butter.droid.base.manager.prefs.PrefManager
 import butter.droid.base.ui.ActivityScope
 import butter.droid.tv.ui.launch.TVLaunchModule.TVLaunchBindModule
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
 
-@Module(includes = TVLaunchBindModule::class)
+@Module(includes = [TVLaunchBindModule::class])
 class TVLaunchModule {
 
     @Provides
     @ActivityScope
-    fun providePresenter(view: TVLaunchView, context: Context, prefManager: PrefManager): TVLaunchPresenter {
-        return TVLaunchPresenterImpl(view, context, prefManager)
+    fun providePresenter(view: TVLaunchView, prefManager: PrefManager): TVLaunchPresenter {
+        return TVLaunchPresenterImpl(view, prefManager)
     }
 
     @Module

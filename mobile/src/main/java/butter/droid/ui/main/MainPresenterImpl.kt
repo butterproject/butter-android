@@ -17,10 +17,7 @@
 
 package butter.droid.ui.main
 
-import android.Manifest
 import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import butter.droid.R
 import butter.droid.base.content.preferences.PreferencesHandler
@@ -31,11 +28,15 @@ import butter.droid.ui.main.genre.list.model.UiGenre
 import butter.droid.ui.main.pager.NavInfo
 import butter.droid.ui.preferences.PreferencesActivity
 import butter.droid.ui.terms.TermsPresenterImpl
-import java.util.ArrayList
+import io.reactivex.Observable
+import io.reactivex.SingleObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 class MainPresenterImpl(private val view: MainView,
                         private val providerManager: ProviderManager,
-                        private val context: Context,
                         private val preferencesHandler: PreferencesHandler,
                         private val prefManager: PrefManager) : MainPresenter {
 
@@ -56,9 +57,6 @@ class MainPresenterImpl(private val view: MainView,
     override fun onResume() {
         if (!prefManager.contains(TermsPresenterImpl.TERMS_ACCEPTED)) {
             view.showTermsScreen()
-        } else if (ContextCompat.checkSelfPermission(context,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !== PackageManager.PERMISSION_GRANTED) {
-            view.requestStoragePermissions()
         } else {
             view.checkIntentAction()
         }
@@ -66,14 +64,6 @@ class MainPresenterImpl(private val view: MainView,
         view.setScreenTitle(providerManager.getProvider(selectedProviderId).displayName)
 
         displayProviderData(selectedProviderId)
-    }
-
-    override fun storagePermissionDenied() {
-        view.closeScreen()
-    }
-
-    override fun storagePermissionGranted() {
-        view.checkIntentAction()
     }
 
     override fun selectProvider(providerId: Int) {
@@ -93,13 +83,7 @@ class MainPresenterImpl(private val view: MainView,
 
     override fun onGenreChanged(genre: UiGenre) {
         view.onGenreChanged(genre.genre)
-
-        if (genreListeners.size > 0) {
-            for (genreListener in genreListeners) {
-                genreListener.onGenreChanged(genre)
-            }
-        }
-
+        genreListeners.forEach { it.onGenreChanged(genre) }
         view.showFirsContentScreen()
     }
 
@@ -111,7 +95,7 @@ class MainPresenterImpl(private val view: MainView,
         genreListeners.remove(listener)
     }
 
-    override fun onSaveInstanceState(@NonNull outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle) {
         view.writeStateData(outState, selectedProviderId)
     }
 
@@ -130,27 +114,27 @@ class MainPresenterImpl(private val view: MainView,
 
         unsubscribeProviderId(providerId)
         Observable.concat(mediaProvider.genres()
-                .filter { genres -> genres != null && genres.size() > 0 }
-                .map({ g -> NavInfo(R.id.nav_item_genre, 0, R.string.genres, providerId) })
+                .filter { genres -> genres.isNotEmpty() }
+                .map({ NavInfo(R.id.nav_item_genre, 0, R.string.genres, providerId) })
                 .toObservable(),
                 mediaProvider.navigation()
-                        .flatMapObservable({ Observable.fromIterable() })
-                        .map { item -> NavInfo(item, providerId) })
+                        .flatMapObservable({ Observable.fromIterable(it) })
+                        .map { NavInfo(it, providerId) })
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : SingleObserver<List<NavInfo>>() {
-                    fun onSubscribe(d: Disposable) {
+                .subscribe(object : SingleObserver<List<NavInfo>> {
+                    override fun onSubscribe(d: Disposable) {
                         providerDataDisposable.add(providerId, d)
                     }
 
-                    fun onSuccess(value: List<NavInfo>) {
+                    override fun onSuccess(value: List<NavInfo>) {
                         // TODO: 8/5/17 Do we need this
                         //                        boolean hasGenres = value.first != null && value.first.size() > 0;
                         view.displayProvider(provider.displayName, value)
                     }
 
-                    fun onError(e: Throwable) {
+                    override fun onError(e: Throwable) {
                         // TODO: 8/5/17 Display error
                     }
                 })

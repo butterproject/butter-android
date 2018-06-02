@@ -18,14 +18,8 @@
 package butter.droid.tv.ui.launch
 
 interface TVLaunchView {
-
-    fun requestPermissions()
-
     fun close()
-
     fun showTermsScreen()
-
     fun startRecommendationService()
-
     fun navigateForward()
 }

@@ -43,7 +43,7 @@ interface MainView {
 
     fun showFirsContentScreen()
 
-    fun writeStateData(@NonNull outState: Bundle, selectedProviderId: Int)
+    fun writeStateData(outState: Bundle, selectedProviderId: Int)
 
     fun setScreenTitle(@StringRes title: Int)
 

@@ -28,10 +28,6 @@ interface MainPresenter {
 
     fun onResume()
 
-    fun storagePermissionDenied()
-
-    fun storagePermissionGranted()
-
     fun selectProvider(providerId: Int)
 
     fun openMenuActivity(activityClass: Class<out Activity>)
@@ -42,7 +38,7 @@ interface MainPresenter {
 
     fun removeGenreListener(listener: OnGenreChangeListener)
 
-    fun onSaveInstanceState(@NonNull outState: Bundle)
+    fun onSaveInstanceState(outState: Bundle)
 
     fun searchClicked()
 

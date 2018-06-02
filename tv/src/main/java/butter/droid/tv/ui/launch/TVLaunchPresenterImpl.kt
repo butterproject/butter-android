@@ -17,26 +17,14 @@
 
 package butter.droid.tv.ui.launch
 
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
-import android.support.v4.content.ContextCompat
 import butter.droid.base.manager.prefs.PrefManager
 import butter.droid.tv.ui.terms.TVTermsPresenterImpl
 
-class TVLaunchPresenterImpl(private val view: TVLaunchView, private val context: Context, private val prefManager: PrefManager) : TVLaunchPresenter {
+class TVLaunchPresenterImpl(private val view: TVLaunchView, private val prefManager: PrefManager) : TVLaunchPresenter {
 
     override fun onCreate() {
         initialChecks()
         view.startRecommendationService()
-    }
-
-    override fun permissionsGranted() {
-        initialChecks()
-    }
-
-    override fun permissionsDenied() {
-        view.close()
     }
 
     override fun termsCanceled() {
@@ -48,21 +36,15 @@ class TVLaunchPresenterImpl(private val view: TVLaunchView, private val context:
     }
 
     private fun initialChecks() {
-        if (!hasPermissions()) {
-            view.requestPermissions()
-        } else if (!hasAcceptedTerms()) {
+        if (!hasAcceptedTerms()) {
             view.showTermsScreen()
         } else {
             view.navigateForward()
         }
     }
 
-    private fun hasPermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) === PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) === PackageManager.PERMISSION_GRANTED
-    }
-
     private fun hasAcceptedTerms(): Boolean {
-        return prefManager.get(TVTermsPresenterImpl.TERMS_ACCEPTED, false)!!
+        return prefManager.get(TVTermsPresenterImpl.TERMS_ACCEPTED, false)
     }
 
 }

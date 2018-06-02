@@ -35,14 +35,14 @@ import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 
-@Module(includes = MainBindModule::class)
+@Module(includes = [MainBindModule::class])
 class MainModule {
 
     @Provides
     @ActivityScope
-    internal fun providePresenter(view: MainView, providerManager: ProviderManager, context: Context,
+    internal fun providePresenter(view: MainView, providerManager: ProviderManager,
                                   preferencesHandler: PreferencesHandler, prefManager: PrefManager): MainPresenter {
-        return MainPresenterImpl(view, providerManager, context, preferencesHandler, prefManager)
+        return MainPresenterImpl(view, providerManager, preferencesHandler, prefManager)
     }
 
     @Module
@@ -51,15 +51,15 @@ class MainModule {
         fun bindView(activity: MainActivity): MainView
 
         @FragmentScope
-        @ContributesAndroidInjector(modules = NavigationDrawerModule::class)
+        @ContributesAndroidInjector(modules = [NavigationDrawerModule::class])
         fun contributeNavigationDrawerFragmentInjector(): NavigationDrawerFragment
 
         @FragmentScope
-        @ContributesAndroidInjector(modules = GenreSelectionModule::class)
+        @ContributesAndroidInjector(modules = [GenreSelectionModule::class])
         fun contributeGenreSelecionFragmentInjector(): GenreSelectionFragment
 
         @FragmentScope
-        @ContributesAndroidInjector(modules = MediaListModule::class)
+        @ContributesAndroidInjector(modules = [MediaListModule::class])
         fun contributeMediaListFragmentInjector(): MediaListFragment
     }
 }

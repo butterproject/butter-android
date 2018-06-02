@@ -18,14 +18,7 @@
 package butter.droid.tv.ui.launch
 
 interface TVLaunchPresenter {
-
     fun onCreate()
-
-    fun permissionsGranted()
-
-    fun permissionsDenied()
-
     fun termsCanceled()
-
     fun termsAccepted()
 }
