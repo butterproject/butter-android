@@ -22,26 +22,25 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
+import android.support.v17.leanback.app.GuidedStepSupportFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.tv.R;
 import dagger.android.AndroidInjection;
+import dagger.android.support.AndroidSupportInjection;
+
 import java.util.List;
 import javax.inject.Inject;
 
-public class TVTermsFragment extends GuidedStepFragment implements TVTermsView {
+public class TVTermsFragment extends GuidedStepSupportFragment implements TVTermsView {
 
     @Inject TVTermsPresenter presenter;
     @Inject PrefManager prefManager;
 
     @Override public void onAttach(final Context context) {
-        AndroidInjection.inject(this);
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
-    }
-
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @NonNull
