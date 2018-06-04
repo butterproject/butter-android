@@ -9,6 +9,7 @@ buildscript {
         google()
         maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
+        mavenLocal()
     }
 
     dependencies {
@@ -18,8 +19,11 @@ buildscript {
         classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.3"
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath("solar.blaz.gradle:play-publisher:0.3.0-SNAPSHOT")
     }
 }
+
+apply plugin: "solar.blaz.play-publisher-parent"
 
 ext {
     appCompatVersion = "27.1.1"
@@ -91,3 +95,22 @@ allprojects {
         }
     }
 }
+
+playPublisher {
+    artifacts {
+        draftInternal {
+            appId = "org.butterproject.butter"
+            clientSecretJson = project.hasProperty("playPublishFile") ? file(playPublishFile) : null
+            action = "draft"
+            track = "internal"
+        }
+
+        draftProduction {
+            appId = "org.butterproject.butter"
+            clientSecretJson = project.hasProperty("playPublishFile") ? file(playPublishFile) : null
+            action = "draft"
+            track = "production"
+        }
+    }
+}
+
