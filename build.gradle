@@ -103,6 +103,7 @@ playPublisher {
             clientSecretJson = project.hasProperty("playPublishFile") ? file(playPublishFile) : null
             action = "draft"
             track = "internal"
+        	listingDir = file(".butter/play")
         }
 
         draftProduction {
@@ -110,7 +111,7 @@ playPublisher {
             clientSecretJson = project.hasProperty("playPublishFile") ? file(playPublishFile) : null
             action = "draft"
             track = "production"
-        }
+			listingDir = file(".butter/play")        }
     }
 }
 
