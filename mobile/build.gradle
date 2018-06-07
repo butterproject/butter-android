@@ -57,10 +57,10 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha1'
-    implementation 'androidx.mediarouter:mediarouter:1.0.0-alpha1'
-    implementation 'androidx.annotation:annotation:1.0.0-alpha1'
-    implementation 'androidx.browser:browser:1.0.0-alpha1'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha3'
+    implementation 'androidx.mediarouter:mediarouter:1.0.0-alpha3'
+    implementation 'androidx.annotation:annotation:1.0.0-alpha3'
+    implementation 'androidx.browser:browser:1.0.0-alpha3'
 
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.github.nirhart:parallaxscroll:1.0'

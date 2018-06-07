@@ -58,9 +58,9 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.0.0-alpha1'
-    implementation 'androidx.palette:palette:1.0.0-alpha1'
-    implementation 'androidx.leanback:leanback:1.0.0-alpha1'
+    implementation 'androidx.annotation:annotation:1.0.0-alpha3'
+    implementation 'androidx.palette:palette:1.0.0-alpha3'
+    implementation 'androidx.leanback:leanback:1.0.0-alpha3'
 
     implementation project(':base')
 

@@ -22,8 +22,8 @@ buildscript {
 }
 
 ext {
-    targetSdk = 'P'
-    compileSdk = 'android-P'
+    targetSdk = 28
+    compileSdk = 28
     minSdk = 16
     butterknifeVersion = "8.8.1"
     okHttpVersion = "3.4.2"
@@ -40,11 +40,12 @@ ext {
 
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter()
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'http://guardian.github.com/maven/repo-releases' }
         maven { url "https://dl.bintray.com/butterproject/maven/" }
+        mavenCentral()
     }
 
     //let project evaluate its script first
