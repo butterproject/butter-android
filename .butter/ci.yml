@@ -26,6 +26,7 @@ before_script:
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
   - chmod +x ./gradlew
+  - config/ci/download_keystore.sh
 
 stages:
   - test
@@ -38,10 +39,8 @@ unitTests:
 
 mobileArtifacts:
   stage: deploy
-  before_script:
-    - config/ci/download_keystore.sh
   script:
-    - ./gradlew mobile:assembleRelease
+    - ./gradlew clean mobile:assembleRelease
   only:
     refs:
       - feature/gitlabCI
@@ -53,10 +52,8 @@ mobileArtifacts:
 
 tvArtifacts:
   stage: deploy
-  before_script:
-    - config/ci/download_keystore.sh
   script:
-    - ./gradlew tv:assembleRelease
+    - ./gradlew clean tv:assembleRelease
   only:
     refs:
       - feature/gitlabCI
