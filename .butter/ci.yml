@@ -43,7 +43,7 @@ mobileArtifacts:
     - ./gradlew clean mobile:assembleRelease
   only:
     refs:
-      - feature/gitlabCI
+      - release
   dependencies:
     - unitTests
   artifacts:
@@ -56,7 +56,7 @@ tvArtifacts:
     - ./gradlew clean tv:assembleRelease
   only:
     refs:
-      - feature/gitlabCI
+      - release
   dependencies:
     - unitTests
   artifacts:
