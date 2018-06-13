@@ -97,20 +97,12 @@ allprojects {
 
 playPublisher {
     artifacts {
-        draftInternal {
+        internal {
             appId = "org.butterproject.butter"
             clientSecretJson = project.hasProperty("playPublishFile") ? file(playPublishFile) : null
-            action = "draft"
             track = "internal"
         	listingDir = file(".butter/play")
         }
-
-        draftProduction {
-            appId = "org.butterproject.butter"
-            clientSecretJson = project.hasProperty("playPublishFile") ? file(playPublishFile) : null
-            action = "draft"
-            track = "production"
-			listingDir = file(".butter/play")        }
     }
 }
 

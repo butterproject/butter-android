@@ -62,3 +62,17 @@ tvArtifacts:
   artifacts:
     paths:
       - mobile/build/outputs/apk/release/
+
+playPublish:
+  stage: deploy
+  script:
+    - ./gradlew clean playUploadInternal
+  only:
+    refs:
+      - master
+  dependencies:
+    - unitTests
+  artifacts:
+    paths:
+      - mobile/build/outputs/apk/release/
+      - tv/build/outputs/apk/release/
