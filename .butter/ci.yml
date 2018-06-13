@@ -27,6 +27,7 @@ before_script:
   - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
   - chmod +x ./gradlew
   - config/ci/download_keystore.sh
+  - config/ci/download_play_config.sh
 
 stages:
   - test
