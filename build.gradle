@@ -18,24 +18,27 @@ buildscript {
         classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.3"
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1' // TODO needs update
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "gradle.plugin.solar.blaz.gradle:play-publisher:0.4.0"
     }
 }
+
+apply plugin: "solar.blaz.play-publisher-parent"
 
 ext {
     targetSdk = 28
     compileSdk = 28
     minSdk = 16
     butterknifeVersion = "8.8.1"
-    okHttpVersion = "3.4.2"
+    okHttpVersion = "3.10.0"
     daggerVersion = "2.16"
     javaxAnnotationVersion = "1.2"
     torrentstreamVersion = '2.5.0'
     filePickerVersion = '1.1.0'
     changeloglibVersion = '2.1.0'
     gsonVersion = '2.8.1'
-    rxJavaVersion = '2.1.8'
+    rxJavaVersion = '2.1.13'
     retrofitVersion = '2.4.0'
-    glideVersion = '4.6.1'
+    glideVersion = '4.7.1'
 }
 
 allprojects {
@@ -91,3 +94,15 @@ allprojects {
         }
     }
 }
+
+playPublisher {
+    artifacts {
+        internal {
+            appId = "org.butterproject.butter"
+            clientSecretJson = project.hasProperty("playPublishFile") ? file(playPublishFile) : null
+            track = "internal"
+        	listingDir = file(".butter/play")
+        }
+    }
+}
+

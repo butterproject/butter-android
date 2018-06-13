@@ -18,6 +18,7 @@
 apply plugin: 'com.android.application'
 apply from: "${project.rootDir}/config/gradle/android-common-config.gradle"
 apply plugin: 'si.kamino.version'
+apply plugin: "solar.blaz.play-publisher"
 
 android {
 
