@@ -22,24 +22,43 @@ before_script:
   - printf "8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e" > android-sdk-linux/licenses/android-sdk-license
   - printf "84831b9409646a918e30573bab4c9c91346d8abd" > android-sdk-linux/licenses/android-sdk-preview-license
   - android-sdk-linux/tools/bin/sdkmanager --update > update.log
-#  - android-sdk-linux/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" "build-tools;${ANDROID_BUILD_TOOLS}" "extras;google;m2repository" "extras;android;m2repository" > installPlatform.log
 
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
   - chmod +x ./gradlew
+  - config/ci/download_keystore.sh
 
 stages:
   - test
-  
-#build:
-#  stage: build
-#  script:
-#    - ./gradlew assembleDebug
-#  artifacts:
-#    paths:
-#    - app/build/outputs/
+  - deploy
 
 unitTests:
   stage: test
   script:
     - ./gradlew check
+
+mobileArtifacts:
+  stage: deploy
+  script:
+    - ./gradlew clean mobile:assembleRelease
+  only:
+    refs:
+      - release
+  dependencies:
+    - unitTests
+  artifacts:
+    paths:
+      - mobile/build/outputs/apk/release/
+
+tvArtifacts:
+  stage: deploy
+  script:
+    - ./gradlew clean tv:assembleRelease
+  only:
+    refs:
+      - release
+  dependencies:
+    - unitTests
+  artifacts:
+    paths:
+      - mobile/build/outputs/apk/release/

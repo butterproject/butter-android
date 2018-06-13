@@ -30,16 +30,16 @@ ext {
     compileSdk = 27
     minSdk = 16
     butterknifeVersion = "8.8.1"
-    okHttpVersion = "3.4.2"
-    daggerVersion = "2.15"
+    okHttpVersion = "3.10.0"
+    daggerVersion = "2.16"
     javaxAnnotationVersion = "1.2"
     torrentstreamVersion = '2.5.0'
     filePickerVersion = '1.1.0'
     changeloglibVersion = '2.1.0'
     gsonVersion = '2.8.1'
-    rxJavaVersion = '2.1.8'
+    rxJavaVersion = '2.1.13'
     retrofitVersion = '2.4.0'
-    glideVersion = '4.6.1'
+    glideVersion = '4.7.1'
 }
 
 allprojects {
