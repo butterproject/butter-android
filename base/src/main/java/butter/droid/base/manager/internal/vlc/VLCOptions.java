@@ -22,17 +22,21 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.preference.PreferenceManager;
-import butter.droid.base.ButterApplication;
-import java.io.File;
-import java.util.ArrayList;
+
 import org.videolan.libvlc.util.AndroidUtil;
 import org.videolan.libvlc.util.VLCUtil;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import butter.droid.base.ButterApplication;
+import butter.droid.base.content.preferences.PreferencesHandler;
 import timber.log.Timber;
 
 @SuppressWarnings("unused")
 public class VLCOptions {
 
-    public static ArrayList<String> getLibOptions() {
+    public static ArrayList<String> getLibOptions(PreferencesHandler preferencesHandler) {
         final Context context = ButterApplication.getAppContext();
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -62,9 +66,9 @@ public class VLCOptions {
             networkCaching = 0;
         }
 
-        final String freetypeRelFontsize = pref.getString("subtitles_size", "16");
+        final String freetypeRelFontsize = pref.getString("subtitles_size", String.valueOf(preferencesHandler.getSubtitleSize()));
         final boolean freetypeBold = pref.getBoolean("subtitles_bold", false);
-        final String freetypeColor = pref.getString("subtitles_color", "16777215");
+        final String freetypeColor = pref.getString("subtitles_color", String.valueOf(preferencesHandler.getSubtitleColor()));
         final boolean freetypeBackground = pref.getBoolean("subtitles_background", false);
         final int opengl = Integer.parseInt(pref.getString("opengl", "-1"));
 
