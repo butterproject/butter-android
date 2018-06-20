@@ -91,6 +91,11 @@ public class SubsPickerDialog extends BottomSheetDialogFragment implements SubsP
         presenter.onViewCreated(arguments.getParcelable(ARG_MEDIA), arguments.getParcelable(ARG_SELECTED));
     }
 
+    @Override public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
+
     @Override public void showSubtitles(List<UiSubItem> subs) {
         subsAdapter.setItems(subs);
 

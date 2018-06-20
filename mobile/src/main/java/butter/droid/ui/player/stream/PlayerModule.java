@@ -28,13 +28,6 @@ import dagger.Provides;
 
 @Module(includes = PlayerBindModule.class)
 public class PlayerModule {
-//
-    //    @Provides @FragmentScope PlayerPresenter providePresenter(PlayerView view, Context context, PreferencesHandler preferencesHandler,
-//            ProviderManager providerManager, BeamManager beamManager, AudioManager audioManager,
-//            BrightnessManager brightnessManager, VideoPlayerTouchHandler touchHandler, VlcPlayer player, SubtitleManager subtitleManager) {
-//        return new PlayerPresenterImpl(view, context, preferencesHandler, providerManager,
-//                beamManager, brightnessManager, audioManager, touchHandler, player, subtitleManager);
-//    }
 
     @Provides @FragmentScope VlcPlayer provideVlcPlayer(@Nullable LibVLC libVLC) {
         return new VlcPlayer(libVLC);

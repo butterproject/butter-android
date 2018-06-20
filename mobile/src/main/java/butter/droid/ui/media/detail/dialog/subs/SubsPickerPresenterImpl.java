@@ -25,6 +25,8 @@ public class SubsPickerPresenterImpl implements SubsPickerPresenter {
     private final SubsPickerParent parent;
     private final ProviderManager providerManager;
 
+    private Disposable subtitlesRequest;
+
     @Inject
     public SubsPickerPresenterImpl(final SubsPickerView view, final SubsPickerParent parent,
             final ProviderManager providerManager) {
@@ -37,7 +39,6 @@ public class SubsPickerPresenterImpl implements SubsPickerPresenter {
     @Override public void onViewCreated(@NonNull MediaWrapper mediaWrapper, @Nullable Subtitle selected) {
         String selectedLang = selected != null ? selected.getLanguage() : null;
 
-        // TODO unsubscribe
         providerManager.getSubsProvider(mediaWrapper.getProviderId()).list(mediaWrapper.getMedia())
                 .flatMap(subs -> {
 //                    if (subs.isEmpty()) {
@@ -53,7 +54,7 @@ public class SubsPickerPresenterImpl implements SubsPickerPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<UiSubItem>>() {
                     @Override public void onSubscribe(final Disposable d) {
-//                        subtitlesRequest = d;
+                        subtitlesRequest = d;
                     }
 
                     @Override public void onSuccess(final List<UiSubItem> subs) {
@@ -73,6 +74,14 @@ public class SubsPickerPresenterImpl implements SubsPickerPresenter {
 //                        view.setSubtitleText(R.string.no_subs_available);
                     }
                 });
+    }
+
+    @Override public void onDestroy() {
+        Disposable d = subtitlesRequest;
+        if (d != null) {
+            d.dispose();
+            subtitlesRequest = null;
+        }
     }
 
     @Override public void onSubsItemSelected(UiSubItem item) {
