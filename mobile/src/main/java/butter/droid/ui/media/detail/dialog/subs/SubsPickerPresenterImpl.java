@@ -37,6 +37,7 @@ public class SubsPickerPresenterImpl implements SubsPickerPresenter {
     @Override public void onViewCreated(@NonNull MediaWrapper mediaWrapper, @Nullable Subtitle selected) {
         String selectedLang = selected != null ? selected.getLanguage() : null;
 
+        // TODO unsubscribe
         providerManager.getSubsProvider(mediaWrapper.getProviderId()).list(mediaWrapper.getMedia())
                 .flatMap(subs -> {
 //                    if (subs.isEmpty()) {

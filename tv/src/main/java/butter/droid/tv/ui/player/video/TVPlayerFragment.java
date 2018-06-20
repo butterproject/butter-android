@@ -20,6 +20,7 @@ package butter.droid.tv.ui.player.video;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.widget.Toast;
 
@@ -29,7 +30,9 @@ import org.butterproject.torrentstream.listeners.TorrentListener;
 
 import javax.inject.Inject;
 
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.provider.subs.model.Subtitle;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
 import dagger.android.support.AndroidSupportInjection;
 
@@ -70,8 +73,8 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
         // TODO: 5/7/17 - will be implemented later
     }
 
-    @Override public void showPickSubsDialog(final String[] readableNames, final String[] adapterSubtitles, final String currentSubsLang) {
-        // TODO: 5/7/17 - will be implemented later
+    @Override public void showPickSubsDialog(MediaWrapper mediaWrapper, @Nullable Subtitle subtitle) {
+
     }
 
     @Override public void showSubsFilePicker() {

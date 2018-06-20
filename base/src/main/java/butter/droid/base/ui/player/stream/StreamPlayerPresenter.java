@@ -17,9 +17,10 @@
 
 package butter.droid.base.ui.player.stream;
 
+import java.io.File;
+
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenter;
-import java.io.File;
 
 public interface StreamPlayerPresenter extends BaseVideoPlayerPresenter {
 
@@ -30,8 +31,6 @@ public interface StreamPlayerPresenter extends BaseVideoPlayerPresenter {
     void showSubsLanguageSettings();
 
     void showCustomSubsPicker();
-
-    void onSubtitleLanguageSelected(String language);
 
     void onSubsFileSelected(final File f);
 

@@ -21,6 +21,8 @@ import android.content.Context;
 
 import com.connectsdk.device.ConnectableDevice;
 
+import javax.inject.Inject;
+
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
@@ -28,13 +30,19 @@ import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.subtitle.SubtitleManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
+import butter.droid.base.providers.subs.model.SubtitleWrapper;
+import butter.droid.base.ui.FragmentScope;
 import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 import butter.droid.manager.internal.audio.AudioManager;
 import butter.droid.manager.internal.brightness.BrightnessManager;
+import butter.droid.provider.subs.model.Subtitle;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerParent;
 import butter.droid.ui.player.VideoPlayerTouchHandler;
 import butter.droid.ui.player.VideoPlayerTouchHandler.OnVideoTouchListener;
 
-public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements PlayerPresenter, OnVideoTouchListener {
+@FragmentScope
+public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements PlayerPresenter, OnVideoTouchListener,
+        SubsPickerParent {
 
     private final PlayerView view;
     private final Context context;
@@ -44,6 +52,7 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
     private final AudioManager audioManager;
     private final BeamManager beamManager;
 
+    @Inject
     public PlayerPresenterImpl(final PlayerView view, final Context context, final PreferencesHandler preferencesHandler,
             final ProviderManager providerManager, final BeamManager beamManager,
             final BrightnessManager brightnessManager, final AudioManager audioManager, final VideoPlayerTouchHandler touchHandler,
@@ -132,6 +141,12 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
         view.hideOverlay();
     }
 
+    @Override public void subtitleSelected(Subtitle subtitle) {
+        // TODO saved instant state
+        streamInfo.setSubtitle(new SubtitleWrapper(subtitle));
+        loadSubtitle();
+    }
+
     private void displayTitle() {
         String title;
         if (streamInfo != null) {
@@ -157,5 +172,4 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
             view.close();
         }
     };
-
 }
