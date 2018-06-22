@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import org.videolan.libvlc.LibVLC;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.internal.BasePlayerModule;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.subtitle.SubtitleManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
@@ -29,12 +30,12 @@ import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = TVPlayerBindModule.class)
+@Module(includes = {TVPlayerBindModule.class, BasePlayerModule.class})
 public class TVPlayerModule {
 
-    @Provides @FragmentScope TVPlayerPresenter providePresenter(TVPlayerView view, PreferencesHandler preferencesHandler,
-                                                                ProviderManager providerManager, VlcPlayer vlcPlayer,
-                                                                SubtitleManager subtitleManager) {
+    @Provides @FragmentScope TVPlayerPresenter providePresenter(TVPlayerView view,
+            PreferencesHandler preferencesHandler, ProviderManager providerManager, VlcPlayer vlcPlayer,
+            SubtitleManager subtitleManager) {
         return new TVPlayerPresenterImpl(view, preferencesHandler, providerManager, vlcPlayer, subtitleManager);
     }
 

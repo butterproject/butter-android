@@ -19,6 +19,9 @@ package butter.droid.ui.trailer;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+
+import org.videolan.libvlc.LibVLC;
+
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
@@ -27,12 +30,12 @@ import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.manager.internal.audio.AudioManager;
 import butter.droid.manager.internal.brightness.BrightnessManager;
+import butter.droid.base.manager.internal.BasePlayerModule;
 import butter.droid.ui.player.VideoPlayerTouchHandler;
 import dagger.Module;
 import dagger.Provides;
-import org.videolan.libvlc.LibVLC;
 
-@Module(includes = TrailerPlayerBindModule.class)
+@Module(includes = {TrailerPlayerBindModule.class, BasePlayerModule.class})
 public class TrailerPlayerModule {
 
     @Provides @FragmentScope TrailerPlayerPresenter providePresenter(TrailerPlayerView view, Context context,
