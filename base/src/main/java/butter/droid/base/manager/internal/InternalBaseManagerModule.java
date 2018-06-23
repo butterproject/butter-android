@@ -17,18 +17,13 @@
 
 package butter.droid.base.manager.internal;
 
-import android.content.Context;
-import androidx.annotation.Nullable;
+import java.util.Set;
+
 import butter.droid.base.Internal;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
-import butter.droid.base.manager.internal.vlc.VLCOptions;
 import dagger.Module;
 import dagger.Provides;
-import java.util.Set;
-import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.util.VLCUtil;
-import timber.log.Timber;
 
 @Module
 public class InternalBaseManagerModule {
@@ -37,15 +32,6 @@ public class InternalBaseManagerModule {
         ProviderWrapper[] array = new ProviderWrapper[providers.size()];
         providers.toArray(array);
         return new ProviderManager(array);
-    }
-
-    @Provides @Internal @Nullable LibVLC provideLibVLC(Context context) {
-        if (!VLCUtil.hasCompatibleCPU(context)) {
-            Timber.e(VLCUtil.getErrorMsg());
-            return null;
-        } else {
-            return new LibVLC(context, VLCOptions.getLibOptions());
-        }
     }
 
 }

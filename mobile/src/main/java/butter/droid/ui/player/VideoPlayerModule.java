@@ -19,6 +19,8 @@ package butter.droid.ui.player;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+
+import butter.droid.base.manager.internal.BasePlayerModule;
 import butter.droid.base.ui.ActivityScope;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.player.VideoPlayerModule.VideoPlayerBindModule;
@@ -29,7 +31,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.android.ContributesAndroidInjector;
 
-@Module(includes = VideoPlayerBindModule.class)
+@Module(includes = {VideoPlayerBindModule.class, BasePlayerModule.class})
 public class VideoPlayerModule {
 
     @Provides @ActivityScope VideoPlayerPresenter providePresenter(VideoPlayerView view, ContentResolver contentResolver) {

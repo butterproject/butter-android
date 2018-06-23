@@ -18,7 +18,11 @@
 package butter.droid.tv.ui.trailer;
 
 import androidx.annotation.Nullable;
+
+import org.videolan.libvlc.LibVLC;
+
 import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.manager.internal.BasePlayerModule;
 import butter.droid.base.manager.internal.phone.PhoneManager;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.manager.internal.youtube.YouTubeManager;
@@ -26,13 +30,13 @@ import butter.droid.base.manager.network.NetworkManager;
 import butter.droid.base.ui.FragmentScope;
 import dagger.Module;
 import dagger.Provides;
-import org.videolan.libvlc.LibVLC;
 
-@Module(includes = TVTrailerPlayerBindModule.class)
+@Module(includes = {TVTrailerPlayerBindModule.class, BasePlayerModule.class})
 public class TVTrailerPlayerModule {
 
-    @Provides @FragmentScope TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view, PreferencesHandler preferencesHandler,
-            VlcPlayer player, YouTubeManager youTubeManager, NetworkManager networkManager, PhoneManager phoneManager) {
+    @Provides @FragmentScope TVTrailerPlayerPresenter providePresenter(TVTrailerPlayerView view,
+            PreferencesHandler preferencesHandler, VlcPlayer player, YouTubeManager youTubeManager,
+            NetworkManager networkManager, PhoneManager phoneManager) {
         return new TVTrailerPlayerPresenterImpl(view, preferencesHandler, player, youTubeManager, networkManager,
                 phoneManager);
     }

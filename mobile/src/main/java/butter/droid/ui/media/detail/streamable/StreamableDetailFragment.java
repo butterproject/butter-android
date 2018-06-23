@@ -164,7 +164,7 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
 
     @Override public void displaySynopsis(String synopsis) {
         this.synopsis.setText(synopsis);
-        this.synopsis.post(() -> {
+        this.synopsis.post(() -> { // TODO null layout
             boolean ellipsized = false;
             Layout layout = StreamableDetailFragment.this.synopsis.getLayout();
             int lines = layout.getLineCount();

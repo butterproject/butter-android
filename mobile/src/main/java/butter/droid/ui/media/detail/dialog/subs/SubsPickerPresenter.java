@@ -11,4 +11,6 @@ public interface SubsPickerPresenter {
     void onViewCreated(@NonNull MediaWrapper mediaWrapper, @Nullable Subtitle selected);
 
     void onSubsItemSelected(UiSubItem item);
+
+    void onDestroy();
 }
