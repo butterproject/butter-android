@@ -59,6 +59,7 @@ import butter.droid.R;
 import butter.droid.base.BuildConfig;
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
 import butter.droid.base.ui.player.base.BaseVideoPlayerView;
+import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 import butter.droid.base.utils.AnimUtils;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PixelUtils;
@@ -75,6 +76,7 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
     protected static final String ARG_RESUME_POSITION = "butter.droid.ui.player.abs.AbsPlayerFragment.resumePosition";
 
     private static final String ACTION_SCALE = "butter.droid.ui.player.abs.action.SCALE";
+    protected static final String ACTION_CLOSE_CAPTION = "butter.droid.tv.ui.player.video.action.CLOSE_CAPTION";
 
     private static final int FADE_OUT_INFO = 1000;
 
@@ -91,6 +93,8 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
     @BindView(R.id.play_button) ImageButton playButton;
     @BindView(R.id.forward_button) ImageButton forwardButton;
     @BindView(R.id.rewind_button) ImageButton rewindButton;
+    @BindView(R.id.subs_button) ImageButton subsButton;
+    @BindView(R.id.scale_button) ImageButton scaleButton;
     @BindView(R.id.player_info) TextView playerInfo;
     @BindView(R.id.current_time) TextView currentTimeTextView;
     @BindView(R.id.length_time) TextView lengthTime;
@@ -114,12 +118,7 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
         mediaSession.setMediaButtonReceiver(null);
         mediaSession.setCallback(new PlayerSessionCallback());
 
-        stateBuilder = new PlaybackStateCompat.Builder()
-                .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE
-                        | PlaybackStateCompat.ACTION_REWIND
-                        | PlaybackStateCompat.ACTION_FAST_FORWARD
-                        | PlaybackStateCompat.ACTION_SEEK_TO)
-                .addCustomAction(ACTION_SCALE, getString(R.string.scale), R.drawable.ic_av_aspect_ratio);
+        stateBuilder = new PlaybackStateCompat.Builder();
 
         metadataBuilder = new MediaMetadataCompat.Builder();
     }
@@ -217,16 +216,53 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
         }
     }
 
-    @CallSuper @Override public void setupControls(final String title) {
+    @CallSuper @Override public void setupControls(String title, int actions) {
         mediaController = new MediaControllerCompat(getContext(), mediaSession);
         mediaController.registerCallback(controllerCallback);
 
         MediaControllerCompat.setMediaController(getActivity(), mediaController);
 
+
+        long stateActions = PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_SEEK_TO;
+        if ((actions & StreamPlayerPresenterImpl.PLAYER_ACTION_SKIP_NEXT) > 0) {
+            stateActions |= PlaybackStateCompat.ACTION_FAST_FORWARD;
+            forwardButton.setVisibility(View.VISIBLE);
+        } else {
+            forwardButton.setVisibility(View.GONE);
+        }
+
+        if ((actions & StreamPlayerPresenterImpl.PLAYER_ACTION_SKIP_PREVIOUS) > 0) {
+            stateActions |= PlaybackStateCompat.ACTION_REWIND;
+            rewindButton.setVisibility(View.VISIBLE);
+        } else {
+            rewindButton.setVisibility(View.GONE);
+        }
+
+        stateBuilder.setActions(stateActions);
+
+        if ((actions & StreamPlayerPresenterImpl.PLAYER_ACTION_CC) > 0) {
+            stateBuilder.addCustomAction(ACTION_CLOSE_CAPTION, getString(R.string.subtitles), R.drawable.ic_av_subs);
+            subsButton.setVisibility(View.VISIBLE);
+        } else {
+            subsButton.setVisibility(View.GONE);
+
+        }
+
+        if ((actions & StreamPlayerPresenterImpl.PLAYER_ACTION_SCALE) > 0) {
+            stateBuilder.addCustomAction(ACTION_SCALE, getString(R.string.scale), R.drawable.ic_av_aspect_ratio);
+            scaleButton.setVisibility(View.VISIBLE);
+        } else {
+            scaleButton.setVisibility(View.GONE);
+        }
+
         mediaSession.setPlaybackState(stateBuilder.build());
 
         metadataBuilder.putText(MediaMetadataCompat.METADATA_KEY_TITLE, title);
         mediaSession.setMetadata(metadataBuilder.build());
+
+        // TODO actions visibility by glue host
+        // TODO actions
+
     }
 
     @Override public void attachVlcViews() {
@@ -338,6 +374,10 @@ public class AbsPlayerFragment extends DaggerFragment implements AbsPlayerView, 
 
     @OnClick(R.id.scale_button) void onScaleClick() {
         mediaController.getTransportControls().sendCustomAction(ACTION_SCALE, null);
+    }
+
+    @OnClick(R.id.subs_button) void onSubsClick() {
+        mediaController.getTransportControls().sendCustomAction(ACTION_CLOSE_CAPTION, null);
     }
 
     protected void showPlayerInfo(String text) {

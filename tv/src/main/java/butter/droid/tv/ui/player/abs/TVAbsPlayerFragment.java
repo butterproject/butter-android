@@ -20,6 +20,7 @@ package butter.droid.tv.ui.player.abs;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.VideoSupportFragment;
 import android.support.v17.leanback.app.VideoSupportFragmentGlueHost;
@@ -47,6 +48,7 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import butter.droid.base.manager.internal.vlc.VlcPlayer;
+import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 import butter.droid.tv.BuildConfig;
 
 public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPlayerView {
@@ -91,7 +93,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         return root;
     }
 
-    @Override public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+    @Override public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         presenter.onViewCreated();
@@ -119,7 +121,7 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         presenter.onPause();
     }
 
-    @Override public void onSaveInstanceState(final Bundle outState) {
+    @Override public void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
 
         presenter.onSaveInstanceState(outState);
@@ -131,13 +133,13 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         presenter.onDestroy();
     }
 
-    @Override public void setupControls(final String title) {
+    @Override public void setupControls(final String title, final int actions) {
         mediaSession.setPlaybackState(stateBuilder.build());
 
         MediaControllerCompat mediaController = new MediaControllerCompat(getContext(), mediaSession);
 
-        PlaybackTransportControlGlue<MediaControllerAdapter> mediaControllerGlue
-                = new PlayerMediaControllerGlue<>(requireContext(), new MediaControllerAdapter(mediaController));
+        PlaybackTransportControlGlue<MediaControllerAdapter> mediaControllerGlue = new PlayerMediaControllerGlue<>(
+                requireContext(), new MediaControllerAdapter(mediaController), actions);
         mediaControllerGlue.setTitle(title);
         mediaControllerGlue.setControlsOverlayAutoHideEnabled(true);
         mediaControllerGlue.setSeekEnabled(true);
@@ -217,12 +219,14 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         outState.putLong(ARG_RESUME_POSITION, resumePosition);
     }
 
-    protected boolean onCustomAction(final String action, final Bundle extras) {
+    protected boolean onCustomAction(final int action) {
         switch (action) {
-//            case PlayerMediaControllerGlue.ACTION_SCALE:
-//                presenter.onScaleClicked();
-//                tickle();
-//                return true;
+            case StreamPlayerPresenterImpl.PLAYER_ACTION_SCALE:
+                presenter.onScaleClicked();
+                tickle();
+                return true;
+            case StreamPlayerPresenterImpl.PLAYER_ACTION_PIP:
+                throw new UnsupportedOperationException("Needs to be implemented");
             default:
                 return false;
         }
@@ -258,11 +262,11 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
             // TODO handle
         }
 
-        @Override public void onCustomAction(final String action, final Bundle extras) {
-            if (!TVAbsPlayerFragment.this.onCustomAction(action, extras)) {
-                super.onCustomAction(action, extras);
-            }
-        }
+//        @Override public void onCustomAction(final String action, final Bundle extras) {
+//            if (!TVAbsPlayerFragment.this.onCustomAction(action, extras)) {
+//                super.onCustomAction(action, extras);
+//            }
+//        }
     }
 
     protected class PlayerMediaControllerGlue<T extends PlayerAdapter> extends PlaybackTransportControlGlue<T> {
@@ -272,43 +276,77 @@ public class TVAbsPlayerFragment extends VideoSupportFragment implements TVAbsPl
         private final PlaybackControlsRow.SkipPreviousAction skipPreviousAction;
         private final PlaybackControlsRow.SkipNextAction skipNextAction;
 
-        private final PlaybackControlsRow.ClosedCaptioningAction ccAction;
-        private final PlaybackControlsRow.PictureInPictureAction pipAction;
+        @Nullable private final PlaybackControlsRow.ClosedCaptioningAction ccAction;
+        @Nullable private final PlaybackControlsRow.PictureInPictureAction pipAction;
 
         /**
          * Constructor for the glue.
          *
          * @param context
          * @param impl Implementation to underlying media player.
+         * @param actions
          */
-        public PlayerMediaControllerGlue(Context context, T impl) {
+        public PlayerMediaControllerGlue(Context context, T impl, int actions) {
             super(context, impl);
 
-            skipPreviousAction = new SkipPreviousAction(context);
-            skipNextAction = new SkipNextAction(context);
-            pipAction = new PictureInPictureAction(context);
+            if ((actions & StreamPlayerPresenterImpl.PLAYER_ACTION_SKIP_PREVIOUS) > 0) {
+                skipPreviousAction = new SkipPreviousAction(context);;
+            } else {
+                skipPreviousAction = null;
+            }
 
-            ccAction = new ClosedCaptioningAction(context);
+            if ((actions & StreamPlayerPresenterImpl.PLAYER_ACTION_SKIP_NEXT) > 0) {
+                skipNextAction = new SkipNextAction(context);
+            } else {
+                skipNextAction = null;
+            }
+
+            if ((actions & StreamPlayerPresenterImpl.PLAYER_ACTION_PIP) > 0) {
+                pipAction = new PictureInPictureAction(context);
+            } else {
+                pipAction = null;
+            }
+
+            if ((actions & StreamPlayerPresenterImpl.PLAYER_ACTION_CC) > 0) {
+                ccAction = new ClosedCaptioningAction(context);
+            } else {
+                ccAction = null;
+            }
         }
 
         @Override protected void onCreatePrimaryActions(ArrayObjectAdapter primaryActionsAdapter) {
             super.onCreatePrimaryActions(primaryActionsAdapter);
-            primaryActionsAdapter.add(skipPreviousAction);
-            primaryActionsAdapter.add(skipNextAction);
+            if (skipPreviousAction != null) {
+                primaryActionsAdapter.add(skipPreviousAction);
+            }
+
+            if (skipNextAction != null) {
+                primaryActionsAdapter.add(skipNextAction);
+            }
         }
 
         @Override protected void onCreateSecondaryActions(ArrayObjectAdapter secondaryActionsAdapter) {
             super.onCreateSecondaryActions(secondaryActionsAdapter);
 
-            secondaryActionsAdapter.add(ccAction);
-//            primaryActionsAdapter.add(pipAction); // TODO when implemented
-            // TODO VLC wide scale action
+            if (ccAction != null) {
+                secondaryActionsAdapter.add(ccAction);
+            }
+
+            if (pipAction != null) {
+                secondaryActionsAdapter.add(pipAction);
+            }
+
+            // TODO VLC scale action
         }
 
         @Override public void onActionClicked(Action action) {
-            super.onActionClicked(action);
-
-            // TODO for secondary actions
+            if (action instanceof ClosedCaptioningAction) {
+                onCustomAction(StreamPlayerPresenterImpl.PLAYER_ACTION_CC);
+            } else if (action instanceof PictureInPictureAction) {
+                onCustomAction(StreamPlayerPresenterImpl.PLAYER_ACTION_PIP);
+            } else { // TODO scale action
+                super.onActionClicked(action);
+            }
         }
     }
 

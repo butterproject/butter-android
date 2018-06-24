@@ -21,7 +21,7 @@ import android.os.Bundle;
 
 public interface BaseVideoPlayerView {
 
-    void setupControls(String title);
+    void setupControls(String title, int actions);
 
     void attachVlcViews();
 
