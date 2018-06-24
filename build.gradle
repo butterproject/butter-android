@@ -27,7 +27,7 @@ ext {
     targetSdk = 28
     compileSdk = 28
     minSdk = 16
-    butterknifeVersion = "8.8.1"
+    butterknifeVersion = "9.0.0-SNAPSHOT"
     okHttpVersion = "3.10.0"
     daggerVersion = "2.16"
     javaxAnnotationVersion = "1.2"
