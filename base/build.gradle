@@ -1,5 +1,4 @@
 apply from: "${project.rootDir}/config/gradle/android-library-config.gradle"
-apply plugin: 'com.jakewharton.butterknife'
 
 android {
     def buildNumber = (System.getenv('BUILD_NUMBER') == null ? 0 : System.getenv('BUILD_NUMBER')) as int
@@ -40,6 +39,7 @@ android {
 dependencies {
     api 'androidx.palette:palette:1.0.0-alpha3'
     api 'androidx.appcompat:appcompat:1.0.0-alpha3'
+    api 'androidx.annotation:annotation:1.0.0-alpha3'
     api 'com.google.android.material:material:1.0.0-alpha3'
 
     debugImplementation 'com.github.simonpercic:oklog3:2.2.0'

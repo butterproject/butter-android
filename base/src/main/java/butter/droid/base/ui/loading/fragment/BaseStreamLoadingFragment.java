@@ -18,18 +18,16 @@
 package butter.droid.base.ui.loading.fragment;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import javax.inject.Inject;
 
-import butter.droid.base.R2;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import butter.droid.base.R;
 import butter.droid.base.torrent.TorrentService;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
 
 
@@ -59,13 +57,20 @@ public abstract class BaseStreamLoadingFragment extends DaggerFragment implement
     @Inject BaseStreamLoadingFragmentPresenter presenter;
 
     static class ViewHolder {
-        @BindView(R2.id.progress_indicator) ProgressBar progressIndicator;
-        @BindView(R2.id.primary_textview) TextView primaryTextView;
-        @BindView(R2.id.secondary_textview) TextView secondaryTextView;
-        @BindView(R2.id.tertiary_textview) TextView tertiaryTextView;
+        ProgressBar progressIndicator;
+        TextView primaryTextView;
+        TextView secondaryTextView;
+        TextView tertiaryTextView;
+
+        private void bind(View view) {
+            progressIndicator = view.findViewById(R.id.progress_indicator);
+            primaryTextView = view.findViewById(R.id.primary_textview);
+            secondaryTextView = view.findViewById(R.id.secondary_textview);
+            tertiaryTextView = view.findViewById(R.id.tertiary_textview);
+        }
     }
 
-    final ViewHolder viewHolder = new ViewHolder();
+    private final ViewHolder viewHolder = new ViewHolder();
 
     private TorrentService service;
 
@@ -81,7 +86,7 @@ public abstract class BaseStreamLoadingFragment extends DaggerFragment implement
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(viewHolder, view);
+        viewHolder.bind(view);
     }
 
     @Override public void startStreamUrl(String torrentUrl) {

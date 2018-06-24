@@ -18,12 +18,15 @@
 package butter.droid.ui.trailer;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.view.View;
+
+import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
 import butterknife.ButterKnife;
-import javax.inject.Inject;
 
 public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerPlayerView {
 
@@ -43,7 +46,7 @@ public class TrailerPlayerFragment extends AbsPlayerFragment implements TrailerP
         presenter.onCreate(media, uri, getResumePosition(savedInstanceState));
     }
 
-    @Override public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+    @Override public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
     }

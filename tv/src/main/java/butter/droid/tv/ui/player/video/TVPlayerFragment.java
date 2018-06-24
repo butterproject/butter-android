@@ -32,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.ui.player.stream.StreamPlayerPresenterImpl;
 import butter.droid.provider.subs.model.Subtitle;
 import butter.droid.tv.ui.player.abs.TVAbsPlayerFragment;
 import dagger.android.support.AndroidSupportInjection;
@@ -74,7 +75,7 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
     }
 
     @Override public void showPickSubsDialog(MediaWrapper mediaWrapper, @Nullable Subtitle subtitle) {
-
+        // TODO
     }
 
     @Override public void showSubsFilePicker() {
@@ -85,14 +86,14 @@ public class TVPlayerFragment extends TVAbsPlayerFragment implements TVPlayerVie
         // TODO: 5/7/17 - will be implemented later
     }
 
-    @Override protected boolean onCustomAction(final String action, final Bundle extras) {
+    @Override protected boolean onCustomAction(final int action) {
         switch (action) {
-//            case PlayerMediaControllerGlue.ACTION_CLOSE_CAPTION:
-//                presenter.onSubsClicked();
-//                tickle();
-//                return true;
+            case StreamPlayerPresenterImpl.PLAYER_ACTION_CC:
+                presenter.onSubsClicked();
+                tickle();
+                return true;
             default:
-                return super.onCustomAction(action, extras);
+                return super.onCustomAction(action);
         }
     }
 

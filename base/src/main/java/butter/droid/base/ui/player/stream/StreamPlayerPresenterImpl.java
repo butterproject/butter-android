@@ -41,6 +41,12 @@ import timber.log.Timber;
 
 public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements StreamPlayerPresenter {
 
+    public static final int PLAYER_ACTION_CC = 0x1;
+    public static final int PLAYER_ACTION_PIP = 0x1 << 1;
+    public static final int PLAYER_ACTION_SKIP_PREVIOUS = 0x1 << 2;
+    public static final int PLAYER_ACTION_SKIP_NEXT = 0x1 << 3;
+    public static final int PLAYER_ACTION_SCALE = 0x1 << 4;
+
     private final StreamPlayerView view;
     private final VlcPlayer player;
     private final ProviderManager providerManager;
@@ -50,6 +56,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
     @Nullable private Disposable subsDisposable;
 
+    // TODO subs from file
     private File subsFile;
     private int subtitleOffset;
     private int streamerProgress;
@@ -88,7 +95,8 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     @Override public void onViewCreated() {
-        view.setupControls(streamInfo.getFullTitle());
+        // TODO subs actions
+        view.setupControls(streamInfo.getFullTitle(), getPlayerActions());
     }
 
     @Override public void showSubsLanguageSettings() {
@@ -141,6 +149,16 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         if (time / player.getLength() * 100 <= getStreamerProgress()) {
             super.setCurrentTime(time);
         }
+    }
+
+    protected int getPlayerActions() {
+        int actions = PLAYER_ACTION_SCALE;
+
+        if (providerManager.hasSubsProvider(streamInfo.getMedia().getProviderId())) {
+            actions |= PLAYER_ACTION_CC;
+        }
+
+        return actions;
     }
 
     protected int getStreamerProgress() {

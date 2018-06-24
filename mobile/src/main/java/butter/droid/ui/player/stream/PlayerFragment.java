@@ -41,13 +41,10 @@ import butter.droid.provider.subs.model.Subtitle;
 import butter.droid.ui.beam.BeamPlayerActivity;
 import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
 import butter.droid.ui.player.abs.AbsPlayerFragment;
-import butterknife.OnClick;
 
 public class PlayerFragment extends AbsPlayerFragment implements PlayerView, TorrentListener {
 
     private static final String ARG_STREAM_INFO = "butter.droid.base.ui.player.fragment.BaseVideoPlayerFragment.streamInfo";
-
-    private static final String ACTION_CLOSE_CAPTION = "butter.droid.tv.ui.player.video.action.CLOSE_CAPTION";
 
     @Inject PlayerPresenter presenter;
 
@@ -57,8 +54,6 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
 
         StreamInfo streamInfo = getArguments().getParcelable(ARG_STREAM_INFO);
         long resumePosition = getResumePosition(savedInstanceState);
-
-        stateBuilder.addCustomAction(ACTION_CLOSE_CAPTION, getString(R.string.subtitles), R.drawable.ic_av_subs);
 
         presenter.onCreate(streamInfo, resumePosition);
     }
@@ -83,10 +78,6 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
     @Override public void startBeamPlayerActivity(@NonNull final StreamInfo streamInfo, final long currentTime) {
         FragmentActivity activity = requireActivity();
         activity.startActivity(BeamPlayerActivity.getIntent(activity, streamInfo, currentTime));
-    }
-
-    @OnClick(R.id.subs_button) void onSubsClick() {
-        mediaController.getTransportControls().sendCustomAction(ACTION_CLOSE_CAPTION, null);
     }
 
     @Override public void showSubsSelectorDialog() {
@@ -116,7 +107,7 @@ public class PlayerFragment extends AbsPlayerFragment implements PlayerView, Tor
     }
 
     @Override public void showPickSubsDialog(MediaWrapper mediaWrapper, @Nullable Subtitle subtitle) {
-        //        hideDialog();
+//        hideDialog();
 
         SubsPickerDialog dialog = SubsPickerDialog.newInstance(mediaWrapper, subtitle);
         dialog.show(getChildFragmentManager(), "dialog");
