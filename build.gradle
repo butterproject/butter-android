@@ -9,10 +9,6 @@ buildscript {
         google()
         maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
-        maven {
-            name 'jcenter-snapshot'
-            url "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
 
     dependencies {
@@ -31,7 +27,7 @@ ext {
     targetSdk = 28
     compileSdk = 28
     minSdk = 16
-    butterknifeVersion = "9.0.0-SNAPSHOT"
+    butterknifeVersion = "8.8.1"
     okHttpVersion = "3.10.0"
     daggerVersion = "2.16"
     javaxAnnotationVersion = "1.2"
