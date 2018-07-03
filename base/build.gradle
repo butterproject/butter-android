@@ -65,7 +65,7 @@ dependencies {
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     compile "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
 
-    compile "com.github.se-bastiaan:TorrentStream-Android:${rootProject.ext.torrentstreamVersion}"
+    compile "com.github.TorrentStream:TorrentStream-Android:${rootProject.ext.torrentstreamVersion}"
 
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.1.0'
 
