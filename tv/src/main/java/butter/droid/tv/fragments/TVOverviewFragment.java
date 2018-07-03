@@ -158,9 +158,14 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
             @DebugLog
             @Override
             public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
-                List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
-                mShowAdapter.clear();
-                mShowAdapter.addAll(0, list);
+                final List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mShowAdapter.clear();
+                        mShowAdapter.addAll(0, list);
+                    }
+                });
 
                 if(mSelectedRow == 1)
                     mBackgroundUpdater.updateBackgroundAsync(items.get(0).headerImage);
@@ -188,9 +193,14 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
             @DebugLog
             @Override
             public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
-                List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
-                mMoviesAdapter.clear();
-                mMoviesAdapter.addAll(0, list);
+                final List<MediaCardPresenter.MediaCardItem> list = MediaCardPresenter.convertMediaToOverview(items);
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMoviesAdapter.clear();
+                        mMoviesAdapter.addAll(0, list);
+                    }
+                });
 
                 if(mSelectedRow == 0)
                     mBackgroundUpdater.updateBackgroundAsync(items.get(0).headerImage);
