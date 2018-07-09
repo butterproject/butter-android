@@ -65,7 +65,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
                 .beginTransaction()
                 .replace(R.id.fragment, fragment)
                 .commit();
-        getFragmentManager().executePendingTransactions();
+        getSupportFragmentManager().executePendingTransactions();
 
         if (VersionUtils.isLollipop()) {
             startPostponedEnterTransition();
