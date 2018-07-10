@@ -17,15 +17,19 @@
 
 package butter.droid.tv.ui.main.overview;
 
+import android.util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.Pair;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.rx.KeyDisposable;
 import butter.droid.provider.base.filter.Filter;
-import butter.droid.provider.base.paging.Paging;
 import butter.droid.provider.base.nav.NavItem;
+import butter.droid.provider.base.paging.Paging;
 import butter.droid.provider.filter.Pager;
 import butter.droid.tv.R;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
@@ -37,8 +41,6 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TVOverviewPresenterImpl implements TVOverviewPresenter {
 
@@ -56,11 +58,10 @@ public class TVOverviewPresenterImpl implements TVOverviewPresenter {
     }
 
     @Override public void onActivityCreated() {
-
-        view.setupProviderRows(providerManager.getProviderCount());
+        view.setupProviderRows(providerManager.getProviders());
+        loadProvidersData();
         view.setupMoreRow();
 
-        loadProvidersData();
     }
 
     @Override public void rowSelected(final int index, @Nullable final MediaWrapper mediaItem) {

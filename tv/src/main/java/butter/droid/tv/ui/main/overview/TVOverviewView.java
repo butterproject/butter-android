@@ -17,12 +17,14 @@
 
 package butter.droid.tv.ui.main.overview;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.nav.NavItem;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
-import java.util.List;
 
 public interface TVOverviewView {
 
@@ -36,7 +38,7 @@ public interface TVOverviewView {
 
     void openMediaActivity(@StringRes int title, final int providerId, @NonNull Filter filter);
 
-    void setupProviderRows(int count);
+    void setupProviderRows(ProviderWrapper[] providers);
 
     void setupMoreRow();
 

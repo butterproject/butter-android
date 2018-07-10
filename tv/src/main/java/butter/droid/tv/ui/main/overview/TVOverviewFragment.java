@@ -37,9 +37,11 @@ import androidx.core.app.ActivityOptionsCompat;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
+import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.nav.NavItem;
@@ -136,18 +138,21 @@ public class TVOverviewFragment extends BrowseSupportFragment implements TVOverv
         startActivity(TVMediaGridActivity.newIntent(getActivity(), providerId, title, filter));
     }
 
-    @Override public void setupProviderRows(final int providerCount) {
+    @Override public void setupProviderRows(final ProviderWrapper[] providers) {
+        int providerCount = providers.length;
         mediaListAdapters = new ArrayObjectAdapter[providerCount];
         moreOptionsAdapters = new ArrayObjectAdapter[providerCount];
 
         for (int i = 0; i < providerCount; i++) {
-            mediaListAdapters[i] = addNewMediaListAdapter();
-            moreOptionsAdapters[i] = addMoreOptionsAdapter();
+            String providerName = getString(providers[i].getDisplayName());
+            mediaListAdapters[i] = addNewMediaListAdapter(providerName);
+            moreOptionsAdapters[i] = addMoreOptionsAdapter(providerName);
         }
     }
 
-    private ArrayObjectAdapter addMoreOptionsAdapter() {
-        HeaderItem moreOptionsHeader = new HeaderItem(getString(R.string.more_movies));
+    private ArrayObjectAdapter addMoreOptionsAdapter(final String providerName) {
+        HeaderItem moreOptionsHeader = new HeaderItem(String.format(Locale.getDefault(), "%s %s",
+                getString(R.string.provider_name_more), providerName));
         MorePresenter morePresenter = new MorePresenter(requireContext());
         ArrayObjectAdapter moreOptionsAdapter = new ArrayObjectAdapter(morePresenter);
         rowsAdapter.add(new ListRow(moreOptionsHeader, moreOptionsAdapter));
@@ -170,7 +175,7 @@ public class TVOverviewFragment extends BrowseSupportFragment implements TVOverv
         }
     }
 
-    private ArrayObjectAdapter addNewMediaListAdapter() {
+    private ArrayObjectAdapter addNewMediaListAdapter(final String sorterName) {
         Context context = requireContext();
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
         presenterSelector.addClassPresenter(MediaCardItem.class, new MediaCardPresenter(context));
@@ -179,8 +184,7 @@ public class TVOverviewFragment extends BrowseSupportFragment implements TVOverv
         ArrayObjectAdapter mediaAdapter = new ArrayObjectAdapter(presenterSelector);
         mediaAdapter.add(new LoadingCardItem());
 
-        // TODO: 6/17/17 Define title
-        HeaderItem moviesHeader = new HeaderItem(getString(R.string.top_movies));
+        HeaderItem moviesHeader = new HeaderItem(sorterName);
         rowsAdapter.add(new ListRow(moviesHeader, mediaAdapter));
         return mediaAdapter;
     }
