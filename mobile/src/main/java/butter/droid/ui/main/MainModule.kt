@@ -17,7 +17,6 @@
 
 package butter.droid.ui.main
 
-import android.content.Context
 import butter.droid.base.content.preferences.PreferencesHandler
 import butter.droid.base.manager.internal.provider.ProviderManager
 import butter.droid.base.manager.prefs.PrefManager
@@ -40,8 +39,12 @@ class MainModule {
 
     @Provides
     @ActivityScope
-    internal fun providePresenter(view: MainView, providerManager: ProviderManager,
-                                  preferencesHandler: PreferencesHandler, prefManager: PrefManager): MainPresenter {
+    internal fun providePresenter(
+        view: MainView,
+        providerManager: ProviderManager,
+        preferencesHandler: PreferencesHandler,
+        prefManager: PrefManager
+    ): MainPresenter {
         return MainPresenterImpl(view, providerManager, preferencesHandler, prefManager)
     }
 
@@ -63,4 +66,3 @@ class MainModule {
         fun contributeMediaListFragmentInjector(): MediaListFragment
     }
 }
-

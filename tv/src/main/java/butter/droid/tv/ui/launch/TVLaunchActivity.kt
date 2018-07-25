@@ -82,7 +82,6 @@ class TVLaunchActivity : DaggerActivity(), TVLaunchView {
             } catch (e: UnsupportedEncodingException) {
                 e.printStackTrace()
             }
-
         }
 
         TVMainActivity.startActivity(this)

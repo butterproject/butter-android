@@ -19,8 +19,6 @@ import si.kamino.gradle.extensions.version.code.SimpleVersionCode
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
-apply plugin: "kotlin-android"
-apply plugin: 'kotlin-kapt'
 
 android {
     defaultConfig {
@@ -60,9 +58,9 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.0.0-alpha3'
-    implementation 'androidx.palette:palette:1.0.0-alpha3'
-    implementation 'androidx.leanback:leanback:1.0.0-alpha3'
+    implementation 'androidx.annotation:annotation:1.0.0-beta01'
+    implementation 'androidx.palette:palette:1.0.0-beta01'
+    implementation 'androidx.leanback:leanback:1.0.0-beta01'
 
     implementation project(':base')
 

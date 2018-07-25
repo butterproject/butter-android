@@ -251,7 +251,6 @@ class MainActivity : ButterBaseActivity(), MainView {
         drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
         drawerToggle.syncState()
         drawerLayout.addDrawerListener(drawerToggle)
-
     }
 
     private fun setupTabs() {
@@ -271,5 +270,4 @@ class MainActivity : ButterBaseActivity(), MainView {
         private const val REQUEST_CODE_TERMS = 1
         private const val PERMISSIONS_REQUEST_STORAGE = 1
     }
-
 }

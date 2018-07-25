@@ -33,12 +33,13 @@ import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
-class MainPresenterImpl(private val view: MainView,
-                        private val providerManager: ProviderManager,
-                        private val preferencesHandler: PreferencesHandler,
-                        private val prefManager: PrefManager) : MainPresenter {
+class MainPresenterImpl(
+    private val view: MainView,
+    private val providerManager: ProviderManager,
+    private val preferencesHandler: PreferencesHandler,
+    private val prefManager: PrefManager
+) : MainPresenter {
 
     private val genreListeners = ArrayList<OnGenreChangeListener>()
     private val providerDataDisposable = KeyDisposable()
@@ -115,7 +116,7 @@ class MainPresenterImpl(private val view: MainView,
         unsubscribeProviderId(providerId)
         Observable.concat(mediaProvider.genres()
                 .filter { genres -> genres.isNotEmpty() }
-                .map({ NavInfo(R.id.nav_item_genre, 0, R.string.genres, providerId) })
+                .map { NavInfo(R.id.nav_item_genre, 0, R.string.genres, providerId) }
                 .toObservable(),
                 mediaProvider.navigation()
                         .flatMapObservable({ Observable.fromIterable(it) })
@@ -147,5 +148,4 @@ class MainPresenterImpl(private val view: MainView,
     interface OnGenreChangeListener {
         fun onGenreChanged(genre: UiGenre)
     }
-
 }

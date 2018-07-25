@@ -18,8 +18,6 @@ import si.kamino.gradle.extensions.version.FileAppVersion
  */
 
 apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
-apply plugin: "kotlin-android"
-apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -60,9 +58,9 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha3'
-    implementation 'androidx.mediarouter:mediarouter:1.0.0-alpha3'
-    implementation 'androidx.browser:browser:1.0.0-alpha3'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
+    implementation 'androidx.mediarouter:mediarouter:1.0.0-alpha4'
+    implementation 'androidx.browser:browser:1.0.0-beta01'
 
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.nirhart:parallaxscroll:1.0'

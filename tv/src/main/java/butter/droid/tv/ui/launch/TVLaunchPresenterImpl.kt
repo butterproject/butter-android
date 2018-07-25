@@ -46,5 +46,4 @@ class TVLaunchPresenterImpl(private val view: TVLaunchView, private val prefMana
     private fun hasAcceptedTerms(): Boolean {
         return prefManager.get(TVTermsPresenterImpl.TERMS_ACCEPTED, false)
     }
-
 }

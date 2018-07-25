@@ -18,6 +18,7 @@ buildscript {
         classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "gradle.plugin.solar.blaz.gradle:play-publisher:0.4.1"
+        classpath 'gradle.plugin.org.jmailen.gradle:kotlinter-gradle:1.15.1'
     }
 }
 
