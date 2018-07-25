@@ -16,7 +16,10 @@ import si.kamino.gradle.extensions.version.FileAppVersion
  * You should have received a copy of the GNU General Public License
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
+
 apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
+apply plugin: "kotlin-android"
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -70,9 +73,9 @@ dependencies {
 
     implementation project(':base')
 
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+    kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
 

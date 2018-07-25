@@ -52,7 +52,7 @@ repositories {
 }
 
 dependencies {
-    api 'androidx.appcompat:appcompat:1.0.0-alpha3'
+    api 'androidx.appcompat:appcompat:1.0.0-beta01'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     api "com.google.dagger:dagger:$daggerVersion"
 

@@ -15,17 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.launch;
+package butter.droid.tv.ui.launch
 
-public interface TVLaunchPresenter {
-
-    void onCreate();
-
-    void permissionsGranted();
-
-    void permissionsDenied();
-
-    void termsCanceled();
-
-    void termsAccepted();
+interface TVLaunchView {
+    fun close()
+    fun showTermsScreen()
+    fun startRecommendationService()
+    fun navigateForward()
 }
