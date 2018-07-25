@@ -16,6 +16,7 @@
  */
 
 apply plugin: "kotlin-android"
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'org.jmailen.kotlinter'
 
@@ -26,4 +27,8 @@ dependencies {
 kotlinter {
     indentSize = 4
     continuationIndentSize = 4
+}
+
+androidExtensions {
+    experimental = true
 }
