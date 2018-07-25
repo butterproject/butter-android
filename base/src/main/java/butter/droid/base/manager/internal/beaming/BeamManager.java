@@ -149,7 +149,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mDiscoveryManager.addListener(this);
 
         Intent castServerService = new Intent(context, BeamServerService.class);
-        context.startService(castServerService);
+        // TODO start foreground service
+        //        context.startService(castServerService);
     }
 
     public void onDestroy() {

@@ -9,15 +9,16 @@ buildscript {
         google()
         maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
+        mavenLocal()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-beta02'
+        classpath 'com.android.tools.build:gradle:3.2.0-beta04'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "gradle.plugin.solar.blaz.gradle:play-publisher:0.4.0"
+        classpath "solar.blaz.gradle:play-publisher:0.4.1-SNAPSHOT"
     }
 }
 

@@ -19,9 +19,6 @@ package butter.droid.tv.manager.internal.background;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import androidx.annotation.DrawableRes;
-import androidx.leanback.app.BackgroundManager;
 
 import com.bumptech.glide.request.target.Target;
 
@@ -30,6 +27,8 @@ import java.util.TimerTask;
 
 import javax.inject.Inject;
 
+import androidx.annotation.DrawableRes;
+import androidx.leanback.app.BackgroundManager;
 import butter.droid.base.manager.internal.glide.GlideApp;
 import butter.droid.base.manager.internal.glide.GlideRequests;
 import butter.droid.base.utils.ThreadUtils;
@@ -97,30 +96,6 @@ public class BackgroundUpdater {
                     .error(defaultBackground)
                     .into(backgroundImageTarget);
         }
-    }
-
-    /**
-     * Updates the background immediately with a drawable
-     *
-     * @param drawable
-     */
-    public void updateBackground(Drawable drawable) {
-        backgroundManager.setDrawable(drawable);
-    }
-
-//    protected void setDefaultBackground(Drawable background) {
-//        defaultBackground = background;
-//    }
-
-    protected void setDefaultBackground(int resourceId) {
-        defaultBackground = resourceId;
-    }
-
-    /**
-     * Clears the background immediately
-     */
-    public void clearBackground() {
-        backgroundManager.setThemeDrawableResourceId(defaultBackground);
     }
 
     private class UpdateBackgroundTask extends TimerTask {

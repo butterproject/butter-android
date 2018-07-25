@@ -29,10 +29,6 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.IBinder;
 import android.os.PowerManager;
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationCompat.Action;
-import androidx.core.app.NotificationCompat.Action.Builder;
 
 import org.butterproject.torrentstream.StreamStatus;
 import org.butterproject.torrentstream.Torrent;
@@ -48,6 +44,11 @@ import java.util.TimerTask;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationCompat.Action;
+import androidx.core.app.NotificationCompat.Action.Builder;
+import androidx.core.content.ContextCompat;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.foreground.ForegroundListener;
@@ -59,7 +60,7 @@ import dagger.android.DaggerService;
 public class TorrentService extends DaggerService implements TorrentListener {
 
     public static final int NOTIFICATION_ID = 3423423;
-    private static final String WAKE_LOCK = "TorrentService_WakeLock";
+    private static final String WAKE_LOCK = "butter.droid.base.torrent.TorrentService:wakeLock";
 
     @Inject PreferencesHandler preferencesHandler;
     @Inject ForegroundManager foregroundManager;
@@ -340,7 +341,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
 
     public static void start(Context context) {
         Intent intent = new Intent(context, TorrentService.class);
-        context.startService(intent);
+        ContextCompat.startForegroundService(context, intent);
     }
 
     protected static void stop(Context context) {
