@@ -56,14 +56,6 @@ class TVLaunchActivity : DaggerAppCompatActivity(), TVLaunchView {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     override fun close() {
         finish()
     }
