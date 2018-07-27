@@ -17,8 +17,11 @@
 
 package butter.droid.tv.ui.launch
 
+import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.startActivityForResult
 import butter.droid.base.providers.media.model.MediaWrapper
 import butter.droid.base.providers.media.model.StreamInfo
 import butter.droid.provider.base.model.Clip
@@ -26,12 +29,12 @@ import butter.droid.tv.service.RecommendationService
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity
 import butter.droid.tv.ui.main.TVMainActivity
 import butter.droid.tv.ui.terms.TVTermsActivity
-import dagger.android.DaggerActivity
+import dagger.android.support.DaggerAppCompatActivity
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import javax.inject.Inject
 
-class TVLaunchActivity : DaggerActivity(), TVLaunchView {
+class TVLaunchActivity : DaggerAppCompatActivity(), TVLaunchView {
 
     @Inject
     lateinit var presenter: TVLaunchPresenter
@@ -41,7 +44,7 @@ class TVLaunchActivity : DaggerActivity(), TVLaunchView {
         presenter.onCreate()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             REQUEST_CODE_TERMS -> if (resultCode == RESULT_CANCELED) {
                 presenter.termsCanceled()
@@ -51,6 +54,14 @@ class TVLaunchActivity : DaggerActivity(), TVLaunchView {
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     override fun close() {
