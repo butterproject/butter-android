@@ -26,8 +26,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
-import androidx.multidex.MultiDex;
-import androidx.core.app.NotificationCompat;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
@@ -35,6 +33,8 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import androidx.core.app.NotificationCompat;
+import androidx.multidex.MultiDex;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.foreground.ForegroundManager;
@@ -104,8 +104,8 @@ public abstract class ButterApplication extends DaggerApplication implements But
             statusFile.delete();
         }
 
-        Timber.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
-        Timber.i("Chosen cache location: " + directory);
+        Timber.d("StorageLocations: %s", StorageUtils.getAllStorageLocations());
+        Timber.i("Chosen cache location: %s", directory);
     }
 
     @Override

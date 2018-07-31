@@ -273,7 +273,8 @@ public class TorrentService extends DaggerService implements TorrentListener {
         }
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent stopIntent = new Intent();
         stopIntent.setAction(TorrentBroadcastReceiver.STOP);
@@ -283,8 +284,10 @@ public class TorrentService extends DaggerService implements TorrentListener {
                 getString(R.string.stop), pendingStopIntent).build();
 
         // TODO text to resources
-        notificationManager.createChannel(ButterNotificationManager.CHANNEL_STREAMING, "Straming", NotificationManager.IMPORTANCE_LOW);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, ButterNotificationManager.CHANNEL_STREAMING)
+        notificationManager.createChannel(ButterNotificationManager.CHANNEL_STREAMING, "Straming",
+                NotificationManager.IMPORTANCE_LOW);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
+                ButterNotificationManager.CHANNEL_STREAMING)
                 .setSmallIcon(R.drawable.ic_notif_logo)
                 .setContentTitle(getString(R.string.app_name) + " - " + getString(R.string.running))
                 .setContentText(getString(R.string.tap_to_resume))
@@ -341,6 +344,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
 
     public static void start(Context context) {
         Intent intent = new Intent(context, TorrentService.class);
+//        context.startService(intent);
         ContextCompat.startForegroundService(context, intent);
     }
 

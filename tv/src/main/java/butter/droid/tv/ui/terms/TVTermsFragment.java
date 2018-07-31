@@ -84,12 +84,12 @@ public class TVTermsFragment extends GuidedStepSupportFragment implements TVTerm
     }
 
     @Override public void closeSuccess() {
-        getActivity().setResult(Activity.RESULT_OK);
+        requireActivity().setResult(Activity.RESULT_OK);
         closeSelf();
     }
 
     @Override public void closeSelf() {
-        getActivity().finish();
+        requireActivity().finish();
     }
 
     public static class TermsGuidanceStylist extends GuidanceStylist {
