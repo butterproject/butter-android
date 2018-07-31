@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
 import androidx.core.content.ContextCompat;
+import butter.droid.base.utils.VersionUtils;
 
 // http://stackoverflow.com/a/35347960
 public class Bitmaps {
@@ -17,7 +18,7 @@ public class Bitmaps {
         final Drawable drawable = ContextCompat.getDrawable(context, drawableId);
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
-        } else if (drawable instanceof VectorDrawable) {
+        } else if (VersionUtils.isLollipop() && drawable instanceof VectorDrawable) {
             return getBitmap((VectorDrawable) drawable);
         }
         throw new IllegalArgumentException("Illegal drawable type");

@@ -17,7 +17,6 @@
 
 package butter.droid.ui.main
 
-
 import android.Manifest
 import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
@@ -236,7 +235,7 @@ class MainActivity : ButterBaseActivity(), MainView {
                 StreamLoadingActivity.startActivity(this, StreamInfo(streamUrl, MediaWrapper(clip, -1), null))
                 finish()
             } catch (e: UnsupportedEncodingException) {
-                Timber.d("Unknown encoding", e) // this should never happen
+                Timber.d(e, "Unknown encoding") // this should never happen
             }
         }
     }

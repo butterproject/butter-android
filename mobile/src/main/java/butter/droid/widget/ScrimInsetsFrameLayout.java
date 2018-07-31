@@ -38,10 +38,10 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import androidx.core.view.ViewCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
+import androidx.core.view.ViewCompat;
 import butter.droid.R;
 
 /**
@@ -74,11 +74,11 @@ public class ScrimInsetsFrameLayout extends FrameLayout {
     }
 
     private void init(Context context, AttributeSet attrs, int defStyle) {
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ScrimInsetsView, defStyle, 0);
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ScrimInsetsFrameLayout, defStyle, 0);
         if (a == null) {
             return;
         }
-        insetForeground = a.getDrawable(R.styleable.ScrimInsetsView_insetForegroundColor);
+        insetForeground = a.getDrawable(R.styleable.ScrimInsetsFrameLayout_insetForegroundColor);
         a.recycle();
 
         setWillNotDraw(true);

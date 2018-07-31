@@ -106,7 +106,7 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
                             view.addItems(null, false, null);
                             showLoaded();
                         } else {
-                            Timber.e(e.getMessage());
+                            Timber.e(e);
                             view.showErrorMessage(R.string.unknown_error);
                             showLoaded();
                         }

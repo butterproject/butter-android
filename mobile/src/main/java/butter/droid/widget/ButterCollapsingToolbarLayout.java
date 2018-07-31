@@ -19,6 +19,7 @@ package butter.droid.widget;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -34,7 +35,7 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import butter.droid.R;
 
-public class BurtterCollapsingToolbarLayout extends CollapsingToolbarLayout {
+public class ButterCollapsingToolbarLayout extends CollapsingToolbarLayout {
 
     @ColorInt private static final int TEXT_COLOR = Color.WHITE;
     @ColorInt private static final int TEXT_COLOR_TRANSPARENT = TEXT_COLOR & 0xFFFFFF;
@@ -45,12 +46,12 @@ public class BurtterCollapsingToolbarLayout extends CollapsingToolbarLayout {
 
     private ValueAnimator animator;
 
-    public BurtterCollapsingToolbarLayout(Context context, AttributeSet attrs) {
+    @SuppressLint("PrivateResource") public ButterCollapsingToolbarLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         setTitleEnabled(false);
 
-        TypedArray attr = context.obtainStyledAttributes(attrs,
+        @SuppressLint("CustomViewStyleable") TypedArray attr = context.obtainStyledAttributes(attrs,
                 R.styleable.CollapsingToolbarLayout, 0,
                 R.style.Widget_Design_CollapsingToolbar);
 

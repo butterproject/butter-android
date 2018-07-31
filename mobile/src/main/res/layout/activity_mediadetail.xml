@@ -14,7 +14,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:background="@android:color/transparent">
 
-        <butter.droid.widget.BurtterCollapsingToolbarLayout
+        <butter.droid.widget.ButterCollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -55,7 +55,7 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        </butter.droid.widget.BurtterCollapsingToolbarLayout>
+        </butter.droid.widget.ButterCollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 

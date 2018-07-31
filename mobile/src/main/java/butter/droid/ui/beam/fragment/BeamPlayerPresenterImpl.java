@@ -17,13 +17,8 @@
 
 package butter.droid.ui.beam.fragment;
 
-import androidx.annotation.Nullable;
-import butter.droid.R;
-import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
-import butter.droid.base.manager.internal.beaming.BeamManager;
-import butter.droid.base.providers.media.model.StreamInfo;
-import butter.droid.base.utils.StringUtils;
-import butter.droid.ui.beam.BeamPlayerActivityPresenter;
+import android.annotation.SuppressLint;
+
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.service.capability.MediaControl;
 import com.connectsdk.service.capability.MediaControl.PlayStateListener;
@@ -35,9 +30,18 @@ import com.connectsdk.service.capability.VolumeControl.VolumeListener;
 import com.connectsdk.service.capability.listeners.ResponseListener;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.command.ServiceSubscription;
+
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.Nullable;
+import butter.droid.R;
+import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
+import butter.droid.base.manager.internal.beaming.BeamManager;
+import butter.droid.base.providers.media.model.StreamInfo;
+import butter.droid.base.utils.StringUtils;
+import butter.droid.ui.beam.BeamPlayerActivityPresenter;
 import timber.log.Timber;
 
 public class BeamPlayerPresenterImpl implements BeamPlayerPresenter, LaunchListener {
@@ -267,7 +271,7 @@ public class BeamPlayerPresenterImpl implements BeamPlayerPresenter, LaunchListe
 
     }
 
-    @Override public void onError(final ServiceCommandError error) {
+    @SuppressLint("TimberExceptionLogging") @Override public void onError(final ServiceCommandError error) {
         Timber.e(error.getCause(), error.getMessage());
         if (beamRetries > 2) {
 
