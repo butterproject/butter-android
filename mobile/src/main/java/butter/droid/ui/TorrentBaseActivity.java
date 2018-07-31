@@ -38,15 +38,15 @@ import dagger.android.support.DaggerAppCompatActivity;
 import dagger.android.support.HasSupportFragmentInjector;
 import javax.inject.Inject;
 
-public abstract class TorrentBaseActivity extends DaggerAppCompatActivity implements TorrentActivity, HasFragmentInjector,
+public abstract class TorrentBaseActivity extends DaggerAppCompatActivity implements TorrentActivity,
         HasSupportFragmentInjector {
 
     static {
+        // TODO should be removed
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Inject DispatchingAndroidInjector<Fragment> supportFragmentInjector;
-    @Inject DispatchingAndroidInjector<android.app.Fragment> frameworkFragmentInjector;
     @Inject PreferencesHandler preferencesHandler;
 
     protected Handler torrentHandler;
@@ -92,11 +92,6 @@ public abstract class TorrentBaseActivity extends DaggerAppCompatActivity implem
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return supportFragmentInjector;
-    }
-
-    @Override
-    public AndroidInjector<android.app.Fragment> fragmentInjector() {
-        return frameworkFragmentInjector;
     }
 
     protected ButterApplication getApp() {

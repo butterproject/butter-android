@@ -19,10 +19,10 @@ package butter.droid.tv.ui.preferences.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.fragment.app.DialogFragment;
 import butter.droid.base.R;
 import it.gmariotti.changelibs.library.view.ChangeLogRecyclerView;
 
@@ -37,12 +37,7 @@ public class TVChangeLogDialogFragment extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.changelog)
                 .setView(chgList)
-                .setPositiveButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
-                            }
-                        }
+                .setPositiveButton(R.string.ok, (dialog, whichButton) -> dialog.dismiss()
                 )
                 .create();
 
