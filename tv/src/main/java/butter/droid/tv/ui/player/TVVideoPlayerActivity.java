@@ -39,7 +39,6 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
     private StreamInfo streamInfo;
     private boolean currentStreamStopped = false;
 
-    @SuppressLint("MissingSuperCall")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
