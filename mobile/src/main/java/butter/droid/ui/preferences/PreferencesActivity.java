@@ -64,6 +64,7 @@ import butter.droid.ui.preferences.fragment.ChangeLogDialogFragment;
 import butter.droid.utils.ButterCustomTabActivityHelper;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -82,10 +83,12 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
 
     private PreferencesAdapter adapter;
 
-    @SuppressLint("MissingSuperCall")
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_preferences);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_preferences);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

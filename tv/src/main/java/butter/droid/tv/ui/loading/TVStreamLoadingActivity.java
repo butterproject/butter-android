@@ -42,10 +42,9 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
 
     @Nullable private BaseStreamLoadingFragment fragment;
 
-    @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, 0);
+        super.onCreate(savedInstanceState);
 
         StreamInfo streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
         presenter.onCreate(streamInfo, savedInstanceState != null);

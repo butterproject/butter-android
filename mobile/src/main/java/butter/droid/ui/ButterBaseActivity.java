@@ -41,9 +41,8 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
 
     protected Boolean showCasting = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState, int layoutId) {
-        super.onCreate(savedInstanceState, layoutId);
+    @Override protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         if (!VersionUtils.isUsingCorrectBuild()) {
             new AlertDialog.Builder(this)

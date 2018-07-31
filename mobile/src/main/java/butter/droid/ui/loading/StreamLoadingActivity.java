@@ -50,7 +50,7 @@ public class StreamLoadingActivity extends ButterBaseActivity implements StreamL
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         getWindow().setBackgroundDrawableResource(R.color.bg);
 
-        super.onCreate(savedInstanceState, 0);
+        super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         if (!getIntent().hasExtra(EXTRA_INFO)) {

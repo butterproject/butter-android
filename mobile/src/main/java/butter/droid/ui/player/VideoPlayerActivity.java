@@ -43,7 +43,7 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, 0);
+        super.onCreate(savedInstanceState);
 
         setShowCasting(true);
 

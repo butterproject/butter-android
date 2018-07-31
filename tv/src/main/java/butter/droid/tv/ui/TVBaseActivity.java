@@ -26,8 +26,8 @@ import butter.droid.tv.ui.search.TVSearchActivity;
 public abstract class TVBaseActivity extends TVTorrentBaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState, int layoutId) {
-        super.onCreate(savedInstanceState, layoutId);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         if (!VersionUtils.isUsingCorrectBuild()) {
             new AlertDialog.Builder(this)

@@ -23,25 +23,26 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import com.google.android.material.appbar.AppBarLayout.ScrollingViewBehavior;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.util.Pair;
-import androidx.core.view.ViewCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.google.android.material.appbar.AppBarLayout.ScrollingViewBehavior;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
+import androidx.core.util.Pair;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
@@ -63,6 +64,7 @@ import butter.droid.ui.media.detail.streamable.StreamableDetailFragment;
 import butter.droid.ui.player.VideoPlayerActivity;
 import butter.droid.ui.trailer.TrailerPlayerActivity;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 
@@ -84,7 +86,10 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_mediadetail);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mediadetail);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
         setShowCasting(true);
 

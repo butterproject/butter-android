@@ -52,6 +52,7 @@ import butter.droid.ui.terms.TermsActivity
 import butter.droid.utils.ToolbarUtils
 import butter.droid.widget.ScrimInsetsFrameLayout
 import butterknife.BindView
+import butterknife.ButterKnife
 import com.google.android.material.tabs.TabLayout
 import timber.log.Timber
 import java.io.UnsupportedEncodingException
@@ -76,9 +77,10 @@ class MainActivity : ButterBaseActivity(), MainView {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var adapter: MediaPagerAdapter
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_main)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ButterKnife.bind(this)
 
         setSupportActionBar(toolbar)
         supportActionBar?.apply {

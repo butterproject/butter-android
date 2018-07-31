@@ -31,7 +31,7 @@ public class TrailerPlayerActivity extends ButterBaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, 0);
+        super.onCreate(savedInstanceState);
 
         final Intent intent = getIntent();
         final MediaWrapper media = intent.getParcelableExtra(EXTRA_MEDIA);

@@ -48,7 +48,7 @@ public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayer
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        super.onCreate(savedInstanceState, 0);
+        super.onCreate(savedInstanceState);
 
         setShowCasting(true);
 

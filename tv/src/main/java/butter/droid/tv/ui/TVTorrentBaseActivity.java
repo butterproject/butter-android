@@ -35,7 +35,6 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.utils.LocaleUtils;
-import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -49,16 +48,11 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
 
     protected TorrentService torrentStream;
 
-    protected void onCreate(Bundle savedInstanceState, int layoutId) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onCreate(savedInstanceState);
-
-        if (layoutId != 0) {
-            setContentView(layoutId);
-            ButterKnife.bind(this);
-        }
     }
 
     @Override
