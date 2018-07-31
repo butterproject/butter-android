@@ -20,7 +20,6 @@ package butter.droid.tv.ui.launch
 import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
 import butter.droid.base.providers.media.model.MediaWrapper
 import butter.droid.base.providers.media.model.StreamInfo
