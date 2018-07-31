@@ -19,16 +19,15 @@ package butter.droid.tv.ui.preferences;
 
 import android.content.Context;
 import android.content.res.Resources;
-import androidx.annotation.NonNull;
-import androidx.leanback.widget.GuidedAction;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.leanback.widget.GuidedAction;
 import butter.droid.base.content.preferences.PrefItem;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.preferences.BasePreferencesPresenterImpl;
 
 public class TVPreferencesPresenterImpl extends BasePreferencesPresenterImpl implements TVPreferencesPresenter {
@@ -38,9 +37,8 @@ public class TVPreferencesPresenterImpl extends BasePreferencesPresenterImpl imp
     private final PreferencesHandler preferencesHandler;
 
     public TVPreferencesPresenterImpl(TVPreferencesView view, Context context, PreferencesHandler preferencesHandler,
-            Resources resources, PrefManager prefManager, PlayerManager playerManager,
-            ButterUpdateManager updateManager) {
-        super(view, prefManager, playerManager, preferencesHandler, updateManager, resources, true);
+            Resources resources, PrefManager prefManager, PlayerManager playerManager) {
+        super(view, prefManager, playerManager, preferencesHandler, resources, true);
         this.view = view;
         this.context = context;
         this.preferencesHandler = preferencesHandler;

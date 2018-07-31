@@ -17,10 +17,10 @@
 
 package butter.droid.base.content.preferences;
 
-import androidx.annotation.StringDef;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import androidx.annotation.StringDef;
 
 public final class Prefs {
 
@@ -29,7 +29,7 @@ public final class Prefs {
     @StringDef({SUBTITLE_COLOR, SUBTITLE_SIZE, SUBTITLE_STROKE_WIDTH, SUBTITLE_STROKE_COLOR, SUBTITLE_DEFAULT_LANGUAGE,
             STORAGE_LOCATION, REMOVE_CACHE, HW_ACCELERATION, AUTOMATIC_UPDATES, DEFAULT_PROVIDER, DEFAULT_PLAYER,
             DEFAULT_PLAYER_NAME, WIFI_ONLY, LOCALE, LIBTORRENT_CONNECTION_LIMIT, LIBTORRENT_DOWNLOAD_LIMIT, LIBTORRENT_UPLOAD_LIMIT,
-            LIBTORRENT_LISTENING_PORT, LIBTORRENT_AUTOMATIC_PORT, SHOW_VPN, PIXEL_FORMAT, QUALITY_DEFAULT, CHECK_UPDATE, REPORT_BUG,
+            LIBTORRENT_LISTENING_PORT, LIBTORRENT_AUTOMATIC_PORT, SHOW_VPN, PIXEL_FORMAT, QUALITY_DEFAULT, REPORT_BUG,
             CHANGE_LOG, NOTICE, VERSION, ABOUT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface PrefKey {
@@ -65,7 +65,7 @@ public final class Prefs {
     public static final String SHOW_VPN = "show_vpn"; // TODO: 12/9/16 This is never used
     public static final String PIXEL_FORMAT = "pixel_format";
     public static final String QUALITY_DEFAULT = "quality_default";
-    public static final String CHECK_UPDATE = "check_update";
+//    public static final String CHECK_UPDATE = "check_update";
     public static final String REPORT_BUG = "report_bug";
     public static final String CHANGE_LOG = "change_log";
     public static final String NOTICE = "notice";

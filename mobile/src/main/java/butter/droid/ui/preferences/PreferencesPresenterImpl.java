@@ -23,9 +23,8 @@ import java.util.Map;
 
 import butter.droid.base.content.preferences.PrefItem;
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.preferences.BasePreferencesPresenterImpl;
 
 public class PreferencesPresenterImpl extends BasePreferencesPresenterImpl implements PreferencesPresenter {
@@ -34,9 +33,8 @@ public class PreferencesPresenterImpl extends BasePreferencesPresenterImpl imple
     private final PreferencesHandler preferencesHandler;
 
     public PreferencesPresenterImpl(PreferencesView view, PrefManager prefManager,
-            PreferencesHandler preferencesHandler, Resources resources, PlayerManager playerManager,
-            ButterUpdateManager updateManager) {
-        super(view, prefManager, playerManager, preferencesHandler, updateManager, resources, false);
+            PreferencesHandler preferencesHandler, Resources resources, PlayerManager playerManager) {
+        super(view, prefManager, playerManager, preferencesHandler, resources, false);
         this.view = view;
         this.preferencesHandler = preferencesHandler;
     }

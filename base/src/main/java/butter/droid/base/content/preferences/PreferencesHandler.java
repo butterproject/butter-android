@@ -1,38 +1,37 @@
 package butter.droid.base.content.preferences;
 
-import static butter.droid.base.content.preferences.Prefs.DEFAULT_PROVIDER;
-
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.inject.Inject;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import android.text.format.DateFormat;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.Constants;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PrefItem.SubtitleGenerator;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.internal.vlc.VLCMediaOptions;
 import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StorageUtils;
 import butter.droid.provider.base.model.Format;
 import dagger.Reusable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import javax.inject.Inject;
+
+import static butter.droid.base.content.preferences.Prefs.DEFAULT_PROVIDER;
 
 @Reusable
 public class PreferencesHandler {
@@ -104,7 +103,7 @@ public class PreferencesHandler {
         // updates
         keys.add(Prefs.TITLE_UPDATES);
         keys.add(Prefs.AUTOMATIC_UPDATES);
-        keys.add(Prefs.CHECK_UPDATE);
+//        keys.add(Prefs.CHECK_UPDATE);
 
         // about
         keys.add(Prefs.TITLE_ABOUT);
@@ -467,25 +466,22 @@ public class PreferencesHandler {
                             }
                         })
                         .build();
-            case Prefs.CHECK_UPDATE:
-                return PrefItem.newBuilder()
-                        .setIconResource(R.drawable.ic_prefs_check_update)
-                        .setTitleResource(R.string.check_for_updates)
-                        .setPreferenceKey(Prefs.CHECK_UPDATE)
-                        .setValue(prefManager.get(ButterUpdateManager.LAST_UPDATE_CHECK, 1L))
-                        .setSubtitleGenerator(new SubtitleGenerator() {
-                            @Override
-                            public String get(PrefItem item) {
-                                long timeStamp = (long) item.getValue();
-                                Calendar cal = Calendar.getInstance(Locale.getDefault());
-                                cal.setTimeInMillis(timeStamp);
-                                String time = SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM,
-                                        Locale.getDefault()).format(timeStamp);
-                                String date = DateFormat.format("dd-MM-yyy", cal).toString();
-                                return resources.getString(R.string.last_check) + ": " + date + " " + time;
-                            }
-                        })
-                        .build();
+//            case Prefs.CHECK_UPDATE:
+//                return PrefItem.newBuilder()
+//                        .setIconResource(R.drawable.ic_prefs_check_update)
+//                        .setTitleResource(R.string.check_for_updates)
+//                        .setPreferenceKey(Prefs.CHECK_UPDATE)
+//                        .setValue(prefManager.get(ButterUpdateManager.LAST_UPDATE_CHECK, 1L))
+//                        .setSubtitleGenerator(item -> {
+//                            long timeStamp = (long) item.getValue();
+//                            Calendar cal = Calendar.getInstance(Locale.getDefault());
+//                            cal.setTimeInMillis(timeStamp);
+//                            String time = SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM,
+//                                    Locale.getDefault()).format(timeStamp);
+//                            String date = DateFormat.format("dd-MM-yyy", cal).toString();
+//                            return resources.getString(R.string.last_check) + ": " + date + " " + time;
+//                        })
+//                        .build();
             case Prefs.REPORT_BUG:
                 return PrefItem.newBuilder()
                         .setIconResource(R.drawable.ic_prefs_report_bug)

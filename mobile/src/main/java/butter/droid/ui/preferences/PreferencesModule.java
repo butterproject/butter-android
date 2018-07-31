@@ -20,9 +20,8 @@ package butter.droid.ui.preferences;
 import android.content.res.Resources;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.ActivityScope;
 import butter.droid.ui.preferences.PreferencesModule.PreferencesBindModule;
 import dagger.Binds;
@@ -34,9 +33,8 @@ public class PreferencesModule {
 
     @Provides @ActivityScope PreferencesPresenter providePresenter(PreferencesView view,
             PrefManager prefManager, PreferencesHandler preferencesHandler, Resources resources,
-            PlayerManager playerManager, ButterUpdateManager updateManager) {
-        return new PreferencesPresenterImpl(view, prefManager, preferencesHandler, resources, playerManager,
-                updateManager);
+            PlayerManager playerManager) {
+        return new PreferencesPresenterImpl(view, prefManager, preferencesHandler, resources, playerManager);
     }
 
     @Module public interface PreferencesBindModule {

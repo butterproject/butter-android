@@ -21,9 +21,8 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import butter.droid.base.content.preferences.PreferencesHandler;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.tv.ui.preferences.TVPreferencesModule.TVPreferencesBindModule;
 import dagger.Binds;
@@ -35,9 +34,9 @@ public class TVPreferencesModule {
 
     @FragmentScope @Provides TVPreferencesPresenter providePresenter(TVPreferencesView view, Context context,
             PreferencesHandler preferencesHandler, Resources resources, PrefManager prefManager,
-            PlayerManager playerManager, ButterUpdateManager updateManager) {
+            PlayerManager playerManager) {
         return new TVPreferencesPresenterImpl(view, context, preferencesHandler, resources, prefManager,
-                playerManager, updateManager);
+                playerManager);
     }
 
     @Module

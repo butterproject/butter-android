@@ -37,12 +37,6 @@ public class TVMainActivity extends TVBaseActivity implements TVMainView {
     @Override
     protected void onResume() {
         super.onResume();
-
-        presenter.onResume();
-    }
-
-    @Override public void showUpdateActivity() {
-        startActivity(TVUpdateActivity.newIntent(this));
     }
 
     public static Intent startActivity(Activity activity) {

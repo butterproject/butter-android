@@ -17,15 +17,11 @@
 
 package butter.droid.base;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.net.Uri;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
@@ -33,12 +29,10 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import androidx.core.app.NotificationCompat;
 import androidx.multidex.MultiDex;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.foreground.ForegroundManager;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.LocaleUtils;
@@ -47,12 +41,11 @@ import butter.droid.base.utils.VersionUtils;
 import dagger.android.support.DaggerApplication;
 import timber.log.Timber;
 
-public abstract class ButterApplication extends DaggerApplication implements ButterUpdateManager.Listener {
+public abstract class ButterApplication extends DaggerApplication {
 
     private static String sDefSystemLanguage;
     private static ButterApplication sThis;
 
-    @Inject ButterUpdateManager updateManager;
     @Inject BeamManager beamManager;
     @Inject PreferencesHandler preferencesHandler;
     @Inject ForegroundManager foregroundManager; // inject just so it is initialized
@@ -87,9 +80,6 @@ public abstract class ButterApplication extends DaggerApplication implements But
             Timber.plant(new Timber.DebugTree());
         }
 
-        updateManager.setListener(this);
-        updateManager.checkUpdates(false);
-
         if (VersionUtils.isUsingCorrectBuild()) {
             TorrentService.start(this);
         }
@@ -123,27 +113,6 @@ public abstract class ButterApplication extends DaggerApplication implements But
 
     public static String getSystemLanguage() {
         return sDefSystemLanguage;
-    }
-
-    @Override
-    public void updateAvailable(String updateFile) {
-        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (updateFile.length() > 0) {
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_notif_logo)
-                    .setContentTitle(getString(R.string.update_available))
-                    .setContentText(getString(R.string.press_install))
-                    .setAutoCancel(true)
-                    .setDefaults(NotificationCompat.DEFAULT_ALL);
-
-            Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
-            notificationIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdateManager.ANDROID_PACKAGE);
-
-            notificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0));
-
-            nm.notify(ButterUpdateManager.NOTIFICATION_ID, notificationBuilder.build());
-        }
     }
 
     public static ButterApplication getAppContext() {

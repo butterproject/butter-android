@@ -17,25 +17,11 @@
 
 package butter.droid.tv.ui.main;
 
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
-
 public class TVMainPresenterImpl implements TVMainPresenter {
 
     private final TVMainView view;
-    private final ButterUpdateManager updateManager;
 
-    public TVMainPresenterImpl(final TVMainView view, final ButterUpdateManager updateManager) {
+    public TVMainPresenterImpl(final TVMainView view) {
         this.view = view;
-        this.updateManager = updateManager;
-    }
-
-    @Override public void onResume() {
-        updateManager.setListener(new ButterUpdateManager.Listener() {
-            @Override
-            public void updateAvailable(String filePath) {
-                view.showUpdateActivity();
-            }
-        });
-        updateManager.checkUpdates(false);
     }
 }

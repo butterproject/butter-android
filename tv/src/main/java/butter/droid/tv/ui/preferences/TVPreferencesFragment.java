@@ -38,19 +38,16 @@ import androidx.leanback.widget.GuidanceStylist;
 import androidx.leanback.widget.GuidedAction;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.about.TVAboutFragment;
 import butter.droid.tv.ui.preferences.chooser.TVPreferencesListFragment;
 import butter.droid.tv.ui.preferences.fragment.TVChangeLogDialogFragment;
 import butter.droid.tv.ui.preferences.fragment.TVWebViewFragment;
-import butter.droid.tv.ui.update.TVUpdateActivity;
 import dagger.android.support.AndroidSupportInjection;
 
 public class TVPreferencesFragment extends GuidedStepSupportFragment implements TVPreferencesView {
 
     @Inject TVPreferencesPresenter presenter;
-    @Inject ButterUpdateManager butterUpdateManager;
     @Inject PreferencesHandler preferencesHandler;
 
     @Override public void onAttach(final Context context) {
@@ -72,7 +69,6 @@ public class TVPreferencesFragment extends GuidedStepSupportFragment implements 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        butterUpdateManager.setListener(filePath -> startActivity(TVUpdateActivity.newIntent(getActivity())));
     }
 
     @NonNull

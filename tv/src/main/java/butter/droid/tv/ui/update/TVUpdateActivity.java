@@ -23,6 +23,10 @@ import android.os.Bundle;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.TVBaseActivity;
 
+/**
+ * @deprecated Not needed since we use Google Play
+ */
+@Deprecated
 public class TVUpdateActivity extends TVBaseActivity {
 
     @Override

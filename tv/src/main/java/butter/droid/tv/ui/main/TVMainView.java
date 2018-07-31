@@ -18,6 +18,4 @@
 package butter.droid.tv.ui.main;
 
 public interface TVMainView {
-
-    void showUpdateActivity();
 }

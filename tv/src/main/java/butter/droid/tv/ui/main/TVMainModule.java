@@ -18,7 +18,7 @@
 package butter.droid.tv.ui.main;
 
 import android.app.Activity;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
+
 import butter.droid.base.ui.ActivityScope;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.tv.ui.main.TVMainModule.TVMainBindModule;
@@ -32,8 +32,8 @@ import dagger.android.ContributesAndroidInjector;
 @Module(includes = TVMainBindModule.class)
 public class TVMainModule {
 
-    @Provides @ActivityScope TVMainPresenter providePresenter(TVMainView view, ButterUpdateManager updateManager) {
-        return new TVMainPresenterImpl(view, updateManager);
+    @Provides @ActivityScope TVMainPresenter providePresenter(TVMainView view) {
+        return new TVMainPresenterImpl(view);
     }
 
     @Module
