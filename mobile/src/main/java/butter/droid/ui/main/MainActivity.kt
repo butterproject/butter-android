@@ -17,8 +17,8 @@
 
 package butter.droid.ui.main
 
+
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
 import android.content.res.Configuration
