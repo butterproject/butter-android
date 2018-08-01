@@ -50,8 +50,10 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
+
         String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
+
         super.onCreate(savedInstanceState);
     }
 

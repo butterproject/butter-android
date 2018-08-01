@@ -25,6 +25,7 @@ import android.os.IBinder;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import butter.droid.base.ButterApplication;
@@ -32,14 +33,12 @@ import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.utils.LocaleUtils;
+import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.DaggerAppCompatActivity;
 import dagger.android.support.HasSupportFragmentInjector;
 
-import static android.os.Looper.getMainLooper;
-
-public abstract class TorrentBaseActivity extends DaggerAppCompatActivity implements TorrentActivity,
+public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentActivity,
         HasSupportFragmentInjector {
 
     static {
@@ -54,6 +53,8 @@ public abstract class TorrentBaseActivity extends DaggerAppCompatActivity implem
     private TorrentService torrentStream;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
+
         String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
 
