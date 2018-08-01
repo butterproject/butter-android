@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: circleci/android:api-27-alpha
+      - image: circleci/android:api-28-alpha
     environment:
       JVM_OPTS: -Xmx3200m
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
@@ -21,10 +21,11 @@ jobs:
       - run:
           name: Run Tests
           command: ./gradlew check
-  play_store_internal:
+
+  release_artifacts:
     working_directory: ~/code
     docker:
-      - image: circleci/android:api-27-alpha
+      - image: circleci/android:api-28-alpha
     environment:
       JVM_OPTS: -Xmx3200m
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
@@ -41,7 +42,7 @@ jobs:
           command: ./gradlew androidDependencies
       - run:
           name: Build and deploy
-          command: ./gradlew playUploadDraftInternal
+          command: ./gradlew assembleRelease
       - store_artifacts:
           path: tv/build/outputs/apk/release/
           destination: apk/tv
@@ -49,10 +50,10 @@ jobs:
           path: mobile/build/outputs/apk/release/
           destination: apk/mobile
 
-  play_store_production:
+  play_store_internal:
     working_directory: ~/code
     docker:
-      - image: circleci/android:api-27-alpha
+      - image: circleci/android:api-28-alpha
     environment:
       JVM_OPTS: -Xmx3200m
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
@@ -69,7 +70,7 @@ jobs:
           command: ./gradlew androidDependencies
       - run:
           name: Build and deploy
-          command: ./gradlew playUploadDraftProduction
+          command: ./gradlew playUploadInternal
       - store_artifacts:
           path: tv/build/outputs/apk/release/
           destination: apk/tv
@@ -82,14 +83,14 @@ workflows:
   build_deploy:
     jobs:
       - build
-      - play_store_internal:
+      - release_artifacts:
           requires:
             - build
           filters:
             branches:
               only:
                 - release
-      - play_store_production:
+      - play_store_internal:
           requires:
             - build
           filters:
