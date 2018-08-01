@@ -344,8 +344,7 @@ public class TorrentService extends DaggerService implements TorrentListener {
 
     public static void start(Context context) {
         Intent intent = new Intent(context, TorrentService.class);
-//        context.startService(intent);
-        ContextCompat.startForegroundService(context, intent);
+        context.startService(intent);
     }
 
     protected static void stop(Context context) {

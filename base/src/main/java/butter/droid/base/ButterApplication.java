@@ -33,11 +33,9 @@ import androidx.multidex.MultiDex;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.foreground.ForegroundManager;
-import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.StorageUtils;
-import butter.droid.base.utils.VersionUtils;
 import dagger.android.support.DaggerApplication;
 import timber.log.Timber;
 
@@ -75,13 +73,9 @@ public abstract class ButterApplication extends DaggerApplication {
             e.printStackTrace();
         }
 
-        //initialise logging
+        // initialise logging
         if (Constants.DEBUG_ENABLED) {
             Timber.plant(new Timber.DebugTree());
-        }
-
-        if (VersionUtils.isUsingCorrectBuild()) {
-            TorrentService.start(this);
         }
 
         File path = new File(preferencesHandler.getStorageLocation());
