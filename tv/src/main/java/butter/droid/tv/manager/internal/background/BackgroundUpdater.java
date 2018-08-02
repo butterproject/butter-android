@@ -40,17 +40,16 @@ public class BackgroundUpdater {
     private static final int BACKGROUND_UPDATE_DELAY = 300;
 
     private final BackgroundManager backgroundManager;
-    private final Target<Bitmap> backgroundImageTarget;
 
     private int defaultBackground;
     private Timer backgroundTimer;
     private String backgroundUrl;
     private GlideRequests glide;
+    private Target<Bitmap> lastTarget;
 
     @Inject
-    public BackgroundUpdater(final BackgroundManager backgroundManager, final Target<Bitmap> backgroundImageTarget) {
+    public BackgroundUpdater(final BackgroundManager backgroundManager) {
         this.backgroundManager = backgroundManager;
-        this.backgroundImageTarget = backgroundImageTarget;
     }
 
     public void initialise(Activity activity, @DrawableRes int defaultBackground) {
@@ -70,8 +69,8 @@ public class BackgroundUpdater {
         if (null != backgroundTimer) {
             backgroundTimer.cancel();
         }
-//        backgroundTimer = new Timer();
-//        backgroundTimer.schedule(new UpdateBackgroundTask(), BACKGROUND_UPDATE_DELAY);
+        backgroundTimer = new Timer();
+        backgroundTimer.schedule(new UpdateBackgroundTask(), BACKGROUND_UPDATE_DELAY);
     }
 
 
@@ -84,19 +83,20 @@ public class BackgroundUpdater {
             backgroundTimer.cancel();
         }
 
-        // TODO resolve recycling issue
-        //load default background image
-//        if (uri == null) {
-//            glide.asBitmap()
-//                    .load(defaultBackground)
-//                    .into(backgroundImageTarget);
-//        } else {
-//            //load actual background image
-//            glide.asBitmap()
-//                    .load(uri)
-//                    .error(defaultBackground)
-//                    .into(backgroundImageTarget);
-//        }
+        // TODO clear last target
+        // problem with glide recycle
+
+        if (uri == null) {
+            glide.asBitmap()
+                    .load(defaultBackground)
+                    .into(new BackgroundManagerTarget(backgroundManager));
+        } else {
+            //load actual background image
+            glide.asBitmap()
+                    .load(uri)
+                    .error(defaultBackground)
+                    .into(new BackgroundManagerTarget(backgroundManager));
+        }
     }
 
     private class UpdateBackgroundTask extends TimerTask {
@@ -117,7 +117,10 @@ public class BackgroundUpdater {
             backgroundTimer.cancel();
         }
 
-        glide.clear(backgroundImageTarget);
+        if (lastTarget != null) {
+            glide.clear(lastTarget);
+        }
+
         backgroundManager.release();
     }
 
