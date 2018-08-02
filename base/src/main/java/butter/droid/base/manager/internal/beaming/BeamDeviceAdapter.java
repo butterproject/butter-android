@@ -18,7 +18,6 @@
 package butter.droid.base.manager.internal.beaming;
 
 import android.content.Context;
-import androidx.appcompat.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,9 +39,9 @@ import com.connectsdk.service.command.ServiceCommandError;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import butter.droid.base.R;
 import butter.droid.base.utils.ThreadUtils;
 import butterknife.BindView;
@@ -52,8 +51,8 @@ public class BeamDeviceAdapter extends BaseAdapter {
 
     private final Context context;
     private final BeamManager beamManager;
-    private Map<String, ConnectableDevice> devices = new HashMap<>();
-    private ArrayList<String> keys = new ArrayList<>();
+    private Map<String, ConnectableDevice> devices;
+    private ArrayList<String> keys;
 
     class ViewHolder {
         @BindView(android.R.id.icon) AppCompatImageView icon;

@@ -25,6 +25,7 @@ import android.view.MenuItem;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.NavUtils;
 import androidx.core.app.TaskStackBuilder;
 import butter.droid.R;
@@ -36,7 +37,7 @@ import butter.droid.ui.beam.fragment.dialog.BeamDeviceSelectorDialogFragment;
 
 public class ButterBaseActivity extends TorrentBaseActivity implements BeamManager.BeamListener {
 
-    @Inject BeamManager beamManager;
+    @Inject @Nullable BeamManager beamManager;
     @Inject PreferencesHandler preferencesHandler;
 
     protected Boolean showCasting = false;
@@ -58,14 +59,18 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onResume();
 
-        beamManager.addListener(this);
+        if (beamManager != null) {
+            beamManager.addListener(this);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        beamManager.removeListener(this);
+        if (beamManager != null) {
+            beamManager.removeListener(this);
+        }
     }
 
     protected void onHomePressed() {
@@ -90,10 +95,13 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
     }
 
     @Override public boolean onPrepareOptionsMenu(Menu menu) {
-        Boolean castingVisible = showCasting && beamManager.hasCastDevices();
+        Boolean castingVisible = showCasting && beamManager != null && beamManager.hasCastDevices();
         MenuItem item = menu.findItem(R.id.action_casting);
         item.setVisible(castingVisible);
-        item.setIcon(beamManager.isConnected() ? R.drawable.ic_av_beam_connected : R.drawable.ic_av_beam_disconnected);
+        if (castingVisible) {
+            item.setIcon(
+                    beamManager.isConnected() ? R.drawable.ic_av_beam_connected : R.drawable.ic_av_beam_disconnected);
+        }
         return true;
     }
 

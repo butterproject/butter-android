@@ -18,7 +18,6 @@
 package butter.droid.ui.main
 
 import android.Manifest
-import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -29,7 +28,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager

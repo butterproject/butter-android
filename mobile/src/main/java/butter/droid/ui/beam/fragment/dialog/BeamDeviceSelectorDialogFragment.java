@@ -20,6 +20,8 @@ package butter.droid.ui.beam.fragment.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamDeviceAdapter;
@@ -30,7 +32,7 @@ import javax.inject.Inject;
 
 public class BeamDeviceSelectorDialogFragment extends DaggerAppCompatDialogFragment {
 
-    @Inject BeamManager beamManager;
+    @Inject @Nullable BeamManager beamManager;
 
     private BeamDeviceAdapter adapter;
 

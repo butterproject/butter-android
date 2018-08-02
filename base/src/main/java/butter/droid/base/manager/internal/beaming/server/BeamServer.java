@@ -20,7 +20,7 @@ package butter.droid.base.manager.internal.beaming.server;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
-import butter.droid.base.ButterApplication;
+
 import com.koushikdutta.async.AsyncServer;
 import com.koushikdutta.async.http.Headers;
 import com.koushikdutta.async.http.HttpDate;
@@ -28,9 +28,12 @@ import com.koushikdutta.async.http.server.AsyncHttpServer;
 import com.koushikdutta.async.http.server.AsyncHttpServerRequest;
 import com.koushikdutta.async.http.server.AsyncHttpServerResponse;
 import com.koushikdutta.async.http.server.HttpServerRequestCallback;
+
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
+
+import butter.droid.base.ButterApplication;
 import timber.log.Timber;
 
 public class BeamServer {

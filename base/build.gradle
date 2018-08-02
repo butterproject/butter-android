@@ -1,7 +1,6 @@
 apply from: "${project.rootDir}/config/gradle/android-library-config.gradle"
 
 android {
-    def buildNumber = (System.getenv('BUILD_NUMBER') == null ? 0 : System.getenv('BUILD_NUMBER')) as int
     def gitBranch = (System.getenv('GIT_BRANCH') == null ? 'local' : System.getenv('GIT_BRANCH').replace('origin/', ''))
     def releaseType = (System.getenv('RELEASE_TYPE') == null ? 'NONE' : System.getenv('RELEASE_TYPE'))
     def updateUrls = (System.getenv('UPDATE_URLS') == null ? '"http://localhost/android-update.json"' : System.getenv('UPDATE_URLS'))
@@ -9,13 +8,15 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
-        buildConfigField 'Integer', 'BUILD_NUMBER', '' + buildNumber + ''
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+
         buildConfigField 'String', 'GIT_BRANCH', '\"' + gitBranch + '\"'
         buildConfigField 'String', 'RELEASE_TYPE', '\"' + releaseType + '\"'
         buildConfigField 'String[]', 'UPDATE_URLS', '{' + updateUrls + '}'
-        versionCode buildNumber
-        multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
+
+        // Features
+        buildConfigField 'boolean', 'FEATURE_MOBILE_BEAM', getProperty("butter.config.feature.mobile.beam")
     }
 
     buildTypes {
@@ -30,17 +31,13 @@ android {
         lintConfig file('lint.xml')
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
-    api 'androidx.palette:palette:1.0.0-alpha3'
-    api 'androidx.appcompat:appcompat:1.0.0-alpha3'
-    api 'androidx.annotation:annotation:1.0.0-alpha3'
-    api 'com.google.android.material:material:1.0.0-alpha3'
+    api 'androidx.palette:palette:1.0.0-beta01'
+    api 'androidx.appcompat:appcompat:1.0.0-beta01'
+    api 'androidx.annotation:annotation:1.0.0-beta01'
+    api 'com.google.android.material:material:1.0.0-beta01'
 
     debugImplementation 'com.github.simonpercic:oklog3:2.2.0'
 
@@ -63,9 +60,9 @@ dependencies {
 
     api 'com.butterproject:vlc-android-sdk:3.0.10'
 
-    api project(':connectsdk:core')
-    api project(':connectsdk:modules:firetv')
-    api project(':connectsdk:modules:google_cast')
+    api project(':connectsdk:core') // TODO should be implementation
+    implementation project(':connectsdk:modules:firetv')
+    implementation project(':connectsdk:modules:google_cast')
 
     api project(':provider:media:provider')
     api project(':provider:media:vodo')

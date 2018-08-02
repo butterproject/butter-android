@@ -18,6 +18,8 @@
 package butter.droid.ui.loading.fragment;
 
 import android.content.Context;
+
+import androidx.annotation.Nullable;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.subtitle.SubtitleManager;
@@ -33,7 +35,7 @@ public class StreamLoadingFragmentModule {
 
     @Provides @FragmentScope public StreamLoadingFragmentPresenter providePresenter(StreamLoadingFragmentView view,
             ProviderManager providerManager, SubtitleManager subtitleManager, PlayerManager playerManager, Context context,
-            BeamManager beamManager) {
+            @Nullable BeamManager beamManager) {
         return new StreamLoadingFragmentPresenterImpl(view, providerManager, subtitleManager, playerManager, context, beamManager);
     }
 }

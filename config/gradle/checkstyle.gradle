@@ -6,7 +6,7 @@ task checkstyle(type: Checkstyle) {
     showViolations true
     include '**/*.java'
     exclude '**/gen/**'
-    maxErrors(CHECKSTYLE_MAX_ERRORS as int)
+    maxErrors 0
     reports {
         html {
             destination project.provider {

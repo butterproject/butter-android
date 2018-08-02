@@ -17,9 +17,24 @@
 
 package butter.droid.manager.internal;
 
+import android.content.Context;
+
+import androidx.annotation.Nullable;
+import butter.droid.base.BuildConfig;
+import butter.droid.base.Internal;
+import butter.droid.base.manager.internal.beaming.BeamManager;
 import dagger.Module;
+import dagger.Provides;
 
 @Module
-public class InternalDataModule {
+public class InternalManagerModule {
+
+    @Provides @Internal @Nullable BeamManager provideBeamManager(final Context context) {
+        if (BuildConfig.FEATURE_MOBILE_BEAM) {
+            return new BeamManager(context);
+        } else {
+            return null;
+        }
+    }
 
 }

@@ -127,10 +127,12 @@ public class VodoProvider extends AbsMediaProvider {
 
     private Movie mapVodoMovie(@NonNull VodoMovie vodoMovie) {
 
-        Torrent torrent = new Torrent(vodoMovie.getTorrentUrl(), parseFormat(vodoMovie.getQuality()), 0, vodoMovie.getSizeBytes(), -1, -1);
+        String torrentUrl = vodoMovie.getTorrentUrl().replace("http://", "https://");
+        String coverImage = vodoMovie.getCoverImage().replace("http://", "https://");
+        Torrent torrent = new Torrent(torrentUrl, parseFormat(vodoMovie.getQuality()), 0, vodoMovie.getSizeBytes(), -1, -1);
 
         return new Movie(vodoMovie.getImdbCode(), vodoMovie.getMovieTitleClean(), vodoMovie.getMovieYear(), new Genre[0],
-                vodoMovie.getRating() / 10f, vodoMovie.getCoverImage(), vodoMovie.getCoverImage(), vodoMovie.getSynopsis(),
+                vodoMovie.getRating() / 10f, coverImage, coverImage, vodoMovie.getSynopsis(),
                 new Torrent[]{torrent}, null);
     }
 

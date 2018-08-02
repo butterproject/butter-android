@@ -70,8 +70,8 @@ public class BackgroundUpdater {
         if (null != backgroundTimer) {
             backgroundTimer.cancel();
         }
-        backgroundTimer = new Timer();
-        backgroundTimer.schedule(new UpdateBackgroundTask(), BACKGROUND_UPDATE_DELAY);
+//        backgroundTimer = new Timer();
+//        backgroundTimer.schedule(new UpdateBackgroundTask(), BACKGROUND_UPDATE_DELAY);
     }
 
 
@@ -84,18 +84,19 @@ public class BackgroundUpdater {
             backgroundTimer.cancel();
         }
 
+        // TODO resolve recycling issue
         //load default background image
-        if (uri == null) {
-            glide.asBitmap()
-                    .load(defaultBackground)
-                    .into(backgroundImageTarget);
-        } else {
-            //load actual background image
-            glide.asBitmap()
-                    .load(uri)
-                    .error(defaultBackground)
-                    .into(backgroundImageTarget);
-        }
+//        if (uri == null) {
+//            glide.asBitmap()
+//                    .load(defaultBackground)
+//                    .into(backgroundImageTarget);
+//        } else {
+//            //load actual background image
+//            glide.asBitmap()
+//                    .load(uri)
+//                    .error(defaultBackground)
+//                    .into(backgroundImageTarget);
+//        }
     }
 
     private class UpdateBackgroundTask extends TimerTask {
