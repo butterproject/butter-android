@@ -17,10 +17,14 @@
 
 package butter.droid.ui.main.genre;
 
+import android.os.Bundle;
+
 public interface GenreSelectionPresenter {
-    void onViewCreated(int providerId);
+    void onViewCreated(int providerId, int selectedPosition);
 
     void onGenreSelected(int position);
 
     void onDestroy();
+
+    void saveState(Bundle outState);
 }

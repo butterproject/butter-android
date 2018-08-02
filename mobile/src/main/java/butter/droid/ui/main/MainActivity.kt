@@ -26,11 +26,9 @@ import android.view.MenuItem
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.viewpager.widget.ViewPager
 import butter.droid.R
 import butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService
 import butter.droid.base.manager.internal.beaming.server.BeamServerService
@@ -47,10 +45,9 @@ import butter.droid.ui.preferences.PreferencesActivity
 import butter.droid.ui.search.SearchActivity
 import butter.droid.ui.terms.TermsActivity
 import butter.droid.utils.ToolbarUtils
-import butter.droid.widget.ScrimInsetsFrameLayout
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
 import timber.log.Timber
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
@@ -61,13 +58,7 @@ import javax.inject.Inject
  */
 class MainActivity : ButterBaseActivity(), MainView {
 
-    @Inject
-    lateinit var presenter: MainPresenter
-
-    @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
-    @BindView(R.id.navigation_drawer_container) lateinit var navigationDrawerContainer: ScrimInsetsFrameLayout
-    @BindView(R.id.tabs) lateinit var tabs: TabLayout
-    @BindView(R.id.pager) lateinit var viewPager: ViewPager
+    @Inject lateinit var presenter: MainPresenter
 
     private lateinit var navigationDrawerFragment: NavigationDrawerFragment
     private lateinit var drawerToggle: ActionBarDrawerToggle
@@ -77,7 +68,6 @@ class MainActivity : ButterBaseActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ButterKnife.bind(this)
 
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
@@ -106,7 +96,7 @@ class MainActivity : ButterBaseActivity(), MainView {
 
         presenter.onResume()
 
-        supportInvalidateOptionsMenu()
+        invalidateOptionsMenu()
 
         if (BeamServerService.getServer() != null) {
             BeamServerService.getServer().stop()

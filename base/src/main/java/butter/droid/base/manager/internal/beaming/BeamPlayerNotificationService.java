@@ -269,7 +269,7 @@ public class BeamPlayerNotificationService extends DaggerService {
 
             NotificationManager notificationManager = (NotificationManager) getApplicationContext()
                     .getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.cancel(1);
+            notificationManager.cancel(NOTIFICATION_ID);
             Intent intent = new Intent(getApplicationContext(), BeamPlayerNotificationService.class);
             stopService(intent);
         }

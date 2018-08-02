@@ -136,12 +136,12 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                 MediaPlayer.Play_Video,
                 MediaControl.Any
         ));
-        mDiscoveryManager.start();
-        mDiscoveryManager.addListener(this);
+//        mDiscoveryManager.start();
+//        mDiscoveryManager.addListener(this);
 
         Intent castServerService = new Intent(context, BeamServerService.class);
         // TODO Start when app in foreground
-        context.startService(castServerService);
+//        context.startService(castServerService);
     }
 
     public void onDestroy() {

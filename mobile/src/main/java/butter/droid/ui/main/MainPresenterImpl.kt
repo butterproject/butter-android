@@ -84,7 +84,9 @@ class MainPresenterImpl(
 
     override fun onGenreChanged(genre: UiGenre) {
         view.onGenreChanged(genre.genre)
-        genreListeners.forEach { it.onGenreChanged(genre) }
+        for (genreListener in genreListeners) {
+            genreListener.onGenreChanged(genre)
+        }
         view.showFirsContentScreen()
     }
 
