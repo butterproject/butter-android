@@ -60,6 +60,7 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
         super.onResume();
 
         if (beamManager != null) {
+            beamManager.start();
             beamManager.addListener(this);
         }
     }
