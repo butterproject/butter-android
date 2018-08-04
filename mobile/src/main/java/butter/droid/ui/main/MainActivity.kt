@@ -219,7 +219,7 @@ class MainActivity : ButterBaseActivity(), MainView {
                 val streamUrl = URLDecoder.decode(data.toString(), "UTF-8")
                 // TODO: 7/29/17 Check if actual torrent
                 val clip = Clip("0", streamUrl, 0, arrayOfNulls(0), -1f, "", "", "",
-                        streamUrl)
+                        streamUrl, null)
                 StreamLoadingActivity.startActivity(this, StreamInfo(streamUrl, MediaWrapper(clip, -1), null))
                 finish()
             } catch (e: UnsupportedEncodingException) {
