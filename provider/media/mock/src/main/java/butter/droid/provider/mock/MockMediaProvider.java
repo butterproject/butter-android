@@ -93,7 +93,7 @@ public class MockMediaProvider extends AbsMediaProvider {
     }
 
     @NonNull @Override public Single<Optional<Sorter>> getDefaultSorter() {
-        return Single.just(Optional.<Sorter>empty());
+        return Single.just(Optional.empty());
     }
 
     private <R> R parseResponse(String fileName, Class<R> tClass) {
@@ -132,7 +132,7 @@ public class MockMediaProvider extends AbsMediaProvider {
         return Single.fromCallable(() -> parseResponse("season_list.json", MockSeasons.class))
                 .map(MockSeasons::getSeasons)
                 .flattenAsObservable(mockSeasons -> mockSeasons)
-                .map(s -> mapSeason(s));
+                .map(this::mapSeason);
     }
 
     private BufferedSource getFile(String fileName) throws IOException {
@@ -140,6 +140,7 @@ public class MockMediaProvider extends AbsMediaProvider {
         return Okio.buffer(Okio.source(context.getAssets().open(file)));
     }
 
+    @NonNull
     private Season[] mapSeasons(MockSeason[] mockSeasons) {
         Season[] seasons = new Season[mockSeasons.length];
         for (int i = 0; i < mockSeasons.length; i++) {
@@ -148,7 +149,8 @@ public class MockMediaProvider extends AbsMediaProvider {
         return seasons;
     }
 
-    private Episode[] mapEpisodes(MockEpisode[] mockEpisodes) {
+    @NonNull
+    private Episode[] mapEpisodes(MockEpisode[] mockEpisodes, int season) {
         Episode[] episodes = new Episode[mockEpisodes.length];
         for (int i = 0; i < mockEpisodes.length; i++) {
             MockEpisode episode = mockEpisodes[i];
@@ -156,15 +158,17 @@ public class MockMediaProvider extends AbsMediaProvider {
                     -1, episode.getPoster(), episode.getBackdrop(), episode.getSynopsis(),
                     new Torrent[] {
                             new Torrent(episode.getTorrent(), new Format(episode.getQuality(), Format.FORMAT_NORMAL), 0)
-                    }, episode.getEpisdoe(), null);
+                    }, episode.getEpisdoe(), season, null);
         }
         return episodes;
 
     }
 
+    @NonNull
     private Season mapSeason(MockSeason season) {
         return new Season(String.valueOf(season.getId()), season.getTitle(), season.getYear(), new Genre[0],
-                -1, season.getPoster(), season.getBackdrop(), season.getSynopsis(), mapEpisodes(season.getEpisodes()), null);
+                -1, season.getPoster(), season.getBackdrop(), season.getSynopsis(),
+                mapEpisodes(season.getEpisodes(), season.getSeason()), season.getSeason(), null);
     }
 
 }

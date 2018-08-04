@@ -25,6 +25,7 @@ public class MockSeason {
     private String poster;
     private String backdrop;
     private String synopsis;
+    private int season;
     private MockEpisode[] episodes;
 
     public long getId() {
@@ -53,5 +54,9 @@ public class MockSeason {
 
     public MockEpisode[] getEpisodes() {
         return episodes;
+    }
+
+    public int getSeason() {
+        return season;
     }
 }

@@ -27,17 +27,20 @@ import butter.droid.provider.base.filter.Genre;
 
 public class Episode extends Streamable {
 
+    private final int season;
     private final int episode;
 
     public Episode(@NonNull final String id, @NonNull final String title, final int year, @NonNull final Genre[] genres, final float rating,
             @Nullable final String poster, @NonNull final String backdrop, @NonNull final String synopsis,
-            @NonNull final Torrent[] torrents, final int episode, @Nullable final Map<String, String> meta) {
+            @NonNull final Torrent[] torrents, final int episode, final int season, @Nullable final Map<String, String> meta) {
         super(id, title, year, genres, rating, poster, backdrop, synopsis, torrents, meta);
+        this.season = season;
         this.episode = episode;
     }
 
     protected Episode(Parcel in) {
         super(in);
+        season = in.readInt();
         episode = in.readInt();
     }
 
@@ -45,9 +48,14 @@ public class Episode extends Streamable {
         return episode;
     }
 
+    public int getSeason() {
+        return season;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeInt(season);
         dest.writeInt(episode);
     }
 
