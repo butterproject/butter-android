@@ -77,7 +77,7 @@ class TVLaunchActivity : DaggerAppCompatActivity(), TVLaunchView {
             try {
                 streamUrl = URLDecoder.decode(streamUrl, "utf-8")
                 val media = Clip("0", streamUrl, -1, arrayOfNulls(0), -1f, null, "", "",
-                        streamUrl)
+                        streamUrl, null)
                 TVStreamLoadingActivity.startActivity(this, StreamInfo(streamUrl, MediaWrapper(media, -1), null))
                 finish()
                 return
