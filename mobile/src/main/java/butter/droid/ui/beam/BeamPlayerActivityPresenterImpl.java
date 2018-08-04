@@ -17,15 +17,16 @@
 
 package butter.droid.ui.beam;
 
+import androidx.annotation.Nullable;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.providers.media.model.StreamInfo;
 
 public class BeamPlayerActivityPresenterImpl implements BeamPlayerActivityPresenter {
 
     private final BeamPlayerActivityView view;
-    private final BeamManager beamManager;
+    @Nullable private final BeamManager beamManager;
 
-    public BeamPlayerActivityPresenterImpl(final BeamPlayerActivityView view, final BeamManager beamManager) {
+    public BeamPlayerActivityPresenterImpl(final BeamPlayerActivityView view, @Nullable final BeamManager beamManager) {
         this.view = view;
         this.beamManager = beamManager;
     }

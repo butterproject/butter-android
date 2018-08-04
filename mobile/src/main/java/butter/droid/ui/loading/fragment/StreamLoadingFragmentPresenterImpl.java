@@ -20,6 +20,10 @@ package butter.droid.ui.loading.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+
+import org.butterproject.torrentstream.Torrent;
+
+import androidx.annotation.Nullable;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.subtitle.SubtitleManager;
@@ -27,19 +31,18 @@ import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragment.State;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentPresenterImpl;
 import butter.droid.base.utils.PixelUtils;
-import org.butterproject.torrentstream.Torrent;
 
 public class StreamLoadingFragmentPresenterImpl extends BaseStreamLoadingFragmentPresenterImpl
         implements StreamLoadingFragmentPresenter {
 
     private final StreamLoadingFragmentView view;
     private final Context context;
-    private final BeamManager beamManager;
+    @Nullable private final BeamManager beamManager;
 
     private Torrent currentTorrent;
 
     public StreamLoadingFragmentPresenterImpl(StreamLoadingFragmentView view, ProviderManager providerManager,
-            SubtitleManager subtitleManager, PlayerManager playerManager, Context context, BeamManager beamManager) {
+            SubtitleManager subtitleManager, PlayerManager playerManager, Context context, @Nullable BeamManager beamManager) {
         super(view, providerManager, subtitleManager, playerManager, context);
         this.view = view;
         this.context = context;

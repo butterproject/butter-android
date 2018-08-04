@@ -17,6 +17,7 @@
 
 package butter.droid.ui.beam;
 
+import androidx.annotation.Nullable;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.ui.ActivityScope;
 import butter.droid.base.ui.FragmentScope;
@@ -31,7 +32,7 @@ import dagger.android.ContributesAndroidInjector;
 @Module(includes = BeamPlayerActivityBindModule.class)
 public class BeamPlayerActivityModule {
 
-    @Provides @ActivityScope BeamPlayerActivityPresenter providePresenter(BeamPlayerActivityView view, BeamManager beamManager) {
+    @Provides @ActivityScope BeamPlayerActivityPresenter providePresenter(BeamPlayerActivityView view, @Nullable BeamManager beamManager) {
         return new BeamPlayerActivityPresenterImpl(view, beamManager);
     }
 

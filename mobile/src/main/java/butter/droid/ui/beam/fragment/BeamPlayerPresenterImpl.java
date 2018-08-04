@@ -50,7 +50,7 @@ public class BeamPlayerPresenterImpl implements BeamPlayerPresenter, LaunchListe
     private static final int BUTTON_SEEK_OFFSET = 10000;
 
     private final BeamPlayerView view;
-    private final BeamManager beamManager;
+    @Nullable private final BeamManager beamManager;
     private final BeamPlayerActivityPresenter parentPresenter;
 
     private StreamInfo streamInfo;
@@ -72,7 +72,7 @@ public class BeamPlayerPresenterImpl implements BeamPlayerPresenter, LaunchListe
     private ScheduledFuture task;
     private ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2);
 
-    public BeamPlayerPresenterImpl(final BeamPlayerView view, final BeamManager beamManager,
+    public BeamPlayerPresenterImpl(final BeamPlayerView view, @Nullable final BeamManager beamManager,
             final BeamPlayerActivityPresenter parentPresenter) {
         this.view = view;
         this.beamManager = beamManager;

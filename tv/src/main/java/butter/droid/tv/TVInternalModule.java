@@ -18,14 +18,14 @@
 package butter.droid.tv;
 
 import butter.droid.base.InternalBaseModule;
-import butter.droid.tv.manager.internal.TVInternalDataModule;
+import butter.droid.tv.manager.internal.TVInternalManagerModule;
 import butter.droid.tv.ui.TVInjectorModule;
 import dagger.Module;
 import dagger.android.support.AndroidSupportInjectionModule;
 
 @Module(includes = {
         InternalBaseModule.class,
-        TVInternalDataModule.class,
+        TVInternalManagerModule.class,
         TVInjectorModule.class,
         AndroidSupportInjectionModule.class}
 )

@@ -29,6 +29,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
@@ -44,7 +45,7 @@ public abstract class ButterApplication extends DaggerApplication {
     private static String sDefSystemLanguage;
     private static ButterApplication sThis;
 
-    @Inject BeamManager beamManager;
+    @Inject @Nullable BeamManager beamManager;
     @Inject PreferencesHandler preferencesHandler;
     @Inject ForegroundManager foregroundManager; // inject just so it is initialized
 
@@ -101,7 +102,9 @@ public abstract class ButterApplication extends DaggerApplication {
     @Override
     public void onTerminate() {
         // Just, so that it exists. Cause it is not executed in production, the whole application is closed anyways on OS level.
-        beamManager.onDestroy();
+        if (beamManager != null) {
+            beamManager.onDestroy();
+        }
         super.onTerminate();
     }
 

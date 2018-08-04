@@ -23,6 +23,7 @@ import com.connectsdk.device.ConnectableDevice;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamDeviceListener;
@@ -50,12 +51,14 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
     private final BrightnessManager brightnessManager;
     private final VlcPlayer player;
     private final AudioManager audioManager;
-    private final BeamManager beamManager;
+    @Nullable private final BeamManager beamManager;
 
     @Inject
-    public PlayerPresenterImpl(final PlayerView view, final Context context, final PreferencesHandler preferencesHandler,
-            final ProviderManager providerManager, final BeamManager beamManager,
-            final BrightnessManager brightnessManager, final AudioManager audioManager, final VideoPlayerTouchHandler touchHandler,
+    public PlayerPresenterImpl(final PlayerView view, final Context context,
+            final PreferencesHandler preferencesHandler,
+            final ProviderManager providerManager, @Nullable final BeamManager beamManager,
+            final BrightnessManager brightnessManager, final AudioManager audioManager,
+            final VideoPlayerTouchHandler touchHandler,
             final VlcPlayer player, final SubtitleManager subtitleManager) {
         super(view, preferencesHandler, providerManager, player, subtitleManager);
 
@@ -78,13 +81,18 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
         super.onResume();
 
         displayTitle();
-        beamManager.addDeviceListener(deviceListener);
+
+        if (beamManager != null) {
+            beamManager.addDeviceListener(deviceListener);
+        }
     }
 
     @Override public void onPause() {
         super.onPause();
 
-        beamManager.removeDeviceListener(deviceListener);
+        if (beamManager != null) {
+            beamManager.removeDeviceListener(deviceListener);
+        }
     }
 
     @Override public void onStop() {
@@ -168,7 +176,6 @@ public class PlayerPresenterImpl extends StreamPlayerPresenterImpl implements Pl
         @Override
         public void onDeviceReady(ConnectableDevice device) {
             view.startBeamPlayerActivity(streamInfo, getCurrentTime());
-
             view.close();
         }
     };

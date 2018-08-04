@@ -17,6 +17,8 @@
 
 package butter.droid.ui.main.genre;
 
+import android.os.Bundle;
+
 import java.util.List;
 
 import butter.droid.ui.main.genre.list.model.UiGenre;
@@ -25,4 +27,6 @@ public interface GenreSelectionView {
     void displayGenres(List<UiGenre> uiGenres);
 
     void notifyItemUpdated(int position);
+
+    void saveState(Bundle outState, int selectedGenrePosition);
 }

@@ -17,9 +17,19 @@
 
 package butter.droid.tv.manager.internal;
 
+import android.content.Context;
+
+import androidx.annotation.Nullable;
+import butter.droid.base.Internal;
+import butter.droid.base.manager.internal.beaming.BeamManager;
 import dagger.Module;
+import dagger.Provides;
 
 @Module
-public class TVInternalDataModule {
+public class TVInternalManagerModule {
+
+    @Provides @Internal @Nullable BeamManager provideBeamManager(final Context context) {
+        return null;
+    }
 
 }

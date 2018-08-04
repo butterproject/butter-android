@@ -8,6 +8,11 @@
 
 		<service android:name="butter.droid.base.torrent.TorrentService" />
 
+		<service android:name="butter.droid.base.manager.internal.beaming.server.BeamServerService" />
+		<service android:name="butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService" />
+
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+
 	</application>
 
 </manifest>

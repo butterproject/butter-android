@@ -38,11 +38,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.media.app.NotificationCompat.MediaStyle;
+import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
 import butter.droid.base.manager.internal.glide.GlideApp;
 import dagger.android.DaggerService;
-
-import static butter.droid.base.ButterApplication.getAppContext;
 
 public class BeamPlayerNotificationService extends DaggerService {
 
@@ -54,7 +53,7 @@ public class BeamPlayerNotificationService extends DaggerService {
     public static final String ACTION_FAST_FORWARD = "action_fast_foward";
     public static final String ACTION_STOP = "action_stop";
 
-    @Inject BeamManager manager;
+    @Inject @Nullable BeamManager manager;
     private MediaControl mediaControl;
     private Boolean isPlaying = false;
     private Bitmap image;
@@ -171,13 +170,14 @@ public class BeamPlayerNotificationService extends DaggerService {
         }
 
         Notification notification = builder.build();
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, notification);
     }
 
     public static void cancelNotification() {
         // Remove beamplayer notification if still available
-        NotificationManager notificationManager = (NotificationManager) getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) ButterApplication.getAppContext().getSystemService(
+                NOTIFICATION_SERVICE);
         notificationManager.cancel(BeamPlayerNotificationService.NOTIFICATION_ID);
     }
 
@@ -268,8 +268,8 @@ public class BeamPlayerNotificationService extends DaggerService {
             super.onDeviceDisconnected(device);
 
             NotificationManager notificationManager = (NotificationManager) getApplicationContext()
-                    .getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(1);
+                    .getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.cancel(NOTIFICATION_ID);
             Intent intent = new Intent(getApplicationContext(), BeamPlayerNotificationService.class);
             stopService(intent);
         }
