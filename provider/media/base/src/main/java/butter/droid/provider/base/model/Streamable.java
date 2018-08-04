@@ -18,10 +18,13 @@
 package butter.droid.provider.base.model;
 
 import android.os.Parcel;
+
+import java.util.Arrays;
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import butter.droid.provider.base.filter.Genre;
-import java.util.Arrays;
 
 public abstract class Streamable extends Media {
 
@@ -29,8 +32,8 @@ public abstract class Streamable extends Media {
 
     public Streamable(@NonNull final String id, @NonNull final String title, final int year, @NonNull final Genre[] genres,
             final float rating, @Nullable final String poster, @NonNull final String backdrop, @NonNull final String synopsis,
-            @NonNull final Torrent[] torrents) {
-        super(id, title, year, genres, rating, poster, backdrop, synopsis);
+            @NonNull final Torrent[] torrents, @Nullable final Map<String, String> meta) {
+        super(id, title, year, genres, rating, poster, backdrop, synopsis, meta);
         this.torrents = torrents;
     }
 

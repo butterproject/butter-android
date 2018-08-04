@@ -117,7 +117,7 @@ public class MockMediaProvider extends AbsMediaProvider {
                         m.getBackdrop(), m.getSynopsis(),
                         new Torrent[] {
                                 new Torrent(m.getTorrent(), new Format(m.getQuality(), Format.FORMAT_NORMAL), 0)
-                        }, m.getTrailer()));
+                        }, m.getTrailer(), null));
     }
 
     private Observable<Media> parseShows() {
@@ -125,7 +125,7 @@ public class MockMediaProvider extends AbsMediaProvider {
                 .map(MockShows::getShow)
                 .flattenAsObservable(mockShows -> mockShows)
                 .map(s -> new Show(String.valueOf(s.getId()), s.getTitle(), s.getYear(), new Genre[0], -1, s.getPoster(),
-                        s.getBackdrop(), s.getSynopsis(), mapSeasons(s.getSeasons())));
+                        s.getBackdrop(), s.getSynopsis(), mapSeasons(s.getSeasons()), null));
     }
 
     private Observable<Media> parseSeasons() {
@@ -156,7 +156,7 @@ public class MockMediaProvider extends AbsMediaProvider {
                     -1, episode.getPoster(), episode.getBackdrop(), episode.getSynopsis(),
                     new Torrent[] {
                             new Torrent(episode.getTorrent(), new Format(episode.getQuality(), Format.FORMAT_NORMAL), 0)
-                    }, episode.getEpisdoe());
+                    }, episode.getEpisdoe(), null);
         }
         return episodes;
 
@@ -164,7 +164,7 @@ public class MockMediaProvider extends AbsMediaProvider {
 
     private Season mapSeason(MockSeason season) {
         return new Season(String.valueOf(season.getId()), season.getTitle(), season.getYear(), new Genre[0],
-                -1, season.getPoster(), season.getBackdrop(), season.getSynopsis(), mapEpisodes(season.getEpisodes()));
+                -1, season.getPoster(), season.getBackdrop(), season.getSynopsis(), mapEpisodes(season.getEpisodes()), null);
     }
 
 }

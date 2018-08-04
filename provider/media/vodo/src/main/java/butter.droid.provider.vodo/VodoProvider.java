@@ -18,7 +18,9 @@
 package butter.droid.provider.vodo;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,9 +54,11 @@ public class VodoProvider extends AbsMediaProvider {
     private static final Sorter SORTER_RATING = new Sorter("rating", R.string.sorter_vodo_rating);
     private static final Sorter SORTER_TITLE = new Sorter("title", R.string.sorter_vodo_alphabet);
     private static final Sorter SORTER_TRENDING = new Sorter("trending_score", R.string.sorter_vodo_trending);
-    private static final List<Sorter> SORTERS = Arrays.asList(SORTER_SEEDS, SORTER_YEAR, SORTER_DATE_ADDED, SORTER_RATING, SORTER_TITLE,
+    private static final List<Sorter> SORTERS = Arrays.asList(SORTER_SEEDS, SORTER_YEAR, SORTER_DATE_ADDED,
+            SORTER_RATING, SORTER_TITLE,
             SORTER_TRENDING);
-    private static final List<Genre> GENRES = Arrays.asList(Genre.DOCUMENTARY, Genre.DRAMA, Genre.HORROR, Genre.SCI_FI, Genre.THRILLER);
+    private static final List<Genre> GENRES = Arrays.asList(Genre.DOCUMENTARY, Genre.DRAMA, Genre.HORROR, Genre.SCI_FI,
+            Genre.THRILLER);
     private static final List<NavItem> NAV_ITEMS = Arrays.asList(
             new NavItem(R.drawable.filter_popular_now, R.string.sorter_vodo_popularity, SORTER_SEEDS),
             new NavItem(R.drawable.filter_release_date, R.string.sorter_vodo_year, SORTER_YEAR),
@@ -98,7 +102,9 @@ public class VodoProvider extends AbsMediaProvider {
         }
 
         return vodoService.fetchMovies(query, genre, sorter, null, null, ITEMS_PER_PAGE, page)
-                .flatMapObservable((Function<VodoResponse, ObservableSource<VodoMovie>>) vodoResponse -> Observable.fromArray(vodoResponse.getDownloads()))
+                .flatMapObservable(
+                        (Function<VodoResponse, ObservableSource<VodoMovie>>) vodoResponse -> Observable.fromArray(
+                                vodoResponse.getDownloads()))
                 .map(this::mapVodoMovie)
                 .cast(Media.class)
                 .toList()
@@ -129,11 +135,17 @@ public class VodoProvider extends AbsMediaProvider {
 
         String torrentUrl = vodoMovie.getTorrentUrl().replace("http://", "https://");
         String coverImage = vodoMovie.getCoverImage().replace("http://", "https://");
-        Torrent torrent = new Torrent(torrentUrl, parseFormat(vodoMovie.getQuality()), 0, vodoMovie.getSizeBytes(), -1, -1);
+        Torrent torrent = new Torrent(torrentUrl, parseFormat(vodoMovie.getQuality()), 0, vodoMovie.getSizeBytes(), -1,
+                -1);
 
-        return new Movie(vodoMovie.getImdbCode(), vodoMovie.getMovieTitleClean(), vodoMovie.getMovieYear(), new Genre[0],
-                vodoMovie.getRating() / 10f, coverImage, coverImage, vodoMovie.getSynopsis(),
-                new Torrent[]{torrent}, null);
+        Map<String, String> meta = new HashMap<>();
+        meta.put(Media.KEY_META_IMDB_ID, vodoMovie.getImdbCode().replace("tt", ""));
+
+        Movie movie = new Movie(vodoMovie.getImdbCode(), vodoMovie.getMovieTitleClean(), vodoMovie.getMovieYear(),
+                new Genre[0], vodoMovie.getRating() / 10f, coverImage, coverImage, vodoMovie.getSynopsis(),
+                new Torrent[]{torrent}, null, meta);
+
+        return movie;
     }
 
     private Format parseFormat(@Nullable String vodoQuality) {
