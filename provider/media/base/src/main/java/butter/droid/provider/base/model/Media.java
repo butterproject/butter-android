@@ -55,7 +55,10 @@ public abstract class Media implements Parcelable {
         this.poster = poster;
         this.backdrop = backdrop;
         this.synopsis = synopsis;
-        this.meta.putAll(meta);
+
+        if (meta != null) {
+            this.meta.putAll(meta);
+        }
     }
 
     protected Media(Parcel in) {

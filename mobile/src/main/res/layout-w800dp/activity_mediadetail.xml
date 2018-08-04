@@ -12,7 +12,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:importantForAccessibility="no"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:src="@drawable/ab_gradient"
             android:transitionName="background"/>
 

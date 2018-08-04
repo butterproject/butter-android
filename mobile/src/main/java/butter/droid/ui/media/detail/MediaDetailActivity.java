@@ -214,6 +214,7 @@ public class MediaDetailActivity extends ButterBaseActivity implements MediaDeta
 
         GlideApp.with(this)
                 .asDrawable()
+                .centerCrop()
                 .load(imageUrl)
                 .error(R.drawable.butter_logo)
                 .into(bgImage);
