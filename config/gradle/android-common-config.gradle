@@ -22,6 +22,7 @@ android {
 
     defaultConfig {
         targetSdkVersion rootProject.ext.targetSdk
+        minSdkVersion rootProject.ext.minSdk
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }

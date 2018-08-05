@@ -27,7 +27,8 @@ apply plugin: "solar.blaz.play-publisher-parent"
 ext {
     targetSdk = 28
     compileSdk = 28
-    minSdk = 16
+    minSdk = 19
+    minSdkTV = 21
     butterknifeVersion = "9.0.0-SNAPSHOT"
     okHttpVersion = "3.10.0"
     daggerVersion = "2.16"

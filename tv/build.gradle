@@ -23,7 +23,7 @@ apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
 android {
     defaultConfig {
         applicationId "org.butterproject.butter"
-        minSdkVersion 21
+        minSdkVersion rootProject.ext.minSdkTV
     }
 
     buildTypes {
