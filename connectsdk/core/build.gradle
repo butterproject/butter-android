@@ -46,7 +46,7 @@ dependencies {
     implementation files('libs/java-websocket-patch.jar')
     implementation files('libs/javax.jmdns_3.4.1-patch2.jar')
 
-    implementation 'androidx.appcompat:appcompat:1.0.0-alpha3'
+    implementation 'androidx.appcompat:appcompat:1.0.0-rc01'
     implementation 'androidx.mediarouter:mediarouter:1.0.0-alpha5'
 
     testImplementation 'org.apache.maven:maven-ant-tasks:2.1.3'

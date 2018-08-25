@@ -56,18 +56,9 @@ dependencies {
     implementation project(':provider:subs:provider')
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation 'com.squareup.okio:okio:1.14.0'
-    api "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    api "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-    api "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-
-    implementation('org.simpleframework:simple-xml:2.7.1') {
-        exclude module: 'stax'
-        exclude module: 'stax-api'
-        exclude module: 'xpp3'
-    }
-    implementation 'net.iharder:base64:2.3.9'
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 

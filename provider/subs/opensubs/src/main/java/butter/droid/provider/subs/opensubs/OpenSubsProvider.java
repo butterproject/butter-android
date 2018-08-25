@@ -104,9 +104,7 @@ public class OpenSubsProvider extends AbsSubsProvider {
                         (Function<GroupedObservable<String, OpenSubItem>, ObservableSource<OpenSubItem>>) observable ->
                                 observable.reduce((openSubItem, openSubItem2) -> {
                                     int diff = getItemScore(openSubItem2) - getItemScore(openSubItem);
-                                    // TODO downloads count
-//                            if (diff >= 0 && openSubItem2.getDownloads() > openSubItem.getDownloads()) {
-                                    if (diff >= 0) {
+                                    if (diff > 0 || (diff == 0 && openSubItem2.getSubDownloadsCnt() > openSubItem.getSubDownloadsCnt())) {
                                         return openSubItem2;
                                     } else {
                                         return openSubItem;

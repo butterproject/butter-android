@@ -98,7 +98,7 @@ public class OpenSubItem {
     private String subSumVotes;
     @SerializedName("SubDownloadsCnt")
     @Expose
-    private String subDownloadsCnt;
+    private int subDownloadsCnt;
     @SerializedName("MovieReleaseName")
     @Expose
     private String movieReleaseName;
@@ -394,11 +394,11 @@ public class OpenSubItem {
         this.subSumVotes = subSumVotes;
     }
 
-    public String getSubDownloadsCnt() {
+    public int getSubDownloadsCnt() {
         return subDownloadsCnt;
     }
 
-    public void setSubDownloadsCnt(String subDownloadsCnt) {
+    public void setSubDownloadsCnt(int subDownloadsCnt) {
         this.subDownloadsCnt = subDownloadsCnt;
     }
 
