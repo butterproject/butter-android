@@ -47,7 +47,7 @@ dependencies {
     implementation files('libs/javax.jmdns_3.4.1-patch2.jar')
 
     implementation 'androidx.appcompat:appcompat:1.0.0-alpha3'
-    implementation 'androidx.mediarouter:mediarouter:1.0.0-alpha3'
+    implementation 'androidx.mediarouter:mediarouter:1.0.0-alpha5'
 
     testImplementation 'org.apache.maven:maven-ant-tasks:2.1.3'
     testImplementation 'junit:junit:4.12'

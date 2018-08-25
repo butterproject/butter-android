@@ -55,7 +55,7 @@ android {
 
 dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
-    implementation 'androidx.mediarouter:mediarouter:1.0.0-alpha4'
+    implementation 'androidx.mediarouter:mediarouter:1.0.0-alpha5'
     implementation 'androidx.browser:browser:1.0.0-beta01'
 
     implementation 'de.hdodenhof:circleimageview:2.2.0'

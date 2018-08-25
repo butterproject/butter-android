@@ -24,27 +24,39 @@ import io.reactivex.Single;
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
-import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Url;
 
 public interface OpenSubsService {
 
-    @Headers({"Accept: application/json"})
-    @GET("search/imdbid-{imdbid}/sublanguageid-{lang}")
-    Single<List<OpenSubItem>> searchByImdbId(
+    @GET("search/sublanguageid-{lang}/query-{query}")
+    Single<List<OpenSubItem>> searchMovie(
             @Header("User-Agent") String userAgent,
-            @Path(value = "imdbid", encoded = true) String imdbId,
+            @Path("query") String query,
             @Path("lang") String language);
 
-    @Headers({"Accept: application/json"})
-    @GET("search/episode-{episode}/imdbid-{imdbid}/season-{season}/sublanguageid-{lang}")
-    Single<List<OpenSubItem>> searchByImdbSeasonEpisode(
+    @GET("search/imdbid-{imdbid}/sublanguageid-{lang}/0query-{query}")
+    Single<List<OpenSubItem>> searchMovie(
             @Header("User-Agent") String userAgent,
-            @Path(value = "imdbid", encoded = true) String imdbId,
-            @Path("season") String season,
-            @Path("episode") String episode,
+            @Path("imdbid") String imdbId,
+            @Path("query") String query,
+            @Path("lang") String language);
+
+    @GET("search/episode-{episode}/imdbid-{imdbid}/season-{season}/sublanguageid-{lang}")
+    Single<List<OpenSubItem>> searchEpisode(
+            @Header("User-Agent") String userAgent,
+            @Path("imdbid") String imdbId,
+            @Path("season") int season,
+            @Path("episode") int episode,
+            @Path("lang") String language);
+
+    @GET("search/episode-{episode}/imdbid-{imdbid}/season-{season}/sublanguageid-{lang}/query-{query}")
+    Single<List<OpenSubItem>> searchEpisode(
+            @Header("User-Agent") String userAgent,
+            @Path("imdbid") String imdbId,
+            @Path("query") String query,
+            @Path("season") int season,
+            @Path("episode") int episode,
             @Path("lang") String language);
 
     @GET

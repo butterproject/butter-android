@@ -175,10 +175,6 @@ public class OpenSubItem {
     @Expose
     private String subFromTrusted;
 
-    @SerializedName("QueryParameters")
-    @Expose
-    private OpenSubQueryParameters queryParameters;
-
     @SerializedName("SubTSGroupHash")
     @Expose
     private String subTSGroupHash;
@@ -604,14 +600,6 @@ public class OpenSubItem {
 
     public void setSubFromTrusted(String subFromTrusted) {
         this.subFromTrusted = subFromTrusted;
-    }
-
-    public OpenSubQueryParameters getQueryParameters() {
-        return queryParameters;
-    }
-
-    public void setQueryParameters(OpenSubQueryParameters queryParameters) {
-        this.queryParameters = queryParameters;
     }
 
     public String getSubTSGroupHash() {

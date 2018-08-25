@@ -18,26 +18,22 @@
 package butter.droid.provider.subs.opensubs;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.AbsSubsProvider;
 import butter.droid.provider.subs.model.Subtitle;
 import butter.droid.provider.subs.opensubs.data.OpenSubsService;
 import butter.droid.provider.subs.opensubs.data.model.response.OpenSubItem;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 import io.reactivex.observables.GroupedObservable;
 import okhttp3.ResponseBody;
@@ -82,18 +78,34 @@ public class OpenSubsProvider extends AbsSubsProvider {
     }
 
     private Single<List<Subtitle>> fetchSubtitles(@NonNull final Media media, String languageCode) {
-        String imdbid = media.getId().replaceAll("^tt", "");
-        // TODO if episode use episode search
-        return service.searchByImdbId(USER_AGENT, imdbid, languageCode)
-                .retry(5)
-                .flattenAsObservable(m -> m)
+        String imdbId = media.getMeta(Media.KEY_META_IMDB_ID);
+
+        Single<List<OpenSubItem>> request;
+        if (media instanceof Episode) {
+            Episode episode = (Episode) media;
+            if (imdbId != null) {
+                request = service.searchEpisode(USER_AGENT, imdbId, episode.getTitle(), episode.getSeason(),
+                        episode.getEpisode(), languageCode);
+            } else {
+                request = service.searchEpisode(USER_AGENT, episode.getTitle(), episode.getSeason(),
+                        episode.getEpisode(), languageCode);
+            }
+        } else {
+            if (imdbId != null) {
+                request = service.searchMovie(USER_AGENT, imdbId, media.getTitle(), languageCode);
+            } else {
+                request = service.searchMovie(USER_AGENT, media.getTitle(), languageCode);
+            }
+        }
+
+        return request.flattenAsObservable(m -> m)
                 .groupBy(OpenSubItem::getSubLanguageID)
                 .concatMap(
                         (Function<GroupedObservable<String, OpenSubItem>, ObservableSource<OpenSubItem>>) observable ->
                                 observable.reduce((openSubItem, openSubItem2) -> {
                                     int diff = getItemScore(openSubItem2) - getItemScore(openSubItem);
                                     // TODO downloads count
-//                            if (diff > 0 || diff == 0 && openSubItem2.getDownloads() > openSubItem.getDownloads()) {
+//                            if (diff >= 0 && openSubItem2.getDownloads() > openSubItem.getDownloads()) {
                                     if (diff >= 0) {
                                         return openSubItem2;
                                     } else {

@@ -33,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class OpenSubsModule {
 
     @Provides @ProviderScope @OpenSubsQualifier HttpUrl providerUrl() {
-        return HttpUrl.parse("http://rest.opensubtitles.org/");
+        return HttpUrl.parse("https://rest.opensubtitles.org/");
     }
 
     @Provides @ProviderScope @OpenSubsQualifier Converter.Factory provideGsonConverterFactory() {
