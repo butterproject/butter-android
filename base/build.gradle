@@ -35,9 +35,9 @@ android {
 
 dependencies {
     api 'androidx.palette:palette:1.0.0-rc01'
-    api 'androidx.appcompat:appcompat:1.0.0-beta01'
-    api 'androidx.annotation:annotation:1.0.0-beta01'
-    api 'com.google.android.material:material:1.0.0-beta01'
+    api 'androidx.appcompat:appcompat:1.0.0-rc01'
+    api 'androidx.annotation:annotation:1.0.0-rc01'
+    api 'com.google.android.material:material:1.0.0-rc01'
 
     debugImplementation 'com.github.simonpercic:oklog3:2.2.0'
 

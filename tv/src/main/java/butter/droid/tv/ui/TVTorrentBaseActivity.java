@@ -22,10 +22,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import org.butterproject.torrentstream.StreamStatus;
-import org.butterproject.torrentstream.Torrent;
-import org.butterproject.torrentstream.listeners.TorrentListener;
-
 import javax.inject.Inject;
 
 import androidx.fragment.app.Fragment;
@@ -40,7 +36,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public abstract class TVTorrentBaseActivity extends FragmentActivity implements TorrentListener, TorrentActivity, ServiceConnection,
+public abstract class TVTorrentBaseActivity extends FragmentActivity implements TorrentActivity,
         HasSupportFragmentInjector {
 
     @Inject DispatchingAndroidInjector<androidx.fragment.app.Fragment> supportFragmentInjector;
@@ -57,19 +53,14 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        TorrentService.bindHere(this, this);
+    @Override protected void onStart() {
+        super.onStart();
+        TorrentService.bindHere(this, serviceConnection);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (null != torrentStream) {
-            torrentStream.removeListener(this);
-            unbindService(this);
-        }
+    @Override protected void onStop() {
+        super.onStop();
+        unbindService(serviceConnection);
     }
 
     @Override
@@ -87,20 +78,6 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
         return torrentStream;
     }
 
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        torrentStream = ((TorrentService.ServiceBinder) service).getService();
-        torrentStream.addListener(this);
-        onTorrentServiceConnected(torrentStream);
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        torrentStream.removeListener(this);
-        onTorrentServiceDisconnected(torrentStream);
-        torrentStream = null;
-    }
-
     public void onTorrentServiceConnected(final TorrentService service) {
         // Placeholder
     }
@@ -109,37 +86,23 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
         // Placeholder
     }
 
-    @Override
-    public void onStreamPrepared(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamStarted(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamError(Torrent torrent, Exception ex) {
-
-    }
-
-    @Override
-    public void onStreamReady(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
-
-    }
-
-    @Override
-    public void onStreamStopped() {
-
-    }
-
     @Override public AndroidInjector<Fragment> supportFragmentInjector() {
         return supportFragmentInjector;
     }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            torrentStream = ((TorrentService.ServiceBinder) service).getService();
+            onTorrentServiceConnected(torrentStream);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            onTorrentServiceDisconnected(torrentStream);
+            torrentStream = null;
+        }
+    };
+
+
 }

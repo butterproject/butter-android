@@ -441,8 +441,6 @@
             android:name=".ui.base.WebViewActivity"
             android:screenOrientation="sensorPortrait" />
 
-        <service android:name="butter.droid.base.torrent.TorrentService" />
-
         <receiver android:name="butter.droid.base.torrent.TorrentBroadcastReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="pct.droid.base.torrent.TorrentBroadcastReceiver.STOP" />

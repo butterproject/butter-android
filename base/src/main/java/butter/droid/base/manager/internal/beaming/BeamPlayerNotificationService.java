@@ -213,11 +213,6 @@ public class BeamPlayerNotificationService extends DaggerService {
     }
 
     @Override
-    public boolean onUnbind(Intent intent) {
-        return super.onUnbind(intent);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
 
