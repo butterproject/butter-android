@@ -54,7 +54,11 @@ repositories {
 
 dependencies {
     implementation project(':provider:subs:provider')
-    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation 'com.squareup.okio:okio:1.14.0'
+    api "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    api "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    api "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
@@ -64,7 +68,6 @@ dependencies {
         exclude module: 'xpp3'
     }
     implementation 'net.iharder:base64:2.3.9'
-    implementation files("libs/retrofit-xmlrpc-0.1.jar")
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
