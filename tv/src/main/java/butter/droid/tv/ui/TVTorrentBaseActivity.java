@@ -61,6 +61,7 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
     @Override protected void onStop() {
         super.onStop();
         unbindService(serviceConnection);
+        onTorrentServiceDisconnected(torrentStream);
     }
 
     @Override
