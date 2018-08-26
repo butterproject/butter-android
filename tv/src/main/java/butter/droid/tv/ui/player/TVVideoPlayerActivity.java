@@ -17,11 +17,11 @@
 
 package butter.droid.tv.ui.player;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.tv.ui.TVBaseActivity;
@@ -58,7 +58,7 @@ public class TVVideoPlayerActivity extends TVBaseActivity {
     @Override
     protected void onDestroy() {
         if (!currentStreamStopped) {
-            torrentStream.stopStreaming();
+            torrentStream.stopStreaming(); // TODO could be null
             currentStreamStopped = true;
         }
         super.onDestroy();
