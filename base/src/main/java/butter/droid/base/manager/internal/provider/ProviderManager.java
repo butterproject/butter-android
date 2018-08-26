@@ -32,11 +32,6 @@ public class ProviderManager {
         if (providers == null || providers.length == 0) {
             throw new IllegalStateException("No media providers available");
         }
-
-        for (ProviderWrapper providerWrapper : providers) {
-            Timber.d("Test 4 %s", providerWrapper.getMediaProvider().getClass().getName());
-        }
-
         this.providers = providers;
     }
 
