@@ -29,9 +29,7 @@ import butter.droid.provider.vodo.VodoModule;
 import butter.droid.provider.vodo.VodoProvider;
 import dagger.Module;
 import dagger.Provides;
-import dagger.multibindings.ElementsIntoSet;
-import java.util.Set;
-import java.util.TreeSet;
+import dagger.multibindings.IntoSet;
 
 @Module(includes = {
         ProviderBindModule.class,
@@ -41,13 +39,16 @@ import java.util.TreeSet;
 )
 public class ProviderModule {
 
-    @Provides @ProviderScope @ElementsIntoSet Set<ProviderWrapper> provideVodoWrapper(final VodoProvider vodoProvider,
-            final OpenSubsProvider openSubsProvider, final MockMediaProvider mockProvider, final MockSubsProvider mockSubsProvider) {
-        Set<ProviderWrapper> set = new TreeSet<>((o1, o2) -> o2.getPosition() - o1.getPosition());
-        set.add(new ProviderWrapper(vodoProvider, openSubsProvider, R.string.vodo_label, R.drawable.ic_nav_movies, 0));
-        set.add(new ProviderWrapper(mockProvider, mockSubsProvider, butter.droid.provider.mock.R.string.title_movies,
-                butter.droid.provider.mock.R.drawable.ic_nav_movies, 1));
-        return set;
+    @Provides @ProviderScope @IntoSet ProviderWrapper provideVodoWrapper(final VodoProvider vodoProvider,
+            final OpenSubsProvider openSubsProvider) {
+        return new ProviderWrapper(vodoProvider, openSubsProvider, R.string.vodo_label, R.drawable.ic_nav_movies, 2);
     }
+
+    @Provides @ProviderScope @IntoSet ProviderWrapper provideMockWrapper(final MockMediaProvider mockProvider,
+            final MockSubsProvider mockSubsProvider) {
+        return new ProviderWrapper(mockProvider, mockSubsProvider, butter.droid.provider.mock.R.string.title_movies,
+                butter.droid.provider.mock.R.drawable.ic_nav_movies, 1);
+    }
+
 
 }

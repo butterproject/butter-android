@@ -17,6 +17,7 @@
 
 package butter.droid.base.manager.internal;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import butter.droid.base.Internal;
@@ -24,6 +25,7 @@ import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import dagger.Module;
 import dagger.Provides;
+import timber.log.Timber;
 
 @Module
 public class InternalBaseManagerModule {
@@ -31,6 +33,17 @@ public class InternalBaseManagerModule {
     @Provides @Internal ProviderManager provideProviderManager(final Set<ProviderWrapper> providers) {
         ProviderWrapper[] array = new ProviderWrapper[providers.size()];
         providers.toArray(array);
+
+        for (ProviderWrapper providerWrapper : array) {
+            Timber.d("Test 2 %s", providerWrapper.getMediaProvider().getClass().getName());
+        }
+
+        Arrays.sort(array, (o1, o2) -> o1.getPosition() - o2.getPosition());
+
+        for (ProviderWrapper providerWrapper : array) {
+            Timber.d("Test 3 %s", providerWrapper.getMediaProvider().getClass().getName());
+        }
+
         return new ProviderManager(array);
     }
 
