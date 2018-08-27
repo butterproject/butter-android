@@ -17,14 +17,11 @@
 
 package butter.droid.tv.ui.launch
 
-import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.app.ActivityCompat.startActivityForResult
 import butter.droid.base.providers.media.model.MediaWrapper
 import butter.droid.base.providers.media.model.StreamInfo
 import butter.droid.provider.base.model.Clip
-import butter.droid.tv.service.RecommendationService
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity
 import butter.droid.tv.ui.main.TVMainActivity
 import butter.droid.tv.ui.terms.TVTermsActivity
@@ -61,11 +58,11 @@ class TVLaunchActivity : DaggerAppCompatActivity(), TVLaunchView {
 
     override fun showTermsScreen() {
         startActivityForResult(TVTermsActivity.getIntent(this), REQUEST_CODE_TERMS)
-    }
-
+    
     override fun startRecommendationService() {
-        val recommendationIntent = Intent(this, RecommendationService::class.java)
-        startService(recommendationIntent)
+        // TODO disable for now / start foreground?
+//        val recommendationIntent = Intent(this, RecommendationService::class.java)
+//        startService(recommendationIntent)
     }
 
     override fun navigateForward() {
