@@ -58,6 +58,7 @@ class TVLaunchActivity : DaggerAppCompatActivity(), TVLaunchView {
 
     override fun showTermsScreen() {
         startActivityForResult(TVTermsActivity.getIntent(this), REQUEST_CODE_TERMS)
+    }
     
     override fun startRecommendationService() {
         // TODO disable for now / start foreground?
