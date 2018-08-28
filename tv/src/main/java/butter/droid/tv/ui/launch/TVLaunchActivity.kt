@@ -19,24 +19,27 @@ package butter.droid.tv.ui.launch
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
 import butter.droid.base.providers.media.model.MediaWrapper
 import butter.droid.base.providers.media.model.StreamInfo
 import butter.droid.provider.base.model.Clip
 import butter.droid.tv.ui.loading.TVStreamLoadingActivity
 import butter.droid.tv.ui.main.TVMainActivity
 import butter.droid.tv.ui.terms.TVTermsActivity
-import dagger.android.support.DaggerAppCompatActivity
+import dagger.android.AndroidInjection
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import javax.inject.Inject
 
-class TVLaunchActivity : DaggerAppCompatActivity(), TVLaunchView {
+class TVLaunchActivity : FragmentActivity(), TVLaunchView {
 
-    @Inject
-    lateinit var presenter: TVLaunchPresenter
+    @Inject lateinit var presenter: TVLaunchPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
+
         presenter.onCreate()
     }
 

@@ -18,7 +18,7 @@
 
 <resources>
 
-    <style name="Theme.HiddenActivity" parent="android:Theme">
+    <style name="Theme.HiddenActivity" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
