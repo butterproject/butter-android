@@ -134,7 +134,8 @@ public class StreamableDetailPresenterImpl implements StreamableDetailPresenter,
         this.selectedSub = subtitle;
         parentPresenter.selectSubtitle(new SubtitleWrapper(subtitle));
 
-        if (subtitle.getLanguage() == null) {
+        // TODO verify non null
+        if (subtitle != null && subtitle.getLanguage() == null) {
             view.setSubtitleText(R.string.no_subs);
         } else {
             view.setSubtitleText(subtitle.getName());

@@ -19,11 +19,6 @@ package butter.droid.ui.media.detail.streamable;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -35,11 +30,17 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import butter.droid.R;
 import butter.droid.base.manager.internal.glide.GlideApp;
 import butter.droid.base.providers.media.model.MediaWrapper;
@@ -164,17 +165,21 @@ public class StreamableDetailFragment extends DaggerFragment implements Streamab
 
     @Override public void displaySynopsis(String synopsis) {
         this.synopsis.setText(synopsis);
-        this.synopsis.post(() -> { // TODO null layout
+        this.synopsis.post(() -> {
             boolean ellipsized = false;
             Layout layout = StreamableDetailFragment.this.synopsis.getLayout();
-            int lines = layout.getLineCount();
-            if (lines > 0) {
-                int ellipsisCount = layout.getEllipsisCount(lines - 1);
-                if (ellipsisCount > 0) {
-                    ellipsized = true;
+            if (layout != null) { // TODO solve proper
+                int lines = layout.getLineCount();
+                if (lines > 0) {
+                    int ellipsisCount = layout.getEllipsisCount(lines - 1);
+                    if (ellipsisCount > 0) {
+                        ellipsized = true;
+                    }
                 }
+                readMore.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
+            } else {
+                readMore.setVisibility(View.GONE);
             }
-            readMore.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
         });
 
         readMore.setVisibility(View.GONE);
