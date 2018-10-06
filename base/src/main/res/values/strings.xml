@@ -49,6 +49,7 @@
     <string name="search">Search</string>
     <string name="searching">Searching…</string>
     <string name="no_data_found">No data found</string>
+    <string name="no_favourites">No favourites</string>
     <string name="title_shows">Shows</string>
     <string name="title_movies">Movies</string>
     <string name="title_anime">Anime</string>
@@ -120,6 +121,8 @@
     <string name="minutes">min</string>
     <string name="read_more">Read more</string>
     <string name="watch_trailer">Watch trailer</string>
+    <string name="add_to_favourites">Add to favourites</string>
+    <string name="remove_from_favourites">Remove from favourites</string>
     <string name="no_subs">No subtitles</string>
     <string name="no_subs_available">No subtitles available</string>
     <string name="quality">Quality</string>
@@ -222,6 +225,7 @@
     <string name="genre_yuri">Yuri</string>
 
     <!-- Possible tabs -->
+    <string name="favourites">FAVOURITES</string>
     <string name="popular">POPULAR</string>
     <string name="top_rated">TOP RATED</string>
     <string name="release_date">RELEASE DATE</string>

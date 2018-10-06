@@ -33,6 +33,7 @@ import butter.droid.base.content.preferences.DefaultQuality;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.youtube.YouTubeManager;
+import butter.droid.base.providers.media.MoviesProvider;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.Magnet;
@@ -45,6 +46,7 @@ import butter.droid.base.utils.SortUtils;
 import butter.droid.base.utils.StringUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.base.utils.VersionUtils;
+import butter.droid.base.utils.FavouriteUtils;
 import butter.droid.fragments.base.BaseDetailFragment;
 import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butter.droid.widget.OptionSelector;
@@ -78,6 +80,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
     Button mReadMore;
     @BindView(R.id.watch_trailer)
     Button mWatchTrailer;
+    @BindView(R.id.toggle_favourite)
+    Button mToggleFavourite;
     @BindView(R.id.magnet)
     ImageButton mOpenMagnet;
     @BindView(R.id.rating)
@@ -167,6 +171,10 @@ public class MovieDetailFragment extends BaseDetailFragment {
             }
 
             mWatchTrailer.setVisibility(sMovie.trailer == null || sMovie.trailer.isEmpty() ? View.GONE : View.VISIBLE);
+
+            Context context = MobileButterApplication.getAppContext();
+            mToggleFavourite.setText(FavouriteUtils.isFavourite(context, MoviesProvider.class, sMovie) ?
+                R.string.remove_from_favourites : R.string.add_to_favourites);
 
             mSubtitles.setFragmentManager(getFragmentManager());
             mQuality.setFragmentManager(getFragmentManager());
@@ -335,6 +343,18 @@ public class MovieDetailFragment extends BaseDetailFragment {
             VideoPlayerActivity.startActivity(mActivity, new StreamInfo(sMovie, null, null, null, null, sMovie.trailer));
         } else {
             TrailerPlayerActivity.startActivity(mActivity, sMovie.trailer, sMovie);
+        }
+    }
+
+    @OnClick(R.id.toggle_favourite)
+    public void toggleFavourite(View v) {
+        Context context = MobileButterApplication.getAppContext();
+        if (FavouriteUtils.isFavourite(context, MoviesProvider.class, sMovie)) {
+            FavouriteUtils.removeFavourite(context, MoviesProvider.class, sMovie);
+            mToggleFavourite.setText(R.string.add_to_favourites);
+        } else {
+            FavouriteUtils.addFavourite(context, MoviesProvider.class, sMovie);
+            mToggleFavourite.setText(R.string.remove_from_favourites);
         }
     }
 

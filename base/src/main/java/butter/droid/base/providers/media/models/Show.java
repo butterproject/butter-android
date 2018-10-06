@@ -47,6 +47,7 @@ public class Show extends Media implements Parcelable {
     public String synopsis = "No synopsis available";
     public Integer seasons = 0;
     public LinkedList<Episode> episodes = new LinkedList<>();
+    public Boolean isAnime = false;
     private String certification = "n/a";
 
     public Show() {
