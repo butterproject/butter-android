@@ -81,13 +81,13 @@ You can use [Android Studio](http://developer.android.com/sdk/installing/studio.
 
 For transparency and insight into our release cycle, and for striving to maintain backward compatibility, Popcorn Time will be maintained according to the [Semantic Versioning](http://semver.org/) guidelines as much as possible.
 
-###Beta versions
+### Beta versions
 
 Beta releases will be numbered with the following format:
 
 `0.<major>.<minor>-<patch>`
 
-###Stable versions
+### Stable versions
 
 Releases will be numbered with the following format:
 
