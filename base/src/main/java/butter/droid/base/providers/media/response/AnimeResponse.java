@@ -30,6 +30,7 @@ public class AnimeResponse extends Response<Anime> {
             } else if (item.getType().equalsIgnoreCase("show")) {
                 Show show = new Show();
 
+                show.isAnime = true;
                 show.title = item.getTitle();
                 show.videoId = item.getId();
                 show.seasons = item.getNumSeasons();

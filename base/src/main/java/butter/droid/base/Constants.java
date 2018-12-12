@@ -21,6 +21,7 @@ public class Constants {
 
     public static Boolean DEBUG_ENABLED = BuildConfig.DEBUG; // will be set to true for debug builds and false for release builds
     public static final String PREFS_FILE = "PCT_Prefs";
+    public static final String PREFS_FILE_FAVOURITES = "PCT_Favourites";
     public static final Integer SERVER_PORT = 55723;
     public static final String GIT_URL = "https://github.com/popcorn-official/popcorn-android";
     public static final String BUTTER_URL = "https://popcorntime.sh/";
