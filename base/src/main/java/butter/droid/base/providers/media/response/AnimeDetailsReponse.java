@@ -33,7 +33,6 @@ public class AnimeDetailsReponse extends DetailsResponse<AnimeDetails> {
                  */
             if (item.getType().equalsIgnoreCase("show")) {
                 Show show = new Show();
-                show.isAnime = true;
                 show.seasons = item.getNumSeasons();
                 show.runtime = item.getRuntime();
                 show.synopsis = item.getSynopsis();

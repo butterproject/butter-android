@@ -24,13 +24,8 @@ import android.os.Parcelable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
 import butter.droid.base.manager.provider.ProviderManager;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
 public abstract class Media implements Parcelable {
 
     public String videoId;
