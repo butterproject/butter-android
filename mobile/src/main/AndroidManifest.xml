@@ -28,7 +28,6 @@
 
 		<activity
 			android:name="butter.droid.activities.MainActivity"
-            android:label="@null"
 			android:theme="@style/Theme.Butter.NavigationDrawer"
 			android:windowSoftInputMode="adjustPan">
             <intent-filter>
