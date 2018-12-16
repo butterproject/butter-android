@@ -18,7 +18,6 @@
 package butter.droid.fragments;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -54,7 +53,6 @@ import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ThreadUtils;
-import butter.droid.base.utils.FavouriteUtils;
 import butter.droid.fragments.dialog.LoadingDetailDialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -213,16 +211,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
         }
     };
-    private SharedPreferences.OnSharedPreferenceChangeListener mOnSharedPrefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-            loadFavourites();
-        }
-    };
-
-    public static MediaListFragment newInstance(Mode mode) {
-        return newInstance(mode, null, null, null);
-    }
 
     public static MediaListFragment newInstance(Mode mode, MediaProvider.Filters.Sort filter, MediaProvider.Filters.Order defOrder) {
         return newInstance(mode, filter, defOrder, null);
@@ -260,18 +248,11 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         super.onViewCreated(view, savedInstanceState);
 
         mRecyclerView.setHasFixedSize(true);
-        if (mMode != Mode.FAVOURITES) {
-            mRecyclerView.addOnScrollListener(mScrollListener);
-        }
+        mRecyclerView.addOnScrollListener(mScrollListener);
         //adapter should only ever be created once on fragment initialise.
         mAdapter = new MediaGridAdapter(mContext, mItems, mColumns);
         mAdapter.setOnItemClickListener(mOnItemClickListener);
         mRecyclerView.setAdapter(mAdapter);
-
-        if (mMode == Mode.FAVOURITES) {
-            SharedPreferences prefs = FavouriteUtils.getPrefs(mContext);
-            prefs.registerOnSharedPreferenceChangeListener(mOnSharedPrefChangeListener);
-        }
     }
 
     @Override
@@ -293,11 +274,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
             providerManager.getCurrentMediaProvider()
                     .getList(new MediaProvider.Filters(mFilters), mCallback);
         }
-    }
-
-    public void loadFavourites() {
-        mItems = FavouriteUtils.getFavourites(mContext, providerManager.getCurrentMediaProvider().getClass());
-        mAdapter.setItems(mItems);
     }
 
     @Override
@@ -335,9 +311,6 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
         super.onActivityCreated(savedInstanceState);
         if (mMode == Mode.SEARCH) {
             mEmptyView.setText(getString(R.string.no_search_results));
-        } else if (mMode == Mode.FAVOURITES) {
-            mEmptyView.setText(getString(R.string.no_favourites));
-            loadFavourites();
         } else if (mAdapter.getItemCount() == 0) { //don't load initial data in search mode
             setState(State.LOADING);
             providerManager.getCurrentMediaProvider().getList(new MediaProvider.Filters(mFilters), mCallback);/* fetch new items */
@@ -458,7 +431,7 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
     }
 
     public enum Mode {
-        NORMAL, SEARCH, FAVOURITES
+        NORMAL, SEARCH
     }
 
     private enum State {

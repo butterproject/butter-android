@@ -1,7 +1,6 @@
 package butter.droid.fragments;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,15 +14,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.util.Log;
 
 import butter.droid.R;
-import butter.droid.MobileButterApplication;
-import butter.droid.base.providers.media.AnimeProvider;
-import butter.droid.base.providers.media.TVProvider;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.utils.VersionUtils;
-import butter.droid.base.utils.FavouriteUtils;
 import butter.droid.fragments.base.BaseDetailFragment;
 import butter.droid.fragments.dialog.SynopsisDialogFragment;
 import butterknife.BindView;
@@ -44,8 +38,6 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
     RatingBar mRating;
     @BindView(R.id.read_more)
     Button mReadMore;
-    @BindView(R.id.toggle_favourite)
-    Button mToggleFavourite;
     @BindView(R.id.info_buttons)
     LinearLayout mInfoButtons;
     @BindView(R.id.magnet)
@@ -120,17 +112,12 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
                             ellipsized = true;
                         }
                     }
-                    mReadMore.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
+                    mInfoButtons.setVisibility(ellipsized ? View.VISIBLE : View.GONE);
                 }
             });
         } else {
-            mReadMore.setVisibility(View.GONE);
+            mInfoButtons.setVisibility(View.GONE);
         }
-
-        Context context = MobileButterApplication.getAppContext();
-        Class provider = sShow.isAnime ? AnimeProvider.class : TVProvider.class;
-        mToggleFavourite.setText(FavouriteUtils.isFavourite(context, provider, sShow) ?
-            R.string.remove_from_favourites : R.string.add_to_favourites);
 
         mOpenMagnet.setVisibility(View.GONE);
 
@@ -146,19 +133,6 @@ public class ShowDetailAboutFragment extends BaseDetailFragment {
         b.putString("text", sShow.synopsis);
         synopsisDialogFragment.setArguments(b);
         synopsisDialogFragment.show(getFragmentManager(), "overlay_fragment");
-    }
-
-    @OnClick(R.id.toggle_favourite)
-    public void toggleFavourite(View v) {
-        Context context = MobileButterApplication.getAppContext();
-        Class provider = sShow.isAnime ? AnimeProvider.class : TVProvider.class;
-        if (FavouriteUtils.isFavourite(context, provider, sShow)) {
-            FavouriteUtils.removeFavourite(context, provider, sShow);
-            mToggleFavourite.setText(R.string.add_to_favourites);
-        } else {
-            FavouriteUtils.addFavourite(context, provider, sShow);
-            mToggleFavourite.setText(R.string.remove_from_favourites);
-        }
     }
 
 }

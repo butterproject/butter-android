@@ -109,12 +109,6 @@
                     android:text="@string/read_more"
                     app:typeface="roboto_medium"  />
 
-                <com.devspark.robototextview.widget.RobotoButton
-                    style="@style/Theme.Butter.DetailButton"
-                    android:id="@+id/toggle_favourite"
-                    android:text="@string/add_to_favourites"
-                    app:typeface="roboto_medium"  />
-
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

@@ -62,7 +62,7 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return mTabs.size() + mHasGenreTabs + 1;
+        return mTabs.size() + mHasGenreTabs;
     }
 
     @Override
@@ -70,12 +70,7 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         if (mHasGenreTabs > 0 && position == 0) {
             return ButterApplication.getAppContext().getString(R.string.genres).toUpperCase(LocaleUtils.getCurrent());
         }
-
-        if (position == 1) {
-            return ButterApplication.getAppContext().getString(R.string.favourites).toUpperCase(LocaleUtils.getCurrent());
-        }
-
-        position -= mHasGenreTabs + 1;
+        position -= mHasGenreTabs;
         return mTabs.get(position).getLabel().toUpperCase(LocaleUtils.getCurrent());
     }
 
@@ -88,11 +83,7 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
             return mGenreFragment;
         }
 
-        if (position == 1) {
-            return MediaListFragment.newInstance(MediaListFragment.Mode.FAVOURITES);
-        }
-
-        position -= mHasGenreTabs + 1;
+        position -= mHasGenreTabs;
         return MediaListFragment.newInstance(MediaListFragment.Mode.NORMAL, mTabs.get(position).getFilter(), mTabs.get(position).getOrder(), mGenre);
     }
 
