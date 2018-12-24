@@ -25,7 +25,7 @@ ext {
     butterknifeVersion = "8.4.0"
     okHttpVersion = "3.4.2"
     picassoVersion = "2.5.2"
-    torrentstreamVersion = "733ef8c83d3f11b168fe5a0ce244a7d0b18b0877"
+    torrentstreamServerVersion = "1.0.5"
     daggerVersion = "2.7"
     javaxAnnotationVersion = "1.2"  
 }

@@ -57,7 +57,6 @@ import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.beaming.BeamManager;
 import butter.droid.base.beaming.BeamPlayerNotificationService;
-import butter.droid.base.beaming.server.BeamServerService;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.youtube.YouTubeManager;
@@ -166,10 +165,6 @@ public class MainActivity extends ButterBaseActivity implements ProviderManager.
         supportInvalidateOptionsMenu();
 
         mNavigationDrawerFragment.initItems();
-
-        if (BeamServerService.getServer() != null) {
-            BeamServerService.getServer().stop();
-        }
 
         BeamPlayerNotificationService.cancelNotification();
 

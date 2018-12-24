@@ -23,14 +23,14 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
+import com.github.se_bastiaan.torrentstreamserver.TorrentStreamServer;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butter.droid.base.ButterApplication;
-import butter.droid.base.beaming.server.BeamServer;
-import butter.droid.base.beaming.server.BeamServerService;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
@@ -100,17 +100,14 @@ public class DefaultPlayer {
             Intent intent = new Intent();
             if (null != media && media.subtitles != null && media.subtitles.size() > 0 && subLanguage != null && !subLanguage.equals("no-subs")) {
                 File subsLocation = new File(SubsProvider.getStorageLocation(context), media.videoId + "-" + subLanguage + ".srt");
-                BeamServer.setCurrentSubs(subsLocation);
-                intent.putExtra("subs", new Uri[]{Uri.parse(BeamServer.getSubsURL())});
+                TorrentStreamServer.getInstance().setStreamSrtSubtitle(subsLocation);
+                intent.putExtra("subs", new Uri[]{Uri.parse(location.substring(0, location.lastIndexOf('.')) + ".srt")});
                 intent.putExtra("subs.name", new String[]{LocaleUtils.toLocale(subLanguage).getDisplayLanguage()});
             }
 
-            BeamServer.setCurrentVideo(location);
-            BeamServerService.getServer().start();
-
             intent.setClassName(playerData[1], playerData[0]);
             intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(BeamServer.getVideoURL()), "video/mp4");
+            intent.setDataAndType(Uri.parse(location), "video/mp4");
 
             if (media != null) {
                 if (media.isMovie) {

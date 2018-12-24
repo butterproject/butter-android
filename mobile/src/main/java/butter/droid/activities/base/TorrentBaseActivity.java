@@ -26,7 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
-import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import com.github.se_bastiaan.torrentstreamserver.TorrentServerListener;
 
 import butter.droid.base.ButterApplication;
 import butter.droid.base.activities.TorrentActivity;
@@ -36,7 +36,7 @@ import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PrefUtils;
 import butterknife.ButterKnife;
 
-public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentListener, TorrentActivity {
+public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentServerListener, TorrentActivity {
 
     protected Handler mHandler;
     protected TorrentService mService;
@@ -55,6 +55,22 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
     protected void onStart() {
         super.onStart();
         TorrentService.bindHere(this, mServiceConnection);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (null != mService) {
+            mService.addListener(this);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (null != mService) {
+            mService.removeListener(this);
+        }
     }
 
     @Override
@@ -133,6 +149,11 @@ public abstract class TorrentBaseActivity extends AppCompatActivity implements T
 
     @Override
     public void onStreamStopped() {
+
+    }
+
+    @Override
+    public void onServerReady(String url) {
 
     }
 }

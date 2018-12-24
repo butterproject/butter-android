@@ -24,7 +24,7 @@ import android.support.v4.app.Fragment;
 
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
-import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import com.github.se_bastiaan.torrentstreamserver.TorrentServerListener;
 
 import java.util.Map;
 
@@ -32,8 +32,6 @@ import javax.inject.Inject;
 
 import butter.droid.base.R;
 import butter.droid.base.activities.TorrentActivity;
-import butter.droid.base.beaming.server.BeamServer;
-import butter.droid.base.beaming.server.BeamServerService;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.models.Episode;
@@ -69,7 +67,7 @@ import hugo.weaving.DebugLog;
  * //todo: most of this logic should probably be factored out into its own service at some point
  */
 public abstract class BaseStreamLoadingFragment extends Fragment
-        implements TorrentListener,
+        implements TorrentServerListener,
         SubtitleDownloader.ISubtitleDownloaderListener,
         SubsProvider.Callback {
 
@@ -214,16 +212,13 @@ public abstract class BaseStreamLoadingFragment extends Fragment
     public void onResume() {
         super.onResume();
         if (mPlayerStarted) {
-            BeamServer beamService = BeamServerService.getServer();
-            if (beamService != null) {
-                beamService.stop();
-            }
             if(!mPlayingExternal)
                 getActivity().onBackPressed();
         }
 
         if(mService != null && mService.isStreaming() && mService.isReady()) {
             onStreamReady(mService.getCurrentTorrent());
+            onServerReady(mService.getCurrentStreamUrl());
         }
 
         if(mState == null) {
@@ -245,6 +240,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment
             mService.stopStreaming();
         } else if(mService.isReady()) {
             onStreamReady(mService.getCurrentTorrent());
+            onServerReady(mService.getCurrentStreamUrl());
         }
 
         //start streaming the new file
@@ -286,9 +282,16 @@ public abstract class BaseStreamLoadingFragment extends Fragment
      */
     @Override
     @DebugLog
-    public void onStreamReady(Torrent torrent) {
-        mVideoLocation = torrent.getVideoFile().toString();
-        startPlayer(mVideoLocation);
+    public void onStreamReady(Torrent torrent) { }
+
+    /**
+     * Called when the torrent server is running
+     * @param url
+     */
+    @Override
+    @DebugLog
+    public void onServerReady(String url) {
+        startPlayer(url);
     }
 
     /**
@@ -307,9 +310,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment
     }
 
     @Override
-    public void onStreamPrepared(Torrent torrent) {
-        torrent.startDownload();
-    }
+    public void onStreamPrepared(Torrent torrent) { }
 
     @Override
     public void onStreamStopped() {

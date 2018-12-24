@@ -43,6 +43,7 @@ import com.connectsdk.device.ConnectableDevice;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import com.github.se_bastiaan.torrentstreamserver.TorrentServerListener;
 
 import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
@@ -82,7 +83,7 @@ import timber.log.Timber;
 public abstract class BaseVideoPlayerFragment
     extends Fragment
     implements IVLCVout.Callback,
-        TorrentListener,
+        TorrentServerListener,
         MediaPlayer.EventListener,
         LibVLC.HardwareAccelerationError,
         SubtitleDownloader.ISubtitleDownloaderListener {
@@ -732,6 +733,9 @@ public abstract class BaseVideoPlayerFragment
 
     @Override
     public void onStreamReady(Torrent torrent) { }
+
+    @Override
+    public void onServerReady(String url) { }
 
     @Override
     public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {

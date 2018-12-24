@@ -44,6 +44,7 @@ import com.connectsdk.service.command.ServiceCommandError;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import com.github.se_bastiaan.torrentstreamserver.TorrentServerListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -71,7 +72,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class BeamPlayerFragment extends Fragment implements TorrentListener {
+public class BeamPlayerFragment extends Fragment implements TorrentServerListener {
 
     public static final int REFRESH_INTERVAL_MS = (int) TimeUnit.SECONDS.toMillis(1);
 
@@ -533,6 +534,9 @@ public class BeamPlayerFragment extends Fragment implements TorrentListener {
     public void onStreamError(Torrent torrent, Exception e) { }
     @Override
     public void onStreamReady(Torrent torrent) { }
+
+    @Override
+    public void onServerReady(String url) { }
 
     @Override
     public void onStreamProgress(Torrent torrent, StreamStatus status) {

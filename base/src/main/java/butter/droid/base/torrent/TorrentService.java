@@ -33,10 +33,12 @@ import android.support.v4.app.NotificationCompat;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.TorrentOptions;
-import com.github.se_bastiaan.torrentstream.TorrentStream;
-import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import com.github.se_bastiaan.torrentstreamserver.TorrentServerListener;
+import com.github.se_bastiaan.torrentstreamserver.TorrentStreamNotInitializedException;
+import com.github.se_bastiaan.torrentstreamserver.TorrentStreamServer;
 import com.sjl.foreground.Foreground;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,26 +46,29 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import butter.droid.base.ButterApplication;
+import butter.droid.base.Constants;
 import butter.droid.base.R;
 import butter.droid.base.activities.TorrentActivity;
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import timber.log.Timber;
 
-public class TorrentService extends Service implements TorrentListener {
+public class TorrentService extends Service implements TorrentServerListener {
 
     private static final Integer NOTIFICATION_ID = 3423423;
 
     private static TorrentService sThis;
 
-    private TorrentStream mTorrentStream;
+    private TorrentStreamServer mTorrentStreamServer;
     private Torrent mCurrentTorrent;
+    private String mCurrentStreamUrl;
     private StreamStatus mStreamStatus;
 
     private boolean mInForeground = false, mIsReady = false, mStopped = false;
 
     private IBinder mBinder = new ServiceBinder();
-    private List<TorrentListener> mListener = new ArrayList<>();
+    private List<TorrentServerListener> mListener = new ArrayList<>();
 
     private PowerManager.WakeLock mWakeLock;
     private Class mCurrentActivityClass;
@@ -90,7 +95,11 @@ public class TorrentService extends Service implements TorrentListener {
         super.onCreate();
         sThis = this;
         Foreground.get().addListener(mForegroundListener);
-        mTorrentStream = TorrentStream.init(getTorrentOptions());
+        mTorrentStreamServer = TorrentStreamServer.getInstance();
+        mTorrentStreamServer.setServerHost(NetworkUtils.getWifiIPAddress());
+        mTorrentStreamServer.setServerPort(Constants.SERVER_PORT);
+        mTorrentStreamServer.setTorrentOptions(getTorrentOptions());
+        mTorrentStreamServer.startTorrentStream();
     }
 
     @Override
@@ -99,6 +108,7 @@ public class TorrentService extends Service implements TorrentListener {
         Timber.d("onDestroy");
         if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
+        mTorrentStreamServer.stopTorrentStream();
     }
 
     @Override
@@ -199,7 +209,7 @@ public class TorrentService extends Service implements TorrentListener {
         Timber.d("streamTorrent");
         mStopped = false;
 
-        if (mTorrentStream.isStreaming()) return;
+        if (mTorrentStreamServer.isStreaming()) return;
 
         Timber.d("Starting streaming");
 
@@ -208,37 +218,41 @@ public class TorrentService extends Service implements TorrentListener {
             mWakeLock.release();
             mWakeLock = null;
         }
-        String WAKE_LOCK = "TorrentService_WakeLock";
+        String WAKE_LOCK = "PCT:TorrentService_WakeLock";
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK);
         mWakeLock.acquire();
 
-        mTorrentStream.setOptions(getTorrentOptions());
+        mTorrentStreamServer.setTorrentOptions(getTorrentOptions());
 
         mIsReady = false;
-        mTorrentStream.addListener(this);
-        mTorrentStream.startStream(torrentUrl);
+        mTorrentStreamServer.addListener(this);
+        try {
+            mTorrentStreamServer.startStream(torrentUrl);
+        } catch (IOException | TorrentStreamNotInitializedException e) {
+            Timber.e("Error occurred", e);
+        }
     }
 
     public void stopStreaming() {
         mStopped = true;
-        mTorrentStream.removeListener(this);
+        mTorrentStreamServer.removeListener(this);
 
         if (mWakeLock != null && mWakeLock.isHeld())
             mWakeLock.release();
 
-        if(!mTorrentStream.isStreaming())
+        if(!mTorrentStreamServer.isStreaming())
             return;
 
         stopForeground();
 
-        mTorrentStream.stopStream();
+        mTorrentStreamServer.stopStream();
         mIsReady = false;
 
         Timber.d("Stopped torrent and removed files if possible");
     }
 
     public boolean isStreaming() {
-        return mTorrentStream.isStreaming();
+        return mTorrentStreamServer.isStreaming();
     }
 
     public boolean isReady() {
@@ -253,11 +267,11 @@ public class TorrentService extends Service implements TorrentListener {
         return false;
     }
 
-    public void addListener(@NonNull TorrentListener listener) {
+    public void addListener(@NonNull TorrentServerListener listener) {
         mListener.add(listener);
     }
 
-    public void removeListener(@NonNull TorrentListener listener) {
+    public void removeListener(@NonNull TorrentServerListener listener) {
         mListener.remove(listener);
     }
 
@@ -278,8 +292,8 @@ public class TorrentService extends Service implements TorrentListener {
     private Foreground.Listener mForegroundListener = new Foreground.Listener() {
         @Override
         public void onBecameForeground() {
-            if (!mTorrentStream.isStreaming()) {
-                mTorrentStream.resumeSession();
+            if (!mTorrentStreamServer.isStreaming()) {
+                mTorrentStreamServer.resumeSession();
             } else {
                 mInForeground = false;
                 stopForeground();
@@ -288,8 +302,8 @@ public class TorrentService extends Service implements TorrentListener {
 
         @Override
         public void onBecameBackground() {
-            if (!mTorrentStream.isStreaming()) {
-                mTorrentStream.pauseSession();
+            if (!mTorrentStreamServer.isStreaming()) {
+                mTorrentStreamServer.pauseSession();
             } else {
                 mInForeground = true;
                 startForeground();
@@ -302,28 +316,32 @@ public class TorrentService extends Service implements TorrentListener {
     }
 
     public String getCurrentTorrentUrl() {
-        return mTorrentStream.getCurrentTorrentUrl();
+        return mTorrentStreamServer.getCurrentTorrentUrl();
+    }
+
+    public String getCurrentStreamUrl() {
+        return mCurrentStreamUrl;
     }
 
     @Override
     public void onStreamPrepared(Torrent torrent) {
         mCurrentTorrent = torrent;
 
-        for(TorrentListener listener : mListener) {
+        for(TorrentServerListener listener : mListener) {
             listener.onStreamPrepared(torrent);
         }
     }
 
     @Override
     public void onStreamStarted(Torrent torrent) {
-        for(TorrentListener listener : mListener) {
+        for(TorrentServerListener listener : mListener) {
             listener.onStreamStarted(torrent);
         }
     }
 
     @Override
     public void onStreamError(Torrent torrent, Exception e) {
-        for(TorrentListener listener : mListener) {
+        for(TorrentServerListener listener : mListener) {
             listener.onStreamError(torrent, e);
         }
     }
@@ -331,16 +349,15 @@ public class TorrentService extends Service implements TorrentListener {
     @Override
     public void onStreamReady(Torrent torrent) {
         mCurrentTorrent = torrent;
-        mIsReady = true;
 
-        for(TorrentListener listener : mListener) {
+        for(TorrentServerListener listener : mListener) {
             listener.onStreamReady(torrent);
         }
     }
 
     @Override
     public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
-        for(TorrentListener listener : mListener) {
+        for(TorrentServerListener listener : mListener) {
             if (null != listener) {
                 listener.onStreamProgress(torrent, streamStatus);
             }
@@ -353,9 +370,21 @@ public class TorrentService extends Service implements TorrentListener {
 
     @Override
     public void onStreamStopped() {
-        for(TorrentListener listener : mListener) {
+        for(TorrentServerListener listener : mListener) {
             if (listener != null) {
                 listener.onStreamStopped();
+            }
+        }
+    }
+
+    @Override
+    public void onServerReady(String url) {
+        mIsReady = true;
+        mCurrentStreamUrl = url;
+
+        for(TorrentServerListener listener : mListener) {
+            if (listener != null) {
+                listener.onServerReady(url);
             }
         }
     }

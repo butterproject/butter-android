@@ -25,7 +25,6 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.beaming.BeamPlayerNotificationService;
-import butter.droid.base.beaming.server.BeamServerService;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
@@ -174,7 +173,6 @@ public class MediaDetailActivity extends ButterBaseActivity implements BaseDetai
         if (null != mService) {
             mService.stopStreaming();
         }
-        BeamServerService.getServer().stop();
         BeamPlayerNotificationService.cancelNotification();
     }
 

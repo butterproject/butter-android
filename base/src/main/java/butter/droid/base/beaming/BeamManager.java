@@ -20,7 +20,6 @@ package butter.droid.base.beaming;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.text.InputType;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -51,6 +50,7 @@ import com.connectsdk.service.capability.MediaPlayer;
 import com.connectsdk.service.capability.VolumeControl;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.sessions.LaunchSession;
+import com.github.se_bastiaan.torrentstreamserver.TorrentStreamServer;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -63,10 +63,11 @@ import java.util.Map;
 
 import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
-import butter.droid.base.beaming.server.BeamServer;
-import butter.droid.base.beaming.server.BeamServerService;
 import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.subs.FormatSRT;
+import butter.droid.base.subs.TimedTextObject;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.utils.FileUtils;
 import timber.log.Timber;
 
 /**
@@ -154,9 +155,6 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         ));
         mDiscoveryManager.start();
         mDiscoveryManager.addListener(this);
-
-        Intent castServerService = new Intent(context, BeamServerService.class);
-        context.startService(castServerService);
     }
 
     public static BeamManager getInstance(Context context) {
@@ -171,8 +169,6 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mDiscoveryManager.removeListener(this);
         mDiscoveryManager.stop();
         mDiscoveryManager.onDestroy();
-        Intent castServerService = new Intent(mContext, BeamServerService.class);
-        mContext.stopService(castServerService);
     }
 
     public Map<String, ConnectableDevice> getDevices() {
@@ -229,22 +225,34 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mStreamInfo = info;
 
         String location = info.getVideoLocation();
-        if(!location.startsWith("http")) {
-            BeamServer.setCurrentVideo(location);
-            location = BeamServer.getVideoURL();
-        }
 
         String subsLocation = null;
         if(info.getSubtitleLanguage() != null && !info.getSubtitleLanguage().isEmpty() && !info.getSubtitleLanguage().equals("no-subs")) {
             File srtFile = new File(SubsProvider.getStorageLocation(mContext), mStreamInfo.getMedia().videoId + "-" + mStreamInfo.getSubtitleLanguage() + ".srt");
-            BeamServer.setCurrentSubs(srtFile);
+            File vttFile = new File(SubsProvider.getStorageLocation(mContext), mStreamInfo.getMedia().videoId + "-" + mStreamInfo.getSubtitleLanguage() + ".vtt");
+
+            try {
+                if (!vttFile.exists() && srtFile.exists()) {
+                    FormatSRT srt = new FormatSRT();
+                    TimedTextObject timedTextObject = srt.parseFile(srtFile.getName(), FileUtils.getContentsAsString(srtFile.getAbsolutePath()));
+                    String[] vttStr = timedTextObject.toVTT();
+                    FileUtils.saveStringFile(vttStr, vttFile);
+                }
+            } catch (Exception e) {
+                Timber.e("Error creating VTT sub files", e);
+            }
+
+            TorrentStreamServer.getInstance().setStreamSrtSubtitle(srtFile);
+            TorrentStreamServer.getInstance().setStreamVttSubtitle(vttFile);
+
             if(mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Vtt)) {
-                subsLocation = BeamServer.getSubsURL(BeamServer.VTT);
+                subsLocation = location.substring(0, location.lastIndexOf('.')) + ".vtt";
             } else if (mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Srt)) {
-                subsLocation = BeamServer.getSubsURL(BeamServer.SRT);
+                subsLocation = location.substring(0, location.lastIndexOf('.')) + ".srt";
             }
         } else {
-            BeamServer.removeSubs();
+            TorrentStreamServer.getInstance().setStreamSrtSubtitle(null);
+            TorrentStreamServer.getInstance().setStreamVttSubtitle(null);
         }
 
         try {

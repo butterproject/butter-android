@@ -30,7 +30,6 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.base.ButterBaseActivity;
 import butter.droid.base.beaming.BeamManager;
-import butter.droid.base.beaming.server.BeamServerService;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.fragments.BeamPlayerFragment;
@@ -77,8 +76,6 @@ public class BeamPlayerActivity extends ButterBaseActivity implements VideoPlaye
         super.onCreate(savedInstanceState, R.layout.activity_beamplayer);
 
         setShowCasting(true);
-
-        BeamServerService.getServer().start();
 
         mStreamInfo = getIntent().getParcelableExtra(INFO);
 
@@ -128,7 +125,6 @@ public class BeamPlayerActivity extends ButterBaseActivity implements VideoPlaye
             @Override
             public void onSelectionPositive() {
                 mBeamManager.stopVideo();
-                BeamServerService.getServer().stop();
                 if (mService != null)
                     mService.stopStreaming();
                 finish();
