@@ -27,6 +27,7 @@ import android.support.v4.app.FragmentActivity;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
+import com.github.se_bastiaan.torrentstreamserver.TorrentServerListener;
 
 import butter.droid.base.ButterApplication;
 import butter.droid.base.activities.TorrentActivity;
@@ -38,7 +39,7 @@ import butterknife.ButterKnife;
 
 public abstract class TVTorrentBaseActivity
     extends FragmentActivity
-    implements TorrentListener, TorrentActivity, ServiceConnection {
+    implements TorrentServerListener, TorrentActivity, ServiceConnection {
 
     protected Handler mHandler;
     protected TorrentService mService;
@@ -122,6 +123,11 @@ public abstract class TVTorrentBaseActivity
 
     @Override
     public void onStreamReady(Torrent torrent) {
+
+    }
+
+    @Override
+    public void onServerReady(String url) {
 
     }
 
