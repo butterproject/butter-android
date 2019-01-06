@@ -20,13 +20,13 @@ import java.util.Map;
 import butter.droid.base.BuildConfig;
 import butter.droid.base.Constants;
 import butter.droid.base.R;
-import butter.droid.base.compat.SupportedArchitectures;
 import butter.droid.base.fragments.dialog.ChangeLogDialogFragment;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.updater.ButterUpdateManager;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.StorageUtils;
+import butter.droid.base.utils.VersionUtils;
 import butter.droid.base.vlc.VLCOptions;
 
 public interface PreferencesHandler {
@@ -746,7 +746,7 @@ public interface PreferencesHandler {
                         public String get(PrefItem item) {
                             try {
                                 PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-                                return packageInfo.versionName + " - " + SupportedArchitectures.getAbi();
+                                return packageInfo.versionName + " - " + VersionUtils.getBuildAbi();
                             } catch (PackageManager.NameNotFoundException e) {
                                 e.printStackTrace();
                             }

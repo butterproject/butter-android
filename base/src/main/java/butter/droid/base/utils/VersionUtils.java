@@ -24,9 +24,11 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 
+import java.util.Locale;
+
 import butter.droid.base.BuildConfig;
 import butter.droid.base.ButterApplication;
-import butter.droid.base.compat.SupportedArchitectures;
+import timber.log.Timber;
 
 public class VersionUtils {
 
@@ -48,35 +50,37 @@ public class VersionUtils {
     }
 
     public static boolean isUsingCorrectBuild() {
-        String buildAbi = getBuildAbi();
+        String abi;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            abi = Build.CPU_ABI.toLowerCase(Locale.US);
+        } else {
+            abi = Build.SUPPORTED_ABIS[0].toLowerCase(Locale.US);
+        }
         return BuildConfig.GIT_BRANCH.equalsIgnoreCase("local") ||
-                SupportedArchitectures.getAbi().equalsIgnoreCase(buildAbi);
+                abi.contains(getBuildAbi());
 
     }
 
-    private static String getBuildAbi() {
+    public static String getBuildAbi() {
         PackageManager manager = ButterApplication.getAppContext().getPackageManager();
         try {
             PackageInfo info = manager.getPackageInfo(ButterApplication.getAppContext().getPackageName(), 0);
             Integer versionCode = info.versionCode;
 
-            if(info.versionName.contains("local"))
+            if(info.versionName.contains("local")) {
                 return "local";
+            }
 
-            if(versionCode > 40000000) {
+            if(versionCode > 50000000) {
                 return "x86";
             } else if(versionCode > 30000000) {
-                return "arm64-v8a";
-            } else if(versionCode > 20000000) {
-                return "armeabi-v7a";
-            } else if(versionCode > 10000000) {
-                return "armeabi";
+                return "arm";
             }
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Timber.e(e, "Couldn't get the build ABI");
         }
 
-        return "unsupported";
+        return "unknown";
     }
 
 }
