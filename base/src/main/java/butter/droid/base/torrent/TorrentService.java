@@ -29,10 +29,6 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompat.Action;
-import android.support.v4.app.NotificationCompat.Action.Builder;
 
 import org.butterproject.torrentstream.StreamStatus;
 import org.butterproject.torrentstream.Torrent;
@@ -48,6 +44,10 @@ import java.util.TimerTask;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationCompat.Action;
+import androidx.core.app.NotificationCompat.Action.Builder;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.foreground.ForegroundListener;
@@ -59,7 +59,7 @@ import dagger.android.DaggerService;
 public class TorrentService extends DaggerService implements TorrentListener {
 
     public static final int NOTIFICATION_ID = 3423423;
-    private static final String WAKE_LOCK = "TorrentService_WakeLock";
+    private static final String WAKE_LOCK = "butter.droid.base.torrent.TorrentService:wakeLock";
 
     @Inject PreferencesHandler preferencesHandler;
     @Inject ForegroundManager foregroundManager;
@@ -272,7 +272,8 @@ public class TorrentService extends DaggerService implements TorrentListener {
         }
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent stopIntent = new Intent();
         stopIntent.setAction(TorrentBroadcastReceiver.STOP);
@@ -282,8 +283,10 @@ public class TorrentService extends DaggerService implements TorrentListener {
                 getString(R.string.stop), pendingStopIntent).build();
 
         // TODO text to resources
-        notificationManager.createChannel(ButterNotificationManager.CHANNEL_STREAMING, "Straming", NotificationManager.IMPORTANCE_LOW);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, ButterNotificationManager.CHANNEL_STREAMING)
+        notificationManager.createChannel(ButterNotificationManager.CHANNEL_STREAMING, "Straming",
+                NotificationManager.IMPORTANCE_LOW);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
+                ButterNotificationManager.CHANNEL_STREAMING)
                 .setSmallIcon(R.drawable.ic_notif_logo)
                 .setContentTitle(getString(R.string.app_name) + " - " + getString(R.string.running))
                 .setContentText(getString(R.string.tap_to_resume))

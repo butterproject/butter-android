@@ -15,20 +15,10 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.subs.opensubs.data.model.request;
+package butter.droid.tv.ui.launch
 
-import io.reactivex.annotations.Nullable;
-
-public class QuerySearchRequest {
-
-    public static final String LANGUAGE_ALL = "all";
-
-    @Nullable public final String query;
-    @Nullable public final String sublanguageid;
-
-    public QuerySearchRequest(final String query, final String language) {
-        this.query = query;
-        this.sublanguageid = language;
-    }
+interface TVLaunchPresenter {
+    fun onCreate()
+    fun termsCanceled()
+    fun termsAccepted()
 }
-

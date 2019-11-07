@@ -9,15 +9,15 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class GradientDrawable extends Drawable {
 
     @Override public void draw(@NonNull Canvas canvas) {
         // Code borrowed from https://stackoverflow.com/questions/23657811/how-to-mask-bitmap-with-lineargradient-shader-properly
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
+        int width = getBounds().width();
+        int height = getBounds().height();
 
         Paint paint = new Paint();
         float gradientHeight = height / 2f;

@@ -21,12 +21,12 @@ android {
     compileSdkVersion rootProject.ext.compileSdk
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
     }
@@ -48,19 +48,19 @@ android {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    api "com.android.support:appcompat-v7:$appCompatVersion"
-    api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    api 'androidx.appcompat:appcompat:1.0.0-rc01'
     api "com.google.dagger:dagger:$daggerVersion"
 
     testImplementation "junit:junit:4.12"
-    testImplementation 'org.mockito:mockito-core:2.8.47'
+    testImplementation 'org.mockito:mockito-core:2.17.0'
 
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha3', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestImplementation 'org.mockito:mockito-android:2.8.47'
+    androidTestImplementation 'org.mockito:mockito-android:2.17.0'
+
 }

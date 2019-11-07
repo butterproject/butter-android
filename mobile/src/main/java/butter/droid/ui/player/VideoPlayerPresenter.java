@@ -18,7 +18,7 @@
 package butter.droid.ui.player;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import butter.droid.base.providers.media.model.StreamInfo;
 
 public interface VideoPlayerPresenter {

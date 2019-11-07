@@ -6,7 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import butter.droid.base.R;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

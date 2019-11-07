@@ -15,17 +15,26 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.launch;
+package butter.droid.manager.internal;
 
-public interface TVLaunchView {
+import android.content.Context;
 
-    void requestPermissions();
+import androidx.annotation.Nullable;
+import butter.droid.base.BuildConfig;
+import butter.droid.base.Internal;
+import butter.droid.base.manager.internal.beaming.BeamManager;
+import dagger.Module;
+import dagger.Provides;
 
-    void close();
+@Module
+public class InternalManagerModule {
 
-    void showTermsScreen();
+    @Provides @Internal @Nullable BeamManager provideBeamManager(final Context context) {
+        if (BuildConfig.FEATURE_MOBILE_BEAM) {
+            return new BeamManager(context);
+        } else {
+            return null;
+        }
+    }
 
-    void startRecommendationService();
-
-    void navigateForward();
 }

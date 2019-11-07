@@ -22,17 +22,22 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.preference.PreferenceManager;
-import butter.droid.base.ButterApplication;
-import java.io.File;
-import java.util.ArrayList;
+
 import org.videolan.libvlc.util.AndroidUtil;
 import org.videolan.libvlc.util.VLCUtil;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import butter.droid.base.ButterApplication;
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.utils.PixelUtils;
 import timber.log.Timber;
 
 @SuppressWarnings("unused")
 public class VLCOptions {
 
-    public static ArrayList<String> getLibOptions() {
+    public static ArrayList<String> getLibOptions(PreferencesHandler preferencesHandler) {
         final Context context = ButterApplication.getAppContext();
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -62,9 +67,12 @@ public class VLCOptions {
             networkCaching = 0;
         }
 
-        final String freetypeRelFontsize = pref.getString("subtitles_size", "16");
-        final boolean freetypeBold = pref.getBoolean("subtitles_bold", false);
-        final String freetypeColor = pref.getString("subtitles_color", "16777215");
+        final String freetypeFontsize = String.valueOf(PixelUtils.getPixelsFromDp(context,
+                preferencesHandler.getSubtitleSize()));
+        final String freetypeColor = String.valueOf(preferencesHandler.getSubtitleColor() & 0xFFFFFF); // Ignore alpha
+        final String freetypeOutlineTickness = String.valueOf(PixelUtils.getPixelsFromDp(context,
+                preferencesHandler.getSubtitleStrokeWidth()));
+        final String freetypeOutlineColor = String.valueOf(preferencesHandler.getSubtitleStrokeColor() & 0xFFFFFF); // Ignore alpha
         final boolean freetypeBackground = pref.getBoolean("subtitles_background", false);
         final int opengl = Integer.parseInt(pref.getString("opengl", "-1"));
 
@@ -88,16 +96,11 @@ public class VLCOptions {
         options.add("--audio-resampler");
         options.add(getResampler());
 
-        options.add("--freetype-rel-fontsize=" + freetypeRelFontsize);
-        if (freetypeBold) {
-            options.add("--freetype-bold");
-        }
+        options.add("--freetype-fontsize=" + freetypeFontsize);
         options.add("--freetype-color=" + freetypeColor);
-        if (freetypeBackground) {
-            options.add("--freetype-background-opacity=128");
-        } else {
-            options.add("--freetype-background-opacity=0");
-        }
+        options.add("--freetype-outline-color=" + freetypeOutlineColor);
+        options.add("--freetype-outline-thickness=" + freetypeOutlineTickness);
+
         if (opengl == 1) {
             options.add("--vout=gles2,none");
         } else if (opengl == 0) {

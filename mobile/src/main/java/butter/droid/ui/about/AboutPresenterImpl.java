@@ -17,7 +17,7 @@
 
 package butter.droid.ui.about;
 
-import android.support.annotation.IdRes;
+import androidx.annotation.IdRes;
 
 import butter.droid.R;
 import butter.droid.base.ui.about.BaseAboutPresenterImpl;

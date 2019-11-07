@@ -15,15 +15,31 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.subs.opensubs.data.model.response;
+package butter.droid.ui.main
 
-import nl.nl2312.xmlrpc.deserialization.MemberName;
+import android.app.Activity
+import android.os.Bundle
+import butter.droid.ui.main.genre.list.model.UiGenre
 
-public class LoginResponse {
+interface MainPresenter {
 
-    @MemberName("token") String tokem;
+    fun onCreate(selectedProviderId: Int)
 
-    public String getTokem() {
-        return tokem;
-    }
+    fun onResume()
+
+    fun selectProvider(providerId: Int)
+
+    fun openMenuActivity(activityClass: Class<out Activity>)
+
+    fun onGenreChanged(genre: UiGenre)
+
+    fun addGenreListener(listener: MainPresenterImpl.OnGenreChangeListener)
+
+    fun removeGenreListener(listener: MainPresenterImpl.OnGenreChangeListener)
+
+    fun onSaveInstanceState(outState: Bundle)
+
+    fun searchClicked()
+
+    fun onDestroy()
 }

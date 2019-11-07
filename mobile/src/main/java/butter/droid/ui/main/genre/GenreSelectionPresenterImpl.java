@@ -17,8 +17,12 @@
 
 package butter.droid.ui.main.genre;
 
-import android.support.annotation.MainThread;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
+
+import java.util.List;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.Nullable;
 import butter.droid.base.manager.internal.provider.ProviderManager;
 import butter.droid.ui.main.MainPresenter;
 import butter.droid.ui.main.genre.list.model.UiGenre;
@@ -27,7 +31,6 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import java.util.List;
 
 public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
 
@@ -47,7 +50,8 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
         this.parentPresenter = parentPresenter;
     }
 
-    @Override public void onViewCreated(final int providerId) {
+    @Override public void onViewCreated(final int providerId, int selectedPosition) {
+        this.selectedGenrePosition = selectedPosition;
         disposeGenres();
 
         providerManager.getMediaProvider(providerId).genres()
@@ -64,7 +68,10 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
                     @Override public void onSuccess(final List<UiGenre> value) {
                         genres = value;
                         view.displayGenres(genres);
-                        onGenreSelected(0);
+
+                        // only fist time to 0 else to current position
+                        int navigateTo = Math.max(selectedPosition, 0);
+                        onGenreSelected(navigateTo);
                     }
 
                     @Override public void onError(final Throwable e) {
@@ -87,6 +94,10 @@ public class GenreSelectionPresenterImpl implements GenreSelectionPresenter {
 
             parentPresenter.onGenreChanged(genre);
         }
+    }
+
+    @Override public void saveState(Bundle outState) {
+        view.saveState(outState, selectedGenrePosition);
     }
 
     @Override public void onDestroy() {

@@ -21,7 +21,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.TVBaseActivity;
@@ -32,10 +32,10 @@ public class TVMediaGridActivity extends TVBaseActivity {
     private static final String EXTRA_FILTER = "butter.droid.tv.ui.media.TVMediaGridActivity.extra_filter";
     private static final String EXTRA_PROVIDER = "butter.droid.tv.ui.media.TVMediaGridActivity.extra_provider";
 
-    @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_movie_media_grid);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_movie_media_grid);
 
         Bundle extras = getIntent().getExtras();
         final Filter filter = extras.getParcelable(EXTRA_FILTER);

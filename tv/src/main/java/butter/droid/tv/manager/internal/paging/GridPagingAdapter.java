@@ -17,9 +17,9 @@
 
 package butter.droid.tv.manager.internal.paging;
 
-import android.support.annotation.Nullable;
-import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.PresenterSelector;
+import androidx.annotation.Nullable;
+import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.PresenterSelector;
 
 import java.util.List;
 

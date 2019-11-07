@@ -22,6 +22,7 @@ android {
 
     defaultConfig {
         targetSdkVersion rootProject.ext.targetSdk
+        minSdkVersion rootProject.ext.minSdk
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
@@ -30,5 +31,10 @@ android {
         unitTests {
             includeAndroidResources = true
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }

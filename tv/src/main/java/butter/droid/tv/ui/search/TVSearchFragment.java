@@ -19,23 +19,25 @@ package butter.droid.tv.ui.search;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
-import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.ClassPresenterSelector;
-import android.support.v17.leanback.widget.HeaderItem;
-import android.support.v17.leanback.widget.ListRow;
-import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.ObjectAdapter;
-import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.OnItemViewSelectedListener;
-import android.support.v17.leanback.widget.Presenter;
-import android.support.v17.leanback.widget.Row;
-import android.support.v17.leanback.widget.RowPresenter;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.StringRes;
+import androidx.leanback.app.SearchSupportFragment;
+import androidx.leanback.app.SearchSupportFragment.SearchResultProvider;
+import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.ClassPresenterSelector;
+import androidx.leanback.widget.HeaderItem;
+import androidx.leanback.widget.ListRow;
+import androidx.leanback.widget.ListRowPresenter;
+import androidx.leanback.widget.ObjectAdapter;
+import androidx.leanback.widget.OnItemViewClickedListener;
+import androidx.leanback.widget.OnItemViewSelectedListener;
+import androidx.leanback.widget.Presenter;
+import androidx.leanback.widget.Row;
+import androidx.leanback.widget.RowPresenter;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
@@ -44,10 +46,9 @@ import butter.droid.tv.presenters.LoadingCardPresenter.LoadingCardItem;
 import butter.droid.tv.presenters.MediaCardPresenter;
 import butter.droid.tv.presenters.MediaCardPresenter.MediaCardItem;
 import butter.droid.tv.ui.detail.TVMediaDetailActivity;
-import dagger.android.AndroidInjection;
+import dagger.android.support.AndroidSupportInjection;
 
-public class TVSearchFragment extends android.support.v17.leanback.app.SearchFragment
-        implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider, TVSearchView {
+public class TVSearchFragment extends SearchSupportFragment implements SearchResultProvider, TVSearchView {
 
     @Inject TVSearchPresenter presenter;
     @Inject BackgroundUpdater backgroundUpdater;
@@ -57,7 +58,7 @@ public class TVSearchFragment extends android.support.v17.leanback.app.SearchFra
     private ListRow loadingRow;
 
     @Override public void onAttach(final Context context) {
-        AndroidInjection.inject(this);
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
     }
 

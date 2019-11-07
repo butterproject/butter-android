@@ -19,12 +19,18 @@ package butter.droid.provider.base.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import butter.droid.provider.base.filter.Genre;
+
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import butter.droid.provider.base.filter.Genre;
 
 public abstract class Media implements Parcelable {
+
+    public static final String KEY_META_IMDB_ID = "imdb_id";
 
     @NonNull private final String id;
     @NonNull private final String title;
@@ -37,8 +43,10 @@ public abstract class Media implements Parcelable {
     @NonNull private final String backdrop;
     @NonNull private final String synopsis;
 
+    @NonNull private final Map<String, String> meta = new HashMap<>();
+
     public Media(@NonNull final String id, @NonNull final String title, final int year, @NonNull final Genre[] genres, final float rating,
-            @Nullable final String poster, @NonNull final String backdrop, @NonNull final String synopsis) {
+            @Nullable final String poster, @NonNull final String backdrop, @NonNull final String synopsis, @Nullable final Map<String, String> meta) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -47,6 +55,10 @@ public abstract class Media implements Parcelable {
         this.poster = poster;
         this.backdrop = backdrop;
         this.synopsis = synopsis;
+
+        if (meta != null) {
+            this.meta.putAll(meta);
+        }
     }
 
     protected Media(Parcel in) {
@@ -58,6 +70,7 @@ public abstract class Media implements Parcelable {
         poster = in.readString();
         backdrop = in.readString();
         synopsis = in.readString();
+        in.readMap(meta, Map.class.getClassLoader());
     }
 
     @NonNull public String getId() {
@@ -92,6 +105,10 @@ public abstract class Media implements Parcelable {
         return synopsis;
     }
 
+    @Nullable public String getMeta(@NonNull String key) {
+        return meta.get(key);
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
@@ -102,6 +119,7 @@ public abstract class Media implements Parcelable {
         dest.writeString(poster);
         dest.writeString(backdrop);
         dest.writeString(synopsis);
+        dest.writeMap(meta);
     }
 
     @Override public boolean equals(final Object o) {
@@ -126,7 +144,6 @@ public abstract class Media implements Parcelable {
         if (!title.equals(media.title)) {
             return false;
         }
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
         if (!Arrays.equals(genres, media.genres)) {
             return false;
         }

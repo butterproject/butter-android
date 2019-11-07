@@ -1,8 +1,8 @@
 package butter.droid.base.manager.internal.glide.transcode;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.v7.graphics.Palette;
+import androidx.annotation.NonNull;
+import androidx.palette.graphics.Palette;
 
 public class PaletteBitmap {
 

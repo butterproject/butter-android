@@ -17,8 +17,8 @@
 
 package butter.droid.base.content.preferences;
 
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
 
 import butter.droid.base.content.preferences.Prefs.PrefKey;
 

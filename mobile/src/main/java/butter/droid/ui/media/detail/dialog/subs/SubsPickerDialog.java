@@ -20,23 +20,24 @@ package butter.droid.ui.media.detail.dialog.subs;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
+import androidx.recyclerview.widget.RecyclerView;
 import butter.droid.R;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
@@ -91,13 +92,18 @@ public class SubsPickerDialog extends BottomSheetDialogFragment implements SubsP
         presenter.onViewCreated(arguments.getParcelable(ARG_MEDIA), arguments.getParcelable(ARG_SELECTED));
     }
 
+    @Override public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
+
     @Override public void showSubtitles(List<UiSubItem> subs) {
         subsAdapter.setItems(subs);
 
         recyclerView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
 
-        FrameLayout bottomSheet = getDialog().findViewById(android.support.design.R.id.design_bottom_sheet);
+        FrameLayout bottomSheet = getDialog().findViewById(com.google.android.material.R.id.design_bottom_sheet);
         BottomSheetBehavior<FrameLayout> behaviour = BottomSheetBehavior.from(bottomSheet);
         behaviour.setState(BottomSheetBehavior.STATE_EXPANDED);
         behaviour.setSkipCollapsed(true);

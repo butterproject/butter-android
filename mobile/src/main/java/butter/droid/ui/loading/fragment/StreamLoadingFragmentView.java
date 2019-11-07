@@ -18,7 +18,7 @@
 package butter.droid.ui.loading.fragment;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.ui.loading.fragment.BaseStreamLoadingFragmentView;

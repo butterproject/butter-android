@@ -15,16 +15,11 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.provider.subs.opensubs.data.model.response;
+package butter.droid.tv.ui.launch
 
-import java.util.List;
-import nl.nl2312.xmlrpc.deserialization.MemberName;
-
-public class SearchResponse {
-
-    @MemberName("data") List<OpenSubItem> data;
-
-    public List<OpenSubItem> getData() {
-        return data;
-    }
+interface TVLaunchView {
+    fun close()
+    fun showTermsScreen()
+    fun startRecommendationService()
+    fun navigateForward()
 }

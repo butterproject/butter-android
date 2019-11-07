@@ -2,10 +2,16 @@
 	package="butter.droid.base">
 
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 	<application>
 
 		<service android:name="butter.droid.base.torrent.TorrentService" />
+
+		<service android:name="butter.droid.base.manager.internal.beaming.server.BeamServerService" />
+		<service android:name="butter.droid.base.manager.internal.beaming.BeamPlayerNotificationService" />
+
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
 	</application>
 

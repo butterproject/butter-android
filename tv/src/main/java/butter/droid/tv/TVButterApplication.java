@@ -18,12 +18,12 @@
 package butter.droid.tv;
 
 import android.content.Context;
-import android.support.multidex.MultiDex;
+
+import androidx.multidex.MultiDex;
 import butter.droid.base.BaseApplicationModule;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.providers.DaggerProviderComponent;
 import butter.droid.base.providers.ProviderComponent;
-import butter.droid.base.utils.VersionUtils;
 import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerApplication;
 
@@ -31,13 +31,6 @@ public class TVButterApplication extends ButterApplication {
 
     private ApplicationComponent appComponent;
     private ProviderComponent providerComponent;
-
-    @Override
-    public void updateAvailable(String filePath) {
-        if (!VersionUtils.isAndroidTV()) {
-            super.updateAvailable(filePath);
-        }
-    }
 
     @Override protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         if (appComponent == null) {

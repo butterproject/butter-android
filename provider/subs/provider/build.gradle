@@ -21,12 +21,12 @@ android {
     compileSdkVersion rootProject.ext.compileSdk
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     buildTypes {
@@ -47,21 +47,21 @@ android {
 }
 
 repositories {
-    mavenCentral()
     google()
+    jcenter()
 }
 
 dependencies {
     api project(':provider:media:base')
-    implementation 'com.squareup.okio:okio:1.13.0'
-    api "com.android.support:appcompat-v7:$appCompatVersion"
+    implementation 'com.squareup.okio:okio:1.14.0'
+    api 'androidx.appcompat:appcompat:1.0.0-rc01'
     api "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     api 'io.reactivex.rxjava2:rxandroid:2.0.2'
 
     testImplementation 'junit:junit:4.12'
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test:rules:1.1.0-alpha4'
 
 
 }

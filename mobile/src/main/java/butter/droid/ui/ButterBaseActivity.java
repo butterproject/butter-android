@@ -19,51 +19,37 @@ package butter.droid.ui;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NavUtils;
+import androidx.core.app.TaskStackBuilder;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.manager.internal.beaming.BeamManager;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.ui.beam.fragment.dialog.BeamDeviceSelectorDialogFragment;
 
 public class ButterBaseActivity extends TorrentBaseActivity implements BeamManager.BeamListener {
 
-    @Inject ButterUpdateManager updateManager;
-    @Inject BeamManager beamManager;
+    @Inject @Nullable BeamManager beamManager;
     @Inject PreferencesHandler preferencesHandler;
 
     protected Boolean showCasting = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState, int layoutId) {
-        super.onCreate(savedInstanceState, layoutId);
+    @Override protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         if (!VersionUtils.isUsingCorrectBuild()) {
             new AlertDialog.Builder(this)
                     .setMessage(butter.droid.base.R.string.wrong_abi)
                     .setCancelable(false)
                     .show();
-
-            updateManager.setListener(new ButterUpdateManager.Listener() {
-                @Override
-                public void updateAvailable(String updateFile) {
-                    Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                    installIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdateManager.ANDROID_PACKAGE);
-                    installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(installIntent);
-                }
-            });
-            updateManager.checkUpdatesManually();
         }
     }
 
@@ -73,14 +59,19 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
         super.onResume();
 
-        beamManager.addListener(this);
+        if (beamManager != null) {
+            beamManager.start();
+            beamManager.addListener(this);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        beamManager.removeListener(this);
+        if (beamManager != null) {
+            beamManager.removeListener(this);
+        }
     }
 
     protected void onHomePressed() {
@@ -105,10 +96,13 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
     }
 
     @Override public boolean onPrepareOptionsMenu(Menu menu) {
-        Boolean castingVisible = showCasting && beamManager.hasCastDevices();
+        Boolean castingVisible = showCasting && beamManager != null && beamManager.hasCastDevices();
         MenuItem item = menu.findItem(R.id.action_casting);
         item.setVisible(castingVisible);
-        item.setIcon(beamManager.isConnected() ? R.drawable.ic_av_beam_connected : R.drawable.ic_av_beam_disconnected);
+        if (castingVisible) {
+            item.setIcon(
+                    beamManager.isConnected() ? R.drawable.ic_av_beam_connected : R.drawable.ic_av_beam_disconnected);
+        }
         return true;
     }
 

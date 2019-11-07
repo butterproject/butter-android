@@ -17,26 +17,41 @@
 
 package butter.droid.ui.preferences;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.github.angads25.filepicker.model.DialogConfigs;
+import com.github.angads25.filepicker.model.DialogProperties;
+import com.github.angads25.filepicker.view.FilePickerDialog;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.io.File;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import butter.droid.R;
 import butter.droid.base.content.preferences.PrefItem;
+import butter.droid.base.content.preferences.PreferencesHandler;
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
 import butter.droid.base.fragments.dialog.NumberPickerDialogFragment;
 import butter.droid.base.fragments.dialog.StringArraySelectorDialogFragment;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.utils.ResourceUtils;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
@@ -44,26 +59,23 @@ import butter.droid.ui.ButterBaseActivity;
 import butter.droid.ui.about.AboutActivity;
 import butter.droid.ui.preferences.dialog.ColorPickerDialogFragment;
 import butter.droid.ui.preferences.dialog.NumberDialogFragment;
-import butter.droid.ui.preferences.dialog.NumberDialogFragment.ResultListener;
 import butter.droid.ui.preferences.dialog.SeekBarDialogFragment;
 import butter.droid.ui.preferences.fragment.ChangeLogDialogFragment;
 import butter.droid.utils.ButterCustomTabActivityHelper;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
-import com.github.angads25.filepicker.controller.DialogSelectionListener;
-import com.github.angads25.filepicker.model.DialogConfigs;
-import com.github.angads25.filepicker.model.DialogProperties;
-import com.github.angads25.filepicker.view.FilePickerDialog;
-import java.io.File;
-import java.util.Map;
-import javax.inject.Inject;
+import butterknife.ButterKnife;
+
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class PreferencesActivity extends ButterBaseActivity implements PreferencesView, RecyclerClickListener {
 
     private static final String FRAGMENT_DIALOG_PICKER = "fragment_dialog_picker";
+    private static final int OPEN_DIRECTORY_SELECTOR_PERMISSION = 1;
 
     @Inject PreferencesPresenter presenter;
-    @Inject ButterUpdateManager updateManager;
+    @Inject PreferencesHandler preferencesHandler;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
@@ -73,7 +85,10 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_preferences);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_preferences);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -119,66 +134,61 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
     }
 
     @Override public void openColorSelector(@PrefKey final String key, @StringRes int title, @ColorInt int value) {
-        ColorPickerDialogFragment fragment = ColorPickerDialogFragment
-                .newInstance(getString(title), value, value1 -> presenter.onColorSelected(key, value1));
+        ColorPickerDialogFragment fragment = ColorPickerDialogFragment.newInstance(getString(title), value,
+                value1 -> presenter.onColorSelected(key, value1));
         fragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
     }
 
     @Override
     public void openNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min, int max) {
         SeekBarDialogFragment dialogFragment = SeekBarDialogFragment.newInstance(getString(title), max, min, value);
-        dialogFragment.setOnResultListener(new SeekBarDialogFragment.ResultListener() {
-            @Override
-            public void onNewValue(int value) {
-                presenter.onNumberSelected(key, value);
-            }
-        });
+        dialogFragment.setOnResultListener(value1 -> presenter.onNumberSelected(key, value1));
         dialogFragment.show(getFragmentManager(), FRAGMENT_DIALOG_PICKER);
     }
 
     @Override public void openDirectorySelector(@PrefKey final String key, @StringRes int title, String value) {
+        boolean isStoragePermissionGranted =
+                ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
+
+        if (!isStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[] {WRITE_EXTERNAL_STORAGE},  OPEN_DIRECTORY_SELECTOR_PERMISSION);
+            return;
+        }
+
         final String[] directoryOptions = {getString(R.string.storage_automatic), getString(R.string.storage_choose)};
 
-        openListDialog(title, directoryOptions, -1, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int position) {
-                if (position == 0) {
-                    presenter.clearPreference(key);
-                } else {
-                    final DialogProperties properties = new DialogProperties();
-                    properties.selection_mode = DialogConfigs.SINGLE_MODE;
-                    properties.selection_type = DialogConfigs.DIR_SELECT;
-                    properties.root = new File(DialogConfigs.DEFAULT_DIR);
-                    properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
-                    properties.offset = new File(DialogConfigs.DEFAULT_DIR);
+        openListDialog(title, directoryOptions, -1, (dialog, position) -> {
+            if (position == 0) {
+                presenter.clearPreference(key);
+            } else {
+                final DialogProperties properties = new DialogProperties();
+                properties.selection_mode = DialogConfigs.SINGLE_MODE;
+                properties.selection_type = DialogConfigs.DIR_SELECT;
+                properties.root = new File(DialogConfigs.DEFAULT_DIR);
+                properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
+                properties.offset = new File(DialogConfigs.DEFAULT_DIR);
 
-                    final FilePickerDialog filePickerDialog = new FilePickerDialog(PreferencesActivity.this, properties);
-                    filePickerDialog.setDialogSelectionListener(new DialogSelectionListener() {
-                        @Override
-                        public void onSelectedFilePaths(String[] files) {
-                            final String path = files[0];
-                            presenter.onFolderSelected(key, path);
-                        }
-                    });
-                    filePickerDialog.show();
-                }
+                final FilePickerDialog filePickerDialog = new FilePickerDialog(PreferencesActivity.this,
+                        properties);
+                filePickerDialog.setDialogSelectionListener(files -> {
+                    final String path = files[0];
+                    presenter.onFolderSelected(key, path);
+                });
+                filePickerDialog.show();
             }
         });
     }
 
-    @Override public void openPreciseNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min, int max) {
+    @Override public void openPreciseNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min,
+            int max) {
         NumberDialogFragment fragment = NumberDialogFragment
-                .newInstance(getString(title), max, min, value, new ResultListener() {
-                    @Override
-                    public void onNewValue(int value) {
-                        presenter.onNumberSelected(key, value);
-                    }
-                });
+                .newInstance(getString(title), max, min, value, value1 -> presenter.onNumberSelected(key, value1));
         fragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
     }
 
     @Override
-    public void openPreciseSmallNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min, int max) {
+    public void openPreciseSmallNumberSelector(@PrefKey final String key, @StringRes int title, int value, int min,
+            int max) {
         final Bundle args = new Bundle();
         args.putString(NumberPickerDialogFragment.TITLE, getString(title));
         args.putInt(NumberPickerDialogFragment.MAX_VALUE, max);
@@ -187,12 +197,7 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
 
         final NumberPickerDialogFragment dialogFragment = new NumberPickerDialogFragment();
         dialogFragment.setArguments(args);
-        dialogFragment.setOnResultListener(new NumberPickerDialogFragment.ResultListener() {
-            @Override
-            public void onNewValue(int value) {
-                presenter.onNumberSelected(key, value);
-            }
-        });
+        dialogFragment.setOnResultListener(value1 -> presenter.onNumberSelected(key, value1));
         dialogFragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG_PICKER);
     }
 
@@ -216,6 +221,18 @@ public class PreferencesActivity extends ButterBaseActivity implements Preferenc
 
     @Override public void showAboutScreen() {
         startActivity(AboutActivity.getIntent(this));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == OPEN_DIRECTORY_SELECTOR_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openDirectorySelector(Prefs.STORAGE_LOCATION, R.string.storage_location, preferencesHandler.getStorageLocation());
+            }
+        }
+
     }
 
     private void openListDialog(@StringRes int title, String[] items, int currentItem, OnClickListener listener) {

@@ -18,8 +18,11 @@
 package butter.droid.provider.base.model;
 
 import android.os.Parcel;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import butter.droid.provider.base.filter.Genre;
 
 public class Movie extends Streamable {
@@ -28,8 +31,8 @@ public class Movie extends Streamable {
 
     public Movie(@NonNull final String id, @NonNull final String title, final int year, @NonNull final Genre[] genres, final float rating,
             @Nullable final String poster, @NonNull final String backdrop, @NonNull final String synopsis,
-            @NonNull final Torrent[] torrents, @Nullable final String trailer) {
-        super(id, title, year, genres, rating, poster, backdrop, synopsis, torrents);
+            @NonNull final Torrent[] torrents, @Nullable final String trailer, @Nullable final Map<String, String> meta) {
+        super(id, title, year, genres, rating, poster, backdrop, synopsis, torrents, meta);
         this.trailer = trailer;
     }
 

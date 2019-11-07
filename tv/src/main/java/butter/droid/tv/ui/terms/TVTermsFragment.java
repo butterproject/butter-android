@@ -20,28 +20,27 @@ package butter.droid.tv.ui.terms;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v17.leanback.app.GuidedStepFragment;
-import android.support.v17.leanback.widget.GuidanceStylist;
-import android.support.v17.leanback.widget.GuidedAction;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.tv.R;
-import dagger.android.AndroidInjection;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
-public class TVTermsFragment extends GuidedStepFragment implements TVTermsView {
+import androidx.annotation.NonNull;
+import androidx.leanback.app.GuidedStepSupportFragment;
+import androidx.leanback.widget.GuidanceStylist;
+import androidx.leanback.widget.GuidedAction;
+import butter.droid.base.manager.prefs.PrefManager;
+import butter.droid.tv.R;
+import dagger.android.support.AndroidSupportInjection;
+
+public class TVTermsFragment extends GuidedStepSupportFragment implements TVTermsView {
 
     @Inject TVTermsPresenter presenter;
     @Inject PrefManager prefManager;
 
     @Override public void onAttach(final Context context) {
-        AndroidInjection.inject(this);
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
-    }
-
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @NonNull
@@ -85,12 +84,12 @@ public class TVTermsFragment extends GuidedStepFragment implements TVTermsView {
     }
 
     @Override public void closeSuccess() {
-        getActivity().setResult(Activity.RESULT_OK);
+        requireActivity().setResult(Activity.RESULT_OK);
         closeSelf();
     }
 
     @Override public void closeSelf() {
-        getActivity().finish();
+        requireActivity().finish();
     }
 
     public static class TermsGuidanceStylist extends GuidanceStylist {

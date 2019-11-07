@@ -17,42 +17,41 @@
 
 package butter.droid.tv.ui.preferences;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.v17.leanback.app.GuidedStepFragment;
-import android.support.v17.leanback.widget.GuidanceStylist;
-import android.support.v17.leanback.widget.GuidedAction;
 import android.view.View;
 import android.widget.Toast;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.fragment.app.FragmentManager;
+import androidx.leanback.app.GuidedStepSupportFragment;
+import androidx.leanback.widget.GuidanceStylist;
+import androidx.leanback.widget.GuidedAction;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.tv.R;
 import butter.droid.tv.ui.about.TVAboutFragment;
 import butter.droid.tv.ui.preferences.chooser.TVPreferencesListFragment;
-import butter.droid.tv.ui.preferences.chooser.TVPreferencesListFragment.SelectionListener;
 import butter.droid.tv.ui.preferences.fragment.TVChangeLogDialogFragment;
 import butter.droid.tv.ui.preferences.fragment.TVWebViewFragment;
-import butter.droid.tv.ui.update.TVUpdateActivity;
-import dagger.android.AndroidInjection;
-import java.util.Arrays;
-import java.util.List;
-import javax.inject.Inject;
+import dagger.android.support.AndroidSupportInjection;
 
-public class TVPreferencesFragment extends GuidedStepFragment implements TVPreferencesView {
+public class TVPreferencesFragment extends GuidedStepSupportFragment implements TVPreferencesView {
 
     @Inject TVPreferencesPresenter presenter;
-    @Inject ButterUpdateManager butterUpdateManager;
     @Inject PreferencesHandler preferencesHandler;
 
     @Override public void onAttach(final Context context) {
-        AndroidInjection.inject(this);
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
     }
 
@@ -70,7 +69,6 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        butterUpdateManager.setListener(filePath -> startActivity(TVUpdateActivity.newIntent(getActivity())));
     }
 
     @NonNull
@@ -101,12 +99,8 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
     public void openSimpleChoiceSelector(@PrefKey final String key, @StringRes int title, String[] items,
             int currentValue) {
         TVPreferencesListFragment fragment = TVPreferencesListFragment.newInstance(title, items, currentValue,
-                new SelectionListener() {
-                    @Override public void onSelect(int position) {
-                        presenter.onSimpleChaiseItemSelected(key, position);
-                    }
-                });
-        GuidedStepFragment.add(getFragmentManager(), fragment);
+                position -> presenter.onSimpleChaiseItemSelected(key, position));
+        GuidedStepSupportFragment.add(getFragmentManager(), fragment);
     }
 
     @Override public void openColorSelector(@PrefKey final String key, @StringRes int title, int value) {
@@ -118,7 +112,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
         TVPreferencesListFragment fragment = TVPreferencesListFragment.newInstance(title, colors,
                 Arrays.asList(colorCodes).indexOf(value),
                 position -> presenter.onColorSelected(key, colorCodes[position]));
-        GuidedStepFragment.add(getFragmentManager(), fragment);
+        GuidedStepSupportFragment.add(getFragmentManager(), fragment);
     }
 
     @Override
@@ -130,7 +124,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
 
         TVPreferencesListFragment fragment = TVPreferencesListFragment.newInstance(title, array, (value - min),
                 position -> presenter.onNumberSelected(key, position + min));
-        GuidedStepFragment.add(getFragmentManager(), fragment);
+        GuidedStepSupportFragment.add(getFragmentManager(), fragment);
     }
 
     @Override public void openDirectorySelector(@PrefKey String key, @StringRes int title, String value) {
@@ -146,7 +140,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
 
         TVPreferencesListFragment fragment = TVPreferencesListFragment.newInstance(title, array, (value - min),
                 position -> presenter.onNumberSelected(key, position + min));
-        GuidedStepFragment.add(getFragmentManager(), fragment);
+        GuidedStepSupportFragment.add(getFragmentManager(), fragment);
     }
 
     @Override
@@ -159,7 +153,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
 
         TVPreferencesListFragment fragment = TVPreferencesListFragment.newInstance(title, array, (value - min),
                 position -> presenter.onNumberSelected(key, position + min));
-        GuidedStepFragment.add(getFragmentManager(), fragment);
+        GuidedStepSupportFragment.add(getFragmentManager(), fragment);
     }
 
     @Override public void openBrowser(Intent intent) {
@@ -192,7 +186,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements TVPrefe
     }
 
     @Override public void showAboutScreen() {
-        GuidedStepFragment.add(getFragmentManager(), new TVAboutFragment());
+        GuidedStepSupportFragment.add(getFragmentManager(), new TVAboutFragment());
     }
 
 }

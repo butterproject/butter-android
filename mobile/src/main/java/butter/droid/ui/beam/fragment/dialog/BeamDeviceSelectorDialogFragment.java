@@ -20,17 +20,21 @@ package butter.droid.ui.beam.fragment.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+
+import com.connectsdk.device.ConnectableDevice;
+
+import javax.inject.Inject;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 import butter.droid.R;
 import butter.droid.base.manager.internal.beaming.BeamDeviceAdapter;
 import butter.droid.base.manager.internal.beaming.BeamManager;
-import com.connectsdk.device.ConnectableDevice;
 import dagger.android.support.DaggerAppCompatDialogFragment;
-import javax.inject.Inject;
 
 public class BeamDeviceSelectorDialogFragment extends DaggerAppCompatDialogFragment {
 
-    @Inject BeamManager beamManager;
+    @Inject @Nullable BeamManager beamManager;
 
     private BeamDeviceAdapter adapter;
 
@@ -43,24 +47,23 @@ public class BeamDeviceSelectorDialogFragment extends DaggerAppCompatDialogFragm
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder;
         if (!beamManager.isConnected()) {
-            adapter = new BeamDeviceAdapter(getActivity(), beamManager);
-            builder = new AlertDialog.Builder(getActivity())
+            adapter = new BeamDeviceAdapter(requireContext(), beamManager);
+            builder = new AlertDialog.Builder(requireContext())
                     .setSingleChoiceItems(adapter, -1, (dialog, position) -> {
                         ConnectableDevice device = adapter.getItem(position);
                         beamManager.connect(device);
                         dismiss();
                     })
                     .setTitle(R.string.select_beaming)
-                    .setNegativeButton(R.string.cancel,
-                            (dialog, which) -> dialog.dismiss()
-                    );
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss() );
             return builder.create();
         } else if (beamManager.getConnectedDevice() != null) {
-            builder = new AlertDialog.Builder(getActivity())
+            builder = new AlertDialog.Builder(requireContext())
                     .setTitle(getString(R.string.connected_to) + " " + beamManager.getConnectedDevice().getFriendlyName())
                     .setNeutralButton(R.string.disconnect, (dialog, which) -> beamManager.disconnect());
             return builder.create();
         } else {
+            // TODO show no devices! Should not happen?
             return super.onCreateDialog(savedInstanceState);
         }
     }

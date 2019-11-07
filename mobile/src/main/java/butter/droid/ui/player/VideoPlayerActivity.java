@@ -20,7 +20,7 @@ package butter.droid.ui.player;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.MenuItem;
 import butter.droid.R;
 import butter.droid.base.providers.media.model.StreamInfo;
@@ -43,7 +43,7 @@ public class VideoPlayerActivity extends ButterBaseActivity implements VideoPlay
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, 0);
+        super.onCreate(savedInstanceState);
 
         setShowCasting(true);
 

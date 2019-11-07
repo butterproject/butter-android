@@ -17,11 +17,11 @@
 
 package butter.droid.ui.main.pager;
 
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import butter.droid.base.R;
 import butter.droid.provider.base.filter.Sorter;
 import butter.droid.provider.base.nav.NavItem;

@@ -17,15 +17,28 @@
 
 package butter.droid.ui.player.stream;
 
+import butter.droid.base.ui.SubFragmentScope;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerDialog;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerModule;
+import butter.droid.ui.media.detail.dialog.subs.SubsPickerParent;
 import butter.droid.ui.player.abs.AbsPlayerPresenter;
 import dagger.Binds;
 import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
 
 @Module
 public interface PlayerBindModule {
 
+    @Binds PlayerPresenter bindPresenter(PlayerPresenterImpl presenter);
+
     @Binds AbsPlayerPresenter bindBasePresenter(PlayerPresenter presenter);
 
     @Binds PlayerView bindView(PlayerFragment fragment);
+
+    @Binds SubsPickerParent subsPickerParent(PlayerPresenterImpl presenter);
+
+    @SubFragmentScope
+    @ContributesAndroidInjector(modules = SubsPickerModule.class)
+    SubsPickerDialog contributeSubsPickerDialogInjector();
 
 }

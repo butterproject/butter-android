@@ -17,14 +17,17 @@
 
 package butter.droid.base.ui.player.stream;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.ui.player.base.BaseVideoPlayerView;
+import butter.droid.provider.subs.model.Subtitle;
 
 public interface StreamPlayerView extends BaseVideoPlayerView {
 
     void showSubsSelectorDialog();
 
-    void showPickSubsDialog(String[] readableNames, String[] adapterSubtitles, String currentSubsLang);
+    void showPickSubsDialog(MediaWrapper mediaWrapper, @Nullable Subtitle subtitle);
 
     void showSubsFilePicker();
 

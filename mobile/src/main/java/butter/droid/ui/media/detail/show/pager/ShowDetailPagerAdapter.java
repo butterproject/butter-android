@@ -18,10 +18,10 @@
 package butter.droid.ui.media.detail.show.pager;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.ui.media.detail.show.about.ShowDetailAboutFragment;
 import butter.droid.ui.media.detail.show.pager.model.UiShowDetailItem;

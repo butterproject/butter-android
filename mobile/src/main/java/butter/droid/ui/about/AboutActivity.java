@@ -21,12 +21,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import butter.droid.R;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AboutActivity extends ButterBaseActivity {
 
@@ -40,7 +42,9 @@ public class AboutActivity extends ButterBaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_about);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_about);
+        ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions

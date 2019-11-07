@@ -17,7 +17,7 @@
 
 package butter.droid.ui.media.detail;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentHealth;

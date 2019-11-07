@@ -18,7 +18,7 @@
 package butter.droid.ui.search;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import butter.droid.R;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;

@@ -18,10 +18,10 @@
 package butter.droid.tv.presenters;
 
 import android.content.Context;
-import android.support.annotation.ColorInt;
-import android.support.v17.leanback.widget.ImageCardView;
-import android.support.v17.leanback.widget.Presenter;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.ColorInt;
+import androidx.leanback.widget.ImageCardView;
+import androidx.leanback.widget.Presenter;
+import androidx.core.content.ContextCompat;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import butter.droid.tv.R;

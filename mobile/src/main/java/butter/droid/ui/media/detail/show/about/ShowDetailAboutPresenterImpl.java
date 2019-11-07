@@ -18,8 +18,8 @@
 package butter.droid.ui.media.detail.show.about;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.provider.base.filter.Genre;

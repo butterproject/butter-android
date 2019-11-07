@@ -17,17 +17,18 @@
 
 package butter.droid.ui.search;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import butter.droid.R;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 /**
@@ -44,9 +45,12 @@ public class SearchActivity extends ButterBaseActivity {
 
     private SearchFragment fragment;
 
-    @SuppressLint("MissingSuperCall") @Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_search);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setShowCasting(true);

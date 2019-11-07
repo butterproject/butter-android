@@ -441,17 +441,11 @@
             android:name=".ui.base.WebViewActivity"
             android:screenOrientation="sensorPortrait" />
 
-        <service android:name="butter.droid.base.torrent.TorrentService" />
-        <service android:name=".base.manager.internal.beaming.server.BeamServerService" />
-        <service android:name=".base.manager.internal.beaming.BeamPlayerNotificationService" />
-
         <receiver android:name="butter.droid.base.torrent.TorrentBroadcastReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="pct.droid.base.torrent.TorrentBroadcastReceiver.STOP" />
             </intent-filter>
         </receiver>
-
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 	</application>
 
 </manifest>

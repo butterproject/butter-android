@@ -30,7 +30,7 @@ public class TVMediaDetailPresenterImpl implements TVMediaDetailPresenter {
     }
 
     @Override public void onCreate(final MediaWrapper media) {
-        view.updateBackground(media.getMedia().getPoster());
+        view.updateBackground(media.getMedia().getBackdrop());
 
         if (media.isStreamable()) {
             view.displayFragment(TVStreamableDetailsFragment.newInstance(media));

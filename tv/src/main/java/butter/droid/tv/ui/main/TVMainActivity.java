@@ -20,10 +20,11 @@ package butter.droid.tv.ui.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import javax.inject.Inject;
+
 import butter.droid.tv.R;
 import butter.droid.tv.ui.TVBaseActivity;
-import butter.droid.tv.ui.update.TVUpdateActivity;
-import javax.inject.Inject;
 
 public class TVMainActivity extends TVBaseActivity implements TVMainView {
 
@@ -31,18 +32,13 @@ public class TVMainActivity extends TVBaseActivity implements TVMainView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_main);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        presenter.onResume();
-    }
-
-    @Override public void showUpdateActivity() {
-        startActivity(TVUpdateActivity.newIntent(this));
     }
 
     public static Intent startActivity(Activity activity) {

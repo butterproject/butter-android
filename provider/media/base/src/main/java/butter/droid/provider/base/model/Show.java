@@ -18,10 +18,13 @@
 package butter.droid.provider.base.model;
 
 import android.os.Parcel;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import butter.droid.provider.base.filter.Genre;
+
 import java.util.Arrays;
+import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import butter.droid.provider.base.filter.Genre;
 
 public class Show extends Media {
 
@@ -29,8 +32,8 @@ public class Show extends Media {
 
     public Show(@NonNull final String id, @NonNull final String title, final int year, @NonNull final Genre[] genres, final float rating,
             @Nullable final String poster, @NonNull final String backdrop, @NonNull final String synopsis,
-            @NonNull final Season[] seasons) {
-        super(id, title, year, genres, rating, poster, backdrop, synopsis);
+            @NonNull final Season[] seasons, @Nullable final Map<String, String> meta) {
+        super(id, title, year, genres, rating, poster, backdrop, synopsis, meta);
         this.seasons = seasons;
     }
 

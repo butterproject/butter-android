@@ -18,10 +18,12 @@
 package butter.droid.ui.media.list;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import javax.inject.Inject;
+
+import androidx.annotation.Nullable;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.ui.media.list.base.BaseMediaListFragment;
-import javax.inject.Inject;
 
 public class MediaListFragment extends BaseMediaListFragment implements MediaListView {
 

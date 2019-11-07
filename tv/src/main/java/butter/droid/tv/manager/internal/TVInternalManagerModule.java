@@ -15,25 +15,21 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.launch;
+package butter.droid.tv.manager.internal;
 
 import android.content.Context;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.ui.ActivityScope;
-import butter.droid.tv.ui.launch.TVLaunchModule.TVLaunchBindModule;
-import dagger.Binds;
+
+import androidx.annotation.Nullable;
+import butter.droid.base.Internal;
+import butter.droid.base.manager.internal.beaming.BeamManager;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = TVLaunchBindModule.class)
-public class TVLaunchModule {
+@Module
+public class TVInternalManagerModule {
 
-    @Provides @ActivityScope public TVLaunchPresenter providePresneter(TVLaunchView view, Context context, PrefManager prefManager) {
-        return new TVLaunchPresenterImpl(view, context, prefManager);
+    @Provides @Internal @Nullable BeamManager provideBeamManager(final Context context) {
+        return null;
     }
 
-    @Module
-    public interface TVLaunchBindModule {
-        @Binds TVLaunchView bindView(TVLaunchActivity activity);
-    }
 }

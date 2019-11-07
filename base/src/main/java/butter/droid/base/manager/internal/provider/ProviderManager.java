@@ -17,10 +17,11 @@
 
 package butter.droid.base.manager.internal.provider;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
 import butter.droid.provider.MediaProvider;
 import butter.droid.provider.subs.SubsProvider;
+import timber.log.Timber;
 
 public class ProviderManager {
 
@@ -31,7 +32,6 @@ public class ProviderManager {
         if (providers == null || providers.length == 0) {
             throw new IllegalStateException("No media providers available");
         }
-
         this.providers = providers;
     }
 

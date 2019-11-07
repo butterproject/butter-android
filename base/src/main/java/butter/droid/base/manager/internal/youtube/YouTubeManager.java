@@ -23,7 +23,7 @@ package butter.droid.base.manager.internal.youtube;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.net.URLDecoder;

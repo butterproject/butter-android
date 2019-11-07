@@ -17,6 +17,7 @@
 
 package butter.droid.ui.beam.fragment;
 
+import androidx.annotation.Nullable;
 import butter.droid.base.manager.internal.beaming.BeamManager;
 import butter.droid.base.ui.FragmentScope;
 import butter.droid.ui.beam.BeamPlayerActivityPresenter;
@@ -28,7 +29,7 @@ import dagger.Provides;
 @Module(includes = BeamPlayerBindModule.class)
 public class BeamPlayerModule {
 
-    @Provides @FragmentScope BeamPlayerPresenter providePresenter(BeamPlayerView view, BeamManager beamManager,
+    @Provides @FragmentScope BeamPlayerPresenter providePresenter(BeamPlayerView view, @Nullable BeamManager beamManager,
             BeamPlayerActivityPresenter parentPresenter) {
         return new BeamPlayerPresenterImpl(view, beamManager, parentPresenter);
     }

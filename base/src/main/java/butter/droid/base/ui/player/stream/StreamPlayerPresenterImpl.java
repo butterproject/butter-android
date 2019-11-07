@@ -18,7 +18,7 @@
 package butter.droid.base.ui.player.stream;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.io.File;
@@ -33,12 +33,19 @@ import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import butter.droid.base.ui.player.base.BaseVideoPlayerPresenterImpl;
 import butter.droid.provider.subs.SubsProvider;
+import butter.droid.provider.subs.model.Subtitle;
 import io.reactivex.MaybeObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenterImpl implements StreamPlayerPresenter {
+
+    public static final int PLAYER_ACTION_CC = 0x1;
+    public static final int PLAYER_ACTION_PIP = 0x1 << 1;
+    public static final int PLAYER_ACTION_SKIP_PREVIOUS = 0x1 << 2;
+    public static final int PLAYER_ACTION_SKIP_NEXT = 0x1 << 3;
+    public static final int PLAYER_ACTION_SCALE = 0x1 << 4;
 
     private final StreamPlayerView view;
     private final VlcPlayer player;
@@ -49,7 +56,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
     @Nullable private Disposable subsDisposable;
 
-    //    private String currentSubsLang = SubsProvider.SUBTITLE_LANGUAGE_NONE;
+    // TODO subs from file
     private File subsFile;
     private int subtitleOffset;
     private int streamerProgress;
@@ -88,73 +95,21 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
     }
 
     @Override public void onViewCreated() {
-        view.setupControls(streamInfo.getFullTitle());
+        // TODO subs actions
+        view.setupControls(streamInfo.getFullTitle(), getPlayerActions());
     }
-
-    @Override public void onSubtitleLanguageSelected(final String language) {
-//        if (currentSubsLang != null && (language == null || currentSubsLang.equals(language))) {
-//            return;
-//        }
-//
-//        currentSubsLang = language;
-////        streamInfo.setSubtitleLanguage(language);
-//
-//        if (currentSubsLang.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-//            subs = null;
-//            onSubtitleEnabledStateChanged(false);
-//            return;
-//        }
-
-        // TODO subs
-        /*
-        if (media == null || media.subtitles == null || media.subtitles.size() == 0) {
-            media = null;
-            onSubtitleEnabledStateChanged(false);
-            throw new IllegalArgumentException("Media doesn't have subtitle");
-        }
-
-        if (!media.subtitles.containsKey(currentSubsLang)) {
-            subs = null;
-            onSubtitleEnabledStateChanged(false);
-            throw new IllegalArgumentException("Media doesn't have subtitle with specified language");
-        }
-        */
-
-        loadSubtitle();
-    }
-
-//    @Override public void onSubtitleDownloadCompleted(final boolean isSuccessful, final TimedTextObject subtitleFile) {
-//        onSubtitleEnabledStateChanged(isSuccessful);
-//        subs = subtitleFile;
-//    }
 
     @Override public void showSubsLanguageSettings() {
-        // TODO subs
-/*
-        String[] subtitles = media.subtitles.keySet().toArray(new String[media.subtitles.size()]);
-        Arrays.sort(subtitles);
-
-        final String[] adapterSubtitles = new String[subtitles.length + 2];
-        System.arraycopy(subtitles, 0, adapterSubtitles, 1, subtitles.length);
-
-        adapterSubtitles[0] = SubsProvider.SUBTITLE_LANGUAGE_NONE;
-        adapterSubtitles[adapterSubtitles.length - 1] = "custom";
-        String[] readableNames = new String[adapterSubtitles.length];
-
-        for (int i = 0; i < readableNames.length - 1; i++) {
-            String language = adapterSubtitles[i];
-            if (language.equals(SubsProvider.SUBTITLE_LANGUAGE_NONE)) {
-                readableNames[i] = context.getString(R.string.no_subs);
-            } else {
-                Locale locale = LocaleUtils.toLocale(language);
-                readableNames[i] = locale.getDisplayName(locale);
-            }
+        // TODO custom subs
+        final SubtitleWrapper subtitleWrapper = streamInfo.getSubtitle();
+        final Subtitle subtitle;
+        if (subtitleWrapper != null) {
+            subtitle = subtitleWrapper.getSubtitle();
+        } else {
+            subtitle = null;
         }
 
-        readableNames[readableNames.length - 1] = "Custom..";
-
-        view.showPickSubsDialog(readableNames, adapterSubtitles, currentSubsLang);
-        */
+        view.showPickSubsDialog(streamInfo.getMedia(), subtitle);
     }
 
     @Override public void onSubsFileSelected(final File f) {
@@ -175,7 +130,7 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
 
     @Override public void onSubsTimingChanged(final int value) {
         subtitleOffset = value;
-        player.setSubsDelay(value);
+        player.setSubsDelay(value * 10);
     }
 
     @Override public void onSubsClicked() {
@@ -196,11 +151,21 @@ public abstract class StreamPlayerPresenterImpl extends BaseVideoPlayerPresenter
         }
     }
 
+    protected int getPlayerActions() {
+        int actions = PLAYER_ACTION_SCALE;
+
+        if (providerManager.hasSubsProvider(streamInfo.getMedia().getProviderId())) {
+            actions |= PLAYER_ACTION_CC;
+        }
+
+        return actions;
+    }
+
     protected int getStreamerProgress() {
         return streamerProgress;
     }
 
-    private void loadSubtitle() {
+    protected void loadSubtitle() {
         final SubtitleWrapper subtitle = streamInfo.getSubtitle();
         MediaWrapper media = streamInfo.getMedia();
         SubsProvider provider = providerManager.getSubsProvider(media.getProviderId());

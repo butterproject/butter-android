@@ -18,7 +18,7 @@
 package butter.droid;
 
 import butter.droid.base.InternalBaseModule;
-import butter.droid.manager.internal.InternalDataModule;
+import butter.droid.manager.internal.InternalManagerModule;
 import butter.droid.ui.InjectorModule;
 import dagger.Module;
 import dagger.android.support.AndroidSupportInjectionModule;
@@ -26,7 +26,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Module(
         includes = {
                 InternalBaseModule.class,
-                InternalDataModule.class,
+                InternalManagerModule.class,
                 InjectorModule.class,
                 AndroidSupportInjectionModule.class
         }

@@ -17,7 +17,7 @@
 
 package butter.droid.tv.ui.search;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import java.util.List;
 

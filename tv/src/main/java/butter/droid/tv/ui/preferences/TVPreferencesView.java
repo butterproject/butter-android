@@ -17,8 +17,8 @@
 
 package butter.droid.tv.ui.preferences;
 
-import android.support.annotation.StringRes;
-import android.support.v17.leanback.widget.GuidedAction;
+import androidx.annotation.StringRes;
+import androidx.leanback.widget.GuidedAction;
 
 import butter.droid.base.content.preferences.Prefs.PrefKey;
 import butter.droid.base.ui.preferences.BasePreferencesView;

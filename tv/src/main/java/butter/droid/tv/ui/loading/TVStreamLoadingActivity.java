@@ -21,11 +21,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import android.view.View;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.torrent.TorrentService;
@@ -42,10 +42,9 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements TVStreamL
 
     @Nullable private BaseStreamLoadingFragment fragment;
 
-    @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, 0);
+        super.onCreate(savedInstanceState);
 
         StreamInfo streamInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
         presenter.onCreate(streamInfo, savedInstanceState != null);

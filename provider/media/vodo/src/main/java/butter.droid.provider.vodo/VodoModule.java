@@ -17,9 +17,10 @@
 
 package butter.droid.provider.vodo;
 
+import com.google.gson.Gson;
+
 import butter.droid.provider.base.ProviderScope;
 import butter.droid.provider.vodo.api.VodoService;
-import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.HttpUrl;
@@ -34,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class VodoModule {
 
     @Provides @ProviderScope HttpUrl providerUrl() {
-        return HttpUrl.parse("http://butter.vodo.net/");
+        return HttpUrl.parse("https://butter.vodo.net/");
     }
 
     @Provides @ProviderScope CallAdapter.Factory provideCallAdapter() {

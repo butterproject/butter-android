@@ -23,7 +23,7 @@ apply from: "${project.rootDir}/config/gradle/android-application-config.gradle"
 android {
     defaultConfig {
         applicationId "org.butterproject.butter"
-        minSdkVersion 21
+        minSdkVersion rootProject.ext.minSdkTV
     }
 
     buildTypes {
@@ -50,23 +50,18 @@ android {
             include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
-    implementation "com.android.support:support-annotations:$appCompatVersion"
-    implementation "com.android.support:palette-v7:$appCompatVersion"
-    implementation "com.android.support:leanback-v17:$appCompatVersion"
+    implementation 'androidx.annotation:annotation:1.0.0-rc01'
+    implementation 'androidx.palette:palette:1.0.0-rc01'
+    implementation 'androidx.leanback:leanback:1.0.0-rc01'
 
     implementation project(':base')
 
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+    kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
 }

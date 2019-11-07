@@ -20,14 +20,17 @@ package butter.droid.ui.terms;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
+
+import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import butter.droid.R;
 import butter.droid.ui.ButterBaseActivity;
 import butter.droid.utils.ToolbarUtils;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
-import javax.inject.Inject;
 
 public class TermsActivity extends ButterBaseActivity implements TermsView {
 
@@ -37,7 +40,10 @@ public class TermsActivity extends ButterBaseActivity implements TermsView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_terms);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_terms);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
         ToolbarUtils.updateToolbarHeight(this, toolbar);

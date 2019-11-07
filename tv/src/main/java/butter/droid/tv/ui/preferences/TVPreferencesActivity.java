@@ -20,15 +20,16 @@ package butter.droid.tv.ui.preferences;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v17.leanback.app.GuidedStepFragment;
+import androidx.leanback.app.GuidedStepFragment;
+import androidx.leanback.app.GuidedStepSupportFragment;
 import butter.droid.tv.ui.TVBaseActivity;
 
 public class TVPreferencesActivity extends TVBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, 0);
-        GuidedStepFragment.addAsRoot(this, new TVPreferencesFragment(), android.R.id.content);
+        super.onCreate(savedInstanceState);
+        GuidedStepSupportFragment.addAsRoot(this, new TVPreferencesFragment(), android.R.id.content);
     }
 
     public static Intent getIntent(Context context) {

@@ -20,15 +20,18 @@ package butter.droid.tv.ui.search;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import butter.droid.tv.R;
 import butter.droid.tv.ui.TVBaseActivity;
+import butterknife.ButterKnife;
 
 
 public class TVSearchActivity extends TVBaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_search);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search);
     }
 
     public static Intent newIntent(Context context) {

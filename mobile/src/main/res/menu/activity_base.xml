@@ -21,6 +21,6 @@
     <item
         android:id="@+id/action_casting"
         android:icon="@drawable/ic_av_beam_disconnected"
-        app:showAsAction="always"
-        android:title="@string/beaming" />
+        android:title="@string/beaming"
+        app:showAsAction="always" />
 </menu>

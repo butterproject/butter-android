@@ -18,17 +18,19 @@
 package butter.droid.tv.ui.preferences.chooser;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.v17.leanback.app.GuidedStepFragment;
-import android.support.v17.leanback.widget.GuidanceStylist;
-import android.support.v17.leanback.widget.GuidedAction;
 import android.view.View;
-import butter.droid.base.utils.LocaleUtils;
-import butter.droid.tv.R;
+
 import java.util.List;
 
-public class TVPreferencesListFragment extends GuidedStepFragment {
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.leanback.app.GuidedStepSupportFragment;
+import androidx.leanback.widget.GuidanceStylist;
+import androidx.leanback.widget.GuidedAction;
+import butter.droid.base.utils.LocaleUtils;
+import butter.droid.tv.R;
+
+public class TVPreferencesListFragment extends GuidedStepSupportFragment {
 
     private static final String TITLE_ARG = "butter.droid.tv.ui.preferences.chooser.TVPreferencesListFragment.titleres";
     private static final String ITEMS_ARG = "butter.droid.tv.ui.preferences.chooser.TVPreferencesListFragment.items";

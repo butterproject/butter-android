@@ -17,10 +17,10 @@
 
 package butter.droid.provider;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RestrictTo;
-import android.support.annotation.RestrictTo.Scope;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
+import androidx.annotation.RestrictTo.Scope;
 import butter.droid.provider.base.filter.Filter;
 import butter.droid.provider.base.filter.Genre;
 import butter.droid.provider.base.filter.Sorter;

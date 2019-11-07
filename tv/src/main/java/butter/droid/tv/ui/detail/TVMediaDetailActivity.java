@@ -20,13 +20,16 @@ package butter.droid.tv.ui.detail;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+
+import javax.inject.Inject;
+
+import androidx.fragment.app.Fragment;
 import butter.droid.base.providers.media.model.MediaWrapper;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.manager.internal.background.BackgroundUpdater;
 import butter.droid.tv.ui.TVBaseActivity;
-import javax.inject.Inject;
+import butterknife.ButterKnife;
 
 public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDetailView {
 
@@ -39,7 +42,8 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_media_details);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_media_details);
 
         backgroundUpdater.initialise(this, R.color.black);
         Bundle extras = getIntent().getExtras();
@@ -65,7 +69,7 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMediaDeta
                 .beginTransaction()
                 .replace(R.id.fragment, fragment)
                 .commit();
-        getFragmentManager().executePendingTransactions();
+        getSupportFragmentManager().executePendingTransactions();
 
         if (VersionUtils.isLollipop()) {
             startPostponedEnterTransition();

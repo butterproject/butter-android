@@ -19,8 +19,8 @@ package butter.droid.base.providers.media.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import butter.droid.provider.base.model.Episode;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.base.model.Movie;

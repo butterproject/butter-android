@@ -33,7 +33,6 @@ import com.connectsdk.discovery.CapabilityFilter;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.discovery.DiscoveryManagerListener;
 import com.connectsdk.discovery.provider.CastDiscoveryProvider;
-import com.connectsdk.discovery.provider.FireTVDiscoveryProvider;
 import com.connectsdk.discovery.provider.SSDPDiscoveryProvider;
 import com.connectsdk.discovery.provider.ZeroconfDiscoveryProvider;
 import com.connectsdk.service.AirPlayService;
@@ -41,7 +40,6 @@ import com.connectsdk.service.CastService;
 import com.connectsdk.service.DIALService;
 import com.connectsdk.service.DLNAService;
 import com.connectsdk.service.DeviceService;
-import com.connectsdk.service.FireTVService;
 import com.connectsdk.service.NetcastTVService;
 import com.connectsdk.service.RokuService;
 import com.connectsdk.service.WebOSTVService;
@@ -59,27 +57,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import butter.droid.base.Internal;
 import butter.droid.base.R;
 import butter.droid.base.manager.internal.beaming.server.BeamServer;
 import butter.droid.base.manager.internal.beaming.server.BeamServerService;
-import butter.droid.base.manager.internal.vlc.PlayerManager;
 import butter.droid.base.providers.media.model.StreamInfo;
 import butter.droid.base.providers.subs.model.SubtitleWrapper;
 import timber.log.Timber;
+
 
 /**
  * CastingManager.java
  * <p/>
  * Wrapper for ConnectSDK
  */
-@Internal
 public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerListener {
 
     private final Context context;
-    private final PlayerManager playerManager;
 
     private DiscoveryManager mDiscoveryManager;
     private ConnectableDevice mCurrentDevice;
@@ -93,12 +86,10 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     private AlertDialog mPairingCodeDialog;
     private StreamInfo mStreamInfo;
 
-    @Inject
-    public BeamManager(Context context, PlayerManager playerManager) {
+    public BeamManager(Context context) {
         this.context = context;
 
         mInput = new EditText(context);
-        this.playerManager = playerManager;
         mInput.setInputType(InputType.TYPE_CLASS_NUMBER);
         mInputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -137,7 +128,7 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         mDiscoveryManager.registerDeviceService(NetcastTVService.class, SSDPDiscoveryProvider.class);
         mDiscoveryManager.registerDeviceService(WebOSTVService.class, SSDPDiscoveryProvider.class);
         mDiscoveryManager.registerDeviceService(AirPlayService.class, ZeroconfDiscoveryProvider.class);
-        mDiscoveryManager.registerDeviceService(FireTVService.class, FireTVDiscoveryProvider.class);
+//        mDiscoveryManager.registerDeviceService(FireTVService.class, FireTVDiscoveryProvider.class);
         mDiscoveryManager.unregisterDeviceService(DIALService.class, SSDPDiscoveryProvider.class);
 
         mDiscoveryManager.setPairingLevel(DiscoveryManager.PairingLevel.ON);
@@ -145,15 +136,17 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
                 MediaPlayer.Play_Video,
                 MediaControl.Any
         ));
-        mDiscoveryManager.start();
         mDiscoveryManager.addListener(this);
+    }
+
+    public void start() {
+        mDiscoveryManager.start();
 
         Intent castServerService = new Intent(context, BeamServerService.class);
         context.startService(castServerService);
     }
 
     public void onDestroy() {
-        mDiscoveryManager.removeListener(this);
         mDiscoveryManager.stop();
         mDiscoveryManager.onDestroy();
         Intent castServerService = new Intent(context, BeamServerService.class);
@@ -189,7 +182,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
     public VolumeControl getVolumeControl() {
         if (mCurrentDevice != null && mCurrentDevice.hasCapability(VolumeControl.Volume_Get) && mCurrentDevice
-                .hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(VolumeControl.Volume_Subscribe)) {
+                .hasCapability(VolumeControl.Volume_Get) && mCurrentDevice.hasCapability(
+                VolumeControl.Volume_Subscribe)) {
             return mCurrentDevice.getCapability(VolumeControl.class);
         }
         return null;
@@ -241,13 +235,15 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         try {
             URL url = new URL(location);
-            URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(),
+            URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
+                    url.getQuery(),
                     url.getRef());
             location = uri.toString();
 
             if (subsLocation != null) {
                 URL subsUrl = new URL(subsLocation);
-                URI subsUri = new URI(subsUrl.getProtocol(), subsUrl.getUserInfo(), subsUrl.getHost(), subsUrl.getPort(), subsUrl.getPath(),
+                URI subsUri = new URI(subsUrl.getProtocol(), subsUrl.getUserInfo(), subsUrl.getHost(),
+                        subsUrl.getPort(), subsUrl.getPath(),
                         subsUrl.getQuery(), subsUrl.getRef());
                 subsLocation = subsUri.toString();
             }
@@ -262,23 +258,24 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
         if (mCurrentDevice != null) {
             MediaInfo mediaInfo = new MediaInfo(location, subsLocation, "video/mp4", title, "");
             mediaInfo.addImages(new ImageInfo(imageUrl));
-            mCurrentDevice.getCapability(MediaPlayer.class).playMedia(mediaInfo, false, new MediaPlayer.LaunchListener() {
-                @Override
-                public void onSuccess(MediaPlayer.MediaLaunchObject object) {
-                    mLaunchSession = object.launchSession;
-                    if (listener != null) {
-                        listener.onSuccess(object);
-                    }
-                }
+            mCurrentDevice.getCapability(MediaPlayer.class).playMedia(mediaInfo, false,
+                    new MediaPlayer.LaunchListener() {
+                        @Override
+                        public void onSuccess(MediaPlayer.MediaLaunchObject object) {
+                            mLaunchSession = object.launchSession;
+                            if (listener != null) {
+                                listener.onSuccess(object);
+                            }
+                        }
 
-                @Override
-                public void onError(ServiceCommandError error) {
-                    Timber.e(error.getMessage());
-                    if (listener != null) {
-                        listener.onError(error);
-                    }
-                }
-            });
+                        @Override
+                        public void onError(ServiceCommandError error) {
+                            Timber.e(error);
+                            if (listener != null) {
+                                listener.onError(error);
+                            }
+                        }
+                    });
         }
     }
 
@@ -375,7 +372,8 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
     }
 
     @Override
-    public void onPairingRequired(ConnectableDevice device, DeviceService service, DeviceService.PairingType pairingType) {
+    public void onPairingRequired(ConnectableDevice device, DeviceService service,
+            DeviceService.PairingType pairingType) {
         switch (pairingType) {
             case FIRST_SCREEN:
                 mPairingAlertDialog.show();

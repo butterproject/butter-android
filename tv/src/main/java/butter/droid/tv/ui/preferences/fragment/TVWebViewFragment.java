@@ -1,16 +1,17 @@
 package butter.droid.tv.ui.preferences.fragment;
 
-import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v17.leanback.widget.BaseCardView.LayoutParams;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.leanback.widget.BaseCardView.LayoutParams;
 import butter.droid.tv.R;
 
 public class TVWebViewFragment extends Fragment {
@@ -26,9 +27,9 @@ public class TVWebViewFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
-        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.fragment_webview_progress);
+        final ProgressBar progressBar = view.findViewById(R.id.fragment_webview_progress);
 
-        final WebView webView = (WebView) view.findViewById(R.id.fragment_webview_webview);
+        final WebView webView = view.findViewById(R.id.fragment_webview_webview);
         webView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         webView.setWebViewClient(new WebViewClient() {
             @Override

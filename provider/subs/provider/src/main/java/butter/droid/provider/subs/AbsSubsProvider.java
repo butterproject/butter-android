@@ -19,7 +19,7 @@ package butter.droid.provider.subs;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Base64;
 import butter.droid.provider.base.model.Media;
 import butter.droid.provider.subs.model.Subtitle;

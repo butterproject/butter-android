@@ -20,14 +20,21 @@ package butter.droid.tv.ui.update;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import butter.droid.tv.R;
 import butter.droid.tv.ui.TVBaseActivity;
+import butterknife.ButterKnife;
 
+/**
+ * @deprecated Not needed since we use Google Play
+ */
+@Deprecated
 public class TVUpdateActivity extends TVBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_update);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_update);
     }
 
     public static Intent newIntent(Context context) {

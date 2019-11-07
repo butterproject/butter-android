@@ -19,13 +19,19 @@ package butter.droid.ui.main.genre;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
 import butter.droid.R;
 import butter.droid.base.widget.recycler.RecyclerClickListener;
 import butter.droid.base.widget.recycler.RecyclerItemClickListener;
@@ -34,12 +40,11 @@ import butter.droid.ui.main.genre.list.model.UiGenre;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
-import java.util.List;
-import javax.inject.Inject;
 
 public class GenreSelectionFragment extends DaggerFragment implements GenreSelectionView, RecyclerClickListener {
 
     private static final String ARG_PROVIDER = "butter.droid.ui.main.genre.GenreSelectionFragment.provider";
+    private static final String STATE_SELECTED_POSITION = "butter.droid.ui.main.genre.GenreSelectionFragment.selectedPosition";
 
     @Inject GenreSelectionPresenter presenter;
 
@@ -76,7 +81,18 @@ public class GenreSelectionFragment extends DaggerFragment implements GenreSelec
 
         int providerId = getArguments().getInt(ARG_PROVIDER);
 
-        presenter.onViewCreated(providerId);
+        int selectedPosition = -1;
+        if (savedInstanceState != null) {
+            selectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION, -1);
+        }
+
+        presenter.onViewCreated(providerId, selectedPosition);
+    }
+
+    @Override public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        presenter.saveState(outState);
     }
 
     @Override public void onDestroy() {
@@ -94,6 +110,10 @@ public class GenreSelectionFragment extends DaggerFragment implements GenreSelec
 
     @Override public void notifyItemUpdated(int position) {
         adapter.notifyItemChanged(position);
+    }
+
+    @Override public void saveState(Bundle outState, int selectedGenrePosition) {
+        outState.putInt(STATE_SELECTED_POSITION, selectedGenrePosition);
     }
 
     public static GenreSelectionFragment newInstance(final int providerId) {

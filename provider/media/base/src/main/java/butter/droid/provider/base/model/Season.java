@@ -18,35 +18,46 @@
 package butter.droid.provider.base.model;
 
 import android.os.Parcel;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import butter.droid.provider.base.filter.Genre;
+
 import java.util.Arrays;
+import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import butter.droid.provider.base.filter.Genre;
 
 public class Season extends Media {
 
     @NonNull private final Episode[] episodes;
+    private final int season;
 
     public Season(@NonNull final String id, @NonNull final String title, final int year, @NonNull final Genre[] genres, final float rating,
             @Nullable final String poster, @NonNull final String backdrop, @NonNull final String synopsis,
-            @NonNull final Episode[] episodes) {
-        super(id, title, year, genres, rating, poster, backdrop, synopsis);
+            @NonNull final Episode[] episodes, final int season, @Nullable final Map<String, String> meta) {
+        super(id, title, year, genres, rating, poster, backdrop, synopsis, meta);
         this.episodes = episodes;
+        this.season = season;
     }
 
     protected Season(Parcel in) {
         super(in);
         episodes = in.createTypedArray(Episode.CREATOR);
+        season = in.readInt();
     }
 
     @NonNull public Episode[] getEpisodes() {
         return episodes;
     }
 
+    public int getSeason() {
+        return season;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeTypedArray(episodes, flags);
+        dest.writeInt(season);
     }
 
     @Override

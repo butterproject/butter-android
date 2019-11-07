@@ -18,9 +18,9 @@
 package butter.droid.tv.manager.internal.background;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v17.leanback.app.BackgroundManager;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.leanback.app.BackgroundManager;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;

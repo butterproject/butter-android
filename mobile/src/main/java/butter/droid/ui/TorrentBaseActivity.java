@@ -22,46 +22,43 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatDelegate;
+
+import javax.inject.Inject;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.utils.LocaleUtils;
-import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasFragmentInjector;
-import dagger.android.support.DaggerAppCompatActivity;
 import dagger.android.support.HasSupportFragmentInjector;
-import javax.inject.Inject;
 
-public abstract class TorrentBaseActivity extends DaggerAppCompatActivity implements TorrentActivity, HasFragmentInjector,
+public abstract class TorrentBaseActivity extends AppCompatActivity implements TorrentActivity,
         HasSupportFragmentInjector {
 
     static {
+        // TODO should be removed
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Inject DispatchingAndroidInjector<Fragment> supportFragmentInjector;
-    @Inject DispatchingAndroidInjector<android.app.Fragment> frameworkFragmentInjector;
     @Inject PreferencesHandler preferencesHandler;
 
     protected Handler torrentHandler;
     private TorrentService torrentStream;
 
-    protected void onCreate(Bundle savedInstanceState, int layoutId) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
+
         String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
-        super.onCreate(savedInstanceState);
 
-        if (layoutId != 0) {
-            setContentView(layoutId);
-            ButterKnife.bind(this);
-        }
+        super.onCreate(savedInstanceState);
 
         torrentHandler = new Handler(getMainLooper());
     }
@@ -92,11 +89,6 @@ public abstract class TorrentBaseActivity extends DaggerAppCompatActivity implem
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return supportFragmentInjector;
-    }
-
-    @Override
-    public AndroidInjector<android.app.Fragment> fragmentInjector() {
-        return frameworkFragmentInjector;
     }
 
     protected ButterApplication getApp() {

@@ -19,11 +19,10 @@ package butter.droid.ui.preferences.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import android.view.View;
 
 import com.larswerkman.holocolorpicker.ColorPicker;
@@ -67,24 +66,13 @@ public class ColorPickerDialogFragment extends DialogFragment {
             colorPicker.setNewCenterColor(color);
         }
 
-        builder
-                .setView(view)
+        builder.setView(view)
                 .setTitle(getArguments().getString(TITLE))
-                .setPositiveButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                onResultListener.onNewValue(colorPicker.getColor());
-                                dialog.dismiss();
-                            }
-                        })
-                .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    onResultListener.onNewValue(colorPicker.getColor());
+                    dialog.dismiss();
+                })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
 
         return builder.create();
     }

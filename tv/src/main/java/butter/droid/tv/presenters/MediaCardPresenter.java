@@ -18,13 +18,13 @@
 package butter.droid.tv.presenters;
 
 import android.content.Context;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v17.leanback.widget.BaseCardView;
-import android.support.v17.leanback.widget.ImageCardView;
-import android.support.v17.leanback.widget.Presenter;
-import android.support.v7.graphics.Palette;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.leanback.widget.BaseCardView;
+import androidx.leanback.widget.ImageCardView;
+import androidx.leanback.widget.Presenter;
+import androidx.palette.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;

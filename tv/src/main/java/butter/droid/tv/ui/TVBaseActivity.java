@@ -18,37 +18,22 @@
 package butter.droid.tv.ui;
 
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
-import javax.inject.Inject;
-
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.ui.search.TVSearchActivity;
 
 public abstract class TVBaseActivity extends TVTorrentBaseActivity {
 
-    @Inject ButterUpdateManager updateManager;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState, int layoutId) {
-        super.onCreate(savedInstanceState, layoutId);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         if (!VersionUtils.isUsingCorrectBuild()) {
             new AlertDialog.Builder(this)
                     .setMessage(butter.droid.base.R.string.wrong_abi)
                     .setCancelable(false)
                     .show();
-
-            updateManager.setListener(updateFile -> {
-                Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                installIntent.setDataAndType(Uri.parse("file://" + updateFile), ButterUpdateManager.ANDROID_PACKAGE);
-                installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(installIntent);
-            });
-            updateManager.checkUpdatesManually();
         }
     }
 

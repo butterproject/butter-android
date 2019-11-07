@@ -17,62 +17,51 @@
 
 package butter.droid.tv.ui;
 
-import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.FragmentActivity;
+
+import javax.inject.Inject;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.ui.TorrentActivity;
 import butter.droid.base.utils.LocaleUtils;
-import butterknife.ButterKnife;
-import org.butterproject.torrentstream.StreamStatus;
-import org.butterproject.torrentstream.Torrent;
-import org.butterproject.torrentstream.listeners.TorrentListener;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasFragmentInjector;
 import dagger.android.support.HasSupportFragmentInjector;
-import javax.inject.Inject;
 
-public abstract class TVTorrentBaseActivity extends FragmentActivity implements TorrentListener, TorrentActivity, ServiceConnection,
-        HasFragmentInjector, HasSupportFragmentInjector {
+public abstract class TVTorrentBaseActivity extends FragmentActivity implements TorrentActivity,
+        HasSupportFragmentInjector {
 
-    @Inject DispatchingAndroidInjector<Fragment> fragmentInjector;
-    @Inject DispatchingAndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector;
+    @Inject DispatchingAndroidInjector<androidx.fragment.app.Fragment> supportFragmentInjector;
     @Inject PreferencesHandler preferencesHandler;
 
     protected TorrentService torrentStream;
 
-    protected void onCreate(Bundle savedInstanceState, int layoutId) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
+
         String language = preferencesHandler.getLocale();
         LocaleUtils.setCurrent(this, LocaleUtils.toLocale(language));
+
         super.onCreate(savedInstanceState);
-
-        if (layoutId != 0) {
-            setContentView(layoutId);
-            ButterKnife.bind(this);
-        }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        TorrentService.bindHere(this, this);
+    @Override protected void onStart() {
+        super.onStart();
+        TorrentService.bindHere(this, serviceConnection);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (null != torrentStream) {
-            torrentStream.removeListener(this);
-            unbindService(this);
-        }
+    @Override protected void onStop() {
+        super.onStop();
+        unbindService(serviceConnection);
+        onTorrentServiceDisconnected(torrentStream);
     }
 
     @Override
@@ -90,20 +79,6 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
         return torrentStream;
     }
 
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        torrentStream = ((TorrentService.ServiceBinder) service).getService();
-        torrentStream.addListener(this);
-        onTorrentServiceConnected(torrentStream);
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        torrentStream.removeListener(this);
-        onTorrentServiceDisconnected(torrentStream);
-        torrentStream = null;
-    }
-
     public void onTorrentServiceConnected(final TorrentService service) {
         // Placeholder
     }
@@ -112,42 +87,23 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
         // Placeholder
     }
 
-    @Override
-    public void onStreamPrepared(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamStarted(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamError(Torrent torrent, Exception ex) {
-
-    }
-
-    @Override
-    public void onStreamReady(Torrent torrent) {
-
-    }
-
-    @Override
-    public void onStreamProgress(Torrent torrent, StreamStatus streamStatus) {
-
-    }
-
-    @Override
-    public void onStreamStopped() {
-
-    }
-
-    @Override
-    public AndroidInjector<Fragment> fragmentInjector() {
-        return fragmentInjector;
-    }
-
-    @Override public AndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector() {
+    @Override public AndroidInjector<Fragment> supportFragmentInjector() {
         return supportFragmentInjector;
     }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            torrentStream = ((TorrentService.ServiceBinder) service).getService();
+            onTorrentServiceConnected(torrentStream);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            onTorrentServiceDisconnected(torrentStream);
+            torrentStream = null;
+        }
+    };
+
+
 }

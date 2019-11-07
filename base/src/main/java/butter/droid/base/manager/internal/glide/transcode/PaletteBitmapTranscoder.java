@@ -1,9 +1,9 @@
 package butter.droid.base.manager.internal.glide.transcode;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.graphics.Palette;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.palette.graphics.Palette;
 
 import com.bumptech.glide.load.Options;
 import com.bumptech.glide.load.engine.Resource;

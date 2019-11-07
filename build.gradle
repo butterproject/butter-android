@@ -2,7 +2,7 @@ import si.kamino.gradle.extensions.version.code.IncreaseVersionCode
 
 buildscript {
     ext {
-        kotlinVersion = '1.2.40'
+        kotlinVersion = '1.2.60'
     }
 
     repositories {
@@ -12,40 +12,48 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha08'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.3"
-        classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "gradle.plugin.solar.blaz.gradle:play-publisher:0.4.2"
+        classpath 'gradle.plugin.org.jmailen.gradle:kotlinter-gradle:1.15.1'
     }
 }
 
+apply plugin: "solar.blaz.play-publisher-parent"
+
 ext {
-    appCompatVersion = "27.1.1"
-    targetSdk = 27
-    compileSdk = 27
-    minSdk = 16
-    butterknifeVersion = "8.8.1"
-    okHttpVersion = "3.4.2"
-    daggerVersion = "2.15"
+    targetSdk = 28
+    compileSdk = 28
+    minSdk = 19
+    minSdkTV = 21
+    butterknifeVersion = "9.0.0-SNAPSHOT"
+    okHttpVersion = "3.10.0"
+    daggerVersion = "2.16"
     javaxAnnotationVersion = "1.2"
     torrentstreamVersion = '2.5.0'
     filePickerVersion = '1.1.0'
     changeloglibVersion = '2.1.0'
     gsonVersion = '2.8.1'
-    rxJavaVersion = '2.1.8'
+    rxJavaVersion = '2.1.13'
     retrofitVersion = '2.4.0'
-    glideVersion = '4.6.1'
+    glideVersion = '4.8.0-SNAPSHOT'
 }
 
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter()
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'http://guardian.github.com/maven/repo-releases' }
         maven { url "https://dl.bintray.com/butterproject/maven/" }
+        mavenCentral()
+        maven {
+            name 'jcenter-snapshot'
+            url "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
     }
 
     //let project evaluate its script first
@@ -91,3 +99,15 @@ allprojects {
         }
     }
 }
+
+playPublisher {
+    artifacts {
+        internal {
+            appId = "org.butterproject.butter"
+            clientSecretJson = project.hasProperty("playPublishFile") ? file(playPublishFile) : null
+            track = "internal"
+        	listingDir = file(".butter/play")
+        }
+    }
+}
+

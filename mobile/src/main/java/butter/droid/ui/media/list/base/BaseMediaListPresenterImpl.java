@@ -17,9 +17,13 @@
 
 package butter.droid.ui.media.list.base;
 
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import butter.droid.R;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
@@ -34,8 +38,6 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import java.util.ArrayList;
-import java.util.List;
 import timber.log.Timber;
 
 public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresenter {
@@ -104,7 +106,7 @@ public abstract class BaseMediaListPresenterImpl implements BaseMediaListPresent
                             view.addItems(null, false, null);
                             showLoaded();
                         } else {
-                            Timber.e(e.getMessage());
+                            Timber.e(e);
                             view.showErrorMessage(R.string.unknown_error);
                             showLoaded();
                         }

@@ -22,23 +22,22 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
 import butter.droid.base.Constants;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.PrefItem;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.content.preferences.Prefs.PrefKey;
-import butter.droid.base.manager.prefs.PrefManager;
-import butter.droid.base.manager.internal.updater.ButterUpdateManager;
 import butter.droid.base.manager.internal.vlc.PlayerManager;
+import butter.droid.base.manager.prefs.PrefManager;
 import butter.droid.base.utils.LocaleUtils;
 import timber.log.Timber;
 
@@ -49,7 +48,6 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
     private final PrefManager prefManager;
     private final PlayerManager playerManager;
     private final PreferencesHandler preferencesHandler;
-    private final ButterUpdateManager updateManager;
     private final Resources resources;
 
     protected final String[] keys;
@@ -58,13 +56,12 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
     private final String[] appLanguages;
 
     public BasePreferencesPresenterImpl(BasePreferencesView view, PrefManager prefManager, PlayerManager playerManager,
-            PreferencesHandler preferencesHandler, ButterUpdateManager updateManager, Resources resources,
+            PreferencesHandler preferencesHandler, Resources resources,
             boolean isTV) {
         this.view = view;
         this.prefManager = prefManager;
         this.playerManager = playerManager;
         this.preferencesHandler = preferencesHandler;
-        this.updateManager = updateManager;
         this.resources = resources;
 
         keys = preferencesHandler.getPreferencesOrder(isTV);
@@ -268,10 +265,10 @@ public abstract class BasePreferencesPresenterImpl implements OnSharedPreference
             case Prefs.PIXEL_FORMAT:
                 updatePixelFormat(item);
                 break;
-            case Prefs.CHECK_UPDATE:
-                updateManager.checkUpdatesManually();
-                view.showMessage(R.string.checking_for_updates);
-                break;
+//            case Prefs.CHECK_UPDATE:
+//                updateManager.checkUpdatesManually();
+//                view.showMessage(R.string.checking_for_updates);
+//                break;
             case Prefs.REPORT_BUG:
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(Constants.REPORT_ISSUE_URL));

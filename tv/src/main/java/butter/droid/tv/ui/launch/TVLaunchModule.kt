@@ -15,17 +15,27 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package butter.droid.tv.ui.launch;
+package butter.droid.tv.ui.launch
 
-public interface TVLaunchPresenter {
+import butter.droid.base.manager.prefs.PrefManager
+import butter.droid.base.ui.ActivityScope
+import butter.droid.tv.ui.launch.TVLaunchModule.TVLaunchBindModule
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
 
-    void onCreate();
+@Module(includes = [TVLaunchBindModule::class])
+class TVLaunchModule {
 
-    void permissionsGranted();
+    @Provides
+    @ActivityScope
+    fun providePresenter(view: TVLaunchView, prefManager: PrefManager): TVLaunchPresenter {
+        return TVLaunchPresenterImpl(view, prefManager)
+    }
 
-    void permissionsDenied();
-
-    void termsCanceled();
-
-    void termsAccepted();
+    @Module
+    interface TVLaunchBindModule {
+        @Binds
+        fun bindView(activity: TVLaunchActivity): TVLaunchView
+    }
 }

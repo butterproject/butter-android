@@ -20,7 +20,7 @@ package butter.droid.ui.beam;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
 import butter.droid.R;
@@ -48,7 +48,7 @@ public class BeamPlayerActivity extends ButterBaseActivity implements BeamPlayer
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        super.onCreate(savedInstanceState, 0);
+        super.onCreate(savedInstanceState);
 
         setShowCasting(true);
 
