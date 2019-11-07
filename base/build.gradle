@@ -34,17 +34,18 @@ android {
 }
 
 dependencies {
-    api 'androidx.palette:palette:1.0.0-rc01'
-    api 'androidx.appcompat:appcompat:1.0.0-rc01'
-    api 'androidx.annotation:annotation:1.0.0-rc01'
-    api 'com.google.android.material:material:1.0.0-rc01'
+    api 'androidx.palette:palette:1.0.0'
+    api "androidx.appcompat:appcompat:$androidXVersion"
+    api "androidx.annotation:annotation:$androidXVersion"
+    api "com.google.android.material:material:1.0.0"
 
     debugImplementation 'com.github.simonpercic:oklog3:2.2.0'
 
     api 'com.jakewharton.timber:timber:4.7.0'
     api "com.squareup.okhttp3:okhttp:$okHttpVersion"
     api "com.google.code.gson:gson:$gsonVersion"
-    api "com.jakewharton:butterknife:$butterknifeVersion"
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
+    kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
     api "com.github.gabrielemariotti.changeloglib:changelog:$changeloglibVersion"
     api 'com.jakewharton.threetenabp:threetenabp:1.1.0'
     api 'com.koushikdutta.async:androidasync:2.1.9'
@@ -72,10 +73,9 @@ dependencies {
     api project(':provider:subs:mock')
     api project(':provider:subs:opensubs')
 
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
 

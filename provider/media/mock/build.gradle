@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-apply plugin: 'com.android.library'
+apply from: "${project.rootDir}/config/gradle/android-library-config.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -57,7 +57,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation 'com.squareup.okio:okio:1.14.0'
 
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
 

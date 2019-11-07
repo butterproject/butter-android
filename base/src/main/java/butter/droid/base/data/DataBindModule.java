@@ -17,15 +17,16 @@
 
 package butter.droid.base.data;
 
-import butter.droid.provider.base.ProviderScope;
+import java.util.Set;
+
 import dagger.Module;
 import dagger.multibindings.Multibinds;
-import java.util.Set;
 import okhttp3.Interceptor;
 
 @Module
 public interface DataBindModule {
 
-    @Multibinds @ProviderScope Set<Interceptor> provideIntercptors();
+    @Multibinds
+    Set<Interceptor> provideIntercptors();
 
 }

@@ -16,6 +16,7 @@
  */
 
 apply from: "${project.rootDir}/config/gradle/checkstyle.gradle"
+apply from: "${project.rootDir}/config/gradle/android-kotlin-config.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdk

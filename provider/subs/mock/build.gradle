@@ -15,7 +15,7 @@
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
 
-apply plugin: 'com.android.library'
+apply from: "${project.rootDir}/config/gradle/android-library-config.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -57,7 +57,7 @@ dependencies {
     api "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     api "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.4'
