@@ -18,7 +18,6 @@
 package butter.droid.base.providers;
 
 import butter.droid.base.manager.internal.provider.model.ProviderWrapper;
-import butter.droid.provider.base.ProviderScope;
 import dagger.Module;
 import dagger.multibindings.Multibinds;
 import java.util.Set;
@@ -26,6 +25,6 @@ import java.util.Set;
 @Module
 public interface ProviderBindModule {
 
-    @Multibinds @ProviderScope Set<ProviderWrapper> multibindProviderWrapper();
+    @Multibinds Set<ProviderWrapper> multibindProviderWrapper();
 
 }

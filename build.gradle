@@ -2,7 +2,7 @@ import si.kamino.gradle.extensions.version.code.IncreaseVersionCode
 
 buildscript {
     ext {
-        kotlinVersion = '1.2.60'
+        kotlinVersion = '1.3.50'
     }
 
     repositories {
@@ -12,7 +12,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-alpha08'
+        classpath 'com.android.tools.build:gradle:3.6.0-beta03'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath "gradle.plugin.si.kamino.gradle:android-version:1.5.3"
@@ -29,9 +29,9 @@ ext {
     compileSdk = 28
     minSdk = 19
     minSdkTV = 21
-    butterknifeVersion = "9.0.0-SNAPSHOT"
+    butterknifeVersion = "10.2.0"
     okHttpVersion = "3.10.0"
-    daggerVersion = "2.16"
+    daggerVersion = "2.24"
     javaxAnnotationVersion = "1.2"
     torrentstreamVersion = '2.5.0'
     filePickerVersion = '1.1.0'
@@ -39,7 +39,8 @@ ext {
     gsonVersion = '2.8.1'
     rxJavaVersion = '2.1.13'
     retrofitVersion = '2.4.0'
-    glideVersion = '4.8.0-SNAPSHOT'
+    glideVersion = '4.9.0'
+    androidXVersion = '1.1.0'
 }
 
 allprojects {

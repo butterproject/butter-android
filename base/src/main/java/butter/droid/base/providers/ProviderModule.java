@@ -39,12 +39,12 @@ import dagger.multibindings.IntoSet;
 )
 public class ProviderModule {
 
-    @Provides @ProviderScope @IntoSet ProviderWrapper provideVodoWrapper(final VodoProvider vodoProvider,
+    @Provides @IntoSet ProviderWrapper provideVodoWrapper(final VodoProvider vodoProvider,
             final OpenSubsProvider openSubsProvider) {
         return new ProviderWrapper(vodoProvider, openSubsProvider, R.string.vodo_label, R.drawable.ic_nav_movies, 2);
     }
 
-    @Provides @ProviderScope @IntoSet ProviderWrapper provideMockWrapper(final MockMediaProvider mockProvider,
+    @Provides @IntoSet ProviderWrapper provideMockWrapper(final MockMediaProvider mockProvider,
             final MockSubsProvider mockSubsProvider) {
         return new ProviderWrapper(mockProvider, mockSubsProvider, butter.droid.provider.mock.R.string.title_movies,
                 butter.droid.provider.mock.R.drawable.ic_nav_movies, 1);

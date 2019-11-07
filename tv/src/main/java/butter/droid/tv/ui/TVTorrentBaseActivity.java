@@ -22,10 +22,10 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import androidx.fragment.app.FragmentActivity;
+
 import javax.inject.Inject;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.PreferencesHandler;
 import butter.droid.base.torrent.TorrentService;
@@ -34,17 +34,20 @@ import butter.droid.base.utils.LocaleUtils;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.android.HasAndroidInjector;
 
 public abstract class TVTorrentBaseActivity extends FragmentActivity implements TorrentActivity,
-        HasSupportFragmentInjector {
+        HasAndroidInjector {
 
-    @Inject DispatchingAndroidInjector<androidx.fragment.app.Fragment> supportFragmentInjector;
-    @Inject PreferencesHandler preferencesHandler;
+    @Inject
+    DispatchingAndroidInjector<Object> supportFragmentInjector;
+    @Inject
+    PreferencesHandler preferencesHandler;
 
     protected TorrentService torrentStream;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
 
         String language = preferencesHandler.getLocale();
@@ -53,12 +56,14 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
         super.onCreate(savedInstanceState);
     }
 
-    @Override protected void onStart() {
+    @Override
+    protected void onStart() {
         super.onStart();
         TorrentService.bindHere(this, serviceConnection);
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
         unbindService(serviceConnection);
         onTorrentServiceDisconnected(torrentStream);
@@ -87,7 +92,8 @@ public abstract class TVTorrentBaseActivity extends FragmentActivity implements 
         // Placeholder
     }
 
-    @Override public AndroidInjector<Fragment> supportFragmentInjector() {
+    @Override
+    public AndroidInjector<Object> androidInjector() {
         return supportFragmentInjector;
     }
 
