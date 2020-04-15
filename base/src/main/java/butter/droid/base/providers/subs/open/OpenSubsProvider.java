@@ -38,7 +38,7 @@ import okhttp3.OkHttpClient;
 public class OpenSubsProvider extends SubsProvider {
 
     static final String API_URL = "http://api.opensubtitles.org/xml-rpc";
-    static final String USER_AGENT = "Popcorn Time v1";//"Popcorn Time Android v1";
+    static final String USER_AGENT = "Butter v1";//"Popcorn Time Android v1";
 
     private final XMLRPCClient client;
 
