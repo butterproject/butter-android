@@ -38,14 +38,13 @@
         android:gravity="center_vertical"
         android:orientation="vertical">
 
-        <com.devspark.robototextview.widget.RobotoTextView
+        <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Show Title"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/detail_title_text_size"
-            app:typeface="roboto_medium" />
+            android:textSize="@dimen/detail_title_text_size" />
 
         <LinearLayout
             android:id="@+id/extras"
@@ -93,7 +92,7 @@
 
         </LinearLayout>
 
-        <com.devspark.robototextview.widget.RobotoTextView
+        <TextView
             android:id="@+id/meta"
             android:layout_below="@id/extras"
             android:layout_width="wrap_content"
@@ -104,7 +103,7 @@
             android:textSize="@dimen/detail_meta_text_size"
             android:textColor="@color/secondary_text_color" />
 
-        <com.devspark.robototextview.widget.RobotoTextView
+        <TextView
             android:id="@+id/synopsis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -128,20 +127,18 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/detail_vertical_offset"
         >
-        <com.devspark.robototextview.widget.RobotoButton
+        <Button
             style="@style/Theme.Butter.DetailButton"
             android:id="@+id/read_more"
             android:layout_marginRight="@dimen/detail_button_margin"
             android:layout_marginEnd="@dimen/detail_button_margin"
-            android:text="@string/read_more"
-            app:typeface="roboto_medium"  />
+            android:text="@string/read_more"  />
 
-        <com.devspark.robototextview.widget.RobotoButton
+        <Button
             style="@style/Theme.Butter.DetailButton"
             android:visibility="gone"
             android:id="@+id/watch_trailer"
-            android:text="@string/watch_trailer"
-            app:typeface="roboto_medium"  />
+            android:text="@string/watch_trailer"  />
     </LinearLayout>
 
 </RelativeLayout>

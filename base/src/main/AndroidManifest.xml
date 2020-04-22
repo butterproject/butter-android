@@ -1,13 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	package="butter.droid.base">
 
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<application>
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+	<application
+		android:usesCleartextTraffic="true"
+		tools:targetApi="M">
 
 		<service android:name="butter.droid.base.torrent.TorrentService" />
 
 		<provider
-			android:name="android.support.v4.content.FileProvider"
+			android:name="androidx.core.content.FileProvider"
 			android:authorities="${applicationId}.provider"
 			android:exported="false"
 			android:grantUriPermissions="true">

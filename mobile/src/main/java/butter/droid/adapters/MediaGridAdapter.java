@@ -25,9 +25,11 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
-import android.support.annotation.Px;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Px;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,9 +110,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             videoViewHolder.year.setText(item.year);
 
             if (item.image != null && !item.image.equals("")) {
-                Picasso.with(videoViewHolder.coverImage.getContext()).cancelRequest(videoViewHolder.coverImage);
-                Picasso.with(videoViewHolder.coverImage.getContext())
-                        .load(item.image)
+                Picasso.get().cancelRequest(videoViewHolder.coverImage);
+                Picasso.get().load(item.image)
                         .resize(itemWidth, itemHeight)
                         .transform(DrawGradient.getInstance())
                         .into(videoViewHolder.coverImage);

@@ -34,7 +34,7 @@
         android:scaleType="centerInside"
         tools:src="@mipmap/ic_launcher" />
 
-    <com.devspark.robototextview.widget.RobotoTextView
+    <TextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

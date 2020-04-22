@@ -43,7 +43,7 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY" />
 
-    <com.devspark.robototextview.widget.RobotoTextView
+    <TextView
         android:id="@+id/year"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
         android:alpha="0.7"
         tools:text="2014" />
 
-    <com.devspark.robototextview.widget.RobotoTextView
+    <TextView
         android:id="@+id/title"
         android:layout_above="@id/year"
         android:layout_width="match_parent"
@@ -72,7 +72,6 @@
         android:gravity="start|center_vertical"
         android:textSize="@dimen/griditem_title_textsize"
         android:textColor="@android:color/white"
-        app:typeface="roboto_medium"
         tools:text="Interstellar" />
 
     <View

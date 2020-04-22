@@ -4,7 +4,6 @@ apply plugin: 'com.github.ben-manes.versions'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildToolsVersion
     def buildNumber = (System.getenv("BUILD_NUMBER") ?: 1) as int
 
     defaultConfig {
@@ -57,23 +56,26 @@ android {
         abortOnError false
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     project.ext.versionCodes = ["arm": 3, "x86": 5]
 }
 
 //./gradlew dependencyUpdates -Drevision=release
 dependencies {
-    compile 'com.android.support:multidex:1.0.1'
+    implementation project(':base')
 
-    compile "com.android.support:support-annotations:${rootProject.ext.appCompatVersion}"
-    compile "com.android.support:palette-v7:${rootProject.ext.appCompatVersion}"
-    compile "com.android.support:leanback-v17:${rootProject.ext.appCompatVersion}"
-    compile "com.squareup.picasso:picasso:${rootProject.ext.picassoVersion}"
-    compile "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
-    compile 'de.greenrobot:eventbus:2.4.1'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'androidx.leanback:leanback:1.0.0'
+    implementation "com.squareup.picasso:picasso:${rootProject.ext.picassoVersion}"
+    implementation "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
+    implementation 'de.greenrobot:eventbus:2.4.1'
 
     annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
-    provided "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
-
-    compile project(':base')
+    compileOnly "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
 }

@@ -87,7 +87,7 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="@dimen/player_controls_distance">
 
-                <com.devspark.robototextview.widget.RobotoTextView
+                <TextView
                     android:id="@+id/current_time"
                     android:layout_width="55dp"
                     android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                     android:gravity="end"
                     tools:text="0:00" />
 
-                <com.devspark.robototextview.widget.RobotoTextView
+                <TextView
                     android:id="@+id/length_time"
                     android:layout_width="55dp"
                     android:layout_height="wrap_content"
@@ -188,7 +188,7 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -196,7 +196,7 @@
         android:background="@color/player_overlay"
         android:fitsSystemWindows="true" />
 
-    <com.devspark.robototextview.widget.RobotoTextView
+    <TextView
         android:id="@+id/player_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

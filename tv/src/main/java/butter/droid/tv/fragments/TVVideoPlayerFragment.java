@@ -32,8 +32,8 @@ import android.media.session.PlaybackState;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -415,7 +415,7 @@ public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
         if (imageUrl != null && !imageUrl.equals("")) {
             metadataBuilder.putString(MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI, imageUrl);
             metadataBuilder.putString(MediaMetadata.METADATA_KEY_ART_URI, imageUrl);
-            Picasso.with(getActivity()).load(imageUrl).into(new Target() {
+            Picasso.get().load(imageUrl).into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ART, bitmap);
@@ -424,7 +424,7 @@ public class TVVideoPlayerFragment extends BaseVideoPlayerFragment {
                 }
 
                 @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
+                public void onBitmapFailed(Exception exc, Drawable errorDrawable) {
                     mMediaSession.setMetadata(metadataBuilder.build());
                     mMediaSessionMetadataApplied = true;
                 }

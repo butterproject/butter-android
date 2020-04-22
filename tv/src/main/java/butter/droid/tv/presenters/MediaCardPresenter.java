@@ -20,10 +20,10 @@ package butter.droid.tv.presenters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.support.v17.leanback.widget.BaseCardView;
-import android.support.v17.leanback.widget.ImageCardView;
-import android.support.v17.leanback.widget.Presenter;
-import android.support.v7.graphics.Palette;
+import androidx.leanback.widget.BaseCardView;
+import androidx.leanback.widget.ImageCardView;
+import androidx.leanback.widget.Presenter;
+import androidx.palette.graphics.Palette;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -124,7 +124,7 @@ public class MediaCardPresenter extends Presenter {
 					});
 				}
 
-				@Override public void onBitmapFailed(Drawable errorDrawable) {
+				@Override public void onBitmapFailed(Exception exc, Drawable errorDrawable) {
 					cardView.getMainImageView().setImageResource(R.drawable.placeholder_inset);
                     cardView.getMainImageView().setAlpha(0.4f);
 					cardView.getMainImageView().setScaleType(ImageView.ScaleType.CENTER_INSIDE);
@@ -138,7 +138,7 @@ public class MediaCardPresenter extends Presenter {
 				}
 			};
 			//load image
-			Picasso.with(mContext).load(item.image).resize(mCardWidth, mCardHeight).centerCrop().into(target);
+			Picasso.get().load(item.image).resize(mCardWidth, mCardHeight).centerCrop().into(target);
 			cardView.setTarget(target);
 		} else {
             cardView.getMainImageView().setImageResource(R.drawable.placeholder_inset);
@@ -156,7 +156,7 @@ public class MediaCardPresenter extends Presenter {
 		cardView.setBadgeImage(null);
 		cardView.setMainImage(null);
 		if (cardView.getTarget() != null) {
-			Picasso.with(mContext).cancelRequest(cardView.getTarget());
+			Picasso.get().cancelRequest(cardView.getTarget());
 			cardView.setTarget(null);
 		}
 	}

@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,7 +149,7 @@ public class StreamLoadingFragment extends BaseStreamLoadingFragment {
             }
 
             if (!TextUtils.isEmpty(url))
-                Picasso.with(mContext).load(url).error(R.color.bg).into(mBackgroundImageView);
+                Picasso.get().load(url).error(R.color.bg).into(mBackgroundImageView);
         }
     }
 

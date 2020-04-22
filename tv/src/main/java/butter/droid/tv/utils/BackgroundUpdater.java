@@ -20,8 +20,8 @@ package butter.droid.tv.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.v17.leanback.app.BackgroundManager;
+import androidx.annotation.DrawableRes;
+import androidx.leanback.app.BackgroundManager;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -82,12 +82,12 @@ public class BackgroundUpdater {
 
         //load default background image
         if (null == uri) {
-            Picasso.with(mContext).load(mDefaultBackground).into(mBackgroundImageTarget);
+            Picasso.get().load(mDefaultBackground).into(mBackgroundImageTarget);
             return;
         }
 
         //load actual background image
-        Picasso.with(mContext)
+        Picasso.get()
                 .load(uri)
                 .error(mDefaultBackground)
                 .into(mBackgroundImageTarget);
@@ -139,7 +139,7 @@ public class BackgroundUpdater {
             mBackgroundTimer.cancel();
         }
 
-        Picasso.with(mContext).cancelRequest(mBackgroundImageTarget);
+        Picasso.get().cancelRequest(mBackgroundImageTarget);
         mBackgroundManager.release();
     }
 }

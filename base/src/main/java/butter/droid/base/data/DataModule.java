@@ -20,7 +20,6 @@ package butter.droid.base.data;
 import android.content.Context;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -65,14 +64,8 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public OkHttp3Downloader provideOkHttpDownloader(OkHttpClient client) {
-        return new OkHttp3Downloader(client);
-    }
-
-    @Provides
-    @Singleton
-    public Picasso providePicasso(Context context, OkHttp3Downloader okHttpDownloader) {
-        return new Picasso.Builder(context).downloader(okHttpDownloader).build();
+    public Picasso providePicasso(Context context) {
+        return new Picasso.Builder(context).build();
     }
 
     @Provides

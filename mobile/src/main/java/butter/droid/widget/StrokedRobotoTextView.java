@@ -8,9 +8,10 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import com.devspark.robototextview.widget.RobotoTextView;
+import androidx.appcompat.widget.AppCompatTextView;
 
-public class StrokedRobotoTextView extends RobotoTextView {
+
+public class StrokedRobotoTextView extends AppCompatTextView {
 
     private int mStrokeColor;
     private float mStrokeWidth;

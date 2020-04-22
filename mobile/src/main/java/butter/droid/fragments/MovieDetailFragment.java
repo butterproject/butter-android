@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -278,7 +278,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             }
 
             if (mCoverImage != null) {
-                Picasso.with(mCoverImage.getContext()).load(sMovie.image).into(mCoverImage);
+                Picasso.get().load(sMovie.image).into(mCoverImage);
             }
         }
 

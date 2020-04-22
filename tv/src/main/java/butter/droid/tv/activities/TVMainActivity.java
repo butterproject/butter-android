@@ -18,6 +18,7 @@
 
 package butter.droid.tv.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class TVMainActivity extends TVBaseActivity {
         return intent;
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         TVButterApplication.getAppContext()
