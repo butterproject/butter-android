@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
-import android.support.v7.app.NotificationCompat;
+
+import androidx.core.app.NotificationCompat;
+import androidx.media.app.NotificationCompat.MediaStyle;
 
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.service.capability.MediaControl;
@@ -118,7 +120,7 @@ public class BeamPlayerNotificationService extends Service {
         if(mManager.getStreamInfo() == null)
             return;
 
-        NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle();
+        MediaStyle style = new MediaStyle();
 
         Intent intent = new Intent(this, BeamPlayerNotificationService.class);
         intent.setAction( ACTION_STOP );
@@ -177,7 +179,7 @@ public class BeamPlayerNotificationService extends Service {
             mMediaControl.getPlayState(mPlayStateListener);
 
             if(mManager.getStreamInfo().getImageUrl() != null)
-                Picasso.with(this).load(mManager.getStreamInfo().getImageUrl()).resize(400, 400).centerInside().into(new Target() {
+                Picasso.get().load(mManager.getStreamInfo().getImageUrl()).resize(400, 400).centerInside().into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         mImage = bitmap;
@@ -190,7 +192,7 @@ public class BeamPlayerNotificationService extends Service {
                     }
 
                     @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
+                    public void onBitmapFailed(Exception exc, Drawable errorDrawable) {
                     }
 
                     @Override

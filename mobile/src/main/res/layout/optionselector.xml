@@ -17,7 +17,7 @@
         tools:src="@mipmap/ic_launcher"
         android:duplicateParentState="true" />
 
-    <com.devspark.robototextview.widget.RobotoTextView
+    <TextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

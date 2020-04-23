@@ -46,7 +46,6 @@
                     android:textColor="@color/text_color"
                     android:textDirection="locale"
                     tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras leo dolor, condimentum."
-                    app:typeface="roboto_medium"
                     />
                 <RatingBar
                     android:id="@+id/rating"
@@ -58,7 +57,7 @@
                     style="@style/Theme.Butter.RatingBar"
                     android:max="10"
                     android:progress="5"/>
-                <com.devspark.robototextview.widget.RobotoTextView
+                <TextView
                     android:id="@+id/aired"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -69,7 +68,7 @@
                     android:textColor="@color/secondary_text_color" />
             </LinearLayout>
 
-            <com.devspark.robototextview.widget.RobotoTextView
+            <TextView
                 android:id="@+id/synopsis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,14 +105,13 @@
                     android:id="@+id/read_more"
                     android:layout_marginRight="@dimen/detail_button_margin"
                     android:layout_marginEnd="@dimen/detail_button_margin"
-                    android:text="@string/read_more"
-                    app:typeface="roboto_medium"  />
+                    android:text="@string/read_more"      />
 
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="wrap_content"
         android:layout_height="48sp"

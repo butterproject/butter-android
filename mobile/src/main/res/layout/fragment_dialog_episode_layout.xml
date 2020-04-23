@@ -87,23 +87,21 @@
                             android:orientation="vertical"
                             android:paddingBottom="@dimen/detail_vertical_offset">
 
-                            <com.devspark.robototextview.widget.RobotoTextView
+                            <TextView
                                 android:id="@+id/info"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAllCaps="true"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/detail_meta_text_size"
-                                app:typeface="roboto_medium"
                                 tools:text="S01E02" />
 
-                            <com.devspark.robototextview.widget.RobotoTextView
+                            <TextView
                                 android:id="@+id/title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/detail_title_text_size"
-                                app:typeface="roboto_medium"
                                 tools:text="Show Title" />
                         </LinearLayout>
                     </RelativeLayout>
@@ -116,7 +114,7 @@
                         android:orientation="vertical"
                         android:paddingTop="@dimen/detail_vertical_offset">
 
-                        <com.devspark.robototextview.widget.RobotoTextView
+                        <TextView
                             android:id="@+id/aired"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -146,7 +144,7 @@
                             android:scaleType="fitCenter"
                             android:contentDescription="@string/magnet" />
 
-                        <com.devspark.robototextview.widget.RobotoTextView
+                        <TextView
                             android:id="@+id/synopsis"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

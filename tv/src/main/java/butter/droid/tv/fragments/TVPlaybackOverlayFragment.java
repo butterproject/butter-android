@@ -16,6 +16,7 @@
  */
 package butter.droid.tv.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,32 +24,32 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v17.leanback.app.PlaybackOverlayFragment;
-import android.support.v17.leanback.app.PlaybackOverlaySupportFragment;
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
-import android.support.v17.leanback.widget.Action;
-import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.ClassPresenterSelector;
-import android.support.v17.leanback.widget.ControlButtonPresenterSelector;
-import android.support.v17.leanback.widget.ListRow;
-import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnActionClickedListener;
-import android.support.v17.leanback.widget.OnItemViewSelectedListener;
-import android.support.v17.leanback.widget.PlaybackControlsRow;
-import android.support.v17.leanback.widget.PlaybackControlsRow.ClosedCaptioningAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.FastForwardAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.PlayPauseAction;
-import android.support.v17.leanback.widget.PlaybackControlsRow.RewindAction;
-import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
-import android.support.v17.leanback.widget.Presenter;
-import android.support.v17.leanback.widget.PresenterSelector;
-import android.support.v17.leanback.widget.Row;
-import android.support.v17.leanback.widget.RowPresenter;
-import android.support.v4.content.res.ResourcesCompat;
+import androidx.annotation.NonNull;
+import androidx.leanback.app.PlaybackSupportFragment;
+import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
+import androidx.leanback.widget.Action;
+import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.ClassPresenterSelector;
+import androidx.leanback.widget.ControlButtonPresenterSelector;
+import androidx.leanback.widget.ListRow;
+import androidx.leanback.widget.ListRowPresenter;
+import androidx.leanback.widget.OnActionClickedListener;
+import androidx.leanback.widget.OnItemViewSelectedListener;
+import androidx.leanback.widget.PlaybackControlsRow;
+import androidx.leanback.widget.PlaybackControlsRow.ClosedCaptioningAction;
+import androidx.leanback.widget.PlaybackControlsRow.FastForwardAction;
+import androidx.leanback.widget.PlaybackControlsRow.PlayPauseAction;
+import androidx.leanback.widget.PlaybackControlsRow.RewindAction;
+import androidx.leanback.widget.PlaybackControlsRowPresenter;
+import androidx.leanback.widget.Presenter;
+import androidx.leanback.widget.PresenterSelector;
+import androidx.leanback.widget.Row;
+import androidx.leanback.widget.RowPresenter;
+import androidx.core.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.InputEvent;
 import android.view.KeyEvent;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,10 +83,10 @@ import butter.droid.tv.events.UpdatePlaybackStateEvent;
 /*
  * Class for video playback with media control
  */
-public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
+public class TVPlaybackOverlayFragment extends PlaybackSupportFragment
         implements OnActionClickedListener,
         OnItemViewSelectedListener,
-        PlaybackOverlaySupportFragment.InputEventHandler {
+        View.OnKeyListener {
     private static final String TAG = "PlaybackOverlayFragment";
 
     private static final int MODE_NOTHING = 0;
@@ -122,6 +123,7 @@ public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     private int mFastForwardSpeed = SeekForwardEvent.MINIMUM_SEEK_SPEED;
     private int mRewindSpeed = SeekBackwardEvent.MINIMUM_SEEK_SPEED;
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
@@ -150,10 +152,10 @@ public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
         mHandlerPlayback = new Handler();
         mHandlerPlaybackSpeed = new Handler();
 
-        setBackgroundType(PlaybackOverlayFragment.BG_LIGHT);
+        setBackgroundType(PlaybackSupportFragment.BG_LIGHT);
         setFadingEnabled(false);
         setOnItemViewSelectedListener(this);
-        setInputEventHandler(this);
+        setOnKeyInterceptListener(this);
         initialisePlaybackControlPresenter();
     }
 
@@ -221,27 +223,24 @@ public class TVPlaybackOverlayFragment extends PlaybackOverlaySupportFragment
     }
 
     @Override
-    public boolean handleInputEvent(@NonNull InputEvent event) {
-        if (event instanceof KeyEvent) {
-            KeyEvent keyEvent = (KeyEvent) event;
-            if (keyEvent.getKeyCode() != KeyEvent.KEYCODE_DPAD_CENTER) return false;
-            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                if (mFastForwardAction != null && mSelectedActionId == mFastForwardAction.getId()) {
-                    if (keyEvent.getRepeatCount() == 0) {
-                        mCurrentMode = MODE_FAST_FORWARD;
-                        invokeFastForwardAction();
-                    }
-                }
-                else if (mRewindAction != null && mSelectedActionId == mRewindAction.getId()) {
-                    if (keyEvent.getRepeatCount() == 0) {
-                        mCurrentMode = MODE_REWIND;
-                        invokeRewindAction();
-                    }
+    public boolean onKey(View v, int keyCode, @NonNull KeyEvent keyEvent) {
+        if (keyEvent.getKeyCode() != KeyEvent.KEYCODE_DPAD_CENTER) return false;
+        if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+            if (mFastForwardAction != null && mSelectedActionId == mFastForwardAction.getId()) {
+                if (keyEvent.getRepeatCount() == 0) {
+                    mCurrentMode = MODE_FAST_FORWARD;
+                    invokeFastForwardAction();
                 }
             }
-            else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                mCurrentMode = MODE_NOTHING;
+            else if (mRewindAction != null && mSelectedActionId == mRewindAction.getId()) {
+                if (keyEvent.getRepeatCount() == 0) {
+                    mCurrentMode = MODE_REWIND;
+                    invokeRewindAction();
+                }
             }
+        }
+        else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+            mCurrentMode = MODE_NOTHING;
         }
         return false;
     }

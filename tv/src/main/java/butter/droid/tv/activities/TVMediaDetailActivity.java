@@ -79,11 +79,11 @@ public class TVMediaDetailActivity extends TVBaseActivity implements TVMovieDeta
         }
 
         if (media instanceof Movie) {
-            getFragmentManager().beginTransaction().replace(R.id.fragment, TVMovieDetailsFragment.newInstance(media)).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, TVMovieDetailsFragment.newInstance(media)).commit();
         } else {
-            getFragmentManager().beginTransaction().replace(R.id.fragment, TVShowDetailsFragment.newInstance(media)).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, TVShowDetailsFragment.newInstance(media)).commit();
         }
-        getFragmentManager().executePendingTransactions();
+        getSupportFragmentManager().executePendingTransactions();
 
         if (VersionUtils.isLollipop()) {
             startPostponedEnterTransition();

@@ -11,24 +11,22 @@
     android:paddingEnd="@dimen/detail_horizontal_offset"
     android:gravity="center_vertical"
     android:background="@drawable/selectable_background">
-    <com.devspark.robototextview.widget.RobotoTextView
+    <TextView
         android:id="@+id/info"
         android:layout_height="wrap_content"
         android:layout_width="40dp"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:textSize="@dimen/list_text_size"
-        app:typeface="roboto_medium"
         tools:text="E99"
         />
 
-    <com.devspark.robototextview.widget.RobotoTextView
+    <TextView
         android:id="@+id/title"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:textSize="@dimen/list_text_size"
         android:textColor="@color/text_color"
-        app:typeface="roboto_regular"
         tools:text="Episode Title"
         />
 </LinearLayout>

@@ -14,17 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with Butter. If not, see <http://www.gnu.org/licenses/>.
  */
-package android.support.v17.leanback.widget;
+package androidx.leanback.widget;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Matrix;
 import android.os.Handler;
-import android.support.v17.leanback.transition.TransitionHelper;
-import android.support.v17.leanback.transition.TransitionListener;
-import android.support.v17.leanback.widget.PTVDetailsOverviewRowPresenter.ViewHolder;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.SharedElementCallback;
-import android.support.v4.view.ViewCompat;
+import androidx.leanback.transition.TransitionHelper;
+import androidx.leanback.transition.TransitionListener;
+import androidx.leanback.widget.PTVDetailsOverviewRowPresenter.ViewHolder;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.SharedElementCallback;
+import androidx.core.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -227,17 +228,17 @@ final class PTVDetailsOverviewSharedElementHelper extends SharedElementCallback 
             }
         });
         mViewHolder.mRightPanel.postOnAnimation(new Runnable() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void run() {
                 if (DEBUG) {
                     Log.d(TAG, "setTransitionName "+mViewHolder.mOverviewFrame);
                 }
                 ViewCompat.setTransitionName(mViewHolder.mOverviewFrame, mSharedElementName);
-                final TransitionHelper transitionHelper = TransitionHelper.getInstance();
-                Object transition = transitionHelper.getSharedElementEnterTransition(
+                Object transition = TransitionHelper.getSharedElementEnterTransition(
                         mActivityToRunTransition.getWindow());
                 if (transition != null) {
-                    transitionHelper.setTransitionListener(transition, new TransitionListener() {
+                    TransitionHelper.addTransitionListener(transition, new TransitionListener() {
                         @Override
                         public void onTransitionEnd(Object transition) {
                             if (DEBUG) {
@@ -248,7 +249,7 @@ final class PTVDetailsOverviewSharedElementHelper extends SharedElementCallback 
                             if (mViewHolder.mActionsRow.isFocused()) {
                                 mViewHolder.mActionsRow.requestFocus();
                             }
-                            transitionHelper.setTransitionListener(transition, null);
+                            TransitionHelper.removeTransitionListener(transition, this);
                         }
                     });
                 }

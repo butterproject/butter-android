@@ -25,10 +25,10 @@ import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +43,6 @@ import com.connectsdk.service.capability.listeners.ResponseListener;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
-import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 import com.github.se_bastiaan.torrentstreamserver.TorrentServerListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Callback;
@@ -186,7 +185,7 @@ public class BeamPlayerFragment extends Fragment implements TorrentServerListene
         }
 
         if (mStreamInfo.getImageUrl() != null && !mStreamInfo.getImageUrl().equals("")) {
-            Picasso.with(mCoverImage.getContext()).load(mStreamInfo.getImageUrl())
+            Picasso.get().load(mStreamInfo.getImageUrl())
                 .into(mCoverImage, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -194,7 +193,8 @@ public class BeamPlayerFragment extends Fragment implements TorrentServerListene
                     }
 
                     @Override
-                    public void onError() {
+                    public void onError(Exception e) {
+
                     }
                 });
         }

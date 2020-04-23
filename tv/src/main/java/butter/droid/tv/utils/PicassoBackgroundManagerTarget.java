@@ -19,7 +19,7 @@ package butter.droid.tv.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.support.v17.leanback.app.BackgroundManager;
+import androidx.leanback.app.BackgroundManager;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -40,7 +40,7 @@ public class PicassoBackgroundManagerTarget implements Target {
     }
 
     @Override
-    public void onBitmapFailed(Drawable drawable) {
+    public void onBitmapFailed(Exception exc, Drawable drawable) {
         this.mBackgroundManager.setDrawable(drawable);
     }
 
