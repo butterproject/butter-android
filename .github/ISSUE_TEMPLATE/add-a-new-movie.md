@@ -7,4 +7,6 @@ assignees: ''
 
 ---
 
+## Do not open an issue
+
 The app cannot do this. This is not the right place to open an issue.
