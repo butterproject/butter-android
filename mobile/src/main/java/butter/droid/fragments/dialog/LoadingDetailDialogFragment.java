@@ -97,7 +97,7 @@ public class LoadingDetailDialogFragment extends DialogFragment {
         ArrayList<Media> currentList = mCallback.getCurrentList();
         int position = getArguments().getInt(EXTRA_MEDIA);
         final Media media = currentList.get(position);
-        providerManager.getCurrentMediaProvider().getDetail(currentList, position, new MediaProvider.Callback() {
+        providerManager.getCurrentMediaProvider().getDetail(getContext(), currentList, position, new MediaProvider.Callback() {
                     @Override
                     public void onSuccess(MediaProvider.Filters filters, ArrayList<Media> items) {
                         if (!isAdded()) return;

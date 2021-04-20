@@ -214,6 +214,58 @@ public interface PreferencesHandler {
                     })
                     .build());
 
+            prefItems.add(PrefItem.newBuilder(context)
+                    .setIconResource(R.drawable.ic_prefs_app_language)
+                    .setTitleResource(R.string.content_language)
+                    .setPreferenceKey(Prefs.CONTENT_LOCALE)
+                    .hasNext(true)
+                    .setDefaultValue("")
+                    .setOnClickListener(new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(final PrefItem item) {
+                            int currentPosition = 0;
+                            String currentValue = item.getValue().toString();
+
+                            final String[] languages = context.getResources().getStringArray(R.array.translation_languages);
+                            Arrays.sort(languages);
+
+                            String[] items = new String[languages.length + 1];
+                            items[0] = context.getString(R.string.same_language);
+                            for (int i = 0; i < languages.length; i++) {
+                                Locale locale = LocaleUtils.toLocale(languages[i]);
+                                items[i + 1] = locale.getDisplayName(locale);
+                                if (languages[i].equals(currentValue)) {
+                                    currentPosition = i + 1;
+                                }
+                            }
+
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.ADVANCED_CHOICE, currentPosition, 0, 0, new OnSelectionListener() {
+                                @Override
+                                public void onSelection(int position, Object value) {
+                                    if (position == 0) {
+                                        item.clearValue();
+                                    } else {
+                                        item.saveValue(languages[position - 1]);
+                                    }
+
+                                    handler.showMessage(context.getString(R.string.restart_effect));
+                                }
+                            });
+                        }
+                    })
+                    .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            String langCode = item.getValue().toString();
+                            if (langCode.isEmpty())
+                                return context.getString(R.string.same_language);
+
+                            Locale locale = LocaleUtils.toLocale(langCode);
+                            return locale.getDisplayName(locale);
+                        }
+                    })
+                    .build());
+
             if(!isTV)
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_wifi_only)

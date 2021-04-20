@@ -17,6 +17,8 @@
 
 package butter.droid.base.providers.media;
 
+import android.content.Context;
+
 import androidx.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,7 +54,7 @@ public class MoviesProvider extends MediaProvider {
     }
 
     @Override
-    public void getDetail(ArrayList<Media> currentList, Integer index, Callback callback) {
+    public void getDetail(Context conteext, ArrayList<Media> currentList, Integer index, Callback callback) {
         ArrayList<Media> returnList = new ArrayList<>();
         returnList.add(currentList.get(index));
         callback.onSuccess(null, returnList);

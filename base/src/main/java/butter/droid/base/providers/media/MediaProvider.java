@@ -18,6 +18,9 @@
 package butter.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
+import android.content.Context;
+import android.util.Log;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 
@@ -28,11 +31,15 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 
+import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.providers.BaseProvider;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.utils.LocaleUtils;
+import butter.droid.base.utils.PrefUtils;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -110,8 +117,11 @@ public abstract class MediaProvider extends BaseProvider {
             params.add(new AbstractMap.SimpleEntry<>("order", "-1"));
         }
 
-        if (filters.langCode != null) {
-            params.add(new AbstractMap.SimpleEntry<>("lang", filters.langCode));
+        if (filters.langCode != null && !filters.langCode.equals("en")) {
+            params.add(new AbstractMap.SimpleEntry<>("locale", filters.langCode));
+        }
+        if (filters.contentLangCode != null && !filters.contentLangCode.equals(filters.langCode)) {
+            params.add(new AbstractMap.SimpleEntry<>("contentLocale", filters.contentLangCode));
         }
 
         String sort;
@@ -201,9 +211,25 @@ public abstract class MediaProvider extends BaseProvider {
         });
     }
 
-    public void getDetail(ArrayList<Media> currentList, Integer index, final Callback callback) {
+    public void getDetail(Context conteext, ArrayList<Media> currentList, Integer index, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
-        String url = apiUrls[currentApi] + itemDetailsPath + currentList.get(index).videoId;
+
+        // Locale support
+        String language = PrefUtils.get(conteext, Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String content_language = PrefUtils.get(conteext, Prefs.CONTENT_LOCALE, language);
+        String locale = LocaleUtils.toLocale(language).getLanguage();
+        String content_locale = LocaleUtils.toLocale(content_language).getLanguage();
+
+        ArrayList<AbstractMap.SimpleEntry<String, String>> params = new ArrayList<>();
+        if (!locale.equals("en")) {
+            params.add(new AbstractMap.SimpleEntry<>("locale", locale));
+        }
+        if (!content_locale.equals(locale)) {
+            params.add(new AbstractMap.SimpleEntry<>("contentLocale", content_locale));
+        }
+        String query = params.isEmpty() ? "" : ("?" + buildQuery(params));
+
+        String url = apiUrls[currentApi] + itemDetailsPath + currentList.get(index).videoId + query;
         requestBuilder.url(url);
 
         Timber.d(this.getClass().getSimpleName(), "Making request to: " + url);
@@ -288,6 +314,7 @@ public abstract class MediaProvider extends BaseProvider {
         Sort sort = Sort.POPULARITY;
         Integer page = null;
         String langCode = "en";
+        String contentLangCode = "en";
 
         public Filters() {
         }
@@ -299,6 +326,7 @@ public abstract class MediaProvider extends BaseProvider {
             sort = filters.sort;
             page = filters.page;
             langCode = filters.langCode;
+            contentLangCode = filters.contentLangCode;
         }
 
         public String getKeywords() {
@@ -347,6 +375,14 @@ public abstract class MediaProvider extends BaseProvider {
 
         public void setLangCode(String langCode) {
             this.langCode = langCode;
+        }
+
+        public String getContentLangCode() {
+            return contentLangCode;
+        }
+
+        public void setContentLangCode(String contentLangCode) {
+            this.contentLangCode = contentLangCode;
         }
 
         public enum Order {ASC, DESC}
