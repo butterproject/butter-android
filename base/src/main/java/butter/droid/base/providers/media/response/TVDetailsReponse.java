@@ -68,6 +68,23 @@ public class TVDetailsReponse extends DetailsResponse<ShowDetails> {
             }
             show.genre = stringBuilder.toString();
 
+            if (item.getLocale() != null) {
+                if (!item.getLocale().getTitle().isEmpty()) {
+                    show.title2 = show.title;
+                    show.title = item.getLocale().getTitle();
+                }
+                if (!item.getLocale().getSynopsis().isEmpty()) {
+                    show.synopsis = item.getLocale().getSynopsis();
+                }
+                if (!item.getLocale().getPoster().isEmpty()) {
+                    show.image = item.getLocale().getPoster().replace("/posters/", "/_cache/posters/");
+                    show.fullImage = item.getLocale().getPoster();
+                }
+                if (!item.getLocale().getFanart().isEmpty()) {
+                    show.headerImage = item.getLocale().getFanart().replace("/original/", "/medium/");
+                }
+            }
+
             for (Episode episode : item.getEpisodes()) {
                 try {
                     butter.droid.base.providers.media.models.Episode episodeObject = new butter.droid.base.providers.media.models.Episode();
@@ -91,6 +108,15 @@ public class TVDetailsReponse extends DetailsResponse<ShowDetails> {
                     episodeObject.videoId = show.videoId + episodeObject.season + episodeObject.episode;
                     episodeObject.imdbId = show.imdbId;
                     episodeObject.image = episodeObject.fullImage = episodeObject.headerImage = show.headerImage;
+
+                    if (episode.getLocale() != null) {
+                        if (!episode.getLocale().getTitle().isEmpty()) {
+                            episodeObject.title = episode.getLocale().getTitle();
+                        }
+                        if (!item.getLocale().getSynopsis().isEmpty()) {
+                            episodeObject.overview = episode.getLocale().getOverview();
+                        }
+                    }
 
                     show.episodes.add(episodeObject);
                 } catch (Exception e) {

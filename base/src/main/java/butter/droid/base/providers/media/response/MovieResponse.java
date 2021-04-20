@@ -1,5 +1,7 @@
 package butter.droid.base.providers.media.response;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Map;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.response.models.Response;
+import butter.droid.base.providers.media.response.models.common.Locale;
 import butter.droid.base.providers.media.response.models.movies.Language;
 import butter.droid.base.providers.media.response.models.movies.Movie;
 import butter.droid.base.providers.media.response.models.movies.Quality;
@@ -67,6 +70,23 @@ public class MovieResponse extends Response<Movie> {
                         torrentMap.put(torrentQuality.getKey(), torrent);
                     }
                     movie.torrents.put(language.getKey(), torrentMap);
+                }
+            }
+
+            if (item.getLocale() != null) {
+                if (!item.getLocale().getTitle().isEmpty()) {
+                    movie.title2 = movie.title;
+                    movie.title = item.getLocale().getTitle();
+                }
+                if (!item.getLocale().getSynopsis().isEmpty()) {
+                    movie.synopsis = item.getLocale().getSynopsis();
+                }
+                if (!item.getLocale().getPoster().isEmpty()) {
+                    movie.image = item.getLocale().getPoster();
+                    movie.fullImage = item.getLocale().getPoster().replace("w500", "w1280");
+                }
+                if (!item.getLocale().getFanart().isEmpty()) {
+                    movie.headerImage = item.getLocale().getFanart().replace("w500", "original");
                 }
             }
 

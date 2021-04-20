@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import butter.droid.base.providers.media.response.models.ResponseItem;
 import butter.droid.base.providers.media.response.models.common.Images;
+import butter.droid.base.providers.media.response.models.common.Locale;
 import butter.droid.base.providers.media.response.models.common.Rating;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -29,6 +30,8 @@ public class Show extends ResponseItem {
     private int numSeasons;
     @JsonProperty("images")
     private Images images;
+    @JsonProperty("locale")
+    private Locale locale;
 
     /**
      * @return The id
@@ -172,5 +175,15 @@ public class Show extends ResponseItem {
     @JsonProperty("images")
     public void setImages(Images images) {
         this.images = images;
+    }
+
+    @JsonProperty("locale")
+    public Locale getLocale() {
+        return locale;
+    }
+
+    @JsonProperty("locale")
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }

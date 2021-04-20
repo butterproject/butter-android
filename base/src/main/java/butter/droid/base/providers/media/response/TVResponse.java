@@ -31,6 +31,24 @@ public class TVResponse extends Response<Show> {
             if (item.getImages().getFanart() != null && item.getImages().getFanart().contains("images/posterholder.png")) {
                 show.headerImage = item.getImages().getFanart().replace("w500", "original");
             }
+
+            if (item.getLocale() != null) {
+                if (!item.getLocale().getTitle().isEmpty()) {
+                    show.title2 = show.title;
+                    show.title = item.getLocale().getTitle();
+                }
+                if (!item.getLocale().getSynopsis().isEmpty()) {
+                    show.synopsis = item.getLocale().getSynopsis();
+                }
+                if (!item.getLocale().getPoster().isEmpty()) {
+                    show.image = item.getLocale().getPoster();
+                    show.fullImage = item.getLocale().getPoster().replace("w500", "w1280");
+                }
+                if (!item.getLocale().getFanart().isEmpty()) {
+                    show.headerImage = item.getLocale().getFanart().replace("w500", "original");
+                }
+            }
+
             existingList.add(show);
         }
         return existingList;
