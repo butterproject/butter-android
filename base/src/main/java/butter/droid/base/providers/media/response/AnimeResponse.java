@@ -1,5 +1,7 @@
 package butter.droid.base.providers.media.response;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class AnimeResponse extends Response<Anime> {
         super(responseItems);
     }
 
-    public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList, MediaProvider mediaProvider, SubsProvider subsProvider) {
+    public ArrayList<Media> formatListForPopcorn(Context context, ArrayList<Media> existingList, MediaProvider mediaProvider, SubsProvider subsProvider) {
         for (Anime item : responseItems) {
             Media media = null;
             if (item.getType().equalsIgnoreCase("movie")) {

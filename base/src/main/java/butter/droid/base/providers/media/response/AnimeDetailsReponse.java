@@ -1,5 +1,6 @@
 package butter.droid.base.providers.media.response;
 
+import android.content.Context;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class AnimeDetailsReponse extends DetailsResponse<AnimeDetails> {
     public AnimeDetailsReponse() {
     }
 
-    public ArrayList<Media> formatDetailForPopcorn(AnimeDetails item, MediaProvider mediaProvider, SubsProvider subsProvider) {
+    public ArrayList<Media> formatDetailForPopcorn(Context context, AnimeDetails item, MediaProvider mediaProvider, SubsProvider subsProvider) {
         ArrayList<Media> list = new ArrayList<>();
         try {
 

@@ -1,5 +1,7 @@
 package butter.droid.base.providers.media.response.models;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 import butter.droid.base.providers.media.MediaProvider;
@@ -11,5 +13,5 @@ public abstract class DetailsResponse<T extends ResponseItem> {
     public DetailsResponse() {
     }
 
-    public abstract ArrayList<Media> formatDetailForPopcorn(T responseItem, MediaProvider mediaProvider, SubsProvider subsProvider);
+    public abstract ArrayList<Media> formatDetailForPopcorn(Context context, T responseItem, MediaProvider mediaProvider, SubsProvider subsProvider);
 }

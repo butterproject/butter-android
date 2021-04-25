@@ -39,8 +39,8 @@ import okhttp3.OkHttpClient;
 
 public class MoviesProvider extends MediaProvider {
 
-    public MoviesProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
-        super(client, mapper, subsProvider, BuildConfig.MOVIE_URLS, "movies/", "", 0);
+    public MoviesProvider(Context context, OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
+        super(context, client, mapper, subsProvider, BuildConfig.MOVIE_URLS, "movies/", "", 0);
     }
 
     @Override
@@ -48,13 +48,13 @@ public class MoviesProvider extends MediaProvider {
         ArrayList<Media> formattedData = currentList;
         List<Movie> list = mapper.readValue(responseStr, mapper.getTypeFactory().constructCollectionType(List.class, Movie.class));
         if (!list.isEmpty()) {
-            formattedData = new MovieResponse(list).formatListForPopcorn(currentList, this, getSubsProvider());
+            formattedData = new MovieResponse(list).formatListForPopcorn(context, currentList, this, getSubsProvider());
         }
         return formattedData;
     }
 
     @Override
-    public void getDetail(Context conteext, ArrayList<Media> currentList, Integer index, Callback callback) {
+    public void getDetail(ArrayList<Media> currentList, Integer index, Callback callback) {
         ArrayList<Media> returnList = new ArrayList<>();
         returnList.add(currentList.get(index));
         callback.onSuccess(null, returnList);

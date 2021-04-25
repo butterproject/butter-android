@@ -1,5 +1,6 @@
 package butter.droid.base.providers.media.response;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.response.models.Response;
@@ -15,6 +17,7 @@ import butter.droid.base.providers.media.response.models.movies.Language;
 import butter.droid.base.providers.media.response.models.movies.Movie;
 import butter.droid.base.providers.media.response.models.movies.Quality;
 import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.StringUtils;
 
 public class MovieResponse extends Response<Movie> {
@@ -23,7 +26,7 @@ public class MovieResponse extends Response<Movie> {
         super(responseItems);
     }
 
-    public ArrayList<Media> formatListForPopcorn(ArrayList<Media> existingList, MediaProvider mediaProvider, SubsProvider subsProvider) {
+    public ArrayList<Media> formatListForPopcorn(Context context, ArrayList<Media> existingList, MediaProvider mediaProvider, SubsProvider subsProvider) {
         for (Movie item : responseItems) {
 
             butter.droid.base.providers.media.models.Movie movie = new butter.droid.base.providers.media.models.Movie();
@@ -75,17 +78,29 @@ public class MovieResponse extends Response<Movie> {
 
             if (item.getLocale() != null) {
                 if (!item.getLocale().getTitle().isEmpty()) {
-                    movie.title2 = movie.title;
-                    movie.title = item.getLocale().getTitle();
+                    switch (PrefUtils.get(context, Prefs.TRANSLATE_TITLE, "translated-origin")) {
+                        case "translated-origin":
+                            movie.title2 = item.getLocale().getTitle();
+                            break;
+                        case "origin-translated":
+                            movie.title2 = movie.title;
+                            movie.title = item.getLocale().getTitle();
+                            break;
+                        case "translated":
+                            movie.title = item.getLocale().getTitle();
+                            break;
+                        case "origin":
+                            break;
+                    }
                 }
-                if (!item.getLocale().getSynopsis().isEmpty()) {
+                if (!item.getLocale().getSynopsis().isEmpty() && PrefUtils.get(context, Prefs.TRANSLATE_SYNOPSIS, true)) {
                     movie.synopsis = item.getLocale().getSynopsis();
                 }
-                if (!item.getLocale().getPoster().isEmpty()) {
+                if (!item.getLocale().getPoster().isEmpty() && PrefUtils.get(context, Prefs.TRANSLATE_POSTER, true)) {
                     movie.image = item.getLocale().getPoster();
                     movie.fullImage = item.getLocale().getPoster().replace("w500", "w1280");
                 }
-                if (!item.getLocale().getFanart().isEmpty()) {
+                if (!item.getLocale().getFanart().isEmpty() && PrefUtils.get(context, Prefs.TRANSLATE_POSTER, true)) {
                     movie.headerImage = item.getLocale().getFanart().replace("w500", "original");
                 }
             }

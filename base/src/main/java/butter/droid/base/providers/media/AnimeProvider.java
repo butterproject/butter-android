@@ -17,6 +17,8 @@
 
 package butter.droid.base.providers.media;
 
+import android.content.Context;
+
 import androidx.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,8 +41,8 @@ import okhttp3.OkHttpClient;
 
 public class AnimeProvider extends MediaProvider {
 
-    public AnimeProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
-        super(client, mapper, subsProvider, BuildConfig.ANIME_URLS, "animes/", "anime/", 0);
+    public AnimeProvider(Context context, OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
+        super(context, client, mapper, subsProvider, BuildConfig.ANIME_URLS, "animes/", "anime/", 0);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class AnimeProvider extends MediaProvider {
         ArrayList<Media> formattedData = currentList;
         List<Anime> list = mapper.readValue(responseStr, mapper.getTypeFactory().constructCollectionType(List.class, Anime.class));
         if (!list.isEmpty()) {
-            formattedData = new AnimeResponse(list).formatListForPopcorn(currentList, this, getSubsProvider());
+            formattedData = new AnimeResponse(list).formatListForPopcorn(context, currentList, this, getSubsProvider());
         }
         return formattedData;
     }
@@ -56,7 +58,7 @@ public class AnimeProvider extends MediaProvider {
     @Override
     public ArrayList<Media> getResponseDetailsFormattedList(String responseStr) throws IOException {
         AnimeDetails detail = mapper.readValue(responseStr, AnimeDetails.class);
-        return new AnimeDetailsReponse().formatDetailForPopcorn(detail, this, null);
+        return new AnimeDetailsReponse().formatDetailForPopcorn(context, detail, this, null);
     }
 
     @Override

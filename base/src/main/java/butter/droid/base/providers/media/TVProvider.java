@@ -17,6 +17,8 @@
 
 package butter.droid.base.providers.media;
 
+import android.content.Context;
+
 import androidx.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,8 +40,8 @@ import okhttp3.OkHttpClient;
 
 public class TVProvider extends MediaProvider {
 
-    public TVProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
-        super(client, mapper, subsProvider, BuildConfig.TV_URLS, "shows/", "show/", 0);
+    public TVProvider(Context context, OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
+        super(context, client, mapper, subsProvider, BuildConfig.TV_URLS, "shows/", "show/", 0);
     }
 
     @Override
@@ -47,7 +49,7 @@ public class TVProvider extends MediaProvider {
         ArrayList<Media> formattedData = currentList;
         List<butter.droid.base.providers.media.response.models.shows.Show> list = mapper.readValue(responseStr, mapper.getTypeFactory().constructCollectionType(List.class, butter.droid.base.providers.media.response.models.shows.Show.class));
         if (!list.isEmpty()) {
-            formattedData = new TVResponse(list).formatListForPopcorn(currentList, this, getSubsProvider());
+            formattedData = new TVResponse(list).formatListForPopcorn(context, currentList, this, getSubsProvider());
         }
         return formattedData;
     }
@@ -55,7 +57,7 @@ public class TVProvider extends MediaProvider {
     @Override
     public ArrayList<Media> getResponseDetailsFormattedList(String responseStr) throws IOException {
         ShowDetails detail = mapper.readValue(responseStr, ShowDetails.class);
-        return new TVDetailsReponse().formatDetailForPopcorn(detail, this, getSubsProvider());
+        return new TVDetailsReponse().formatDetailForPopcorn(context, detail, this, getSubsProvider());
     }
 
     @Override

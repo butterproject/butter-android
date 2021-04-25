@@ -19,7 +19,6 @@ package butter.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
@@ -56,19 +55,22 @@ public abstract class MediaProvider extends BaseProvider {
     @Nullable
     private final SubsProvider subsProvider;
 
+    protected final Context context;
+
     private static final int DEFAULT_NAVIGATION_INDEX = 1;
     private String[] apiUrls = new String[0];
     private String itemsPath = "";
     private String itemDetailsPath = "";
     private Integer currentApi = 0;
 
-    public MediaProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider, String[] apiUrls, String itemsPath, String itemDetailsPath, Integer currentApi) {
+    public MediaProvider(Context context, OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider, String[] apiUrls, String itemsPath, String itemDetailsPath, Integer currentApi) {
         super(client, mapper);
         this.subsProvider = subsProvider;
         this.apiUrls = apiUrls;
         this.itemsPath = itemsPath;
         this.itemDetailsPath = itemDetailsPath;
         this.currentApi = currentApi;
+        this.context = context;
     }
 
     /**
@@ -211,12 +213,12 @@ public abstract class MediaProvider extends BaseProvider {
         });
     }
 
-    public void getDetail(Context conteext, ArrayList<Media> currentList, Integer index, final Callback callback) {
+    public void getDetail(ArrayList<Media> currentList, Integer index, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
 
         // Locale support
-        String language = PrefUtils.get(conteext, Prefs.LOCALE, ButterApplication.getSystemLanguage());
-        String content_language = PrefUtils.get(conteext, Prefs.CONTENT_LOCALE, language);
+        String language = PrefUtils.get(context, Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String content_language = PrefUtils.get(context, Prefs.CONTENT_LOCALE, language);
         String locale = LocaleUtils.toLocale(language).getLanguage();
         String content_locale = LocaleUtils.toLocale(content_language).getLanguage();
 
