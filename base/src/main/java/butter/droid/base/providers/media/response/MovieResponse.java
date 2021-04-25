@@ -80,11 +80,11 @@ public class MovieResponse extends Response<Movie> {
                 if (!item.getLocale().getTitle().isEmpty()) {
                     switch (PrefUtils.get(context, Prefs.TRANSLATE_TITLE, "translated-origin")) {
                         case "translated-origin":
-                            movie.title2 = item.getLocale().getTitle();
-                            break;
-                        case "origin-translated":
                             movie.title2 = movie.title;
                             movie.title = item.getLocale().getTitle();
+                            break;
+                        case "origin-translated":
+                            movie.title2 = item.getLocale().getTitle();
                             break;
                         case "translated":
                             movie.title = item.getLocale().getTitle();

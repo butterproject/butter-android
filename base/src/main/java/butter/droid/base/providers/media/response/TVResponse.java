@@ -40,11 +40,11 @@ public class TVResponse extends Response<Show> {
                 if (!item.getLocale().getTitle().isEmpty()) {
                     switch (PrefUtils.get(context, Prefs.TRANSLATE_TITLE, "translated-origin")) {
                         case "translated-origin":
-                            show.title2 = item.getLocale().getTitle();
-                            break;
-                        case "origin-translated":
                             show.title2 = show.title;
                             show.title = item.getLocale().getTitle();
+                            break;
+                        case "origin-translated":
+                            show.title2 = item.getLocale().getTitle();
                             break;
                         case "translated":
                             show.title = item.getLocale().getTitle();
