@@ -62,6 +62,15 @@
     <!-- SettingsActivity strings -->
     <string name="preferences">Preferences</string>
     <string name="general">General</string>
+    <string name="localization">Localization</string>
+    <string name="translate_title">Translate Title</string>
+    <string name="translate_synopsis">Translate Synopsis</string>
+    <string name="translate_poster">Translate Poster</string>
+    <string name="translate_episodes">Translate Episodes</string>
+    <string name="translate_option_translated_original">Translated - Original</string>
+    <string name="translate_option_original_translated">Original - Translated</string>
+    <string name="translate_option_translated">Translated Only</string>
+    <string name="translate_option_original">Original Only</string>
     <string name="default_view">Default overview</string>
     <string name="default_player">Default video player</string>
     <string name="i18n_language">App language</string>
