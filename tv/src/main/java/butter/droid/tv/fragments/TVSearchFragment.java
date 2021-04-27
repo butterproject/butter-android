@@ -36,9 +36,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butter.droid.base.ButterApplication;
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
+import butter.droid.base.utils.LocaleUtils;
+import butter.droid.base.utils.PrefUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;
@@ -125,6 +129,12 @@ public class TVSearchFragment extends androidx.leanback.app.SearchFragment
 		//mShowsProvider.cancel();
 		mRowsAdapter.clear();
 		addLoadingRow();
+
+		//Locale support
+		String language = PrefUtils.get(this.getActivity(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
+		String content_language = PrefUtils.get(this.getActivity(), Prefs.CONTENT_LOCALE, language);
+		mSearchFilter.setLangCode(LocaleUtils.toLocale(language).getLanguage());
+		mSearchFilter.setContentLangCode(LocaleUtils.toLocale(content_language).getLanguage());
 
 		mSearchFilter.setKeywords(query);
 		mSearchFilter.setPage(1);
