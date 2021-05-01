@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import androidx.annotation.NonNull;
@@ -282,7 +283,11 @@ public class TorrentService extends Service implements TorrentServerListener {
 
     public static void start(Context context) {
         Intent torrentServiceIntent = new Intent(context, TorrentService.class);
-        context.startService(torrentServiceIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(torrentServiceIntent);
+        } else {
+            context.startService(torrentServiceIntent);
+        }
     }
 
     static void stop() {
