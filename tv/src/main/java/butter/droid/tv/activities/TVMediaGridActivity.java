@@ -22,7 +22,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import butter.droid.base.ButterApplication;
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.providers.media.MediaProvider;
+import butter.droid.base.utils.LocaleUtils;
+import butter.droid.base.utils.PrefUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
@@ -68,6 +72,11 @@ public class TVMediaGridActivity extends TVBaseActivity implements TVMediaGridFr
         mFilter.setSort(mSort);
         mFilter.setOrder(mDefOrder);
         mFilter.setGenre(mGenre);
+
+        String language = PrefUtils.get(this.getBaseContext(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String content_language = PrefUtils.get(this.getBaseContext(), Prefs.CONTENT_LOCALE, language);
+        mFilter.setLangCode(LocaleUtils.toLocale(language).getLanguage());
+        mFilter.setContentLangCode(LocaleUtils.toLocale(content_language).getLanguage());
 
         //add media fragment
         getFragmentManager().beginTransaction().replace(R.id.fragment, TVMediaGridFragment.newInstance()).commit();

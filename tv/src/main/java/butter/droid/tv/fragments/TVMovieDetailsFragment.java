@@ -33,6 +33,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.youtube.YouTubeManager;
@@ -41,6 +42,7 @@ import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.utils.LocaleUtils;
 import butter.droid.base.utils.NetworkUtils;
 import butter.droid.base.utils.PrefUtils;
 import butter.droid.tv.R;
@@ -102,7 +104,11 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
 		if (item instanceof Movie) {
 			Movie movie = (Movie) item;
 
-			List<String> qualities = new ArrayList<>(movie.torrents.get("en").keySet());
+			String language = PrefUtils.get(getActivity(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
+			String content_language = PrefUtils.get(getActivity(), Prefs.CONTENT_LOCALE, language);
+			String locale = LocaleUtils.toLocale(content_language).getLanguage();
+
+			List<String> qualities = new ArrayList<>(movie.torrents.get(locale).keySet());
 
 			if (movie.trailer != null) {
 				addAction(new TrailerAction(qualities.size() + 1, getResources().getString(R.string.watch),
@@ -111,7 +117,7 @@ public class TVMovieDetailsFragment extends TVBaseDetailsFragment implements Med
 
 			for (String quality : qualities) {
 
-				Media.Torrent torrent = movie.torrents.get("en").get(quality);
+				Media.Torrent torrent = movie.torrents.get(locale).get(quality);
 
 				//add action
 				addAction(new WatchAction((long) qualities.indexOf(quality), getResources().getString(

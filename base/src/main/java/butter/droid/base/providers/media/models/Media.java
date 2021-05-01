@@ -31,6 +31,7 @@ public abstract class Media implements Parcelable {
     public String videoId;
     public String imdbId;
     public String title;
+    public String title2;
     public String year;
     public String genre;
     public String rating;
@@ -48,6 +49,7 @@ public abstract class Media implements Parcelable {
         videoId = in.readString();
         imdbId = in.readString();
         title = in.readString();
+        title2 = in.readString();
         year = in.readString();
         genre = in.readString();
         rating = in.readString();
@@ -77,6 +79,7 @@ public abstract class Media implements Parcelable {
         dest.writeString(videoId);
         dest.writeString(imdbId);
         dest.writeString(title);
+        dest.writeString(title2);
         dest.writeString(year);
         dest.writeString(genre);
         dest.writeString(rating);

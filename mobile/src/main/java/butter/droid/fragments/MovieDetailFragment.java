@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.snackbar.Snackbar;
 import android.text.Layout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +33,12 @@ import butter.droid.MobileButterApplication;
 import butter.droid.R;
 import butter.droid.activities.TrailerPlayerActivity;
 import butter.droid.activities.VideoPlayerActivity;
+import butter.droid.base.ButterApplication;
 import butter.droid.base.content.preferences.DefaultQuality;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.manager.youtube.YouTubeManager;
+import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.subs.SubsProvider;
 import butter.droid.base.torrent.Magnet;
@@ -63,7 +66,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
     YouTubeManager youTubeManager;
 
     private static Movie sMovie;
-    private String mSelectedSubtitleLanguage, mSelectedQuality;
+    private String mSelectedSubtitleLanguage, mSelectedQuality, mContentLocale;
     private Boolean mAttached = false;
     private Magnet mMagnet;
 
@@ -114,6 +117,10 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mRoot.setMinimumHeight(container.getMinimumHeight());
         }
         ButterKnife.bind(this, mRoot);
+
+        String language = PrefUtils.get(getActivity(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String content_language = PrefUtils.get(getActivity(), Prefs.CONTENT_LOCALE, language);
+        mContentLocale = LocaleUtils.toLocale(content_language).getLanguage();
 
         if(sMovie != null) {
 
@@ -250,7 +257,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
             }
 
             if (sMovie.torrents.size() > 0) {
-                final String[] qualities = sMovie.torrents.get("en").keySet().toArray(new String[sMovie.torrents.size()]);
+                final String[] qualities = sMovie.torrents.get(mContentLocale).keySet().toArray(new String[sMovie.torrents.size()]);
                 SortUtils.sortQualities(qualities);
 
                 mQuality.setData(qualities);
@@ -304,15 +311,15 @@ public class MovieDetailFragment extends BaseDetailFragment {
             mHealth.setVisibility(View.VISIBLE);
         }
 
-        TorrentHealth health = TorrentHealth.calculate(sMovie.torrents.get("en").get(mSelectedQuality).getSeeds(), sMovie.torrents.get("en").get(mSelectedQuality).getPeers());
+        TorrentHealth health = TorrentHealth.calculate(getSelectedTorrent().getSeeds(), getSelectedTorrent().getPeers());
         mHealth.setImageResource(health.getImageResource());
     }
 
     private void updateMagnet() {
         if(mMagnet == null) {
-            mMagnet = new Magnet(mActivity, sMovie.torrents.get("en").get(mSelectedQuality).getUrl());
+            mMagnet = new Magnet(mActivity, getSelectedTorrent().getUrl());
         }
-        mMagnet.setUrl(sMovie.torrents.get("en").get(mSelectedQuality).getUrl());
+        mMagnet.setUrl(getSelectedTorrent().getUrl());
 
         if(!mMagnet.canOpen()) {
             mOpenMagnet.setVisibility(View.GONE);
@@ -349,7 +356,7 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
     @OnClick(R.id.play_button)
     public void play() {
-        String streamUrl = sMovie.torrents.get("en").get(mSelectedQuality).getUrl();
+        String streamUrl = getSelectedTorrent().getUrl();
         StreamInfo streamInfo = new StreamInfo(sMovie, streamUrl, mSelectedSubtitleLanguage, mSelectedQuality);
         mCallback.playStream(streamInfo);
     }
@@ -361,8 +368,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
 
     @OnClick(R.id.health)
     public void clickHealth() {
-        int seeds = sMovie.torrents.get("en").get(mSelectedQuality).getSeeds();
-        int peers = sMovie.torrents.get("en").get(mSelectedQuality).getPeers();
+        int seeds = getSelectedTorrent().getSeeds();
+        int peers = getSelectedTorrent().getPeers();
         TorrentHealth health = TorrentHealth.calculate(seeds, peers);
 
         final Snackbar snackbar = Snackbar.make(mRoot, getString(R.string.health_info, getString(health.getStringResource()), seeds, peers), Snackbar.LENGTH_LONG);
@@ -393,5 +400,10 @@ public class MovieDetailFragment extends BaseDetailFragment {
                 }
             });
         }
+    }
+    
+    private Media.Torrent getSelectedTorrent()
+    {
+        return sMovie.torrents.get(mContentLocale).get(mSelectedQuality);
     }
 }

@@ -43,11 +43,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butter.droid.base.ButterApplication;
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.utils.LocaleUtils;
+import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;
@@ -153,6 +157,12 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
         showsFilter.setSort(MediaProvider.Filters.Sort.YEAR);
         showsFilter.setOrder(MediaProvider.Filters.Order.DESC);
 
+        //Locale support
+        String language = PrefUtils.get(this.getActivity(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String content_language = PrefUtils.get(this.getActivity(), Prefs.CONTENT_LOCALE, language);
+        showsFilter.setLangCode(LocaleUtils.toLocale(language).getLanguage());
+        showsFilter.setContentLangCode(LocaleUtils.toLocale(content_language).getLanguage());
+
         providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_SHOW)
                 .getList(null, showsFilter, new MediaProvider.Callback() {
             @DebugLog
@@ -187,6 +197,10 @@ public class TVOverviewFragment extends BrowseFragment implements OnItemViewClic
         final MediaProvider.Filters movieFilters = new MediaProvider.Filters();
         movieFilters.setSort(MediaProvider.Filters.Sort.TRENDING);
         movieFilters.setOrder(MediaProvider.Filters.Order.DESC);
+
+        //Locale support
+        movieFilters.setLangCode(LocaleUtils.toLocale(language).getLanguage());
+        movieFilters.setContentLangCode(LocaleUtils.toLocale(content_language).getLanguage());
 
         providerManager.getMediaProvider(ProviderManager.PROVIDER_TYPE_MOVIE)
                 .getList(null, movieFilters, new MediaProvider.Callback() {

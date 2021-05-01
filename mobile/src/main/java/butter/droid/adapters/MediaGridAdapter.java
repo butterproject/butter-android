@@ -106,7 +106,11 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final OverviewItem overviewItem = getItem(position);
             Media item = overviewItem.media;
 
-            videoViewHolder.title.setText(item.title);
+            videoViewHolder.title2.setText(item.title);
+            if (item.title2 != null && !item.title2.isEmpty() && !item.title2.equals(item.title)) {
+                videoViewHolder.title.setText(item.title2);
+            }
+
             videoViewHolder.year.setText(item.year);
 
             if (item.image != null && !item.image.equals("")) {
@@ -249,6 +253,8 @@ public class MediaGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ImageView coverImage;
         @BindView(R.id.title)
         TextView title;
+        @BindView(R.id.title2)
+        TextView title2;
         @BindView(R.id.year)
         TextView year;
 

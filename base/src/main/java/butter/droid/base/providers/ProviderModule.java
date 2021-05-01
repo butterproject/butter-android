@@ -43,23 +43,23 @@ public class ProviderModule {
 
     @Provides
     @Singleton
-    public MoviesProvider provideMoviesProvider(OkHttpClient client, ObjectMapper mapper,
+    public MoviesProvider provideMoviesProvider(Context context, OkHttpClient client, ObjectMapper mapper,
                                                 OpenSubsProvider subsProvider) {
-        return new MoviesProvider(client, mapper, subsProvider);
+        return new MoviesProvider(context, client, mapper, subsProvider);
     }
 
     @Provides
     @Singleton
-    public TVProvider provideTVProvider(OkHttpClient client, ObjectMapper mapper,
+    public TVProvider provideTVProvider(Context context, OkHttpClient client, ObjectMapper mapper,
                                         OpenSubsProvider subsProvider) {
-        return new TVProvider(client, mapper, subsProvider);
+        return new TVProvider(context, client, mapper, subsProvider);
     }
 
     @Provides
     @Singleton
-    public AnimeProvider provideAnimeProvider(OkHttpClient client, ObjectMapper mapper,
+    public AnimeProvider provideAnimeProvider(Context context, OkHttpClient client, ObjectMapper mapper,
                                               OpenSubsProvider subsProvider) {
-        return new AnimeProvider(client, mapper, subsProvider);
+        return new AnimeProvider(context, client, mapper, subsProvider);
     }
 
 }
