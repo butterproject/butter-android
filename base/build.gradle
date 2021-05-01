@@ -25,6 +25,7 @@ android {
         buildConfigField 'String[]', 'TV_URLS', '{' + tvUrls + '}'
         versionCode buildNumber
         multiDexEnabled true
+        resValue 'string', 'sentry_dsn', rootProject.ext.sentryDsn
     }
 
     buildTypes {
@@ -90,5 +91,5 @@ dependencies {
 
     compileOnly "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
 
-
+    implementation 'io.sentry:sentry-android:4.3.0'
 }
