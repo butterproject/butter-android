@@ -61,12 +61,17 @@ public class SimpleDevicePicker implements ConnectableDeviceListener {
     protected int connectionFailedResId;
 
     SimpleDevicePickerListener listener;
+    private PairingType pairingType;
 
     public SimpleDevicePicker(Activity activity) {
         this.activity = activity;
         this.picker = new DevicePicker(activity);
 
         loadStringIds();
+    }
+
+    public void setPairingType(PairingType pairingType) {
+        this.pairingType = pairingType;
     }
 
     /**
@@ -115,9 +120,9 @@ public class SimpleDevicePicker implements ConnectableDeviceListener {
     }
 
     protected void cleanupActive() {
-        if (pendingDevice != null) {
-            pendingDevice.removeListener(this);
-            pendingDevice = null;
+        if (activeDevice != null) {
+            activeDevice.removeListener(this);
+            activeDevice = null;
         }
     }
 
@@ -161,6 +166,7 @@ public class SimpleDevicePicker implements ConnectableDeviceListener {
             }
 
             if (!device.isConnected()) {
+                device.setPairingType(pairingType);
                 device.connect();
             } else {
                 onDeviceReady(device);
@@ -187,6 +193,7 @@ public class SimpleDevicePicker implements ConnectableDeviceListener {
             break;
 
         case PIN_CODE:
+        case MIXED:
             pairingDialog = createPinPairingDialog();
             break;
 
@@ -222,8 +229,10 @@ public class SimpleDevicePicker implements ConnectableDeviceListener {
                 if (device == pendingDevice) {
                     activeDevice = pendingDevice;
 
-                    if (listener != null)
+                    if (listener != null) {
                         listener.onPickDevice(pendingDevice);
+                    }
+                    pendingDevice = null;
                 }
             }
         });

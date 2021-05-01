@@ -53,6 +53,7 @@ import java.util.Map;
 public class DIALService extends DeviceService implements Launcher {
 
     public static final String ID = "DIAL";
+    private static final String APP_NETFLIX = "Netflix";
 
     private static List<String> registeredApps = new ArrayList<String>();
 
@@ -138,7 +139,9 @@ public class DIALService extends DeviceService implements Launcher {
 
     @Override
     public void launchAppWithInfo(final AppInfo appInfo, Object params, final AppLaunchListener listener) {
-        ServiceCommand<ResponseListener<Object>> command = new ServiceCommand<ResponseListener<Object>>(this, requestURL(appInfo.getName()), params, new ResponseListener<Object>() {
+        ServiceCommand<ResponseListener<Object>> command =
+                new ServiceCommand<ResponseListener<Object>>(getCommandProcessor(),
+                        requestURL(appInfo.getName()), params, new ResponseListener<Object>() {
             @Override
             public void onError(ServiceCommandError error) {
                 Util.postError(listener, new ServiceCommandError(0, "Problem Launching app", null));
@@ -233,16 +236,15 @@ public class DIALService extends DeviceService implements Launcher {
 
         if (contentId != null && contentId.length() > 0) {
             try {
-                new JSONObject() {{
+                params = new JSONObject() {{
                     put("v", contentId);
                 }};
             } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                Log.e(Util.T, "Launch Netflix error", e);
             }
         }
 
-        AppInfo appInfo = new AppInfo("Netflix");
+        AppInfo appInfo = new AppInfo(APP_NETFLIX);
         appInfo.setName(appInfo.getId());
 
         launchAppWithInfo(appInfo, params, listener);
@@ -290,7 +292,9 @@ public class DIALService extends DeviceService implements Launcher {
 
         String uri = requestURL(appName);
 
-        ServiceCommand<ResponseListener<Object>> request = new ServiceCommand<ResponseListener<Object>>(this, uri, null, responseListener);
+        ServiceCommand<ResponseListener<Object>> request =
+                new ServiceCommand<ResponseListener<Object>>(getCommandProcessor(), uri, null,
+                        responseListener);
         request.setHttpMethod(ServiceCommand.TYPE_GET);
 
         request.send();
@@ -396,10 +400,13 @@ public class DIALService extends DeviceService implements Launcher {
 
                 try {
                     HttpConnection connection = createHttpConnection(mCommand.getTarget());
-                    if (payload != null && command.getHttpMethod().equalsIgnoreCase(ServiceCommand.TYPE_POST)) {
-                        connection.setHeader(HttpMessage.CONTENT_TYPE_HEADER, "text/plain; charset=\"utf-8\"");
+                    if (payload != null || command.getHttpMethod().equalsIgnoreCase(ServiceCommand.TYPE_POST)) {
                         connection.setMethod(HttpConnection.Method.POST);
-                        connection.setPayload(payload.toString());
+                        if (payload != null) {
+                            connection.setHeader(HttpMessage.CONTENT_TYPE_HEADER, "text/plain; " +
+                                    "charset=\"utf-8\"");
+                            connection.setPayload(payload.toString());
+                        }
                     } else if (command.getHttpMethod().equalsIgnoreCase(ServiceCommand.TYPE_DEL)) {
                         connection.setMethod(HttpConnection.Method.DELETE);
                     }
@@ -457,7 +464,8 @@ public class DIALService extends DeviceService implements Launcher {
     private void hasApplication(String appID, ResponseListener<Object> listener) {
         String uri = requestURL(appID);
 
-        ServiceCommand<ResponseListener<Object>> command = new ServiceCommand<ResponseListener<Object>>(this, uri, null, listener);
+        ServiceCommand<ResponseListener<Object>> command =
+                new ServiceCommand<ResponseListener<Object>>(getCommandProcessor(), uri, null, listener);
         command.setHttpMethod(ServiceCommand.TYPE_GET);
         command.send();
     }

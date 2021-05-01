@@ -1073,8 +1073,8 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
                         String sourceIndex = (String) rawData.get("sourceIndex");
                         int physicalNum = (Integer) rawData.get("physicalNumber");
 
-                        if (Integer.parseInt(major) == majorNumber
-                                && Integer.parseInt(minor) == minorNumber) {
+                        if (Integer.valueOf(major) == majorNumber
+                                && Integer.valueOf(minor) == minorNumber) {
                             params.put("name", "HandleChannelChange");
                             params.put("major", major);
                             params.put("minor", minor);
@@ -1548,7 +1548,12 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
     @Override
     public void playMedia(String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
-        playMedia(new MediaInfo(url, mimeType, title, description, iconSrc), shouldLoop, listener);
+        MediaInfo mediaInfo = new MediaInfo.Builder(url, mimeType)
+                .setTitle(title)
+                .setDescription(description)
+                .setIcon(iconSrc)
+                .build();
+        playMedia(mediaInfo, shouldLoop, listener);
     }
 
     @Override
@@ -1624,12 +1629,12 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
 
     @Override
     public void rewind(ResponseListener<Object> listener) {
-        sendVirtualKeyCode(NetcastVirtualKeycodes.REWIND.getCode(), listener);
+        Util.postError(listener, ServiceCommandError.notSupported());
     }
 
     @Override
     public void fastForward(ResponseListener<Object> listener) {
-        sendVirtualKeyCode(NetcastVirtualKeycodes.FAST_FORWARD.getCode(), listener);
+        Util.postError(listener, ServiceCommandError.notSupported());
     }
 
     @Override
@@ -2354,8 +2359,6 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
             capabilities.add(Play); 
             capabilities.add(Pause); 
             capabilities.add(Stop); 
-            capabilities.add(Rewind); 
-            capabilities.add(FastForward); 
             capabilities.add(Duration); 
             capabilities.add(Position); 
             capabilities.add(Seek); 
@@ -2396,13 +2399,12 @@ public class NetcastTVService extends DeviceService implements Launcher, MediaCo
             capabilities.add(Play); 
             capabilities.add(Pause); 
             capabilities.add(Stop); 
-            capabilities.add(Rewind); 
-            capabilities.add(FastForward); 
 
             capabilities.add(YouTube); 
             capabilities.add(YouTube_Params); 
         }
 
+        capabilities.add(MediaPlayer.Subtitle_SRT);
         setCapabilities(capabilities);
     }
 

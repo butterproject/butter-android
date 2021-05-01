@@ -20,8 +20,13 @@
 
 package com.connectsdk.service.webos;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.KeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.net.ssl.SSLContext;
 
 import org.java_websocket.WebSocket.READYSTATE;
 import org.java_websocket.client.WebSocketClient;
@@ -37,6 +42,7 @@ public class WebOSTVMouseSocketConnection {
     WebSocketClient ws;
     String socketPath;
     WebOSTVMouseSocketListener listener;
+    WebOSTVTrustManager customTrustManager;
 
     public enum ButtonType {
         HOME,
@@ -50,14 +56,8 @@ public class WebOSTVMouseSocketConnection {
     public WebOSTVMouseSocketConnection(String socketPath, WebOSTVMouseSocketListener listener) {
         Log.d("PtrAndKeyboardFragment", "got socketPath: " + socketPath);
 
-        this.listener = listener;
-
-        if (socketPath.startsWith("wss:")) {
-            this.socketPath = socketPath.replace("wss:", "ws:").replace(":3001/", ":3000/"); // downgrade to plaintext
-            Log.d("PtrAndKeyboardFragment", "downgraded socketPath: " + this.socketPath);
-        }
-        else 
-            this.socketPath = socketPath;
+        this.listener = listener; 
+        this.socketPath = socketPath;
 
         try {
             URI uri = new URI(this.socketPath);
@@ -96,6 +96,23 @@ public class WebOSTVMouseSocketConnection {
             }
         };
 
+        try {
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            customTrustManager = new WebOSTVTrustManager();
+            sslContext.init(null, new WebOSTVTrustManager[] {customTrustManager}, null);
+            //Web-Socket 1.3.7 patch
+            ws.setSocket(sslContext.getSocketFactory().createSocket());
+            ws.setConnectionLostTimeout(0);
+        } catch (KeyException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        //patch ends
         ws.connect();
     }
 

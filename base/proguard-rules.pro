@@ -16,6 +16,7 @@
 #   public *;
 #}
 
+-keep class com.connectsdk.**  { * ; }
 -keep class org.eclipse.mat.** { *; }
 -keep class com.squareup.leakcanary.** { *; }
 
