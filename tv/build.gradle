@@ -11,7 +11,7 @@ android {
         minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdk
         versionCode buildNumber
-        versionName "0.1.4"
+        versionName "0.1.5"
         multiDexEnabled true
     }
 

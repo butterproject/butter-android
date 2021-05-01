@@ -10,8 +10,8 @@ android {
     def releaseType = (System.getenv('RELEASE_TYPE') == null ? 'NONE' : System.getenv('RELEASE_TYPE'))
     def updateUrls = (System.getenv('UPDATE_URLS') == null ? '"https://popcorntime.sh/android-update.json"' : System.getenv('UPDATE_URLS'))
     def animeUrls = (System.getenv('ANIME_URLS') == null ? '"https://anime.api-fetch.sh/"' : System.getenv('ANIME_URLS'))
-    def movieUrls = (System.getenv('MOVIE_URLS') == null ? '"https://movies-v2.api-fetch.sh/"' : System.getenv('MOVIE_URLS'))
-    def tvUrls = (System.getenv('TV_URLS') == null ? '"https://tv-v2.api-fetch.sh/"' : System.getenv('TV_URLS'))
+    def movieUrls = (System.getenv('MOVIE_URLS') == null ? '"https://popcorn-ru.tk/"' : System.getenv('MOVIE_URLS'))
+    def tvUrls = (System.getenv('TV_URLS') == null ? '"https://popcorn-ru.tk/"' : System.getenv('TV_URLS'))
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk

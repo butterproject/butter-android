@@ -86,7 +86,7 @@ def renameOutputFiles(Project project, variant) {
         if (outputFileName.contains("debug")) {
             output.outputFileName = outputFileName.replace("debug", "development").replace(".apk", "-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
         } else {
-            output.outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
+            output.outputFileName = outputFileName.replace(".apk", "-rutk-" + variant.versionName + ".apk")
         }
     }
 }
