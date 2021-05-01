@@ -52,12 +52,23 @@ public interface KeyControl extends CapabilityMethods {
 
         private final int code; 
 
-        private KeyCode(int code) {
+        private static final KeyCode[] codes = {
+            NUM_0, NUM_1, NUM_2, NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9, DASH, ENTER
+        };
+
+        KeyCode(int code) {
             this.code = code;
         }
 
         public int getCode() {
             return code;
+        }
+
+        public static KeyCode createFromInteger(int keyCode) {
+            if (keyCode >= 0 && keyCode < codes.length) {
+                return codes[keyCode];
+            }
+            return null;
         }
     }
 

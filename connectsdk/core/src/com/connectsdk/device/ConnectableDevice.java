@@ -97,6 +97,10 @@ public class ConnectableDevice implements DeviceServiceListener {
 
     Map<String, DeviceService> services;
 
+    private String serviceId;
+
+    public boolean isConnecting = false;
+
     public boolean featuresReady = false;
 
     public ConnectableDevice() {
@@ -323,11 +327,18 @@ public class ConnectableDevice implements DeviceServiceListener {
      * It is always necessary to call connect on a ConnectableDevice, even if it contains no connectable DeviceServices.
      */
     public void connect() {
-        for (DeviceService service : services.values()) {
-            if (!service.isConnected()) {
-                service.connect();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                isConnecting = true;
+                for (DeviceService service : services.values()) {
+                    if (!service.isConnected()) {
+                        service.connect();
+                    }
+                }
+                isConnecting = false;
             }
-        }
+        }).start();
     }
 
     /**
@@ -365,7 +376,10 @@ public class ConnectableDevice implements DeviceServiceListener {
             }
         }
 
-        return connectedCount >= services.size();
+        // In case of Service Integration, a device is assumed as connected,
+        // if a service in the device is connected.
+        return connectedCount >= 1;
+        //return connectedCount >= services.size();
     }
     // @endcond
 
@@ -927,4 +941,12 @@ public class ConnectableDevice implements DeviceServiceListener {
     }
 
     // @endcond
+
+    public void setServiceId(String srvId) {
+        serviceId = srvId;
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
 }

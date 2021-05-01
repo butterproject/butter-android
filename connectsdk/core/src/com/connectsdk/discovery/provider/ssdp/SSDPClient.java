@@ -132,7 +132,6 @@ public class SSDPClient {
         }
 
         if (datagramSocket != null) {
-            datagramSocket.disconnect();
             datagramSocket.close();
         }
     }

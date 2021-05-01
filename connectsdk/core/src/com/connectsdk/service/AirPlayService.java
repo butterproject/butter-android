@@ -2,8 +2,8 @@
  * AirPlayService
  * Connect SDK
  * 
- * Copyright (c) 2014 LG Electronics.
- * Created by Hyun Kook Khang on 18 Apr 2014
+ * Copyright (c) 2020 LG Electronics.
+ * Created by Seokhee Lee on 28 Aug 2020
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,9 @@ import com.connectsdk.core.ImageInfo;
 import com.connectsdk.core.MediaInfo;
 import com.connectsdk.core.Util;
 import com.connectsdk.discovery.DiscoveryFilter;
+import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.etc.helper.DeviceServiceReachability;
-import com.connectsdk.etc.helper.HttpConnection;
-import com.connectsdk.etc.helper.HttpMessage;
-import com.connectsdk.service.airplay.PListBuilder;
+import com.connectsdk.service.airplay.AirPlayServiceSocketClient;
 import com.connectsdk.service.airplay.PListParser;
 import com.connectsdk.service.capability.CapabilityMethods;
 import com.connectsdk.service.capability.MediaControl;
@@ -40,13 +39,14 @@ import com.connectsdk.service.capability.listeners.ResponseListener;
 import com.connectsdk.service.command.ServiceCommand;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.command.ServiceSubscription;
-import com.connectsdk.service.command.URLServiceSubscription;
+import com.connectsdk.service.config.AirPlayServiceConfig;
 import com.connectsdk.service.config.ServiceConfig;
 import com.connectsdk.service.config.ServiceDescription;
 import com.connectsdk.service.sessions.LaunchSession;
 import com.connectsdk.service.sessions.LaunchSession.LaunchSessionType;
+import com.dd.plist.BinaryPropertyListWriter;
+import com.dd.plist.NSDictionary;
 
-import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -54,10 +54,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,22 +67,11 @@ import java.util.UUID;
 public class AirPlayService extends DeviceService implements MediaPlayer, MediaControl {
     public static final String X_APPLE_SESSION_ID = "X-Apple-Session-ID";
     public static final String ID = "AirPlay";
-    public static final String PLAY_STATE = "PlayState";
-
     private static final long KEEP_ALIVE_PERIOD = 15000;
-    private static final long UPDATE_PERIOD = 500;
-
     private final static String CHARSET = "UTF-8";
-
     private String mSessionId;
-
-    private Timer timer, updateTimer;
-
-    private List<URLServiceSubscription<?>> mSubscriptions = new ArrayList<>();
-
-    ServiceCommand pendingCommand = null;
-    String authenticate = null;
-    String password = null;
+    private Timer timer;
+    private AirPlayServiceSocketClient socketClient;
 
     @Override
     public CapabilityPriorityLevel getPriorityLevel(Class<? extends CapabilityMethods> clazz) {
@@ -103,9 +89,9 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
         void onGetPlaybackPositionFailed(ServiceCommandError error);
     }
 
-    public AirPlayService(ServiceDescription serviceDescription,
-            ServiceConfig serviceConfig) throws IOException {
-        super(serviceDescription, serviceConfig);
+    public AirPlayService(ServiceDescription serviceDescription, ServiceConfig serviceConf) {
+        super(serviceDescription, serviceConf);
+        serviceConfig = new AirPlayServiceConfig(serviceConf.toJSONObject());
         pairingType = PairingType.PIN_CODE;
     }
 
@@ -217,6 +203,11 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
         });
     }
 
+    /**
+     * AirPlay has the same response for Buffering and Finished states that's why this method
+     * always returns Finished state for video which is not ready to play.
+     * @param listener
+     */
     @Override
     public void getPlayState(final PlayStateListener listener) {
         getPlaybackInfo(new ResponseListener<Object>() {
@@ -327,11 +318,8 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     @Override
     public ServiceSubscription<PlayStateListener> subscribePlayState(
             PlayStateListener listener) {
-        URLServiceSubscription<PlayStateListener> request = new URLServiceSubscription<>(this, PLAY_STATE, null, null);
-        request.addListener(listener);
-        addSubscription(request);
-
-        return request;
+        Util.postError(listener, ServiceCommandError.notSupported());
+        return null;
     }
 
     @Override
@@ -356,6 +344,8 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
         return null;
     }
 
+    // This function does not work properly now because photo protocol is changed.
+    // 501 Not Implemented error returns with the previous photo protocol.
     @Override
     public void displayImage(final String url, String mimeType, String title,
             String description, String iconSrc, final LaunchListener listener) {
@@ -465,19 +455,24 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
             }
 
             @Override
-            public void onError(ServiceCommandError error) {
+            public void onError(ServiceCommandError error)
+            {
                 Util.postError(listener, error);
             }
         };
 
         String uri = getRequestURL("play");
-        String payload = null;
 
-        PListBuilder builder = new PListBuilder();
-        builder.putString("Content-Location", url);
-        builder.putReal("Start-Position", 0);
+        NSDictionary plist = new NSDictionary();
+        plist.put("Content-Location", url);
+        plist.put("Start-Position", 0.0);
 
-        payload = builder.toString();
+        byte[] payload = new byte[0];
+        try {
+            payload = BinaryPropertyListWriter.writeToArray(plist);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         ServiceCommand<ResponseListener<Object>> request = new ServiceCommand<ResponseListener<Object>>(this, uri, payload, responseListener);
         request.send();
@@ -487,7 +482,6 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
     public void playMedia(String url, String mimeType, String title,
             String description, String iconSrc, boolean shouldLoop,
             LaunchListener listener) {
-
         if (mimeType.contains("image")) {
             displayImage(url, mimeType, title, description, iconSrc, listener);
         }
@@ -527,133 +521,18 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
 
     @Override
     public void sendCommand(final ServiceCommand<?> serviceCommand) {
-        Util.runInBackground(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("http://").append(serviceDescription.getIpAddress()).append(":").append(serviceDescription.getPort());
-                    sb.append(serviceCommand.getTarget());
-
-                    HttpConnection connection = HttpConnection.newInstance(URI.create(sb.toString()));
-                    connection.setHeader(HTTP.USER_AGENT, "ConnectSDK MediaControl/1.0");
-                    connection.setHeader(X_APPLE_SESSION_ID, mSessionId);
-                    if (password != null) {
-                        String authorization = getAuthenticate(serviceCommand.getHttpMethod(), serviceCommand.getTarget(), authenticate);
-                        connection.setHeader("Authorization", authorization);
-                    }
-                    Object payload = serviceCommand.getPayload();
-                    if (serviceCommand.getHttpMethod().equalsIgnoreCase(ServiceCommand.TYPE_POST)
-                            || serviceCommand.getHttpMethod().equalsIgnoreCase(ServiceCommand.TYPE_PUT)) {
-                        if (payload != null) {
-                            if (payload instanceof String) {
-                                connection.setHeader(HttpMessage.CONTENT_TYPE_HEADER, HttpMessage.CONTENT_TYPE_APPLICATION_PLIST);
-                                connection.setPayload(payload.toString());
-                            } else if (payload instanceof byte[]) {
-                                connection.setPayload((byte[]) payload);
-                            }
-                        }
-                    }
-                    if (serviceCommand.getHttpMethod().equalsIgnoreCase(ServiceCommand.TYPE_POST)) {
-                        connection.setMethod(HttpConnection.Method.POST);
-                    } else if (serviceCommand.getHttpMethod().equalsIgnoreCase(ServiceCommand.TYPE_PUT)) {
-                        connection.setMethod(HttpConnection.Method.PUT);
-                    } else {
-                        connection.setHeader("Content-Length", "0");
-                    }
-                    connection.execute();
-                    int code = connection.getResponseCode();
-                    if (code == HttpURLConnection.HTTP_OK) {
-                        Util.postSuccess(serviceCommand.getResponseListener(), connection.getResponseString());
-                    } else if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                        authenticate = connection.getResponseHeader("WWW-Authenticate");
-                        pendingCommand = serviceCommand;
-                        Util.runOnUI(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (listener != null) {
-                                    listener.onPairingRequired(AirPlayService.this, pairingType, null);
-                                }
-                            }
-                        });
-                    } else {
-                        Util.postError(serviceCommand.getResponseListener(), ServiceCommandError.getError(code));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Util.postError(serviceCommand.getResponseListener(), new ServiceCommandError(0, e.getMessage(), null));
-                }
-            }
-        });
+        if (socketClient != null)
+            socketClient.sendCommand(serviceCommand);
     }
 
     @Override
     public void sendPairingKey(String pairingKey) {
-        password = pairingKey;
-
-        if (pendingCommand != null)
-            pendingCommand.send();
-        pendingCommand = null;
-    }
-
-    String getAuthenticate(String method, String digestURI, String authStr) {
-        String realm = null;
-        String nonce = null;
-
-        StringTokenizer st = new StringTokenizer(authStr, "=\", ");
-        while (st.hasMoreTokens()) {
-            String str = st.nextToken();
-            if (str.equalsIgnoreCase("realm")) {     // Digest realm
-                realm = st.nextToken();
-            } else if (str.equalsIgnoreCase("nonce")) {
-                nonce = st.nextToken();
-            }
-        }
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("AirPlay").append(":").append(realm).append(":").append(password);
-        String HA1 = digestAuthentication(sb.toString());
-
-        sb = new StringBuilder();
-        sb.append(method).append(":").append(digestURI);
-        String HA2 = digestAuthentication(sb.toString());
-
-        sb = new StringBuilder();
-        sb.append(HA1).append(":").append(nonce).append(":").append(HA2);
-
-        String response = digestAuthentication(sb.toString());
-
-        sb = new StringBuilder();
-        sb.append("Digest username").append("=").append("\"").append("AirPlay").append("\"").append(", ");
-        sb.append("realm").append("=").append("\"").append(realm).append("\"").append(", ");
-        sb.append("nonce").append("=").append("\"").append(nonce).append("\"").append(", ");
-        sb.append("uri").append("=").append("\"").append(digestURI).append("\"").append(", ");
-        sb.append("response").append("=").append("\"").append(response).append("\"");
-
-        return sb.toString();
-    }
-
-    String digestAuthentication(String md5) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] digest = md.digest(md5.getBytes());
-            StringBuffer sb = new StringBuffer();
-            for (byte b : digest) {
-                sb.append(String.format("%02x", b & 0xFF));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-        return null;
+        socketClient.pair(pairingKey);
     }
 
     @Override
     protected void updateCapabilities() {
         List<String> capabilities = new ArrayList<String>();
-
         capabilities.add(Display_Image);
         capabilities.add(Play_Video);
         capabilities.add(Play_Audio);
@@ -668,8 +547,6 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
         capabilities.add(Seek);
         capabilities.add(Rewind);
         capabilities.add(FastForward);
-
-        capabilities.add(PlayState_Subscribe);
 
         setCapabilities(capabilities);
     }
@@ -699,34 +576,102 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
 
     @Override
     public boolean isConnected() {
-        return connected;
+        if (DiscoveryManager.getInstance().getPairingLevel().compareTo(DiscoveryManager.PairingLevel.PROTECTED) >= 0) {
+            return this.socketClient != null && this.socketClient.isConnected() && this.socketClient.getAuthToken() != "";
+        } else {
+            return this.socketClient != null && this.socketClient.isConnected();
+        }
+    }
+
+    private AirPlayServiceSocketClient.AirPlayServiceSocketClientListener mSocketListener
+            = new AirPlayServiceSocketClient.AirPlayServiceSocketClientListener() {
+
+        @Override
+        public void onRegistrationFailed(final ServiceCommandError error) {
+            disconnect();
+
+            Util.runOnUI(new Runnable() {
+
+                @Override
+                public void run() {
+                if (listener != null)
+                    listener.onConnectionFailure(AirPlayService.this, error);
+                }
+            });
+        }
+
+        @Override
+        public Boolean onReceiveMessage(JSONObject message) { return true; }
+
+        @Override
+        public void onFailWithError(final ServiceCommandError error) {
+            socketClient.setListener(null);
+            socketClient.disconnect();
+            socketClient = null;
+
+            Util.runOnUI(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (listener != null)
+                        listener.onConnectionFailure(AirPlayService.this, error);
+                }
+            });
+        }
+
+        @Override
+        public void onConnect() {
+            reportConnected(true);
+        }
+
+        @Override
+        public void onCloseWithError(final ServiceCommandError error) {
+            socketClient.setListener(null);
+            socketClient.disconnect();
+            socketClient = null;
+
+            Util.runOnUI(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (listener != null)
+                        listener.onDisconnect(AirPlayService.this, error);
+                }
+            });
+        }
+
+        @Override
+        public void onBeforeRegister(final PairingType pairingType) {
+            if (DiscoveryManager.getInstance().getPairingLevel().compareTo(DiscoveryManager.PairingLevel.ON) >= 0) {
+                Util.runOnUI(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (listener != null)
+                            listener.onPairingRequired(AirPlayService.this, pairingType, null);
+                    }
+                });
+            }
+        }
+    };
+
+    public AirPlayServiceConfig getAirPlayServiceConfig() {
+        return (AirPlayServiceConfig) serviceConfig;
     }
 
     @Override
     public void connect() {
         mSessionId = UUID.randomUUID().toString();
-
-        getPlaybackInfo(new ResponseListener<Object>() {
-            @Override
-            public void onSuccess(Object object) {
-                connected = true;
-                reportConnected(true);
-            }
-
-            @Override
-            public void onError(ServiceCommandError error) {
-                if (listener != null) {
-                    listener.onConnectionFailure(AirPlayService.this, error);
-                }
-            }
-        });
+        socketClient = new AirPlayServiceSocketClient(this.getAirPlayServiceConfig(), this.getPairingType(),
+                this.getServiceDescription().getIpAddress());
+        socketClient.setListener(mSocketListener);
+        socketClient.connect();
     }
 
     @Override
     public void disconnect() {
         stopTimer();
         connected=false;
-        password = null;
 
         if (mServiceReachability != null)
             mServiceReachability.stop();
@@ -738,6 +683,12 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
                     listener.onDisconnect(AirPlayService.this, null);
             }
         });
+
+        if (socketClient != null) {
+            socketClient.setListener(null);
+            socketClient.disconnect();
+            socketClient = null;
+        }
     }
 
     @Override
@@ -778,88 +729,14 @@ public class AirPlayService extends DeviceService implements MediaPlayer, MediaC
                 });
             }
         }, KEEP_ALIVE_PERIOD, KEEP_ALIVE_PERIOD);
-
-        updateTimer = new Timer();
-        updateTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                getPlaybackInfo(new ResponseListener<Object>() {
-                    @Override
-                    public void onSuccess(Object object) {
-                        PlayStateStatus playState = PlayStateStatus.Unknown;
-                        try {
-                            JSONObject response = new PListParser().parse(object.toString());
-                            if (response.length() > 0) {
-                                boolean readyToPlay = false;
-                                if (response.has("readyToPlay")) {
-                                    readyToPlay = response.getBoolean("readyToPlay");
-                                }
-
-                                if (!readyToPlay) {
-                                    playState = PlayStateStatus.Buffering;
-                                } else {
-                                    if (!response.has("rate")) {
-                                        playState = PlayStateStatus.Finished;
-                                    } else {
-                                        int rate = response.getInt("rate");
-                                        if (rate == 0) {
-                                            playState = PlayStateStatus.Paused;
-                                        } else if (rate == 1) {
-                                            playState = PlayStateStatus.Playing;
-                                        }
-                                    }
-                                }
-
-                                if (mSubscriptions.size() > 0) {
-                                    for (URLServiceSubscription<?> subscription : mSubscriptions) {
-                                        if (subscription.getTarget().equalsIgnoreCase(PLAY_STATE)) {
-                                            for (int i = 0; i < subscription.getListeners().size(); i++) {
-                                                @SuppressWarnings("unchecked")
-                                                ResponseListener<Object> listener = (ResponseListener<Object>) subscription.getListeners().get(i);
-                                                Util.postSuccess(listener, playState);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                        }
-                    }
-
-                    @Override
-                    public void onError(ServiceCommandError error) {
-                    }
-                });
-            }
-        }, 0, UPDATE_PERIOD);
     }
 
     private void stopTimer() {
         if (timer != null) {
             timer.cancel();
         }
-        if(updateTimer != null) {
-            updateTimer.cancel();
-        }
-        updateTimer = null;
         timer = null;
     }
 
-    private void addSubscription(URLServiceSubscription<?> subscription) {
-        mSubscriptions.add(subscription);
-    }
-
-    @Override
-    public void unsubscribe(URLServiceSubscription<?> subscription) {
-        mSubscriptions.remove(subscription);
-    }
-
-    public List<URLServiceSubscription<?>> getSubscriptions() {
-        return mSubscriptions;
-    }
-
-    public void setSubscriptions(List<URLServiceSubscription<?>> subscriptions) {
-        this.mSubscriptions = subscriptions;
-    }
 
 }

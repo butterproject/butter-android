@@ -1,28 +1,26 @@
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
-//        classpath 'org.robolectric:robolectric-gradle-plugin:1.1.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
     }
 }
 
 allprojects {
     repositories {
+        google()
         jcenter()
     }
 }
 
 apply plugin: 'com.android.library'
-//robolectric plugin causes build errors
-//apply plugin: 'org.robolectric'
-apply plugin: "jacoco"
+apply plugin: 'jacoco'
 
 
 jacoco {
-    toolVersion = "0.7.1.201405082137"
+    toolVersion = "0.8.5"
 }
 
 task jacocoTestReport(type:JacocoReport, dependsOn: "check") {
@@ -30,7 +28,7 @@ task jacocoTestReport(type:JacocoReport, dependsOn: "check") {
 
     description = "Generate Jacoco coverage reports"
 
-    classDirectories = fileTree(
+    getClassDirectories().setFrom(
             dir: 'build/intermediates/classes/debug',
             excludes: ['**/R.class',
                        '**/R$*.class',
@@ -39,9 +37,9 @@ task jacocoTestReport(type:JacocoReport, dependsOn: "check") {
                        '**/Manifest*.*']
     )
 
-    additionalSourceDirs = files(android.sourceSets.main.java.srcDirs)
-    sourceDirectories = files(android.sourceSets.main.java.srcDirs)
-    executionData = files('build/jacoco/testDebug.exec')
+    additionalSourceDirs.from = android.sourceSets.main.java.srcDirs
+    sourceDirectories.from = android.sourceSets.main.java.srcDirs
+    executionData.from = 'build/jacoco/testDebug.exec'
 
     reports {
         xml.enabled = true
@@ -53,16 +51,8 @@ task jacocoTestReport(type:JacocoReport, dependsOn: "check") {
 build.dependsOn jacocoTestReport
 
 android {
-    compileSdkVersion rootProject.ext.compileSdk
-
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdk
-        targetSdkVersion rootProject.ext.targetSdk
-        versionCode 11
-        versionName "1.5.0"
-    }
-
-    useLibrary 'org.apache.http.legacy'
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
 
     packagingOptions {
         exclude 'LICENSE.txt'
@@ -86,41 +76,54 @@ android {
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
+        test {
+            java.srcDirs = [
+                    'core/test/src',
+                    'modules/google_cast/test/src',
+                    'modules/firetv/test/src',
+            ]
+        }
     }
     buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
         release {
             minifyEnabled false
         }
     }
-    
-    lintOptions {
-        abortOnError false
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    android {
+        lintOptions {
+            abortOnError false
+        }
     }
 }
 
 android.testOptions.unitTests.all {
-     include '**/*Test.class'
- }
+    include '**/*Test.class'
+}
 
 dependencies {
-    implementation files('core/libs/java-websocket-patch.jar')
-    implementation files('core/libs/javax.jmdns_3.4.1-patch2.jar')
+    compile files('core/libs/Java-WebSocket-1.3.7.jar')
+    compile files('core/libs/javax.jmdns_3.4.1-patch2.jar')
+
+    api 'androidx.appcompat:appcompat:1.2.0'
 
     implementation fileTree(dir: 'modules/firetv/libs', include: '*.jar')
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.appcompat:appcompat:$rootProject.ext.appCompatVersion"
-    implementation 'androidx.mediarouter:mediarouter:1.1.0'
-    implementation 'com.google.android.gms:play-services-cast:9.8.0'
+    implementation 'androidx.mediarouter:mediarouter:1.2.2'
+    implementation 'com.google.android.gms:play-services-cast:20.0.0'
+    implementation 'com.googlecode.plist:dd-plist:1.23'
+    implementation 'com.nimbusds:srp6a-android:2.0.2'
+    implementation 'net.i2p.crypto:eddsa:0.2.0'
 
     testImplementation 'org.apache.maven:maven-ant-tasks:2.1.3'
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:2.4'
     testImplementation 'org.mockito:mockito-all:1.10.19'
     testImplementation 'org.powermock:powermock-api-mockito:1.6.2'
+    testImplementation 'xmlunit:xmlunit:1.4'
 }
+
+apply from: 'maven-push.gradle'

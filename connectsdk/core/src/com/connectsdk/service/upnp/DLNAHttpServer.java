@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DLNAHttpServer {
-    private static final int port = 49291;
+    final int port = 49291;
 
     volatile ServerSocket welcomeSocket;
 
