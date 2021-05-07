@@ -69,7 +69,7 @@ public class MovieResponse extends Response<Movie> {
                     Map<String, Media.Torrent> torrentMap = new HashMap<>();
                     for (Map.Entry<String, Quality> torrentQuality : language.getValue().getQualities().entrySet()) {
                         if (torrentQuality == null) continue;
-                        Media.Torrent torrent = new Media.Torrent(torrentQuality.getValue().getUrl(), torrentQuality.getValue().getSeeds(), torrentQuality.getValue().getPeers());
+                        Media.Torrent torrent = new Media.Torrent(torrentQuality.getValue().getUrl(), torrentQuality.getValue().getFile(), torrentQuality.getValue().getSeeds(), torrentQuality.getValue().getPeers());
                         torrentMap.put(torrentQuality.getKey(), torrent);
                     }
                     movie.torrents.put(language.getKey(), torrentMap);

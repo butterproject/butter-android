@@ -206,7 +206,7 @@ public class TorrentService extends Service implements TorrentServerListener {
         }
     }
 
-    public void streamTorrent(@NonNull final String torrentUrl) {
+    public void streamTorrent(@NonNull final String torrentUrl, @NonNull final String torrentFile) {
         Timber.d("streamTorrent");
         mStopped = false;
 
@@ -224,6 +224,7 @@ public class TorrentService extends Service implements TorrentServerListener {
         mWakeLock.acquire();
 
         mTorrentStreamServer.setTorrentOptions(getTorrentOptions());
+        Log.d("DEBUG", torrentUrl + ":::" + torrentFile);
 
         mIsReady = false;
         mTorrentStreamServer.addListener(this);
