@@ -36,7 +36,7 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
-        maven { url 'http://guardian.github.com/maven/repo-releases' }
+        maven { url 'http://guardian.github.io/maven/repo-releases' }
         maven { url 'https://jitpack.io' }
         google()
     }
