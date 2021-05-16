@@ -229,7 +229,7 @@ public class TorrentService extends Service implements TorrentServerListener {
         mIsReady = false;
         mTorrentStreamServer.addListener(this);
         try {
-            mTorrentStreamServer.startStream(torrentUrl);
+            mTorrentStreamServer.startStream(torrentUrl, torrentFile);
         } catch (IOException | TorrentStreamNotInitializedException e) {
             Timber.e("Error occurred", e);
         }
