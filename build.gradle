@@ -26,7 +26,7 @@ ext {
     butterknifeVersion = "10.2.1"
     okHttpVersion = "3.4.2"
     picassoVersion = "2.71828"
-    torrentstreamServerVersion = "ab4439a90e49bf4e9682d4b4754922b6c506069c"
+    torrentstreamServerVersion = "file-fix-SNAPSHOT"
     daggerVersion = "2.7"
     javaxAnnotationVersion = "1.2"
     sentryDsn = "https://a4156b48014d43f2b3a4cd71a35029d9@o336317.ingest.sentry.io/5744175"
