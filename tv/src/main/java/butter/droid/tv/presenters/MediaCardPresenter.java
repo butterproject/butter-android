@@ -109,7 +109,7 @@ public class MediaCardPresenter extends Presenter {
         cardView.getMainImageView().setVisibility(View.GONE);
         cardView.setCustomSelectedSwatch(null);
 
-		if (item.image != null) {
+		if (item.image != null && !item.image.isEmpty()) {
 			Target target = new Target() {
 				@Override public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
 					Palette.from(bitmap).maximumColorCount(16).generate(new Palette.PaletteAsyncListener() {
