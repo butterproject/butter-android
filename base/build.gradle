@@ -9,9 +9,9 @@ android {
     def gitBranch = (System.getenv('GIT_BRANCH') == null ? 'local' : System.getenv('GIT_BRANCH').replace('origin/', ''))
     def releaseType = (System.getenv('RELEASE_TYPE') == null ? 'NONE' : System.getenv('RELEASE_TYPE'))
     def updateUrls = (System.getenv('UPDATE_URLS') == null ? '"https://popcorntime.sh/android-update.json"' : System.getenv('UPDATE_URLS'))
-    def animeUrls = (System.getenv('ANIME_URLS') == null ? '"https://anime.api-fetch.sh/"' : System.getenv('ANIME_URLS'))
-    def movieUrls = (System.getenv('MOVIE_URLS') == null ? '"https://popcorn-ru.tk/"' : System.getenv('MOVIE_URLS'))
-    def tvUrls = (System.getenv('TV_URLS') == null ? '"https://popcorn-ru.tk/"' : System.getenv('TV_URLS'))
+    def animeUrls = (System.getenv('ANIME_URLS') == null ? '"https://popcorn-time.ga/"' : System.getenv('ANIME_URLS'))
+    def movieUrls = (System.getenv('MOVIE_URLS') == null ? '"https://popcorn-time.ga/"' : System.getenv('MOVIE_URLS'))
+    def tvUrls = (System.getenv('TV_URLS') == null ? '"https://popcorn-time.ga/"' : System.getenv('TV_URLS'))
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk
@@ -89,7 +89,8 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
-    implementation 'io.sentry:sentry-android:4.3.0'
     implementation "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
     annotationProcessor "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}" 
+
+	implementation 'io.sentry:sentry-android:4.3.0'
 }

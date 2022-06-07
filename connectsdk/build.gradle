@@ -51,7 +51,8 @@ task jacocoTestReport(type:JacocoReport, dependsOn: "check") {
 build.dependsOn jacocoTestReport
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion rootProject.ext.compileSdk 
+    useLibrary  'org.apache.http.legacy'
     buildToolsVersion '22.0.1'
 
     packagingOptions {
