@@ -183,7 +183,7 @@ public class TorrentService extends Service implements TorrentServerListener {
         PendingIntent pendingStopIntent = PendingIntent.getBroadcast(this, TorrentBroadcastReceiver.REQUEST_CODE, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Action stopAction = new NotificationCompat.Action.Builder(R.drawable.abc_ic_clear_material, getString(R.string.stop), pendingStopIntent).build();
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notif_logo)
                 .setContentTitle(getString(R.string.app_name) + " - " + getString(R.string.running))
                 .setContentText(getString(R.string.tap_to_resume))
@@ -194,7 +194,7 @@ public class TorrentService extends Service implements TorrentServerListener {
                 .addAction(stopAction)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE);
 
-        if(mStreamStatus != null && mIsReady) {
+        if (mStreamStatus != null && mIsReady) {
             String downloadSpeed;
             DecimalFormat df = new DecimalFormat("#############0.00");
             if (mStreamStatus.downloadSpeed / 1024 < 1000) {
@@ -246,14 +246,13 @@ public class TorrentService extends Service implements TorrentServerListener {
         mWakeLock.acquire();
 
         mTorrentStreamServer.setTorrentOptions(getTorrentOptions());
-        Log.d("DEBUG", torrentUrl + ":::" + torrentFile);
 
         mIsReady = false;
         mTorrentStreamServer.addListener(this);
         try {
-            mTorrentStreamServer.startStream(torrentUrl, torrentFile);
-        } catch (IOException | TorrentStreamNotInitializedException e) {
-            Timber.e("Error occurred", e);
+            mTorrentStreamServer.startStream(torrentUrl);
+        } catch (Exception e) {
+            Timber.e("Torrent Error occurred", e);
         }
     }
 
@@ -369,6 +368,7 @@ public class TorrentService extends Service implements TorrentServerListener {
 
     @Override
     public void onStreamError(Torrent torrent, Exception e) {
+        Timber.e("Torrent error", e);
         for(TorrentServerListener listener : mListener) {
             listener.onStreamError(torrent, e);
         }
