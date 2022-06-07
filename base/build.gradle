@@ -72,7 +72,7 @@ dependencies {
     api "com.squareup.picasso:picasso:${rootProject.ext.picassoVersion}"
     api "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
 
-    api "com.github.popcorn-time-ru:TorrentStreamServer-Android:${rootProject.ext.torrentstreamServerVersion}"
+    api "com.github.TorrentStream:TorrentStreamServer-Android:${rootProject.ext.torrentstreamServerVersion}"
 
     api 'com.github.gabrielemariotti.changeloglib:changelog:2.1.0'
 
@@ -89,7 +89,7 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
-    compileOnly "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
-
     implementation 'io.sentry:sentry-android:4.3.0'
+    implementation "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
+    annotationProcessor "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}" 
 }

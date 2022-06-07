@@ -3,6 +3,7 @@
 buildscript {
     repositories {
         //temporary to solve hugo error
+        maven { url 'https://guardian.github.com/maven/repo-releases' }
         mavenCentral()
         jcenter()
         google()
@@ -26,19 +27,18 @@ ext {
     butterknifeVersion = "10.2.1"
     okHttpVersion = "3.4.2"
     picassoVersion = "2.71828"
-    torrentstreamServerVersion = "file-fix-SNAPSHOT"
+    torrentstreamServerVersion = "ab4439a90e49bf4e9682d4b4754922b6c506069c"
     daggerVersion = "2.7"
-    javaxAnnotationVersion = "1.2"
+    javaxAnnotationVersion = "1.3.2"
     sentryDsn = "https://a4156b48014d43f2b3a4cd71a35029d9@o336317.ingest.sentry.io/5744175"
 }
 
 allprojects {
     repositories {
+        maven { url 'https://guardian.github.com/maven/repo-releases' }
         maven { url 'https://maven.google.com' }
         jcenter()
         mavenCentral()
-        maven { url 'https://maven.fabric.io/public' }
-        maven { url 'http://guardian.github.io/maven/repo-releases' }
         maven { url 'https://jitpack.io' }
         google()
     }
@@ -86,7 +86,7 @@ def renameOutputFiles(Project project, variant) {
         if (outputFileName.contains("debug")) {
             output.outputFileName = outputFileName.replace("debug", "development").replace(".apk", "-" + (System.getenv("BUILD_NUMBER") ?: "local") + ".apk")
         } else {
-            output.outputFileName = outputFileName.replace(".apk", "-rutk-" + variant.versionName + ".apk")
+            output.outputFileName = outputFileName.replace(".apk", "-" + variant.versionName + ".apk")
         }
     }
 }

@@ -78,4 +78,5 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.daggerVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
     compileOnly "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
+    annotationProcessor "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}"
 }
