@@ -565,11 +565,11 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.max_connections)
                     .setPreferenceKey(Prefs.LIBTORRENT_CONNECTION_LIMIT)
                     .hasNext(true)
-                    .setDefaultValue(200)
+                    .setDefaultValue(1200)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 0, 200, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 0, 1800, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(value);

@@ -135,6 +135,12 @@ public class TorrentService extends Service implements TorrentServerListener {
     }
 
     @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        stopSelf();
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Timber.d("onStartCommand");
         return START_STICKY;
