@@ -52,7 +52,7 @@ public abstract class TVBaseActivity extends TVTorrentBaseActivity {
 					startActivity(installIntent);
 				}
 			});
-			updateManager.checkUpdatesManually();
+			if (updateManager != null) updateManager.checkUpdatesManually();
 		}
 	}
 

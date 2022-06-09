@@ -853,7 +853,7 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            updateManager.checkUpdatesManually();
+                            if (updateManager != null) updateManager.checkUpdatesManually();
                         }
                     })
                     .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
