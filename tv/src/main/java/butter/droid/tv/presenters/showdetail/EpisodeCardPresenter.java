@@ -113,13 +113,15 @@ public class EpisodeCardPresenter extends Presenter {
 		}
 
 		protected void updateCardViewImage(String uri) {
-			Picasso.get()
-				.load(uri)
-				.resize(mCardWidth, mCardHeight)
-                .centerCrop()
-				.placeholder(defaultImage)
-				.error(defaultImage)
-				.into(imageCardViewTarget);
+            if (uri != null && !uri.isEmpty()) {
+                Picasso.get()
+                    .load(uri)
+                    .resize(mCardWidth, mCardHeight)
+                    .centerCrop()
+                    .placeholder(defaultImage)
+                    .error(defaultImage)
+                    .into(imageCardViewTarget);
+            }
 		}
 	}
 

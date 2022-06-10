@@ -81,7 +81,7 @@ public class BackgroundUpdater {
         }
 
         //load default background image
-        if (null == uri) {
+        if (null == uri || uri.isEmpty()) {
             Picasso.get().load(mDefaultBackground).into(mBackgroundImageTarget);
             return;
         }
