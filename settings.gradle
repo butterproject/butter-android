@@ -1,1 +1,7 @@
 include ':mobile', ':vlc', ':base', ':connectsdk', ':tv'
+
+include ":StreamServerTorrent"
+project(":StreamServerTorrent").projectDir = file("./base/submodules/TorrentStreamServer-Android/library")
+
+include ":StreamTorrent"
+project(":StreamTorrent").projectDir = file("./base/submodules/TorrentStreamServer-Android/TorrentStream-Android/library")

@@ -72,8 +72,6 @@ dependencies {
     api "com.squareup.picasso:picasso:${rootProject.ext.picassoVersion}"
     api "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
 
-    api "com.github.popcorn-time-ru:TorrentStreamServer-Android:${rootProject.ext.torrentstreamServerVersion}"
-
     api 'com.github.gabrielemariotti.changeloglib:changelog:2.1.0'
 
     api 'com.koushikdutta.async:androidasync:2.1.9'
@@ -93,4 +91,6 @@ dependencies {
     annotationProcessor "javax.annotation:javax.annotation-api:${rootProject.ext.javaxAnnotationVersion}" 
 
 	implementation 'io.sentry:sentry-android:4.3.0'
+
+    api project(":StreamServerTorrent")
 }
