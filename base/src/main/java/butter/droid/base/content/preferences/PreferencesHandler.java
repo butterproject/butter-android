@@ -829,7 +829,7 @@ public interface PreferencesHandler {
                     .setIconResource(R.drawable.ic_nav_vpn)
                     .setTitleResource(R.string.show_vpn)
                     .setPreferenceKey(Prefs.SHOW_VPN)
-                    .setDefaultValue(true)
+                    .setDefaultValue(false)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
@@ -851,7 +851,7 @@ public interface PreferencesHandler {
                     .setIconResource(R.drawable.ic_prefs_auto_update)
                     .setTitleResource(R.string.auto_updates)
                     .setPreferenceKey(Prefs.AUTOMATIC_UPDATES)
-                    .setDefaultValue(true)
+                    .setDefaultValue(false)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
