@@ -17,6 +17,8 @@
 
 package butter.droid.base.providers.media;
 
+import android.content.Context;
+
 import androidx.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,8 +39,8 @@ import okhttp3.OkHttpClient;
 
 public class MoviesProvider extends MediaProvider {
 
-    public MoviesProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
-        super(client, mapper, subsProvider, BuildConfig.MOVIE_URLS, "movies/", "", 0);
+    public MoviesProvider(Context context, OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
+        super(context, client, mapper, subsProvider, BuildConfig.MOVIE_URLS, "movies/", "", 0);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class MoviesProvider extends MediaProvider {
         ArrayList<Media> formattedData = currentList;
         List<Movie> list = mapper.readValue(responseStr, mapper.getTypeFactory().constructCollectionType(List.class, Movie.class));
         if (!list.isEmpty()) {
-            formattedData = new MovieResponse(list).formatListForPopcorn(currentList, this, getSubsProvider());
+            formattedData = new MovieResponse(list).formatListForPopcorn(context, currentList, this, getSubsProvider());
         }
         return formattedData;
     }

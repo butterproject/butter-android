@@ -1,13 +1,16 @@
 package butter.droid.base.providers.media.response.models.shows;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+import butter.droid.base.providers.media.response.models.common.Locale;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class ShowDetails extends Show {
 
     @JsonProperty("synopsis")
@@ -32,6 +35,8 @@ public class ShowDetails extends Show {
     private List<Episode> episodes = new ArrayList<>();
     @JsonProperty("genres")
     private List<String> genres = new ArrayList<>();
+    @JsonProperty("locale")
+    private Locale locale;
 
     /**
      * @return The synopsis
@@ -207,5 +212,15 @@ public class ShowDetails extends Show {
     @JsonProperty("genres")
     public void setGenres(List<String> genres) {
         this.genres = genres;
+    }
+
+    @JsonProperty("locale")
+    public Locale getLocale() {
+        return locale;
+    }
+
+    @JsonProperty("locale")
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }

@@ -285,10 +285,12 @@ public class MediaListFragment extends Fragment implements LoadingDetailDialogFr
 
         if (getArguments() != null) {
             String language = PrefUtils.get(getActivity(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
+            String content_language = PrefUtils.get(getActivity(), Prefs.CONTENT_LOCALE, language);
             mFilters.setSort((MediaProvider.Filters.Sort) getArguments().getSerializable(EXTRA_SORT));
             mFilters.setOrder((MediaProvider.Filters.Order) getArguments().getSerializable(EXTRA_ORDER));
             mFilters.setGenre(getArguments().getString(EXTRA_GENRE));
             mFilters.setLangCode(LocaleUtils.toLocale(language).getLanguage());
+            mFilters.setContentLangCode(LocaleUtils.toLocale(content_language).getLanguage());
 
             mMode = (Mode) getArguments().getSerializable(EXTRA_MODE);
         }

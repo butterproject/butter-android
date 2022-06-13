@@ -20,19 +20,23 @@
 
 package com.connectsdk.service.google_cast;
 
-import com.connectsdk.core.Util;
-import com.connectsdk.service.sessions.CastWebAppSession;
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.CastDevice;
+
+import com.connectsdk.core.Util;
+import com.connectsdk.service.sessions.CastWebAppSession;
+import com.connectsdk.service.sessions.WebAppSessionListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CastServiceChannel implements Cast.MessageReceivedCallback{
-    String webAppId;
-    CastWebAppSession session;
+    final String webAppId;
+    final CastWebAppSession session;
 
-    public CastServiceChannel(String webAppId, CastWebAppSession session) {
+    public CastServiceChannel(String webAppId, @NonNull CastWebAppSession session) {
         this.webAppId = webAppId;
         this.session = session;
     }
@@ -43,14 +47,20 @@ public class CastServiceChannel implements Cast.MessageReceivedCallback{
 
     @Override
     public void onMessageReceived(CastDevice castDevice, String namespace, final String message) {
-        if (session.getWebAppSessionListener() == null)
+        final WebAppSessionListener webAppSession = session.getWebAppSessionListener();
+        if (webAppSession == null) {
             return;
+        }
 
         JSONObject messageJSON = null;
 
         try {
             messageJSON = new JSONObject(message);
-        } catch (JSONException e) { }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         final JSONObject mMessage = messageJSON;
 
@@ -59,9 +69,9 @@ public class CastServiceChannel implements Cast.MessageReceivedCallback{
             @Override
             public void run() {
                 if (mMessage == null) {
-                    session.getWebAppSessionListener().onReceiveMessage(session, message);
+                    webAppSession.onReceiveMessage(session, message);
                 } else {
-                    session.getWebAppSessionListener().onReceiveMessage(session, mMessage);
+                    webAppSession.onReceiveMessage(session, mMessage);
                 }
             }
         });

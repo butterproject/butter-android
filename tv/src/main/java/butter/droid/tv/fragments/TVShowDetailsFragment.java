@@ -213,6 +213,7 @@ public class TVShowDetailsFragment extends TVBaseDetailsFragment
                 episode,
                 show,
                 torrent.getValue().getUrl(),
+                torrent.getValue().getFile(),
                 subtitleLanguage,
                 torrent.getKey());
 

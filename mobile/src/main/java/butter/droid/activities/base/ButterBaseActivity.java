@@ -73,7 +73,7 @@ public class ButterBaseActivity extends TorrentBaseActivity implements BeamManag
                     startActivity(installIntent);
                 }
             });
-            updateManager.checkUpdatesManually();
+            if (updateManager != null) updateManager.checkUpdatesManually();
         }
     }
 

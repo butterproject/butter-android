@@ -234,6 +234,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment
     private void startStream() {
         if (null == mService) throw new IllegalStateException("Torrent service must be bound");
         String torrentUrl = mStreamInfo.getTorrentUrl();
+        String torrentFile = mStreamInfo.getTorrentFile();
 
         //if the torrent service is currently streaming another file, stop it.
         if (mService.isStreaming() && !mService.getCurrentTorrentUrl().equals(torrentUrl)) {
@@ -244,7 +245,7 @@ public abstract class BaseStreamLoadingFragment extends Fragment
         }
 
         //start streaming the new file
-        mService.streamTorrent(torrentUrl);
+        mService.streamTorrent(torrentUrl, torrentFile);
     }
 
     /**

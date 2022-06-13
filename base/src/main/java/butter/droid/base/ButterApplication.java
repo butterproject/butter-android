@@ -127,7 +127,7 @@ public class ButterApplication extends Application implements ButterUpdateManage
             }
         }
 
-        Timber.d("StorageLocations: " + StorageUtils.getAllStorageLocations());
+        Timber.d("StorageLocations: " + StorageUtils.getAllStorageLocations(this));
         Timber.i("Chosen cache location: " + directory);
 
         Picasso.setSingletonInstance(picasso);

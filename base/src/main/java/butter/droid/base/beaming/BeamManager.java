@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.connectsdk.core.ImageInfo;
 import com.connectsdk.core.MediaInfo;
+import com.connectsdk.core.SubtitleInfo;
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.device.ConnectableDeviceListener;
 import com.connectsdk.discovery.CapabilityFilter;
@@ -245,9 +246,9 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
             TorrentStreamServer.getInstance().setStreamSrtSubtitle(srtFile);
             TorrentStreamServer.getInstance().setStreamVttSubtitle(vttFile);
 
-            if(mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Vtt)) {
+            if(mCurrentDevice.hasCapability(MediaPlayer.Subtitle_WebVTT)) {
                 subsLocation = location.substring(0, location.lastIndexOf('.')) + ".vtt";
-            } else if (mCurrentDevice.hasCapability(MediaPlayer.Subtitles_Srt)) {
+            } else if (mCurrentDevice.hasCapability(MediaPlayer.Subtitle_WebVTT)) {
                 subsLocation = location.substring(0, location.lastIndexOf('.')) + ".srt";
             }
         } else {
@@ -274,8 +275,20 @@ public class BeamManager implements ConnectableDeviceListener, DiscoveryManagerL
 
         //String url, String mimeType, String title, String description, String iconSrc, boolean shouldLoop, LaunchListener listener
         if (mCurrentDevice != null) {
-            MediaInfo mediaInfo = new MediaInfo(location, subsLocation, "video/mp4", title, "");
-            mediaInfo.addImages(new ImageInfo(imageUrl));
+            MediaInfo.Builder builder = new MediaInfo.Builder(location, "video/mp4");
+            builder.setTitle(title);
+            builder.setIcon(new ImageInfo(imageUrl));
+            if (subsLocation != null) {
+                SubtitleInfo.Builder sBuilder = new SubtitleInfo.Builder(subsLocation);
+                sBuilder.setLanguage(info.getSubtitleLanguage());
+                if(mCurrentDevice.hasCapability(MediaPlayer.Subtitle_WebVTT)) {
+                    sBuilder.setMimeType(MediaPlayer.Subtitle_WebVTT);
+                } else if (mCurrentDevice.hasCapability(MediaPlayer.Subtitle_WebVTT)) {
+                    sBuilder.setMimeType(MediaPlayer.Subtitle_SRT);
+                }
+                builder.setSubtitleInfo(sBuilder.build());
+            }
+            MediaInfo mediaInfo = builder.build();
             mCurrentDevice.getCapability(MediaPlayer.class).playMedia(mediaInfo, false, new MediaPlayer.LaunchListener() {
                 @Override
                 public void onSuccess(MediaPlayer.MediaLaunchObject object) {

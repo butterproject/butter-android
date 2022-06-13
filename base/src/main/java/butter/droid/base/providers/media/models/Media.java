@@ -31,6 +31,7 @@ public abstract class Media implements Parcelable {
     public String videoId;
     public String imdbId;
     public String title;
+    public String title2;
     public String year;
     public String genre;
     public String rating;
@@ -48,6 +49,7 @@ public abstract class Media implements Parcelable {
         videoId = in.readString();
         imdbId = in.readString();
         title = in.readString();
+        title2 = in.readString();
         year = in.readString();
         genre = in.readString();
         rating = in.readString();
@@ -77,6 +79,7 @@ public abstract class Media implements Parcelable {
         dest.writeString(videoId);
         dest.writeString(imdbId);
         dest.writeString(title);
+        dest.writeString(title2);
         dest.writeString(year);
         dest.writeString(genre);
         dest.writeString(rating);
@@ -110,6 +113,7 @@ public abstract class Media implements Parcelable {
             }
         };
         private String url;
+        private String file;
         private Integer seeds;
         private Integer peers;
         private String hash;
@@ -117,15 +121,17 @@ public abstract class Media implements Parcelable {
         public Torrent() {
         }
 
-        public Torrent(String url, Integer seeds, Integer peers, String hash) {
+        public Torrent(String url, String file, Integer seeds, Integer peers, String hash) {
             this.url = url;
+            this.file = file;
             this.seeds = seeds;
             this.peers = peers;
             this.hash = hash;
         }
 
-        public Torrent(String url, Integer seeds, Integer peers) {
+        public Torrent(String url, String file, Integer seeds, Integer peers) {
             this.url = url;
+            this.file = file;
             this.seeds = seeds;
             this.peers = peers;
             this.hash = "";
@@ -134,6 +140,7 @@ public abstract class Media implements Parcelable {
 
         public Torrent(Parcel in) {
             url = in.readString();
+            file = in.readString();
             seeds = in.readInt();
             peers = in.readInt();
             hash = in.readString();
@@ -145,6 +152,14 @@ public abstract class Media implements Parcelable {
 
         public void setUrl(String url) {
             this.url = url;
+        }
+
+        public String getFile() {
+            return file;
+        }
+
+        public void setFile(String file) {
+            this.file = file;
         }
 
         public Integer getSeeds() {
@@ -179,6 +194,7 @@ public abstract class Media implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(url);
+            dest.writeString(file);
             dest.writeInt(seeds);
             dest.writeInt(peers);
             dest.writeString(hash);

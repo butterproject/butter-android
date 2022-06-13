@@ -28,6 +28,7 @@ public class StreamInfo implements Parcelable {
     private String mSubtitleLanguage;
     private String mQuality;
     private String mTorrentUrl;
+    private String mTorrentFile;
     private String mVideoLocation;
     private String mTitle;
     private String mImageUrl;
@@ -41,19 +42,20 @@ public class StreamInfo implements Parcelable {
     private Media mMedia;
 
     public StreamInfo(String torrentUrl) {
-        this(null, null, torrentUrl, null, null);
+        this(null, null, torrentUrl, "", null, null);
     }
 
     public StreamInfo(Media media, String torrentUrl, String subtitleLanguage, String quality) {
-        this(media, null, torrentUrl, subtitleLanguage, quality);
+        this(media, null, torrentUrl, "", subtitleLanguage, quality);
     }
 
-    public StreamInfo(Media media, Show show, String torrentUrl, String subtitleLanguage, String quality) {
-        this(media, show, torrentUrl, subtitleLanguage, quality, null);
+    public StreamInfo(Media media, Show show, String torrentUrl, String torrentFile, String subtitleLanguage, String quality) {
+        this(media, show, torrentUrl, torrentFile, subtitleLanguage, quality, null);
     }
 
-    public StreamInfo(Media media, Show show, String torrentUrl, String subtitleLanguage, String quality, String videoLocation) {
+    public StreamInfo(Media media, Show show, String torrentUrl, String torrentFile, String subtitleLanguage, String quality, String videoLocation) {
         mTorrentUrl = torrentUrl;
+        mTorrentFile = torrentFile;
         mSubtitleLanguage = subtitleLanguage;
         mQuality = quality;
         mVideoLocation = videoLocation;
@@ -116,6 +118,10 @@ public class StreamInfo implements Parcelable {
         return mTorrentUrl;
     }
 
+    public String getTorrentFile() {
+        return mTorrentFile;
+    }
+
     public String getVideoLocation() {
         return mVideoLocation;
     }
@@ -146,6 +152,7 @@ public class StreamInfo implements Parcelable {
         dest.writeString(this.mSubtitleLanguage);
         dest.writeString(this.mQuality);
         dest.writeString(this.mTorrentUrl);
+        dest.writeString(this.mTorrentFile);
         dest.writeString(this.mVideoLocation);
         dest.writeString(this.mImageUrl);
         dest.writeString(this.mHeaderImageUrl);
@@ -161,6 +168,7 @@ public class StreamInfo implements Parcelable {
         this.mSubtitleLanguage = in.readString();
         this.mQuality = in.readString();
         this.mTorrentUrl = in.readString();
+        this.mTorrentFile = in.readString();
         this.mVideoLocation = in.readString();
         this.mImageUrl = in.readString();
         this.mHeaderImageUrl = in.readString();

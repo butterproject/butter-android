@@ -46,8 +46,8 @@ public interface MediaPlayer extends CapabilityMethods {
     public final static String Play_Playlist = "MediaPlayer.Play.Playlist";
     public final static String Close = "MediaPlayer.Close";
     public final static String Loop = "MediaPlayer.Loop";
-    public final static String Subtitles_Vtt = "MediaPlayer.Subtitles.Vtt";
-    public final static String Subtitles_Srt = "MediaPlayer.Subtitles.Srt";
+    public final static String Subtitle_SRT = "MediaPlayer.Subtitle.SRT";
+    public final static String Subtitle_WebVTT = "MediaPlayer.Subtitle.WebVTT";
 
     public final static String MetaData_Title = "MediaPlayer.MetaData.Title";
     public final static String MetaData_Description = "MediaPlayer.MetaData.Description";
@@ -58,16 +58,16 @@ public interface MediaPlayer extends CapabilityMethods {
     public final static String MediaInfo_Subscribe = "MediaPlayer.MediaInfo.Subscribe";
 
     public final static String[] Capabilities = {
-            Display_Image,
-            Play_Video,
-            Play_Audio,
-            Close,
-            MetaData_Title,
-            MetaData_Description,
-            MetaData_Thumbnail,
-            MetaData_MimeType,
-            MediaInfo_Get,
-            MediaInfo_Subscribe
+        Display_Image,
+        Play_Video,
+        Play_Audio,
+        Close,
+        MetaData_Title,
+        MetaData_Description,
+        MetaData_Thumbnail,
+        MetaData_MimeType,
+        MediaInfo_Get,
+        MediaInfo_Subscribe
     };
 
     public MediaPlayer getMediaPlayer();

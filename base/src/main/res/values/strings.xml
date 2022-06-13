@@ -62,11 +62,22 @@
     <!-- SettingsActivity strings -->
     <string name="preferences">Preferences</string>
     <string name="general">General</string>
+    <string name="localization">Localization</string>
+    <string name="translate_title">Translate Title</string>
+    <string name="translate_synopsis">Translate Synopsis</string>
+    <string name="translate_poster">Translate Poster</string>
+    <string name="translate_episodes">Translate Episodes</string>
+    <string name="translate_option_translated_original">Translated - Original</string>
+    <string name="translate_option_original_translated">Original - Translated</string>
+    <string name="translate_option_translated">Translated Only</string>
+    <string name="translate_option_original">Original Only</string>
     <string name="default_view">Default overview</string>
     <string name="default_player">Default video player</string>
     <string name="i18n_language">App language</string>
+    <string name="content_language">Content language</string>
     <string name="restart_effect">Restart application for changes to take effect</string>
     <string name="device_language">Device language</string>
+    <string name="same_language">Same language</string>
     <string name="stream_over_wifi_only">Only stream over Wi-Fi</string>
     <string name="internal_player">Internal</string>
     <string name="subtitle_color">Color</string>

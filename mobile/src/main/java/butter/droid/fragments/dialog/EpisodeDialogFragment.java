@@ -405,7 +405,7 @@ public class EpisodeDialogFragment extends DialogFragment {
     public void playClick() {
         smoothDismiss();
         Media.Torrent torrent = mEpisode.torrents.get(mSelectedQuality);
-        StreamInfo streamInfo = new StreamInfo(mEpisode, mShow, torrent.getUrl(), mSelectedSubtitleLanguage, mSelectedQuality);
+        StreamInfo streamInfo = new StreamInfo(mEpisode, mShow, torrent.getUrl(), torrent.getFile(), mSelectedSubtitleLanguage, mSelectedQuality);
         ((MediaDetailActivity) getActivity()).playStream(streamInfo);
     }
 

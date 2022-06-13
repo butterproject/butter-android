@@ -1,12 +1,13 @@
 package butter.droid.base.providers.media.response.models.shows;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import butter.droid.base.providers.media.response.models.common.Torrents;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Episode {
 
     @JsonProperty("torrents")
@@ -27,6 +28,8 @@ public class Episode {
     private int season;
     @JsonProperty("tvdb_id")
     private int tvdbId;
+    @JsonProperty("locale")
+    private EpisodeLocale locale;
 
     /**
      * @return The torrents
@@ -154,6 +157,16 @@ public class Episode {
     @JsonProperty("season")
     public void setSeason(int season) {
         this.season = season;
+    }
+
+    @JsonProperty("locale")
+    public EpisodeLocale getLocale() {
+        return locale;
+    }
+
+    @JsonProperty("locale")
+    public void setLocale(EpisodeLocale locale) {
+        this.locale = locale;
     }
 
     /**

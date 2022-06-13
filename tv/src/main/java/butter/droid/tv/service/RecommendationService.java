@@ -30,12 +30,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import butter.droid.base.ButterApplication;
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Episode;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.providers.media.models.Show;
+import butter.droid.base.utils.LocaleUtils;
+import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.VersionUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
@@ -84,6 +88,13 @@ public class RecommendationService extends IntentService {
         movieFilter.setOrder(MediaProvider.Filters.Order.DESC);
         movieFilter.setSort(MediaProvider.Filters.Sort.TRENDING);
 
+        // Locale support
+        String language = PrefUtils.get(this.getApplicationContext(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String content_language = PrefUtils.get(this.getApplicationContext(), Prefs.CONTENT_LOCALE, language);
+        String locale = LocaleUtils.toLocale(language).getLanguage();
+        String content_locale = LocaleUtils.toLocale(content_language).getLanguage();
+        movieFilter.setLangCode(locale);
+        movieFilter.setContentLangCode(content_locale);
         /*
         Disabled, since no shows provider
         MediaProvider.Filters showsFilter = new MediaProvider.Filters();

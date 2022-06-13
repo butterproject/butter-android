@@ -17,6 +17,7 @@
 
 package butter.droid.base.utils;
 
+import androidx.core.content.ContextCompat;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
@@ -34,8 +35,8 @@ import butter.droid.base.compat.Compatibility;
 
 public class StorageUtils extends Compatibility {
 
-    private static final String SD_CARD = "sdCard";
-    private static final String EXTERNAL_SD_CARD = "externalSdCard";
+    public static final String SD_CARD = "sdCard";
+    public static final String EXTERNAL_SD_CARD = "externalSdCard";
 
     /**
      * @return {@code true} if external storage is available and writable. {@code false} otherwise.
@@ -48,63 +49,17 @@ public class StorageUtils extends Compatibility {
     /**
      * @return A map of all storage locations available
      */
-    public static Map<String, File> getAllStorageLocations() {
+    public static Map<String, File> getAllStorageLocations(Context context) {
         Map<String, File> map = new HashMap<>(10);
 
         List<String> mMounts = new ArrayList<>(10);
         List<String> mVold = new ArrayList<>(10);
-        mMounts.add("/mnt/sdcard");
-        mVold.add("/mnt/sdcard");
 
-        try {
-            File mountFile = new File("/proc/mounts");
-            if (mountFile.exists()) {
-                Scanner scanner = new Scanner(mountFile);
-                while (scanner.hasNext()) {
-                    String line = scanner.nextLine();
-                    if (line.startsWith("/dev/block/vold/")) {
-                        String[] lineElements = line.split(" ");
-                        String element = lineElements[1];
-
-                        // don't add the default mount path
-                        // it's already in the list.
-                        if (!element.equals("/mnt/sdcard"))
-                            mMounts.add(element);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        File[] fs = ContextCompat.getExternalFilesDirs(context, null);
+        for (int i=0;i< fs.length;i++) {
+            String element = fs[i].getParent();
+            mMounts.add(element);
         }
-
-        try {
-            File voldFile = new File("/system/etc/vold.fstab");
-            if (voldFile.exists()) {
-                Scanner scanner = new Scanner(voldFile);
-                while (scanner.hasNext()) {
-                    String line = scanner.nextLine();
-                    if (line.startsWith("dev_mount")) {
-                        String[] lineElements = line.split(" ");
-                        String element = lineElements[2];
-
-                        if (element.contains(":"))
-                            element = element.substring(0, element.indexOf(":"));
-                        if (!element.equals("/mnt/sdcard"))
-                            mVold.add(element);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        for (int i = 0; i < mMounts.size(); i++) {
-            String mount = mMounts.get(i);
-            if (!mVold.contains(mount))
-                mMounts.remove(i--);
-        }
-        mVold.clear();
 
         List<String> mountHash = new ArrayList<>(10);
 
@@ -181,7 +136,7 @@ public class StorageUtils extends Compatibility {
      */
     public static long getAvailableExternalMemorySize() {
         if (isExternalStorageAvailable()) {
-              return getAvailable(Environment.getExternalStorageDirectory());
+            return getAvailable(Environment.getExternalStorageDirectory());
         } else {
             return 0;
         }
@@ -204,11 +159,11 @@ public class StorageUtils extends Compatibility {
      * @return Ideal file location for caching
      */
     public static File getIdealCacheDirectory(Context context) {
-        File externalCacheDir = context.getExternalCacheDir();
-        if (getTotalExternalMemorySize() < getTotalInternalMemorySize() || externalCacheDir == null) {
-            return context.getCacheDir();
+        Map<String, File> dirs = getAllStorageLocations(context);
+        if (dirs.containsKey(EXTERNAL_SD_CARD)) {
+            return dirs.get(EXTERNAL_SD_CARD);
         }
-        return externalCacheDir;
+        return dirs.get(SD_CARD);
     }
 
     public static String getInternalSdCardPath(){

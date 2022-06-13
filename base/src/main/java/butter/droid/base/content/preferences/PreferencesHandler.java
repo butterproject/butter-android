@@ -9,6 +9,7 @@ import android.net.Uri;
 import androidx.fragment.app.FragmentActivity;
 import android.text.format.DateFormat;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,11 +62,16 @@ public interface PreferencesHandler {
             prefItems.add(PrefItem.newBuilder(context).setTitleResource(R.string.general).build());
 
             final String[] items = { context.getString(R.string.title_movies), context.getString(R.string.title_shows), context.getString(R.string.title_anime) };
+            final String[] translateTitleItems = {
+                    context.getString(R.string.translate_option_translated_original),
+                    context.getString(R.string.translate_option_original_translated),
+                    context.getString(R.string.translate_option_translated),
+                    context.getString(R.string.translate_option_original),
+            };
             final String[] hwItems = { context.getString(R.string.hw_automatic), context.getString(R.string.disabled), context.getString(R.string.hw_decoding), context.getString(R.string.hw_full) };
             final String[] qualities = context.getResources().getStringArray(R.array.video_qualities);
             final String[] pixelFormats = { context.getString(R.string.rgb16), context.getString(R.string.rgb32), context.getString(R.string.yuv) };
 
-            if(!isTV)
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_default_view)
                     .setTitleResource(R.string.default_view)
@@ -90,7 +96,6 @@ public interface PreferencesHandler {
                     })
                     .build());
 
-            if(!isTV)
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_default_player)
                     .setTitleResource(R.string.default_player)
@@ -231,6 +236,174 @@ public interface PreferencesHandler {
                         public String get(PrefItem item) {
                             boolean enabled = (boolean) item.getValue();
                             return enabled ? context.getString(R.string.enabled) : context.getString(R.string.disabled);
+                        }
+                    })
+                    .build());
+
+            prefItems.add(PrefItem.newBuilder(context).setTitleResource(R.string.localization).build());
+
+            prefItems.add(PrefItem.newBuilder(context)
+                    .setIconResource(R.drawable.ic_prefs_app_language)
+                    .setTitleResource(R.string.translate_title)
+                    .setPreferenceKey(Prefs.TRANSLATE_TITLE)
+                    .hasNext(true)
+                    .setDefaultValue("origin")
+                    .setOnClickListener(new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(final PrefItem item) {
+                            String currentValue = (String) item.getValue();
+                            int current = 0;
+                            if (currentValue.equals("translated-origin")) {
+                                current = 0;
+                            } else if (currentValue.equals("origin-translated")) {
+                                current = 1;
+                            } else if (currentValue.equals("translated")) {
+                                current = 2;
+                            } else if (currentValue.equals("origin")) {
+                                current = 3;
+                            }
+
+                            handler.openListSelection(item.getTitle(), translateTitleItems, SelectionMode.SIMPLE_CHOICE, current, 0, 0, new OnSelectionListener() {
+                                @Override
+                                public void onSelection(int position, Object value) {
+                                    if(position == 0) {
+                                        item.saveValue("translated-origin");
+                                    } else if (position == 1) {
+                                        item.saveValue("origin-translated");
+                                    } else if (position == 2) {
+                                        item.saveValue("translated");
+                                    } else {
+                                        item.saveValue("origin");
+                                    }
+                                }
+                            });
+                        }
+                    })
+                    .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            if (item.getValue().equals("translated-origin")) {
+                                return context.getString(R.string.translate_option_translated_original);
+                            } else if (item.getValue().equals("origin-translated")) {
+                                return context.getString(R.string.translate_option_original_translated);
+                            } else if (item.getValue().equals("translated")) {
+                                return context.getString(R.string.translate_option_translated);
+                            }
+                            return context.getString(R.string.translate_option_original);
+                        }
+                    })
+                    .build());
+
+            prefItems.add(PrefItem.newBuilder(context)
+                    .setIconResource(R.drawable.ic_prefs_app_language)
+                    .setTitleResource(R.string.translate_synopsis)
+                    .setPreferenceKey(Prefs.TRANSLATE_SYNOPSIS)
+                    .hasNext(true)
+                    .setDefaultValue(false)
+                    .setOnClickListener(new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(final PrefItem item) {
+                            item.saveValue(!(boolean) item.getValue());
+                        }
+                    })
+                    .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            boolean enabled = (boolean) item.getValue();
+                            return enabled ? context.getString(R.string.enabled) : context.getString(R.string.disabled);
+                        }
+                    })
+                    .build());
+
+            prefItems.add(PrefItem.newBuilder(context)
+                    .setIconResource(R.drawable.ic_prefs_app_language)
+                    .setTitleResource(R.string.translate_poster)
+                    .setPreferenceKey(Prefs.TRANSLATE_POSTER)
+                    .hasNext(true)
+                    .setDefaultValue(false)
+                    .setOnClickListener(new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(final PrefItem item) {
+                            item.saveValue(!(boolean) item.getValue());
+                        }
+                    })
+                    .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            boolean enabled = (boolean) item.getValue();
+                            return enabled ? context.getString(R.string.enabled) : context.getString(R.string.disabled);
+                        }
+                    })
+                    .build());
+
+            prefItems.add(PrefItem.newBuilder(context)
+                    .setIconResource(R.drawable.ic_prefs_app_language)
+                    .setTitleResource(R.string.translate_episodes)
+                    .setPreferenceKey(Prefs.TRANSLATE_EPISODES)
+                    .hasNext(true)
+                    .setDefaultValue(false)
+                    .setOnClickListener(new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(final PrefItem item) {
+                            item.saveValue(!(boolean) item.getValue());
+                        }
+                    })
+                    .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            boolean enabled = (boolean) item.getValue();
+                            return enabled ? context.getString(R.string.enabled) : context.getString(R.string.disabled);
+                        }
+                    })
+                    .build());
+
+            prefItems.add(PrefItem.newBuilder(context)
+                    .setIconResource(R.drawable.ic_prefs_app_language)
+                    .setTitleResource(R.string.content_language)
+                    .setPreferenceKey(Prefs.CONTENT_LOCALE)
+                    .setDefaultValue("")
+                    .setOnClickListener(new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(final PrefItem item) {
+                            int currentPosition = 0;
+                            String currentValue = item.getValue().toString();
+
+                            final String[] languages = context.getResources().getStringArray(R.array.translation_languages);
+                            Arrays.sort(languages);
+
+                            String[] items = new String[languages.length + 1];
+                            items[0] = context.getString(R.string.same_language);
+                            for (int i = 0; i < languages.length; i++) {
+                                Locale locale = LocaleUtils.toLocale(languages[i]);
+                                items[i + 1] = locale.getDisplayName(locale);
+                                if (languages[i].equals(currentValue)) {
+                                    currentPosition = i + 1;
+                                }
+                            }
+
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.ADVANCED_CHOICE, currentPosition, 0, 0, new OnSelectionListener() {
+                                @Override
+                                public void onSelection(int position, Object value) {
+                                    if (position == 0) {
+                                        item.clearValue();
+                                    } else {
+                                        item.saveValue(languages[position - 1]);
+                                    }
+
+                                    handler.showMessage(context.getString(R.string.restart_effect));
+                                }
+                            });
+                        }
+                    })
+                    .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            String langCode = item.getValue().toString();
+                            if (langCode.isEmpty())
+                                return context.getString(R.string.same_language);
+
+                            Locale locale = LocaleUtils.toLocale(langCode);
+                            return locale.getDisplayName(locale);
                         }
                     })
                     .build());
@@ -392,11 +565,11 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.max_connections)
                     .setPreferenceKey(Prefs.LIBTORRENT_CONNECTION_LIMIT)
                     .hasNext(true)
-                    .setDefaultValue(200)
+                    .setDefaultValue(1200)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 0, 200, new OnSelectionListener() {
+                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 0, 1800, new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     item.saveValue(value);
@@ -422,10 +595,19 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 0, 3000, new OnSelectionListener() {
+                            handler.openListSelection(
+                                    item.getTitle(),
+                                    items,
+                                    SelectionMode.NUMBER,
+                                    isTV? ((Integer)item.getValue()) / 1000 : item.getValue(),
+                                    0,
+                                    isTV? 3000 : 3000000,
+                                    new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
-                                    item.saveValue(value);
+                                    Integer nValue = (Integer) value;
+                                    if (isTV) nValue = nValue * 1000;
+                                    item.saveValue(nValue);
                                 }
                             });
                         }
@@ -448,14 +630,23 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.upload_speed)
                     .setPreferenceKey(Prefs.LIBTORRENT_UPLOAD_LIMIT)
                     .hasNext(true)
-                    .setDefaultValue(0)
+                    .setDefaultValue(150000)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), items, SelectionMode.NUMBER, item.getValue(), 0, 3000, new OnSelectionListener() {
+                            handler.openListSelection(
+                                    item.getTitle(),
+                                    items,
+                                    SelectionMode.NUMBER,
+                                    isTV? ((Integer)item.getValue()) / 1000 : item.getValue(),
+                                    0,
+                                    isTV? 3000 : 3000000,
+                                    new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
-                                    item.saveValue(value);
+                                    Integer nValue = (Integer) value;
+                                    if (isTV) nValue = nValue * 1000;
+                                    item.saveValue(nValue);
                                 }
                             });
                         }
@@ -473,7 +664,6 @@ public interface PreferencesHandler {
                     })
                     .build());
 
-            if(!isTV)
             prefItems.add(PrefItem.newBuilder(context)
                     .setIconResource(R.drawable.ic_prefs_storage_location)
                     .setTitleResource(R.string.storage_location)
@@ -483,16 +673,25 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            handler.openListSelection(item.getTitle(), null, SelectionMode.DIRECTORY, item.getValue(), 0, 0, new OnSelectionListener() {
-                                @Override
-                                public void onSelection(int position, Object value) {
-                                    if(value != null) {
-                                        item.saveValue(value);
-                                    } else {
-                                        item.clearValue();
-                                    }
+                            if (isTV) {
+                                Map<String, File> locations = StorageUtils.getAllStorageLocations(context);
+                                if (locations.size() > 1 && locations.get(StorageUtils.SD_CARD).toString().equals(item.getValue().toString())) {
+                                    item.saveValue(locations.get(StorageUtils.EXTERNAL_SD_CARD));
+                                } else {
+                                    item.saveValue(locations.get(StorageUtils.SD_CARD));
                                 }
-                            });
+                            } else {
+                                handler.openListSelection(item.getTitle(), null, SelectionMode.DIRECTORY, item.getValue(), 0, 0, new OnSelectionListener() {
+                                    @Override
+                                    public void onSelection(int position, Object value) {
+                                        if(value != null) {
+                                            item.saveValue(value);
+                                        } else {
+                                            item.clearValue();
+                                        }
+                                    }
+                                });
+                            }
                         }
                     })
                     .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
@@ -654,7 +853,7 @@ public interface PreferencesHandler {
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
-                            updateManager.checkUpdatesManually();
+                            if (updateManager != null) updateManager.checkUpdatesManually();
                         }
                     })
                     .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
