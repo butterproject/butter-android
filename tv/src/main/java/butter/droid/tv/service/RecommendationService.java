@@ -88,13 +88,6 @@ public class RecommendationService extends IntentService {
         movieFilter.setOrder(MediaProvider.Filters.Order.DESC);
         movieFilter.setSort(MediaProvider.Filters.Sort.TRENDING);
 
-        // Locale support
-        String language = PrefUtils.get(this.getApplicationContext(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
-        String content_language = PrefUtils.get(this.getApplicationContext(), Prefs.CONTENT_LOCALE, language);
-        String locale = LocaleUtils.toLocale(language).getLanguage();
-        String content_locale = LocaleUtils.toLocale(content_language).getLanguage();
-        movieFilter.setLangCode(locale);
-        movieFilter.setContentLangCode(content_locale);
         /*
         Disabled, since no shows provider
         MediaProvider.Filters showsFilter = new MediaProvider.Filters();

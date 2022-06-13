@@ -119,12 +119,19 @@ public abstract class MediaProvider extends BaseProvider {
             params.add(new AbstractMap.SimpleEntry<>("order", "-1"));
         }
 
-        if (filters.langCode != null && !filters.langCode.equals("en")) {
-            params.add(new AbstractMap.SimpleEntry<>("locale", filters.langCode));
+        // Locale support
+        String language = PrefUtils.get(context, Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String content_language = PrefUtils.get(context, Prefs.CONTENT_LOCALE, language);
+        String locale = LocaleUtils.toLocale(language).getLanguage();
+        String content_locale = LocaleUtils.toLocale(content_language).getLanguage();
+
+        Boolean content_locale_only = PrefUtils.get(context, Prefs.CONTENT_LOCALE_ONLY, false);
+
+        params.add(new AbstractMap.SimpleEntry<>("locale", locale));
+        if (!locale.equals(content_locale)) {
+            params.add(new AbstractMap.SimpleEntry<>("contentLocale", content_locale));
         }
-        if (filters.contentLangCode != null && !filters.contentLangCode.equals(filters.langCode)) {
-            params.add(new AbstractMap.SimpleEntry<>("contentLocale", filters.contentLangCode));
-        }
+        params.add(new AbstractMap.SimpleEntry<>("showAll", content_locale_only ? "0" : "1"));
 
         String sort;
         switch (filters.sort) {
@@ -223,12 +230,8 @@ public abstract class MediaProvider extends BaseProvider {
         String content_locale = LocaleUtils.toLocale(content_language).getLanguage();
 
         ArrayList<AbstractMap.SimpleEntry<String, String>> params = new ArrayList<>();
-        if (!locale.equals("en")) {
-            params.add(new AbstractMap.SimpleEntry<>("locale", locale));
-        }
-        if (!content_locale.equals(locale)) {
-            params.add(new AbstractMap.SimpleEntry<>("contentLocale", content_locale));
-        }
+        params.add(new AbstractMap.SimpleEntry<>("locale", locale));
+        params.add(new AbstractMap.SimpleEntry<>("contentLocale", content_locale));
         String query = params.isEmpty() ? "" : ("?" + buildQuery(params));
 
         String url = apiUrls[currentApi] + itemDetailsPath + currentList.get(index).videoId + query;
@@ -315,8 +318,6 @@ public abstract class MediaProvider extends BaseProvider {
         Order order = Order.DESC;
         Sort sort = Sort.POPULARITY;
         Integer page = null;
-        String langCode = "en";
-        String contentLangCode = "en";
 
         public Filters() {
         }
@@ -327,8 +328,6 @@ public abstract class MediaProvider extends BaseProvider {
             order = filters.order;
             sort = filters.sort;
             page = filters.page;
-            langCode = filters.langCode;
-            contentLangCode = filters.contentLangCode;
         }
 
         public String getKeywords() {
@@ -369,22 +368,6 @@ public abstract class MediaProvider extends BaseProvider {
 
         public void setPage(Integer page) {
             this.page = page;
-        }
-
-        public String getLangCode() {
-            return langCode;
-        }
-
-        public void setLangCode(String langCode) {
-            this.langCode = langCode;
-        }
-
-        public String getContentLangCode() {
-            return contentLangCode;
-        }
-
-        public void setContentLangCode(String contentLangCode) {
-            this.contentLangCode = contentLangCode;
         }
 
         public enum Order {ASC, DESC}

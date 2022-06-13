@@ -130,12 +130,6 @@ public class TVSearchFragment extends androidx.leanback.app.SearchFragment
 		mRowsAdapter.clear();
 		addLoadingRow();
 
-		//Locale support
-		String language = PrefUtils.get(this.getActivity(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
-		String content_language = PrefUtils.get(this.getActivity(), Prefs.CONTENT_LOCALE, language);
-		mSearchFilter.setLangCode(LocaleUtils.toLocale(language).getLanguage());
-		mSearchFilter.setContentLangCode(LocaleUtils.toLocale(content_language).getLanguage());
-
 		mSearchFilter.setKeywords(query);
 		mSearchFilter.setPage(1);
 		if (providerManager.hasProvider(ProviderManager.PROVIDER_TYPE_SHOW)) {
