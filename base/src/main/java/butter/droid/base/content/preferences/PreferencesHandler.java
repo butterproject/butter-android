@@ -247,7 +247,7 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.translate_title)
                     .setPreferenceKey(Prefs.TRANSLATE_TITLE)
                     .hasNext(true)
-                    .setDefaultValue("origin")
+                    .setDefaultValue("translated-origin")
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
@@ -299,7 +299,7 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.translate_synopsis)
                     .setPreferenceKey(Prefs.TRANSLATE_SYNOPSIS)
                     .hasNext(true)
-                    .setDefaultValue(false)
+                    .setDefaultValue(true)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
@@ -320,7 +320,7 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.translate_poster)
                     .setPreferenceKey(Prefs.TRANSLATE_POSTER)
                     .hasNext(true)
-                    .setDefaultValue(false)
+                    .setDefaultValue(true)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
@@ -341,7 +341,7 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.translate_episodes)
                     .setPreferenceKey(Prefs.TRANSLATE_EPISODES)
                     .hasNext(true)
-                    .setDefaultValue(false)
+                    .setDefaultValue(true)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
