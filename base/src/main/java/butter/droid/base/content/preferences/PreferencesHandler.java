@@ -361,6 +361,7 @@ public interface PreferencesHandler {
                     .setIconResource(R.drawable.ic_prefs_app_language)
                     .setTitleResource(R.string.content_language)
                     .setPreferenceKey(Prefs.CONTENT_LOCALE)
+                    .hasNext(true)
                     .setDefaultValue("")
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
@@ -407,6 +408,27 @@ public interface PreferencesHandler {
                         }
                     })
                     .build());
+
+            prefItems.add(PrefItem.newBuilder(context)
+                    .setIconResource(R.drawable.ic_prefs_app_language)
+                    .setTitleResource(R.string.only_selected_language)
+                    .setPreferenceKey(Prefs.CONTENT_LOCALE_ONLY)
+                    .setDefaultValue(false)
+                    .setOnClickListener(new PrefItem.OnClickListener() {
+                        @Override
+                        public void onClick(final PrefItem item) {
+                            item.saveValue(!(boolean) item.getValue());
+                        }
+                    })
+                    .setSubtitleGenerator(new PrefItem.SubtitleGenerator() {
+                        @Override
+                        public String get(PrefItem item) {
+                            boolean enabled = (boolean) item.getValue();
+                            return enabled ? context.getString(R.string.enabled) : context.getString(R.string.disabled);
+                        }
+                    })
+                    .build());
+
 
             prefItems.add(PrefItem.newBuilder(context).setTitleResource(R.string.subtitles).build());
 

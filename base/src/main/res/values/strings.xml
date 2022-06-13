@@ -75,6 +75,7 @@
     <string name="default_player">Default video player</string>
     <string name="i18n_language">App language</string>
     <string name="content_language">Content language</string>
+    <string name="only_selected_language">Show only media with content language</string>
     <string name="restart_effect">Restart application for changes to take effect</string>
     <string name="device_language">Device language</string>
     <string name="same_language">Same language</string>

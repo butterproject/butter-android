@@ -34,6 +34,7 @@ public class Prefs {
     public static final String WIFI_ONLY = "wifi_only";
     public static final String LOCALE = "app_locale";
     public static final String CONTENT_LOCALE = "content_locale";
+    public static final String CONTENT_LOCALE_ONLY = "content_locale_only";
     public static final String TRANSLATE_TITLE = "translate_title";
     public static final String TRANSLATE_SYNOPSIS = "translate_synopsis";
     public static final String TRANSLATE_POSTER = "translate_poster";
