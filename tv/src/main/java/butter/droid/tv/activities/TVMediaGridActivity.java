@@ -73,11 +73,6 @@ public class TVMediaGridActivity extends TVBaseActivity implements TVMediaGridFr
         mFilter.setOrder(mDefOrder);
         mFilter.setGenre(mGenre);
 
-        String language = PrefUtils.get(this.getBaseContext(), Prefs.LOCALE, ButterApplication.getSystemLanguage());
-        String content_language = PrefUtils.get(this.getBaseContext(), Prefs.CONTENT_LOCALE, language);
-        mFilter.setLangCode(LocaleUtils.toLocale(language).getLanguage());
-        mFilter.setContentLangCode(LocaleUtils.toLocale(content_language).getLanguage());
-
         //add media fragment
         getFragmentManager().beginTransaction().replace(R.id.fragment, TVMediaGridFragment.newInstance()).commit();
     }

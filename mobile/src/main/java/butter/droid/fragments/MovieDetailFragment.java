@@ -257,7 +257,8 @@ public class MovieDetailFragment extends BaseDetailFragment {
             }
 
             if (sMovie.torrents.size() > 0) {
-                final String[] qualities = sMovie.torrents.get(mContentLocale).keySet().toArray(new String[sMovie.torrents.size()]);
+                final Map<String, Media.Torrent> qList = sMovie.torrents.get(mContentLocale);
+                final String[] qualities = qList.keySet().toArray(new String[qList.size()]);
                 SortUtils.sortQualities(qualities);
 
                 mQuality.setData(qualities);
