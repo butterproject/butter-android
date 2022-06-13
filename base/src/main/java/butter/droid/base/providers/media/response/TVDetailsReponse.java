@@ -129,7 +129,7 @@ public class TVDetailsReponse extends DetailsResponse<ShowDetails> {
                         if (!episode.getLocale().getTitle().isEmpty() && PrefUtils.get(context, Prefs.TRANSLATE_EPISODES, true)) {
                             episodeObject.title = episode.getLocale().getTitle();
                         }
-                        if (!item.getLocale().getSynopsis().isEmpty() && PrefUtils.get(context, Prefs.TRANSLATE_SYNOPSIS, true)) {
+                        if (!episode.getLocale().getOverview().isEmpty() && PrefUtils.get(context, Prefs.TRANSLATE_SYNOPSIS, true)) {
                             episodeObject.overview = episode.getLocale().getOverview();
                         }
                     }
