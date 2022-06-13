@@ -565,7 +565,7 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.max_connections)
                     .setPreferenceKey(Prefs.LIBTORRENT_CONNECTION_LIMIT)
                     .hasNext(true)
-                    .setDefaultValue(1200)
+                    .setDefaultValue(200)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
@@ -630,7 +630,7 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.upload_speed)
                     .setPreferenceKey(Prefs.LIBTORRENT_UPLOAD_LIMIT)
                     .hasNext(true)
-                    .setDefaultValue(150000)
+                    .setDefaultValue(0)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
