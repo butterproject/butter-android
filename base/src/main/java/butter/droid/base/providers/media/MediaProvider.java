@@ -131,7 +131,9 @@ public abstract class MediaProvider extends BaseProvider {
         if (!locale.equals(content_locale)) {
             params.add(new AbstractMap.SimpleEntry<>("contentLocale", content_locale));
         }
-        params.add(new AbstractMap.SimpleEntry<>("showAll", content_locale_only ? "0" : "1"));
+        if (content_locale_only) {
+            params.add(new AbstractMap.SimpleEntry<>("showAll", "1"));
+        }
 
         String sort;
         switch (filters.sort) {
