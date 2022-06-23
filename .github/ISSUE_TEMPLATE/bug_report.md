@@ -2,32 +2,44 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: bug
+labels: ''
 assignees: ''
 
 ---
 
-## Describe the bug
-A clear and concise description of what the bug is.
+<!--
+If you are asking a question rather than filing a bug, try one of these instead:
+- Reddit /r/PopCornTime's FAQs (https://www.reddit.com/r/PopCornTime/wiki/faq)
+- Reddit /r/PopCornTime (https://www.reddit.com/r/PopCornTime/)
+- PopCornTime Forum (https://discuss.popcorntime.app/)
+-->
 
-## To Reproduce
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Operating System Version:
+<!-- Android? AndroidTV?-->
 
-## Expected behavior
-A clear and concise description of what you expected to happen.
+Popcorn Time Version:
+<!-- What version of Popcorn Time are you running? -->
 
-## Screenshots
-If applicable, add screenshots to help explain your problem.
+Download date:
+<!-- When did you install Popcorn Time? -->
 
-## Smartphone (please complete the following information):
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+Download url:
+<!-- Since there are pre-release builds and it's difficult to track if download is a release or just random build from jenkins. -->
 
-## Additional context
-Add any other context about the problem here.
+#### Expected Behaviour
+<!-- What did you think the app was going to do? -->
+...
+
+#### Actual Behaviour
+<!-- What does the app do instead? -->
+...
+
+#### Steps to reproduce the behaviour
+<!-- What steps do we need to take to find the same bug that you found? -->
+
+1. ...
+2. ...
+3. ...
+
+#### Screenshot(s) of issue or error(s) logs (recommended)
+<!-- Screenshot helps with finding why stuff breaks -->
