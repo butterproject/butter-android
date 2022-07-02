@@ -125,7 +125,8 @@ public abstract class MediaProvider extends BaseProvider {
         String locale = LocaleUtils.toLocale(language).getLanguage();
         String content_locale = LocaleUtils.toLocale(content_language).getLanguage();
 
-        Boolean content_locale_only = PrefUtils.get(context, Prefs.CONTENT_LOCALE_ONLY, false);
+        boolean content_locale_only = PrefUtils.get(context, Prefs.CONTENT_LOCALE_ONLY, false);
+        content_locale_only = true; // TODO: add language selector
 
         params.add(new AbstractMap.SimpleEntry<>("locale", locale));
         if (!locale.equals(content_locale)) {
