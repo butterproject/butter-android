@@ -35,7 +35,7 @@ public interface PreferencesHandler {
     String ABOUT = "about";
 
     enum SelectionMode {
-        NORMAL, ADVANCED_CHOICE, SIMPLE_CHOICE, COLOR, NUMBER, DIRECTORY
+        NORMAL, ADVANCED_CHOICE, SIMPLE_CHOICE, COLOR, NUMBER, NUMBER_SEEK, DIRECTORY
     }
 
     void openListSelection(String title, String[] items, SelectionMode mode, Object currentValue, int lowLimit, int highLimit, OnSelectionListener onClickListener);
@@ -587,7 +587,7 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.max_connections)
                     .setPreferenceKey(Prefs.LIBTORRENT_CONNECTION_LIMIT)
                     .hasNext(true)
-                    .setDefaultValue(1200)
+                    .setDefaultValue(200)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
@@ -620,15 +620,15 @@ public interface PreferencesHandler {
                             handler.openListSelection(
                                     item.getTitle(),
                                     items,
-                                    SelectionMode.NUMBER,
-                                    isTV? ((Integer)item.getValue()) / 1000 : item.getValue(),
+                                    SelectionMode.NUMBER_SEEK,
+                                    ((Integer)item.getValue()) / 1000,
                                     0,
-                                    isTV? 3000 : 3000000,
+                                    3000,
                                     new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     Integer nValue = (Integer) value;
-                                    if (isTV) nValue = nValue * 1000;
+                                    nValue = nValue * 1000;
                                     item.saveValue(nValue);
                                 }
                             });
@@ -652,22 +652,22 @@ public interface PreferencesHandler {
                     .setTitleResource(R.string.upload_speed)
                     .setPreferenceKey(Prefs.LIBTORRENT_UPLOAD_LIMIT)
                     .hasNext(true)
-                    .setDefaultValue(150000)
+                    .setDefaultValue(0)
                     .setOnClickListener(new PrefItem.OnClickListener() {
                         @Override
                         public void onClick(final PrefItem item) {
                             handler.openListSelection(
                                     item.getTitle(),
                                     items,
-                                    SelectionMode.NUMBER,
-                                    isTV? ((Integer)item.getValue()) / 1000 : item.getValue(),
+                                    SelectionMode.NUMBER_SEEK,
+                                    ((Integer)item.getValue()) / 1000,
                                     0,
-                                    isTV? 3000 : 3000000,
+                                    3000,
                                     new OnSelectionListener() {
                                 @Override
                                 public void onSelection(int position, Object value) {
                                     Integer nValue = (Integer) value;
-                                    if (isTV) nValue = nValue * 1000;
+                                    nValue = nValue * 1000;
                                     item.saveValue(nValue);
                                 }
                             });

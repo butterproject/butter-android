@@ -1,0 +1,3 @@
+[submodule "base/submodules/TorrentStreamServer-Android"]
+	path = base/submodules/TorrentStreamServer-Android
+	url = git@github.com:julyworlds/TorrentStreamServer-Android.git

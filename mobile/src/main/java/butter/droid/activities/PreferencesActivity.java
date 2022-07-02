@@ -225,7 +225,7 @@ public class PreferencesActivity extends ButterBaseActivity
                     }
                 }
             });
-        } else if(mode == SelectionMode.NUMBER && high - low > 200) {
+        } else if(mode == SelectionMode.NUMBER_SEEK) {
             Bundle args = new Bundle();
             args.putString(SeekBarDialogFragment.TITLE, title);
             args.putInt(SeekBarDialogFragment.MAX_VALUE, high);
