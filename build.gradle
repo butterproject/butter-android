@@ -31,7 +31,7 @@ ext {
     picassoVersion = "2.71828"
     daggerVersion = "2.7"
     javaxAnnotationVersion = "1.3.2"
-    sentryDsn = ""
+    sentryDsn = "https://a4156b48014d43f2b3a4cd71a35029d9@o336317.ingest.sentry.io/5744175"
 }
 
 allprojects {
