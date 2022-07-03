@@ -112,9 +112,11 @@ public class DefaultPlayer {
             if (media != null) {
                 if (media.isMovie) {
                     intent.putExtra("title", media.title);
+                    intent.putExtra("filename", media.title);
                 } else {
                     Episode episode = (Episode) media;
                     intent.putExtra("title", String.format(LocaleUtils.getCurrent(), "%s S%dE%d - %s", episode.showName, episode.season, episode.episode, episode.title));
+                    intent.putExtra("filename", String.format(LocaleUtils.getCurrent(), "%s S%dE%d - %s", episode.showName, episode.season, episode.episode, episode.title));
                 }
             }
 

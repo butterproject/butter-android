@@ -9,6 +9,7 @@ import java.util.List;
 
 import butter.droid.base.providers.media.response.models.ResponseItem;
 import butter.droid.base.providers.media.response.models.common.Images;
+import butter.droid.base.providers.media.response.models.common.Locale;
 import butter.droid.base.providers.media.response.models.common.Rating;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -41,6 +42,8 @@ public class Movie extends ResponseItem {
     private Images images;
     @JsonProperty("rating")
     private Rating rating;
+    @JsonProperty("locale")
+    private Locale locale;
 
     public Movie() {
 
@@ -228,4 +231,11 @@ public class Movie extends ResponseItem {
         this.rating = rating;
     }
 
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
 }

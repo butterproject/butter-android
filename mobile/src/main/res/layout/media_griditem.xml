@@ -61,6 +61,20 @@
         tools:text="2014" />
 
     <TextView
+        android:id="@+id/title2"
+        android:layout_above="@id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="@dimen/griditem_title_horizontal"
+        android:paddingRight="@dimen/griditem_title_horizontal"
+        android:gravity="start|center_vertical"
+        android:textSize="@dimen/griditem_title_textsize"
+        android:textColor="@android:color/white"
+        tools:text="Interstellar" />
+
+    <TextView
         android:id="@+id/title"
         android:layout_above="@id/year"
         android:layout_width="match_parent"

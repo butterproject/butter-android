@@ -43,11 +43,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butter.droid.base.ButterApplication;
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.models.Movie;
 import butter.droid.base.torrent.StreamInfo;
+import butter.droid.base.utils.LocaleUtils;
+import butter.droid.base.utils.PrefUtils;
 import butter.droid.base.utils.ThreadUtils;
 import butter.droid.tv.BuildConfig;
 import butter.droid.tv.R;

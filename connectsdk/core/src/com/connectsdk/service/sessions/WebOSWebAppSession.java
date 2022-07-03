@@ -20,17 +20,21 @@
 
 package com.connectsdk.service.sessions;
 
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.connectsdk.core.ImageInfo;
 import com.connectsdk.core.MediaInfo;
+import com.connectsdk.core.SubtitleInfo;
 import com.connectsdk.core.Util;
 import com.connectsdk.service.DeviceService;
 import com.connectsdk.service.DeviceService.PairingType;
@@ -49,6 +53,8 @@ import com.connectsdk.service.webos.WebOSTVServiceSocketClient.WebOSTVServiceSoc
 
 public class WebOSWebAppSession extends WebAppSession {
     private static final String namespaceKey = "connectsdk.";
+    private static final String ENABLED_SUBTITLE_ID = "1";
+
     protected WebOSTVService service;
 
     ResponseListener<ServiceCommand<ResponseListener<Object>>> mConnectionListener;
@@ -82,7 +88,7 @@ public class WebOSWebAppSession extends WebAppSession {
     }
 
     public Boolean isConnected() {
-        return connected;
+        return connected && socket != null && socket.isConnected();
     }
 
     public void setConnected(Boolean connected) {
@@ -207,6 +213,21 @@ public class WebOSWebAppSession extends WebAppSession {
             }
 
             return true;
+        }
+
+        @Override
+        public void updateClientKey(String ClientKey) {
+
+        }
+
+        @Override
+        public void updateUUID(String UUID) {
+
+        }
+
+        @Override
+        public void updateIPAddress(String IPAddress) {
+
         }
 
         @Override
@@ -381,13 +402,13 @@ public class WebOSWebAppSession extends WebAppSession {
         };
 
         if (socket != null) {
-            if (socket.isConnected())
+            if (socket.isConnected()){
                 mConnectionListener.onSuccess(null);
-            else
+            } else {
                 socket.connect();
+            }
         } else {
-            socket = new WebOSTVServiceSocketClient(service, WebOSTVServiceSocketClient
-                    .getURI(service));
+            socket = new WebOSTVServiceSocketClient(service, WebOSTVServiceSocketClient.getURI(service));
             socket.setListener(mSocketListener);
             socket.connect();
         }
@@ -404,6 +425,7 @@ public class WebOSWebAppSession extends WebAppSession {
 
         if (socket != null) {
             socket.setListener(null);
+            socket.clearRequests();
             socket.disconnect();
             socket = null;
         }
@@ -860,31 +882,35 @@ public class WebOSWebAppSession extends WebAppSession {
     }
 
     @Override
-    public void playMedia(final String url, final String mimeType,
-            final String title, final String description, final String iconSrc,
-            final boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
+    public void playMedia(String url, String mimeType, String title, String description,
+                          String iconSrc, boolean shouldLoop, MediaPlayer.LaunchListener listener) {
+        MediaInfo mediaInfo = new MediaInfo.Builder(url, mimeType)
+                .setTitle(title)
+                .setDescription(description)
+                .setIcon(iconSrc)
+                .build();
+        playMedia(mediaInfo, shouldLoop, listener);
+    }
+
+    @Override
+    public void playMedia(final MediaInfo mediaInfo,
+                          final boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
         int requestIdNumber = getNextId();
         final String requestId = String.format(Locale.US, "req%d", requestIdNumber);
-
         JSONObject message = null;
+        ImageInfo iconImage = null;
+        List<ImageInfo> images = mediaInfo.getImages();
+
+        if (images != null && !images.isEmpty()) {
+            iconImage = images.get(0);
+        }
+
+        final String iconSrc = iconImage == null ? null : iconImage.getUrl();
+        final SubtitleInfo subtitleInfo = mediaInfo.getSubtitleInfo();
+
         try {
-            message = new JSONObject() {
-                {
-                    putOpt("contentType", namespaceKey + "mediaCommand");
-                    putOpt("mediaCommand", new JSONObject() {
-                        {
-                            putOpt("type", "playMedia");
-                            putOpt("mediaURL", url);
-                            putOpt("iconURL", iconSrc);
-                            putOpt("title", title);
-                            putOpt("description", description);
-                            putOpt("mimeType", mimeType);
-                            putOpt("shouldLoop", shouldLoop);
-                            putOpt("requestId", requestId);
-                        }
-                    });
-                }
-            };
+            message = createPlayMediaJsonRequest(mediaInfo, shouldLoop, requestId, iconSrc,
+                    subtitleInfo);
         } catch (JSONException e) {
             Util.postError(listener, new ServiceCommandError(0, "JSON Parse error", null));
             return;
@@ -922,28 +948,37 @@ public class WebOSWebAppSession extends WebAppSession {
         });
     }
 
-    @Override
-    public void playMedia(final MediaInfo mediaInfo,
-            final boolean shouldLoop, final MediaPlayer.LaunchListener listener) {
-        String mediaUrl = null;
-        String mimeType = null;
-        String title = null;
-        String desc = null;
-        String iconSrc = null;
-
-        if (mediaInfo != null) {
-            mediaUrl = mediaInfo.getUrl();
-            mimeType = mediaInfo.getMimeType();
-            title = mediaInfo.getTitle();
-            desc = mediaInfo.getDescription();
-
-            if (mediaInfo.getImages() != null && mediaInfo.getImages().size() > 0) {
-                ImageInfo imageInfo = mediaInfo.getImages().get(0);
-                iconSrc = imageInfo.getUrl();
-            }
-        }
-
-        playMedia(mediaUrl, mimeType, title, desc, iconSrc, shouldLoop, listener);
+    @NonNull
+    private JSONObject createPlayMediaJsonRequest(final MediaInfo mediaInfo, final boolean
+            shouldLoop, final String requestId, final String iconSrc, final SubtitleInfo
+            subtitleInfo) throws JSONException {
+        return new JSONObject() {{
+            putOpt("contentType", namespaceKey + "mediaCommand");
+            putOpt("mediaCommand", new JSONObject() {{
+                putOpt("type", "playMedia");
+                putOpt("mediaURL", mediaInfo.getUrl());
+                putOpt("iconURL", iconSrc);
+                putOpt("title", mediaInfo.getTitle());
+                putOpt("description", mediaInfo.getDescription());
+                putOpt("mimeType", mediaInfo.getMimeType());
+                putOpt("shouldLoop", shouldLoop);
+                putOpt("requestId", requestId);
+                if (subtitleInfo != null) {
+                    putOpt("subtitles", new JSONObject() {{
+                        putOpt("default", ENABLED_SUBTITLE_ID);
+                        putOpt("enabled", ENABLED_SUBTITLE_ID);
+                        putOpt("tracks", new JSONArray() {{
+                            put(new JSONObject() {{
+                                putOpt("id", ENABLED_SUBTITLE_ID);
+                                putOpt("language", subtitleInfo.getLanguage());
+                                putOpt("source", subtitleInfo.getUrl());
+                                putOpt("label", subtitleInfo.getLabel());
+                            }});
+                        }});
+                    }});
+                }
+            }});
+        }};
     }
 
     /****************

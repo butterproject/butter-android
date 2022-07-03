@@ -620,6 +620,7 @@ public class TVPlaybackOverlayFragment extends PlaybackSupportFragment
             episode,
             mShow,
             torrent.getUrl(),
+            torrent.getFile(),
             subtitleLanguage,
             torrentKey);
 

@@ -16,8 +16,19 @@
 #   public *;
 #}
 
+-keep class com.connectsdk.**  { * ; }
 -keep class org.eclipse.mat.** { *; }
 -keep class com.squareup.leakcanary.** { *; }
+
+-keepclasseswithmembernames,includedescriptorclasses class org.libtorrent4j.swig.libtorrent_jni {
+  native <methods>;
+}
+-keep class org.libtorrent4j.swig.** { *; }
+
+-keep class com.github.se_bastiaan.torrentstreamserver.** { *; }
+-keep class com.github.se_bastiaan.torrentstream.** { *; }
+
+-keep class libcore.io.** { *; }
 
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**

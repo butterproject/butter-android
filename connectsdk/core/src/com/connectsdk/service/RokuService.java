@@ -1,10 +1,10 @@
 /*
  * RokuService
  * Connect SDK
- * 
+ *
  * Copyright (c) 2014 LG Electronics.
  * Created by Hyun Kook Khang on 26 Feb 2014
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -126,7 +126,7 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
         }
         return CapabilityPriorityLevel.NOT_SUPPORTED;
     }
-    
+
     @Override
     public Launcher getLauncher() {
         return this;
@@ -138,41 +138,9 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
     }
 
     class RokuLaunchSession extends LaunchSession {
-        String appName;
-        RokuService service;
-
-        RokuLaunchSession(RokuService service) {
-            this.service = service;
-        }
-
-        RokuLaunchSession(RokuService service, String appId, String appName) {
-            this.service = service;
-            this.appId = appId;
-            this.appName = appName;
-        }
-
-        RokuLaunchSession(RokuService service, JSONObject obj)
-                throws JSONException {
-            this.service = service;
-            fromJSONObject(obj);
-        }
 
         public void close(ResponseListener<Object> responseListener) {
             home(responseListener);
-        }
-
-        @Override
-        public JSONObject toJSONObject() throws JSONException {
-            JSONObject obj = super.toJSONObject();
-            obj.put("type", "roku");
-            obj.put("appName", appName);
-            return obj;
-        }
-
-        @Override
-        public void fromJSONObject(JSONObject obj) throws JSONException {
-            super.fromJSONObject(obj);
-            appName = obj.optString("appName");
         }
     }
 
@@ -208,7 +176,7 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
         }
 
         String baseTargetURL = requestURL("launch", appInfo.getId());
-        StringBuilder queryParams = new StringBuilder();
+        String queryParams = "";
 
         if (params != null && params instanceof JSONObject) {
             JSONObject jsonParams = (JSONObject) params;
@@ -243,7 +211,7 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
                     continue;
 
                 String appendString = prefix + urlSafeKey + "=" + urlSafeValue;
-                queryParams.append(appendString);
+                queryParams = queryParams + appendString;
 
                 count++;
             }
@@ -260,8 +228,12 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
 
             @Override
             public void onSuccess(Object response) {
-                Util.postSuccess(listener, new RokuLaunchSession(
-                        RokuService.this, appInfo.getId(), appInfo.getName()));
+                LaunchSession launchSession = new RokuLaunchSession();
+                launchSession.setService(RokuService.this);
+                launchSession.setAppId(appInfo.getId());
+                launchSession.setAppName(appInfo.getName());
+                launchSession.setSessionType(LaunchSession.LaunchSessionType.App);
+                Util.postSuccess(listener, launchSession);
             }
 
             @Override
@@ -679,9 +651,10 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
 
             @Override
             public void onSuccess(Object response) {
-                Util.postSuccess(listener, new MediaLaunchObject(
-                        new RokuLaunchSession(RokuService.this),
-                        RokuService.this));
+                LaunchSession launchSession = new RokuLaunchSession();
+                launchSession.setService(RokuService.this);
+                launchSession.setSessionType(LaunchSession.LaunchSessionType.Media);
+                Util.postSuccess(listener, new MediaLaunchObject(launchSession, RokuService.this));
             }
 
             @Override
@@ -689,9 +662,6 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
                 Util.postError(listener, error);
             }
         };
-
-        String host = String.format("%s:%s", serviceDescription.getIpAddress(),
-                serviceDescription.getPort());
 
         String action = "input";
         String mediaFormat = mimeType;
@@ -702,22 +672,21 @@ public class RokuService extends DeviceService implements Launcher, MediaPlayer,
 
         String param;
         if (mimeType.contains("image")) {
-            param = String.format("15985?t=p&u=%s&h=%s&tr=crossfade",
-                    HttpMessage.encode(url), HttpMessage.encode(host));
+            param = String.format("15985?t=p&u=%s&tr=crossfade", HttpMessage.encode(url));
         } else if (mimeType.contains("video")) {
             param = String.format(
-                    "15985?t=v&u=%s&k=(null)&h=%s&videoName=%s&videoFormat=%s",
-                    HttpMessage.encode(url), HttpMessage.encode(host),
-                    TextUtils.isEmpty(title) ? "(null)" : HttpMessage.encode(title), 
+                    "15985?t=v&u=%s&k=(null)&videoName=%s&videoFormat=%s",
+                    HttpMessage.encode(url),
+                    TextUtils.isEmpty(title) ? "(null)" : HttpMessage.encode(title),
                             HttpMessage.encode(mediaFormat));
         } else { // if (mimeType.contains("audio")) {
             param = String
-                    .format("15985?t=a&u=%s&k=(null)&h=%s&songname=%s&artistname=%s&songformat=%s&albumarturl=%s",
-                            HttpMessage.encode(url), HttpMessage.encode(host),
+                    .format("15985?t=a&u=%s&k=(null)&songname=%s&artistname=%s&songformat=%s&albumarturl=%s",
+                            HttpMessage.encode(url),
                             TextUtils.isEmpty(title) ? "(null)" : HttpMessage.encode(title),
-                                    TextUtils.isEmpty(description) ? "(null)" : HttpMessage.encode(description),
-                                            HttpMessage.encode(mediaFormat),
-                                            TextUtils.isEmpty(iconSrc) ? "(null)" : HttpMessage.encode(iconSrc));
+                            TextUtils.isEmpty(description) ? "(null)" : HttpMessage.encode(description),
+                            HttpMessage.encode(mediaFormat),
+                            TextUtils.isEmpty(iconSrc) ? "(null)" : HttpMessage.encode(iconSrc));
         }
 
         String uri = requestURL(action, param);

@@ -21,6 +21,8 @@
 				android:resource="@xml/provider_paths" />
 		</provider>
 
+		<meta-data android:name="io.sentry.dsn" android:value="@string/sentry_dsn" />
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
 	</application>
 
 </manifest>

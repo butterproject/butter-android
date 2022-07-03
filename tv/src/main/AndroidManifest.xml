@@ -17,6 +17,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:installLocation="preferExternal"
     package="butter.droid.tv" >
 
     <!-- Features -->
@@ -163,7 +164,9 @@
         <activity
             android:name=".activities.TVPreferencesActivity"
             android:theme="@style/Theme.Butter.TV.GuidedStep" />
-        <activity android:name=".activities.TVStreamLoadingActivity" android:noHistory="true" />
+        <activity
+            android:launchMode="singleTask"
+            android:name=".activities.TVStreamLoadingActivity" />
         <activity android:name=".activities.TVVideoPlayerActivity" android:launchMode="singleTask" />
         <activity android:name=".activities.TVTrailerPlayerActivity" />
         <activity
@@ -172,6 +175,12 @@
 
         <service android:name="butter.droid.base.torrent.TorrentService" />
         <service android:name="butter.droid.tv.service.RecommendationService" android:enabled="true" />
+
+        <receiver android:name="butter.droid.base.torrent.TorrentBroadcastReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="pct.droid.base.torrent.TorrentBroadcastReceiver.STOP" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name="butter.droid.tv.receivers.BootReceiver"

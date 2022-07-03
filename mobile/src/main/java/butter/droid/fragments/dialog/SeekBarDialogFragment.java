@@ -84,7 +84,7 @@ public class SeekBarDialogFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mOnResultListener.onNewValue(seekbar.getProgress() * 1000);
+                                mOnResultListener.onNewValue(seekbar.getProgress());
                                 dialog.dismiss();
                             }
                         })

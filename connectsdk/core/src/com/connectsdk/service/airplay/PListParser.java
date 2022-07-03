@@ -20,7 +20,6 @@
 
 package com.connectsdk.service.airplay;
 
-import android.util.Log;
 import android.util.Xml;
 
 import org.json.JSONArray;
@@ -36,8 +35,20 @@ import java.io.StringReader;
 
 public class PListParser {
     private static final String ns = null;
+    public static final String TAG_DATA = "data";
+    public static final String TAG_INTEGER = "integer";
+    public static final String TAG_STRING = "string";
+    public static final String TAG_DATE = "date";
+    public static final String TAG_REAL = "real";
+    public static final String TAG_ARRAY = "array";
+    public static final String TAG_DICT = "dict";
+    public static final String TAG_TRUE = "true";
+    public static final String TAG_FALSE = "false";
+    public static final String TAG_KEY = "key";
+    public static final String TAG_PLIST = "plist";
 
-    public JSONObject parse(String text) throws XmlPullParserException, IOException, JSONException {
+    public JSONObject parse(String text) throws XmlPullParserException, IOException,
+            JSONException {
         XmlPullParser parser = Xml.newPullParser();
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         Reader stream = new StringReader(text);
@@ -46,7 +57,8 @@ public class PListParser {
         return readPlist(parser);
     }
 
-    public JSONObject parse(InputStream in) throws XmlPullParserException, IOException, JSONException {
+    public JSONObject parse(InputStream in) throws XmlPullParserException, IOException,
+            JSONException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -58,10 +70,11 @@ public class PListParser {
         }
     }
 
-    private JSONObject readPlist(XmlPullParser parser) throws XmlPullParserException, IOException, JSONException {
+    private JSONObject readPlist(XmlPullParser parser) throws XmlPullParserException, IOException,
+            JSONException {
         JSONObject plist = null;
 
-        parser.require(XmlPullParser.START_TAG, ns, "plist");
+        parser.require(XmlPullParser.START_TAG, ns, TAG_PLIST);
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -69,7 +82,7 @@ public class PListParser {
 
             String name = parser.getName();
 
-            if (name.equals("dict")) {
+            if (name.equals(TAG_DICT)) {
                 plist = readDict(parser);
             }
         }  
@@ -77,10 +90,11 @@ public class PListParser {
         return plist;
     }
 
-    public JSONObject readDict(XmlPullParser parser) throws IOException, XmlPullParserException, JSONException {
+    public JSONObject readDict(XmlPullParser parser) throws IOException, XmlPullParserException,
+            JSONException {
         JSONObject plist = new JSONObject();
 
-        parser.require(XmlPullParser.START_TAG, ns, "dict");
+        parser.require(XmlPullParser.START_TAG, ns, TAG_DICT);
 
         String key = null;
 
@@ -90,30 +104,32 @@ public class PListParser {
             }
             String name = parser.getName();
 
-            if (name.equals("key")) {
+            if (name.equals(TAG_KEY)) {
                 key = readKey(parser);
-                Log.d("", "plist " + key);
             }
             else if (key != null) {
-                if (name.equals("data")) {
+                if (name.equals(TAG_DATA)) {
                     plist.put(key, readData(parser));
                 }
-                else if (name.equals("integer")) {
+                else if (name.equals(TAG_INTEGER)) {
                     plist.put(key, readInteger(parser));
                 }
-                else if (name.equals("string")) {
+                else if (name.equals(TAG_STRING)) {
                     plist.put(key, readString(parser));
                 }
-                else if (name.equals("real")) {
+                else if (name.equals(TAG_DATE)) {
+                    plist.put(key, readDate(parser));
+                }
+                else if (name.equals(TAG_REAL)) {
                     plist.put(key, readReal(parser));
                 }
-                else if (name.equals("array")) {
+                else if (name.equals(TAG_ARRAY)) {
                     plist.put(key, readArray(parser));
                 }
-                else if (name.equals("dict")) {
+                else if (name.equals(TAG_DICT)) {
                     plist.put(key, readDict(parser));
                 }
-                else if (name.equals("true") || name.equals("false")) {
+                else if (name.equals(TAG_TRUE) || name.equals(TAG_FALSE)) {
                     plist.put(key, Boolean.valueOf(name));
                     skip(parser);
                 }
@@ -125,16 +141,17 @@ public class PListParser {
         return plist;
     }
 
-    private JSONArray readArray(XmlPullParser parser) throws IOException, XmlPullParserException, JSONException {
+    private JSONArray readArray(XmlPullParser parser) throws IOException, XmlPullParserException,
+            JSONException {
         JSONArray plist = new JSONArray();
-        parser.require(XmlPullParser.START_TAG, ns, "array");
+        parser.require(XmlPullParser.START_TAG, ns, TAG_ARRAY);
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
-            if (name.equals("dict")) {
+            if (name.equals(TAG_DICT)) {
                 plist.put(readDict(parser));
             }
         }
@@ -142,37 +159,44 @@ public class PListParser {
     }
 
     private String readKey(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "key");
+        parser.require(XmlPullParser.START_TAG, ns, TAG_KEY);
         String key = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "key");
+        parser.require(XmlPullParser.END_TAG, ns, TAG_KEY);
         return key;
     }
 
     private String readData(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "data");
+        parser.require(XmlPullParser.START_TAG, ns, TAG_DATA);
         String value = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "data");
+        parser.require(XmlPullParser.END_TAG, ns, TAG_DATA);
         return value;
     }
 
     private int readInteger(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "integer");
-        int value = Integer.parseInt(readText(parser));
-        parser.require(XmlPullParser.END_TAG, ns, "integer");
+        parser.require(XmlPullParser.START_TAG, ns, TAG_INTEGER);
+        int value = Integer.valueOf(readText(parser));
+        parser.require(XmlPullParser.END_TAG, ns, TAG_INTEGER);
         return value;
     }
 
     private double readReal(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "real");
+        parser.require(XmlPullParser.START_TAG, ns, TAG_REAL);
         double value = Double.valueOf(readText(parser));
-        parser.require(XmlPullParser.END_TAG, ns, "real");
+        parser.require(XmlPullParser.END_TAG, ns, TAG_REAL);
         return value;
     }
 
     private String readString(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "string");
+        parser.require(XmlPullParser.START_TAG, ns, TAG_STRING);
         String value = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "string");
+        parser.require(XmlPullParser.END_TAG, ns, TAG_STRING);
+        return value;
+    }
+
+    private String readDate(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, TAG_DATE);
+        String value = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, TAG_DATE);
         return value;
     }
 

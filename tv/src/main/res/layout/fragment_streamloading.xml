@@ -69,6 +69,14 @@
             android:layout_marginBottom="4dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             tools:text="22 Peers" />
+
+        <Button
+            android:id="@+id/startexternal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/start_external"
+            android:visibility="gone" />
     </LinearLayout>
 
     <androidx.legacy.widget.Space

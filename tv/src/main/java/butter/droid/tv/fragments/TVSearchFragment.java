@@ -36,9 +36,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butter.droid.base.ButterApplication;
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.provider.ProviderManager;
 import butter.droid.base.providers.media.MediaProvider;
 import butter.droid.base.providers.media.models.Media;
+import butter.droid.base.utils.LocaleUtils;
+import butter.droid.base.utils.PrefUtils;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVMediaDetailActivity;

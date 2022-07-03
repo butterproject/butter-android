@@ -25,6 +25,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import android.view.View;
+import android.view.WindowManager;
 
 import butter.droid.base.fragments.BaseStreamLoadingFragment;
 import butter.droid.base.providers.media.models.Show;
@@ -32,6 +33,8 @@ import butter.droid.base.torrent.StreamInfo;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.base.TVBaseActivity;
+import butter.droid.tv.fragments.TVStreamLoadingFragment;
+import timber.log.Timber;
 
 public class TVStreamLoadingActivity extends TVBaseActivity implements BaseStreamLoadingFragment.FragmentListener {
 
@@ -39,7 +42,7 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements BaseStrea
 	public final static String EXTRA_SHOW_INFO = "show_info";
 
 	private StreamInfo mInfo;
-	private BaseStreamLoadingFragment mFragment;
+	private TVStreamLoadingFragment mFragment;
 
 	public static Intent startActivity(Activity activity, StreamInfo info) {
 		Intent i = new Intent(activity, TVStreamLoadingActivity.class);
@@ -69,22 +72,29 @@ public class TVStreamLoadingActivity extends TVBaseActivity implements BaseStrea
 	@SuppressLint("MissingSuperCall")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
 		TVButterApplication.getAppContext()
 				.getComponent()
 				.inject(this);
 
 		super.onCreate(savedInstanceState, R.layout.activity_streamloading);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		if (!getIntent().hasExtra(EXTRA_STREAM_INFO)) finish();
 		mInfo = getIntent().getParcelableExtra(EXTRA_STREAM_INFO);
-		mFragment = (BaseStreamLoadingFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+		mFragment = (TVStreamLoadingFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 	}
 
     @Override
 	public StreamInfo getStreamInformation() {
 		return mInfo;
 	}
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
 	@Override
 	public void onBackPressed() {

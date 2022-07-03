@@ -52,7 +52,7 @@ public class DevicePickerListView extends ListView implements DiscoveryManagerLi
     }
 
     @Override
-    public void onDeviceAdded(DiscoveryManager manager, final ConnectableDevice device) {
+    public void onDeviceAdded(final DiscoveryManager manager, final ConnectableDevice device) {
         Util.runOnUI(new Runnable () {
             @Override
             public void run() {
@@ -72,9 +72,14 @@ public class DevicePickerListView extends ListView implements DiscoveryManagerLi
                     }
 
                     if (d.getIpAddress().equals(device.getIpAddress())) {
-                        pickerAdapter.remove(d);
-                        pickerAdapter.insert(device, i);
-                        return;
+                        if (d.getFriendlyName().equals(device.getFriendlyName())) {
+                            if (!manager.isServiceIntegrationEnabled() &&
+                                    d.getServiceId().equals(device.getServiceId())) {
+                                pickerAdapter.remove(d);
+                                pickerAdapter.insert(device, i);
+                                return;
+                            }
+                        }
                     }
 
                     if (newDeviceName.compareToIgnoreCase(dName) < 0) {

@@ -138,6 +138,7 @@ public class TVPreferencesFragment extends GuidedStepFragment implements Prefere
                 GuidedStepFragment.add(getFragmentManager(), fragment);
                 break;
             case NUMBER:
+            case NUMBER_SEEK:
                 final String[] array = new String[highLimit - lowLimit + 1];
                 for(int i = 0; i <= highLimit - lowLimit; i++) {
                     array[i] = Integer.toString(i + lowLimit);

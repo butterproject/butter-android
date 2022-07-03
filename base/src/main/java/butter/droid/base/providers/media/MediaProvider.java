@@ -18,6 +18,8 @@
 package butter.droid.base.providers.media;
 
 import android.accounts.NetworkErrorException;
+import android.content.Context;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 
@@ -28,11 +30,15 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 
+import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
+import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.providers.BaseProvider;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.subs.SubsProvider;
+import butter.droid.base.utils.LocaleUtils;
+import butter.droid.base.utils.PrefUtils;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -49,19 +55,22 @@ public abstract class MediaProvider extends BaseProvider {
     @Nullable
     private final SubsProvider subsProvider;
 
+    protected final Context context;
+
     private static final int DEFAULT_NAVIGATION_INDEX = 1;
     private String[] apiUrls = new String[0];
     private String itemsPath = "";
     private String itemDetailsPath = "";
     private Integer currentApi = 0;
 
-    public MediaProvider(OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider, String[] apiUrls, String itemsPath, String itemDetailsPath, Integer currentApi) {
+    public MediaProvider(Context context, OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider, String[] apiUrls, String itemsPath, String itemDetailsPath, Integer currentApi) {
         super(client, mapper);
         this.subsProvider = subsProvider;
         this.apiUrls = apiUrls;
         this.itemsPath = itemsPath;
         this.itemDetailsPath = itemDetailsPath;
         this.currentApi = currentApi;
+        this.context = context;
     }
 
     /**
@@ -110,8 +119,21 @@ public abstract class MediaProvider extends BaseProvider {
             params.add(new AbstractMap.SimpleEntry<>("order", "-1"));
         }
 
-        if (filters.langCode != null) {
-            params.add(new AbstractMap.SimpleEntry<>("lang", filters.langCode));
+        // Locale support
+        String language = PrefUtils.get(context, Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String content_language = PrefUtils.get(context, Prefs.CONTENT_LOCALE, language);
+        String locale = LocaleUtils.toLocale(language).getLanguage();
+        String content_locale = LocaleUtils.toLocale(content_language).getLanguage();
+
+        boolean content_locale_only = PrefUtils.get(context, Prefs.CONTENT_LOCALE_ONLY, false);
+        content_locale_only = true; // TODO: add language selector
+
+        params.add(new AbstractMap.SimpleEntry<>("locale", locale));
+        if (!locale.equals(content_locale)) {
+            params.add(new AbstractMap.SimpleEntry<>("contentLocale", content_locale));
+        }
+        if (!content_locale_only) {
+            params.add(new AbstractMap.SimpleEntry<>("showAll", "1"));
         }
 
         String sort;
@@ -203,7 +225,19 @@ public abstract class MediaProvider extends BaseProvider {
 
     public void getDetail(ArrayList<Media> currentList, Integer index, final Callback callback) {
         Request.Builder requestBuilder = new Request.Builder();
-        String url = apiUrls[currentApi] + itemDetailsPath + currentList.get(index).videoId;
+
+        // Locale support
+        String language = PrefUtils.get(context, Prefs.LOCALE, ButterApplication.getSystemLanguage());
+        String content_language = PrefUtils.get(context, Prefs.CONTENT_LOCALE, language);
+        String locale = LocaleUtils.toLocale(language).getLanguage();
+        String content_locale = LocaleUtils.toLocale(content_language).getLanguage();
+
+        ArrayList<AbstractMap.SimpleEntry<String, String>> params = new ArrayList<>();
+        params.add(new AbstractMap.SimpleEntry<>("locale", locale));
+        params.add(new AbstractMap.SimpleEntry<>("contentLocale", content_locale));
+        String query = params.isEmpty() ? "" : ("?" + buildQuery(params));
+
+        String url = apiUrls[currentApi] + itemDetailsPath + currentList.get(index).videoId + query;
         requestBuilder.url(url);
 
         Timber.d(this.getClass().getSimpleName(), "Making request to: " + url);
@@ -287,7 +321,6 @@ public abstract class MediaProvider extends BaseProvider {
         Order order = Order.DESC;
         Sort sort = Sort.POPULARITY;
         Integer page = null;
-        String langCode = "en";
 
         public Filters() {
         }
@@ -298,7 +331,6 @@ public abstract class MediaProvider extends BaseProvider {
             order = filters.order;
             sort = filters.sort;
             page = filters.page;
-            langCode = filters.langCode;
         }
 
         public String getKeywords() {
@@ -339,14 +371,6 @@ public abstract class MediaProvider extends BaseProvider {
 
         public void setPage(Integer page) {
             this.page = page;
-        }
-
-        public String getLangCode() {
-            return langCode;
-        }
-
-        public void setLangCode(String langCode) {
-            this.langCode = langCode;
         }
 
         public enum Order {ASC, DESC}

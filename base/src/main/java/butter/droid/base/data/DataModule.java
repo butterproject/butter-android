@@ -18,11 +18,14 @@
 package butter.droid.base.data;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -33,8 +36,11 @@ import butter.droid.base.utils.StorageUtils;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
+import okhttp3.Request;
+import okhttp3.Response;
 
 @Module
 public class DataModule {
@@ -53,8 +59,23 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public OkHttpClient provideOkHttpClient(Cache cache) {
+    public OkHttpClient provideOkHttpClient(Context context, Cache cache) {
         return new Builder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request.Builder builder = chain.request().newBuilder();
+                        String version = "";
+                        try {
+                            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+                            version = info.versionName;
+                        } catch (PackageManager.NameNotFoundException e) {
+                            version = "unknown";
+                        }
+                        builder.addHeader("User-Agent", "Popcorn Time Ru Android (" + version + ")");
+                        return chain.proceed(builder.build());
+                    }
+                })
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)

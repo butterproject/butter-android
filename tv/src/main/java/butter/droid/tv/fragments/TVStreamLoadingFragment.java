@@ -34,6 +34,8 @@
 
 package butter.droid.tv.fragments;
 
+import java.lang.Math;
+
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -48,10 +51,12 @@ import com.github.se_bastiaan.torrentstream.StreamStatus;
 
 import java.text.DecimalFormat;
 
+import butter.droid.base.content.preferences.DefaultPlayer;
 import butter.droid.base.fragments.BaseStreamLoadingFragment;
 import butter.droid.base.providers.media.models.Show;
 import butter.droid.base.torrent.StreamInfo;
 import butter.droid.base.utils.ThreadUtils;
+import butter.droid.base.utils.FragmentUtil;
 import butter.droid.tv.R;
 import butter.droid.tv.TVButterApplication;
 import butter.droid.tv.activities.TVStreamLoadingActivity;
@@ -59,6 +64,8 @@ import butter.droid.tv.activities.TVVideoPlayerActivity;
 import butter.droid.tv.utils.BackgroundUpdater;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import timber.log.Timber;
 
 public class TVStreamLoadingFragment extends BaseStreamLoadingFragment {
 
@@ -71,6 +78,8 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment {
 	TextView mSecondaryTextView;
 	@BindView(R.id.tertiary_textview)
 	TextView mTertiaryTextView;
+    @BindView(R.id.startexternal_button)
+    Button mStartExternalButton;
 
 	BackgroundUpdater mBackgroundUpdater = new BackgroundUpdater();
 
@@ -92,6 +101,13 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment {
 		return mRoot;
 	}
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mPlayingExternal)
+            setState(State.STREAMING);
+    }
+
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -104,9 +120,10 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment {
 		ThreadUtils.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+                Timber.d("DEBXX: " + status.toString());
 				progressIndicator.setIndeterminate(false);
-				progressIndicator.setProgress(status.bufferProgress);
-                mPrimaryTextView.setText(getString(R.string.buffer_progress_percent, status.bufferProgress));
+				progressIndicator.setProgress(Math.round(status.progress));
+                mPrimaryTextView.setText(getString(R.string.buffer_progress_percent, Math.round(status.progress)));
 
 				if (status.downloadSpeed / 1024 < 1000) {
                     mSecondaryTextView.setText(getString(R.string.download_speed_kb, df.format(status.downloadSpeed / 1024)));
@@ -169,15 +186,19 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment {
 
 	@Override
 	protected void startPlayerActivity(String location, int resumePosition) {
-		if (getActivity() != null && !mPlayerStarted) {
+		if (!FragmentUtil.isNotAdded(this) && !mPlayerStarted) {
 			mStreamInfo.setVideoLocation(location);
-			if (getActivity().getIntent().hasExtra(TVStreamLoadingActivity.EXTRA_SHOW_INFO)) {
-				Show show = getActivity().getIntent().getParcelableExtra(TVStreamLoadingActivity.EXTRA_SHOW_INFO);
-				TVVideoPlayerActivity.startActivity(getActivity(), mStreamInfo, show);
-			}
-			else {
-				TVVideoPlayerActivity.startActivity(getActivity(), mStreamInfo, resumePosition);
-			}
+            mPlayingExternal = DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), location);
+            if (!mPlayingExternal) {
+                if (getActivity().getIntent().hasExtra(TVStreamLoadingActivity.EXTRA_SHOW_INFO)) {
+                    Show show = getActivity().getIntent().getParcelableExtra(TVStreamLoadingActivity.EXTRA_SHOW_INFO);
+                    TVVideoPlayerActivity.startActivity(getActivity(), mStreamInfo, show);
+                } else {
+                    TVVideoPlayerActivity.startActivity(getActivity(), mStreamInfo, resumePosition);
+                }
+            } else {
+                mStartExternalButton.setVisibility(View.VISIBLE); 
+            }
 		}
 	}
 
@@ -189,4 +210,9 @@ public class TVStreamLoadingFragment extends BaseStreamLoadingFragment {
 			mBackgroundUpdater.updateBackgroundAsync(url);
 		}
 	}
+
+    @OnClick(R.id.startexternal_button)
+    public void externalClick(View v) {
+        DefaultPlayer.start(mStreamInfo.getMedia(), mStreamInfo.getSubtitleLanguage(), mStreamInfo.getVideoLocation());
+    }
 }
