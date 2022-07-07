@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="cancel">Відмінити</string>
+    <string name="close">Закрити</string>
+    <string name="ok">Гаразд</string>
+    <string name="enabled">Увімкнено</string>
+    <string name="disabled">Вимкнено</string>
+    <string name="update_available">Доступні оновлення</string>
+    <string name="wrong_abi">Опа! Ви використовуєте не ту версію Popcorn Time для Android. Коректна версія завантажиться прямо зараз, якщо це можливо. Якщо програма інсталяції не запускається протягом хвилини, це може означати що ваш пристрій не підтримується, або ваш інтернет зв\'язок перервано і ви можете спробувати знову. Якщо програма встановлення не працює, то потрібно встановити правильну версію вручну.</string>
+    <string name="press_install">Натисніть для встановлення</string>
+    <string name="loading_data">Завантаження даних…</string>
+    <string name="loading_details">Завантаження даних…</string>
+    <string name="loading_shows">Завантаження шоу…</string>
+    <string name="loading_movies">Завантаження фільмів…</string>
+    <string name="loading_subs">Завантаження субтитрів…</string>
+    <string name="error_files">Помилка: не вдалось зберегти файли</string>
+    <string name="overview_not_available">Вибачте!
+Попередній перегляд недоступний.</string>
+    <string name="unknown_error">Щось пішло не так</string>
+    <string name="torrent_failed">Не вдалось отримати торент</string>
+    <string name="running">Продовжує працювати в фоновому режимі</string>
+    <string name="tap_to_close">Натисніть щоб закрити</string>
+    <string name="tap_to_resume">Натисніть щоб продовжити</string>
+    <string name="stop">Стоп</string>
+    <!--Overview strings-->
+    <string name="search_hint">Назва, рік, актори</string>
+    <string name="genres">Жанри</string>
+    <string name="search">Пошук</string>
+    <string name="searching">Шукаю…</string>
+    <string name="no_data_found">Дані не знайдено</string>
+    <string name="title_shows">Серіали</string>
+    <string name="title_movies">Фільми</string>
+    <string name="title_anime">Аніме</string>
+    <string name="signature_invalid">Підпис додатка недійсний</string>
+    <string name="possibly_dangerous">Popcorn Time було підроблено. Ви можете завантажити новий файл інсталяції за адресою http://butterproject.org/</string>
+    <string name="subtitles">Субтитри</string>
+    <string name="now_playing">Зараз відтворюється</string>
+    <!--SettingsActivity strings-->
+    <string name="preferences">Налаштування</string>
+    <string name="general">Основне</string>
+    <string name="default_view">Початкова сторінка</string>
+    <string name="default_player">Відео програвач по замовчуванню</string>
+    <string name="i18n_language">Мова додатку</string>
+    <string name="restart_effect">Перезавантажити додаток для прийняття змін</string>
+    <string name="device_language">Мова пристрою</string>
+    <string name="stream_over_wifi_only">Транслювати лише за допомогою Wi-Fi</string>
+    <string name="internal_player">Вбудований</string>
+    <string name="subtitle_color">Колір</string>
+    <string name="subtitle_size">Розмір</string>
+    <string name="subtitle_timing">Часова затримка субтитрів</string>
+    <string name="subtitle_stroke_color">Колір обведення</string>
+    <string name="subtitle_stroke_width">Колір обведення</string>
+    <string name="default_subtitle_language">Мова за замовчуванням</string>
+    <string name="subtitle_language">Мова субтитрів</string>
+    <string name="subtitle_settings">Налаштування субтитрів</string>
+    <string name="no_default_set">Мова не за замовчуванням</string>
+    <string name="advanced">Додаткові</string>
+    <string name="storage_location">Розташування сховища</string>
+    <string name="storage_automatic">Автоматично</string>
+    <string name="storage_choose">Вибрати розташування</string>
+    <string name="not_writable">Розташування недоступне для запису</string>
+    <string name="remove_cache">Очищувати кеш плеєра після закриття</string>
+    <string name="hw_acceleration">Апаратне прискорення</string>
+    <string name="hw_automatic">Автоматично</string>
+    <string name="hw_full">Повне</string>
+    <string name="hw_decoding">Лише декодування</string>
+    <string name="updates">Оновлення</string>
+    <string name="auto_updates">Автоматичні оновлення</string>
+    <string name="check_for_updates">Пошук оновлень</string>
+    <string name="last_check">Остання перевірка</string>
+    <string name="about_app">Про додаток</string>
+    <string name="version">Версія</string>
+    <string name="changelog">Список змін</string>
+    <string name="tap_to_open">Натисніть щоб відкрити</string>
+    <string name="report_a_bug">Повідомити про помилку</string>
+    <string name="open_source_licenses">Open-source ліцензії</string>
+    <string name="torrents">Торенти</string>
+    <string name="download_speed">Максимальна швидкість завантаження</string>
+    <string name="upload_speed">Максимальна швидкість роздачі</string>
+    <string name="max_connections">Максимальна кількість з\'єднань</string>
+    <string name="dht_limit">Ліміт DHT</string>
+    <string name="unlimited">Необмежено</string>
+    <string name="show_vpn">Показувати пункт VPN в меню</string>
+    <string name="pixel_format">Примусове насичення кольору</string>
+    <string name="rgb32">RGB 32-bit: стандартне насичення</string>
+    <string name="rgb16">RGB 16-bit: хороша швидкодія, низька якість</string>
+    <string name="yuv">YUV: Макс. швидкодія, але не завжди працює</string>
+    <string name="best_fit">Оптимально</string>
+    <string name="fill">За розміром екрану</string>
+    <string name="fit_horizontal">Підігнати по горизонталі</string>
+    <string name="fit_vertical">Підігнати по вертикалі</string>
+    <string name="original_size">Оригінальний</string>
+    <!--DetailActivity strings-->
+    <string name="minutes">хвилини</string>
+    <string name="read_more">Читати більше</string>
+    <string name="watch_trailer">Дивитись трейлер</string>
+    <string name="no_subs">Без субтитрів</string>
+    <string name="no_subs_available">Субтитри недоступні</string>
+    <string name="quality">Якість</string>
+    <string name="trailer">Трейлер</string>
+    <string name="season">Сезон</string>
+    <string name="episode">Епізод</string>
+    <string name="specials">Додаткові матеріали</string>
+    <string name="continuing">Продовжується</string>
+    <string name="ended">ЗАвершено</string>
+    <string name="aired">Вийшли в ефір: %s</string>
+    <string name="no_title_available">Немає назви</string>
+    <string name="no_synopsis_available">Короткий опис - недоступний</string>
+    <string name="magnet">Magnet-посилання</string>
+    <string name="scale">Масштаб</string>
+    <!--About as in 'About serie X'-->
+    <string name="about_series">Про додаток</string>
+    <!--VideoPlayerActivity strings-->
+    <string name="volume">Гучність</string>
+    <string name="brightness">Яскравість</string>
+    <string name="hardware_acceleration_error_title">Помилка HW прискорення</string>
+    <string name="genre_all">Всі</string>
+    <string name="hardware_acceleration_error_message">Виникла помилка з апаратним прискоренням. Бажаєте вимкнути його, та спробувати ще раз?</string>
+    <!--Genres-->
+    <string name="genre_action">Бойовики</string>
+    <string name="genre_adventure">Пригодницькі</string>
+    <string name="genre_animation">Анімаційні</string>
+    <string name="genre_biography">Біографія</string>
+    <string name="genre_comedy">Комедія</string>
+    <string name="genre_crime">Кримінальні</string>
+    <string name="genre_children">Дитяче</string>
+    <string name="genre_documentary">Документальний</string>
+    <string name="genre_drama">Драми</string>
+    <string name="genre_family">Сімейні</string>
+    <string name="genre_fantasy">Фантастика</string>
+    <string name="genre_film_noir">Noir</string>
+    <string name="genre_game_show">Ігрове шоу</string>
+    <string name="genre_history">Історичні</string>
+    <string name="genre_home_garden">Дім та сад</string>
+    <string name="genre_horror">Жахи</string>
+    <string name="genre_mini_series">Міні-серіали</string>
+    <string name="genre_music">Музикальні</string>
+    <string name="genre_musical">Мюзикл</string>
+    <string name="genre_mystery">Містика</string>
+    <string name="genre_news">Новини</string>
+    <string name="genre_reality">Реаліті-шоу</string>
+    <string name="genre_romance">Романтичні</string>
+    <string name="genre_sci_fi">Наукова фантастика</string>
+    <string name="genre_short">Короткометражні</string>
+    <string name="genre_special_interest">Спеціальні інтереси</string>
+    <string name="genre_soap">Мильна опера</string>
+    <string name="genre_sport">Спортивний</string>
+    <string name="genre_suspense">Suspense</string>
+    <string name="genre_talk_show">Ток-шоу</string>
+    <string name="genre_thriller">Трилер</string>
+    <string name="genre_war">Воєнні</string>
+    <string name="genre_western">Вестерни</string>
+    <!--Anime:-->
+    <string name="genre_cars">Автомобілі</string>
+    <string name="genre_dementia">Деменція</string>
+    <string name="genre_demons">Демони</string>
+    <string name="genre_ecchi">Єті</string>
+    <string name="genre_game">Гра</string>
+    <string name="genre_harem">Гарем</string>
+    <string name="genre_josei">Josei</string>
+    <string name="genre_kids">Дитячі</string>
+    <string name="genre_magic">Чари</string>
+    <string name="genre_martial_arts">Бойові мистецтва</string>
+    <string name="genre_mecha">Mecha</string>
+    <string name="genre_military">Воєнні</string>
+    <string name="genre_police">Поліція</string>
+    <string name="genre_parody">Пародія</string>
+    <string name="genre_psychological">Психологічні</string>
+    <string name="genre_samurai">Самурай</string>
+    <string name="genre_school">Школа</string>
+    <string name="genre_seinen">Seinen</string>
+    <string name="genre_shoujo">Shoujo</string>
+    <string name="genre_shoujo_ai">Shoujo AI</string>
+    <string name="genre_shounen">Shounen</string>
+    <string name="genre_shounen_ai">Shounen AI</string>
+    <string name="genre_slice_of_life">Slice of Life</string>
+    <string name="genre_space">Космос</string>
+    <string name="genre_super_power">Супер Сила</string>
+    <string name="genre_supernatural">Надприродній</string>
+    <string name="genre_vampire">Вампір</string>
+    <!--Possible tabs-->
+    <string name="popular">ПОПУЛЯРНІ</string>
+    <string name="top_rated">Топ</string>
+    <string name="release_date">Дата релізу</string>
+    <string name="last_updated">ОСТАННЄ ОНОВЛЕННЯ</string>
+    <string name="year">РІК</string>
+    <string name="a_to_z">А - Я</string>
+    <string name="trending">ТРЕНДОВІ</string>
+    <string name="encountered_error_title">Упс! Непередбачувана помилка відео</string>
+    <string name="encountered_error">Програвач відео зіткнувся із серйозною помилкою. Неможливо відкрити та/або відтворити відеофайл. Формат не визначено.</string>
+    <!--BeamManager-->
+    <string name="beaming">Трансляція</string>
+    <string name="pairing_tv">З\'єднання з TV</string>
+    <string name="confirm_tv">Будь ласка, підтвердьте з\'єднання на TV</string>
+    <string name="enter_pairing_code">Введіть код підключення на TV</string>
+    <!--TermsActivity strings-->
+    <string name="open_with">Відкрити за допомогою</string>
+    <string name="select_file">Вибрати файл</string>
+    <string name="accept">Прийняти</string>
+    <string name="leave">Відмовитись</string>
+    <string name="reload_video">Перезавантажити відео</string>
+    <!--Health-->
+    <string name="health_info">Статус: %1$s, Сіди: %2$d, Піри: %3$d</string>
+    <string name="health_bad">Погане</string>
+    <string name="health_medium">Середнє</string>
+    <string name="health_good">Добре</string>
+    <string name="health_excellent">Чудове</string>
+    <string name="health_unknown">Невідомо</string>
+    <!--StreamLoadingActivity strings-->
+    <string name="waiting_torrent">Очікування торента</string>
+    <string name="starting_buffering">Буферизація відео, зачекайте…</string>
+    <string name="streaming_started">Потокова передача розпочалась</string>
+    <string name="waiting_for_subtitles">Очікування субтитрів</string>
+    <string name="seeds">сіди</string>
+    <string name="start_external">Запускати зовнішнім програвачем</string>
+    <!--VideoPlayerActivity strings-->
+    <string name="fastforward">Перемотка вперед</string>
+    <string name="rewind">Перемотка</string>
+    <string name="comm_error">Помилка зєднання</string>
+    <string name="comm_message">Виникла помилка під час пошуку відео.
+Це може бути пов\'язано з проблемою в мережі або ж протоколом YouTube.
+Будь ласка, спробуйте пізніше.</string>
+    <string name="leave_videoplayer_title">Ви впевнені?</string>
+    <string name="leave_videoplayer_message">Ви впевнені, що хочете закрити програвач відео? %s завершить відтворення.</string>
+    <!--WifiOnlyDialogFragment-->
+    <string name="wifi_only">Лише по Wi-Fi</string>
+    <string name="wifi_only_message">Вибраний режим потокової передачі лише по Wi-Fi. Це можна вимкнути у налаштуваннях, якщо ви хочете використовувати мобільні дані для перегляду.</string>
+    <!--NavigationDrawer-->
+    <string name="drawer_open">Відкрити контекстне меню</string>
+    <string name="drawer_close">Закрити контекстне меню</string>
+    <string name="no_search_results">Результати пошуку не знайдено</string>
+    <string name="vpn">VPN</string>
+    <!--AboutFragment-->
+    <string name="about_message">Popcorn Time - результат роботи розробників та дизайнерів, які поєднали багато API в одне ціле
+для зручного перегляду відео за допомогою торентів.\n\n Цей проект з відкритим вихідним кодом. Ми любимо дивитись відео.
+А також, любимо похрумтіти попкорном.</string>
+    <string name="website">Вебсайт</string>
+    <string name="forum">Форум</string>
+    <string name="google_plus">Google+</string>
+    <string name="facebook">Facebook</string>
+    <string name="git">Git</string>
+    <string name="blog">Блог</string>
+    <string name="twitter">Twitter</string>
+    <!--Beam dialog-->
+    <string name="connected_to">Під\'єднаний до</string>
+    <string name="disconnect">Від\'єднати</string>
+    <string name="select_beaming">Виберіть пристрій для трансляції</string>
+    <string name="starting_beam">Підготовка до трансляції відео…</string>
+    <string name="beaming_failed">Не вдалось почати трансляцію відео на ваш пристрій. Хочете спробувати ще раз? Можливо, додаток повинен завантажити більше частин, перш ніж можна буде відтворити відео.</string>
+    <string name="the_video">Відео</string>
+    <!--Android TV below-->
+    <string name="related_movies">Пов\'язані відео</string>
+    <!--Main screen-->
+    <string name="top_movies">Топ фільмів</string>
+    <string name="top_shows">Топ серіалів</string>
+    <string name="latest_shows">Останні Серіали</string>
+    <string name="browse">Переглянути</string>
+    <string name="more">Більше</string>
+    <string name="tests">Тести</string>
+    <string name="error">Помилка</string>
+    <string name="pause">Пауза</string>
+    <string name="play">Відтворити</string>
+    <string name="init_text">00:00</string>
+    <string name="play_pause_description">Кнопка Відтворити/Пауза</string>
+    <string name="loading">Завантаження…</string>
+    <string name="no_video_found">Відео не знайдене</string>
+    <string name="popular_header">Популярні відео</string>
+    <string name="grid_view">Показувати сіткою</string>
+    <string name="settings">Налаштування</string>
+    <string name="personal_settings">Персональні налаштування</string>
+    <string name="watch_trailer_1">Дивитись трейлер</string>
+    <string name="watch_trailer_2">БЕЗКОШТОВНО</string>
+    <string name="watch">Дивитись</string>
+    <string name="quality_720">720p</string>
+    <string name="quality_1080">1080p</string>
+    <string name="movie">Фільм</string>
+    <string name="search_results">Пошук результатів</string>
+    <string name="movie_results">Результати фільму</string>
+    <string name="show_results">Результати серіалу</string>
+    <string name="video_error_media_load_timeout">Час завантаження вичерпався</string>
+    <string name="video_error_server_unaccessible">Медіа сервер був недоступний</string>
+    <string name="video_error_unknown_error">Не вдалось завантажити відео</string>
+    <string name="oops">Ой</string>
+    <!--PTVUpdateFragment-->
+    <string name="now">Оновити зараз</string>
+    <string name="later">Ні, пізніше</string>
+    <string name="new_update">Доступна нова версія Popcorn Time для Android TV. Хочете оновити зараз?</string>
+    <string name="network_message">Перевірте підключення до інтернету</string>
+    <string name="choose_quality">Виберіть якість</string>
+    <string name="more_movies">Більше фільмів</string>
+    <string name="more_shows">Більше серіалів</string>
+    <string name="terms_and_conditions">Умови та зобов\'язання</string>
+    <string name="view_terms">Переглянути умови</string>
+    <string name="episode_number_format">Епізод %d</string>
+    <!--PTVSettingsFragment-->
+    <string name="version_pref">Версія</string>
+</resources>
