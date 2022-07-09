@@ -32,7 +32,7 @@ ext {
     daggerVersion = "2.7"
     javaxAnnotationVersion = "1.3.2"
     sentryDsn = "https://a4156b48014d43f2b3a4cd71a35029d9@o336317.ingest.sentry.io/5744175"
-    dht = "a4a9ad29e303e137ecb995c50a4e104b3e8f72e5"
+    dhtPublicKey = "3704c4f5f0426d9c726c5b195539c42c7383816e8d756bd68fa5340435f99070"
 }
 
 allprojects {

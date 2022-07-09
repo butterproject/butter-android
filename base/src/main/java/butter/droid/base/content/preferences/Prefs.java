@@ -40,6 +40,9 @@ public class Prefs {
     public static final String TRANSLATE_POSTER = "translate_poster";
     public static final String TRANSLATE_EPISODES = "translate_episodes";
     public static final String DRAWER_LEARNED = "drawer_learned";
+    public static final String DHT_DATA = "dht_data";
+    public static final String DHT_SEQ = "dht_seq";
+    public static final String DHT_UPDATED = "dht_updated";
     public static final String LIBTORRENT_DHT_LIMIT = "libtorrent_dhtlimit";
     public static final String FIRST_RUN = "first_run";
     public static final String LIBTORRENT_CONNECTION_LIMIT = "libtorrent_connectionlimit";
