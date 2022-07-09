@@ -26,6 +26,7 @@ android {
         versionCode buildNumber
         multiDexEnabled true
         resValue 'string', 'sentry_dsn', rootProject.ext.sentryDsn
+        resValue 'string', 'dht', rootProject.ext.dht
     }
 
     buildTypes {
