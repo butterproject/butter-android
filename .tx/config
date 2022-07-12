@@ -12,3 +12,4 @@ trans.pt_BR = base/src/main/res/values-pt-rBR/strings.xml
 trans.es_MX = base/src/main/res/values-es-rMX/strings.xml
 trans.zh_TW = base/src/main/res/values-zh-rTW/strings.xml
 trans.es_AR = base/src/main/res/values-es-rAR/strings.xml
+trans.uk = base/src/main/res/values-uk-rUA/strings.xml
