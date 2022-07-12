@@ -30,6 +30,7 @@ import java.util.List;
 import butter.droid.base.BuildConfig;
 import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
+import butter.droid.base.manager.updater.DhtManager;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
 import butter.droid.base.providers.media.response.MovieResponse;
@@ -39,8 +40,8 @@ import okhttp3.OkHttpClient;
 
 public class MoviesProvider extends MediaProvider {
 
-    public MoviesProvider(Context context, OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider) {
-        super(context, client, mapper, subsProvider, BuildConfig.MOVIE_URLS, "movies/", "", 0);
+    public MoviesProvider(Context context, OkHttpClient client, ObjectMapper mapper, DhtManager dhtManager, @Nullable SubsProvider subsProvider) {
+        super(context, client, mapper, dhtManager, subsProvider, BuildConfig.MOVIE_URLS, "movies/", "", 0);
     }
 
     @Override

@@ -39,6 +39,7 @@ import javax.inject.Inject;
 import butter.droid.base.beaming.BeamManager;
 import butter.droid.base.content.preferences.Prefs;
 import butter.droid.base.manager.updater.ButterUpdateManager;
+import butter.droid.base.manager.updater.DhtManager;
 import butter.droid.base.torrent.TorrentService;
 import butter.droid.base.utils.FileUtils;
 import butter.droid.base.utils.LocaleUtils;
@@ -56,6 +57,8 @@ public class ButterApplication extends Application implements ButterUpdateManage
     Picasso picasso;
     @Inject
     ButterUpdateManager updateManager;
+    @Inject
+    DhtManager dhtManager;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -107,6 +110,8 @@ public class ButterApplication extends Application implements ButterUpdateManage
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+
+        dhtManager.updateSettings();
 
         updateManager.setListener(this);
         updateManager.checkUpdates(false);

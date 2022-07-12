@@ -28,11 +28,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butter.droid.base.ButterApplication;
 import butter.droid.base.R;
 import butter.droid.base.content.preferences.Prefs;
+import butter.droid.base.manager.updater.DhtManager;
 import butter.droid.base.providers.BaseProvider;
 import butter.droid.base.providers.media.models.Genre;
 import butter.droid.base.providers.media.models.Media;
@@ -63,10 +66,22 @@ public abstract class MediaProvider extends BaseProvider {
     private String itemDetailsPath = "";
     private Integer currentApi = 0;
 
-    public MediaProvider(Context context, OkHttpClient client, ObjectMapper mapper, @Nullable SubsProvider subsProvider, String[] apiUrls, String itemsPath, String itemDetailsPath, Integer currentApi) {
+    public MediaProvider(Context context, OkHttpClient client, ObjectMapper mapper, DhtManager dhtManager, @Nullable SubsProvider subsProvider, String[] apiUrls, String itemsPath, String itemDetailsPath, Integer currentApi) {
         super(client, mapper);
         this.subsProvider = subsProvider;
-        this.apiUrls = apiUrls;
+
+        String[] servers;
+        try {
+            servers = dhtManager.servers();
+            Collections.shuffle(Arrays.asList(servers));
+        } catch (NullPointerException e) {
+            servers = apiUrls;
+        }
+        if (servers.length == 0) {
+            servers = apiUrls;
+        }
+        this.apiUrls = servers;
+
         this.itemsPath = itemsPath;
         this.itemDetailsPath = itemDetailsPath;
         this.currentApi = currentApi;

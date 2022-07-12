@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.inject.Singleton;
 
+import butter.droid.base.manager.updater.DhtManager;
 import butter.droid.base.providers.media.AnimeProvider;
 import butter.droid.base.providers.media.MoviesProvider;
 import butter.droid.base.providers.media.TVProvider;
@@ -43,23 +44,23 @@ public class ProviderModule {
 
     @Provides
     @Singleton
-    public MoviesProvider provideMoviesProvider(Context context, OkHttpClient client, ObjectMapper mapper,
+    public MoviesProvider provideMoviesProvider(Context context, OkHttpClient client, ObjectMapper mapper, DhtManager dhtManager,
                                                 OpenSubsProvider subsProvider) {
-        return new MoviesProvider(context, client, mapper, subsProvider);
+        return new MoviesProvider(context, client, mapper, dhtManager, subsProvider);
     }
 
     @Provides
     @Singleton
-    public TVProvider provideTVProvider(Context context, OkHttpClient client, ObjectMapper mapper,
+    public TVProvider provideTVProvider(Context context, OkHttpClient client, ObjectMapper mapper, DhtManager dhtManager,
                                         OpenSubsProvider subsProvider) {
-        return new TVProvider(context, client, mapper, subsProvider);
+        return new TVProvider(context, client, mapper, dhtManager, subsProvider);
     }
 
     @Provides
     @Singleton
-    public AnimeProvider provideAnimeProvider(Context context, OkHttpClient client, ObjectMapper mapper,
+    public AnimeProvider provideAnimeProvider(Context context, OkHttpClient client, ObjectMapper mapper, DhtManager dhtManager,
                                               OpenSubsProvider subsProvider) {
-        return new AnimeProvider(context, client, mapper, subsProvider);
+        return new AnimeProvider(context, client, mapper, dhtManager, subsProvider);
     }
 
 }
