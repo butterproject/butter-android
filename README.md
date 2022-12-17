@@ -14,7 +14,7 @@
   <a href="https://github.com/popcorn-official/popcorn-android/releases/latest"><img src="https://img.shields.io/github/release-date/popcorn-official/popcorn-android?label="></a>
   <a href="https://github.com/popcorn-official/popcorn-android/compare/master...development"><img src="https://img.shields.io/github/commits-since/popcorn-official/popcorn-android/latest?label=commits%20since"></a>
   <a href="https://github.com/popcorn-official/popcorn-android/commit/development"><img src="https://img.shields.io/github/last-commit/popcorn-official/popcorn-android?label=latest%20commit"></a>
-  <a href="https://github.com/popcorn-official/popcorn-android/actions"><img src="https://img.shields.io/github/workflow/status/popcorn-official/popcorn-android/CI?label=latest%20build"></a>
+  <a href="https://github.com/popcorn-official/popcorn-android/actions"><img src="https://img.shields.io/github/actions/workflow/status/popcorn-official/popcorn-android/build.yml?branch=development&label=latest%20build"></a>
   <a href="https://david-dm.org/popcorn-official/popcorn-android"><img src="https://img.shields.io/david/popcorn-official/popcorn-android?label=deps"></a><br>
   <a href="https://popcorntime.app"><img src="https://img.shields.io/website?down_color=red&down_message=offline&label=popcorntime.app&up_color=brightgreen&up_message=online&url=https%3A%2F%2Fpopcorntime.app"></a>
   <a href="https://www.reddit.com/r/PopCornTimeApp"><img src="https://img.shields.io/reddit/subreddit-subscribers/PopCornTimeApp?color=e84722&label=reddit&style=flat"></a>
